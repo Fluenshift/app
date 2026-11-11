@@ -39,13 +39,17 @@ Fill in once known, in the product repo's copy of this file:
 
 | Item | Value |
 | --- | --- |
-| Organization | _to fill_ |
-| Product repo URL | _to fill_ |
-| Product license | _to fill before step 6 (MIT suggested: Grifando is MIT)_ |
-| PE license | _to fill (MIT, or none)_ |
+| Organization | `Fluenshift` (<https://github.com/Fluenshift>) |
+| Product repo URL | <https://github.com/Fluenshift/app> (`app` is a working name until the product is named) |
+| Product license | MIT |
+| PE license | MIT |
 | What Grifando may change until cutover | _to fill (step 3)_ |
-| PE baseline SHA (`<org>/prompt-evolution` tag `parity-baseline`) | _to fill_ |
-| Grifando baseline SHA (`<org>/grifando` tag `parity-baseline`) | _to fill_ |
+| PE baseline SHA (`Fluenshift/prompt-evolution` tag `parity-baseline`) | `5e831bb6f2af1ae0f52c2ff1af1c28c605a25486` |
+| Grifando baseline SHA (`Fluenshift/grifando` tag `parity-baseline`) | _to fill (step 4)_ |
+
+Setup status on 2026-11-10: the ticked boxes below are done. Secret scanning, push
+protection and Dependabot alerts are enabled on each of the three repos, one by one; the
+organization-wide configuration and the other step 1 settings are not verified yet.
 
 ## Setup checklist
 
@@ -55,8 +59,8 @@ migration does not depend on them.
 
 ### 1. Organization (either owner creates it)
 
-- [ ] Create a free organization. Choose the name together; it is also the product's home.
-- [ ] Invite the other owner (`jheffersonsouza` or `levyrodrigues23`) as an organization
+- [x] Create a free organization. Choose the name together; it is also the product's home.
+- [x] Invite the other owner (`jheffersonsouza` or `levyrodrigues23`) as an organization
       **Owner**. The other owner accepts.
 - [ ] In the organization settings:
   - Actions → General → Workflow permissions: read repository contents only;
@@ -69,7 +73,7 @@ migration does not depend on them.
 
 ### 2. Move Grifando into the organization (Levy)
 
-- [ ] Settings → General → Danger Zone → Transfer, to the organization. Keep the repo public.
+- [x] Settings → General → Danger Zone → Transfer, to the organization. Keep the repo public.
       Repo secrets, issues and pull requests move with it, and GitHub redirects the old URLs.
 - [ ] Point every local clone at the new URL:
 
@@ -106,13 +110,13 @@ PE becomes public in this step. Two private files are already ignored by git:
 evaluations. A secret scan is still required before the first push. PE's commits use the
 GitHub noreply address, so its history exposes no personal email.
 
-- [ ] Decide on the untracked tool and personal files: `.codex/`, `.mcp.json` and
+- [x] Decide on the untracked tool and personal files: `.codex/`, `.mcp.json` and
       `.scratch/prompt-notes.md`, a raw prompt log. On 2026-11-10 none of them contained
       token-like strings. Commit each one or add it to `.gitignore`.
-- [ ] Decide PE's own license: add MIT, as Grifando has, or publish with no license (all
+- [x] Decide PE's own license: add MIT, as Grifando has, or publish with no license (all
       rights reserved). This does not block the port: the author of PE's code can license it
       in the product.
-- [ ] Commit the MVP. Leave `.scratch/merge-grifando/` out: these docs move to the product
+- [x] Commit the MVP. Leave `.scratch/merge-grifando/` out: these docs move to the product
       repo in step 6.
 
   ```bash
@@ -122,7 +126,7 @@ GitHub noreply address, so its history exposes no personal email.
   git commit -m "feat: ship the evaluation MVP"
   ```
 
-- [ ] Secret-scan the whole history. It must report no leaks. Nothing is pushed yet, so a
+- [x] Secret-scan the whole history. It must report no leaks. Nothing is pushed yet, so a
       leak can still be fixed by amending the commit.
 
   ```bash
@@ -131,9 +135,9 @@ GitHub noreply address, so its history exposes no personal email.
   docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:latest git -v /repo
   ```
 
-- [ ] Create `<org>/prompt-evolution` as a public, **empty** repo: no README, LICENSE or
+- [x] Create `<org>/prompt-evolution` as a public, **empty** repo: no README, LICENSE or
       .gitignore, so the local history pushes as it is.
-- [ ] Rename the branch, push, then tag the baseline:
+- [x] Rename the branch, push, then tag the baseline:
 
   ```bash
   git branch -m master main
@@ -143,19 +147,19 @@ GitHub noreply address, so its history exposes no personal email.
   git push origin parity-baseline
   ```
 
-- [ ] Add the same tag ruleset as in step 4.
+- [x] Add the same tag ruleset as in step 4.
 - [ ] Once the first agent session has verified the pin (see Next session, step 2), archive
       the repo (Settings → General → Archive this repository). An archived repo is read-only
       for everyone, including an agent that holds an owner token. It can be unarchived.
 
 ### 6. Product repo and agent access
 
-- [ ] Choose the repo name. If the product name is still open, use a working name; renaming
+- [x] Choose the repo name. If the product name is still open, use a working name; renaming
       later keeps redirects. Do not reuse `grifando` or `prompt-evolution` while the source
       repos hold those names.
-- [ ] Create a **public** repo in the organization: default branch `main`, the agreed
+- [x] Create a **public** repo in the organization: default branch `main`, the agreed
       LICENSE, no README and no .gitignore.
-- [ ] Add a branch ruleset on `main` now: block force pushes and restrict deletions. Pull
+- [x] Add a branch ruleset on `main` now: block force pushes and restrict deletions. Pull
       requests only, required checks and the merge queue come in Phase 2, once CI exists.
 - [ ] Give agents their own GitHub access. Agents must not use an owner's personal token: in
       the organization, that token is an Owner token for all three repos, including the live
@@ -176,7 +180,7 @@ GitHub noreply address, so its history exposes no personal email.
   - Start each agent session with its token in `GH_TOKEN`. Never store a token in a repo.
   - Optional cloud agents (Codex cloud, Claude Code on the web): install their GitHub apps
     on the organization with only the product repo selected.
-- [ ] Clone the product repo next to `prompt-evolution`, then push the handoff docs as the
+- [x] Clone the product repo next to `prompt-evolution`, then push the handoff docs as the
       first commit after LICENSE:
 
   ```bash
