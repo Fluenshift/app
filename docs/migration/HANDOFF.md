@@ -186,10 +186,14 @@ GitHub noreply address, so its history exposes no personal email.
 
 ### 7. Toolchain (every machine that runs agents)
 
-- [ ] For the product repo: Node 26.13.0 (via mise, nvm or fnm) and pnpm 12.18.0
+Done on Jhefferson's machine on 2026-11-12: Node 26.13.0 and pnpm 12.18.0 installed with
+mise but not activated globally, Docker 29.9.3, `postgres:17-alpine`, Bun 1.4.0, and PE's
+Playwright 1.63.0 Chromium.
+
+- [x] For the product repo: Node 26.13.0 (via mise, nvm or fnm) and pnpm 12.18.0
       (`npm install -g pnpm@12.18.0`, or mise).
-- [ ] Docker, running.
-- [ ] Each baseline runs on its own toolchain:
+- [x] Docker, running.
+- [x] Each baseline runs on its own toolchain:
   - PE: Bun 1.4.0 (`mise install` in a PE checkout) and the Playwright browsers;
   - Grifando: Node 24 (from `.nvmrc`), pnpm 12.3.4 (from `packageManager`), and
     `docker pull postgres:17-alpine`, the image its CI uses.
