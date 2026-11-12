@@ -51,8 +51,8 @@ One organization holds `<org>/prompt-evolution`, `<org>/grifando` and the new re
   if the remote tag no longer resolves to the pin. Agents and CI read and run sources only
   through it, in disposable worktrees of those clones. The source repos are public, so CI
   needs no token for them.
-- Source repos are read-only for agents (agent rule 1). Agent tokens have no write access to
-  them, and PE is archived once its pin is verified.
+- Source repos are read-only for agents (agent rule 1), and PE is archived once its pin is
+  verified.
 
 ### Baseline bumps
 
@@ -558,9 +558,9 @@ Phase 2 builds CI, the coordinator checks the verdicts by hand.
 | G9 Parity check | Every inventory row present with a valid disposition, its status derived from the reports (the ledger stores none); every `port-changed`, `superseded` or `drop` row cites an accepted ADR; every target exists in the Vitest and Playwright JSON reports and passes; `port` targets keep their source titles; only `pending-decision` rows may have skipped tests. |
 | G10 Parity audit | For class-A and class-B `port` rows, the target matches or exceeds the source in assertion count, expected literals and matcher strength (no `toEqual` turned into `toMatchObject`). Report-only for class C; its output feeds G12. |
 | G11 Gate integrity | Lint and tsgo severities and the CI, Vitest and tsconfig settings are equal to or stricter than `gates/baseline.json`; suppression comments (`oxlint-disable`, `@ts-expect-error`) do not increase without an ADR; the edge helper maps every tagged error to a status, with one test per error. |
-| G12 Cross-vendor verification | A required check computed by `verdict-check.ts` on the PR head. It passes only when the newest verdict for the current head SHA is `G12 PASS`, its `Verifier` differs from the PR's `implementer:` label, and its author is the agent account or an organization member (the repo is public, so anyone can comment). |
+| G12 Cross-vendor verification | A required check computed by `verdict-check.ts` on the PR head. It passes only when the newest verdict for the current head SHA is `G12 PASS`, its `Verifier` differs from the PR's `implementer:` label, and its author is an organization member (the repo is public, so anyone can comment). |
 | G13 Live calibration | Deferred: not a merge gate until the owners schedule it (see Calibration deferred). When it runs: paid and owner-triggered, with frozen fixtures, one request at a time, no retries, a budget preflight and the spend recorded. Once it has passed, it is required again for any change to the Judge's model, prompt, structured contract or Rubric Version. |
-| G14 Owner decisions | Accepting the Phase 1 ADRs, answering every `needs-info` product question, setting the calibration budget, giving final product acceptance and approving cutover. Owners decide product behavior and never review code. A decision counts only when an owner posts it from an owner account; with the agent machine account (`HANDOFF.md` step 6), CI can check the author of each linked comment. |
+| G14 Owner decisions | Accepting the Phase 1 ADRs, answering every `needs-info` product question, setting the calibration budget, giving final product acceptance and approving cutover. Owners decide product behavior and never review code. A decision counts only when an owner posts it. Agents post from the owners' accounts too, so this rests on agent rule 19. |
 
 ## Definition of done
 
@@ -625,8 +625,7 @@ These add to PRE_MIGRATION § Rules for the new repo's AGENTS.md / CLAUDE.md.
 13. Shared files belong to the coordinator: `packages/db` migrations (generated with
     drizzle-kit, never hand-written, one in flight at a time), the `packages/contract` index,
     CI workflows, `gates/baseline.json`, `docs/migration/baselines.json` and the ledger
-    schema. Implementers only add files for their own slice. Implementer tokens lack the
-    Workflows permission, so GitHub rejects their pushes to CI files.
+    schema. Implementers only add files for their own slice.
 14. One unit per branch and PR: no drive-by refactors, dependency bumps or formatting churn
     outside the unit.
 15. Never weaken a gate to get green. If a gate seems wrong, file a decision request; only
@@ -686,8 +685,8 @@ These add to PRE_MIGRATION § Rules for the new repo's AGENTS.md / CLAUDE.md.
 | Moving Grifando into the organization breaks its live deploy or CI. | Deferred by the owners, together with the deploy decision; `HANDOFF.md` § Deferred lists the fixes. The migration depends on neither: the baselines are pinned SHAs, and their suites run outside Grifando's CI. |
 | A source repo changes after its baseline. | Change policy decided at setup (`HANDOFF.md` step 3); every change goes through a baseline bump with an inventory diff. |
 | A baseline tag is moved or deleted. | The SHA pin is the authority; `baselines.ts` fails on a mismatch; tag rulesets restrict updates and deletions. |
-| An agent holding owner credentials changes a source repo, a ruleset or organization settings. | Fine-grained tokens limited to the new repo, preferably on a machine account; no Administration permission, so only owners change rulesets; PE archived; agent rule 1. |
-| Agent comments look like owner decisions, or one vendor posts the other's verdict. | Agent machine account, so owner decisions are checkable by author (G14); verdicts bound to the head SHA and checked against the `implementer:` label (G12). Vendor identity itself is not enforced: both vendors share the agent account. |
+| An agent holding owner credentials changes a source repo, a ruleset or organization settings. | Each owner chooses the credentials of their agent sessions and owns this risk; PE archived; `baselines.ts` fails when a tag no longer matches its SHA pin; agent rule 1. |
+| Agent comments look like owner decisions, or one vendor posts the other's verdict. | Agents never post decisions (agent rule 19); verdicts bound to the head SHA and checked against the `implementer:` label (G12). Neither is enforced by comment author, because agents post from the owners' accounts. |
 
 ## Evidence
 

@@ -45,11 +45,19 @@ Fill in once known, in the product repo's copy of this file:
 | PE license | MIT |
 | What Grifando may change until cutover | _to fill (step 3)_ |
 | PE baseline SHA (`Fluenshift/prompt-evolution` tag `parity-baseline`) | `5e831bb6f2af1ae0f52c2ff1af1c28c605a25486` |
-| Grifando baseline SHA (`Fluenshift/grifando` tag `parity-baseline`) | _to fill (step 4)_ |
+| Grifando baseline SHA (`Fluenshift/grifando` tag `parity-baseline`) | `74dbb9f3305faa4444f981aa2df360c028d3ab08` |
 
-Setup status on 2026-11-10: the ticked boxes below are done. Secret scanning, push
-protection and Dependabot alerts are enabled on each of the three repos, one by one; the
-organization-wide configuration and the other step 1 settings are not verified yet.
+Setup status on 2026-11-12, checked with `gh` and `git ls-remote`: the ticked boxes below
+are done.
+
+- Both tags resolve to the SHAs in the table. Each sits under an active tag ruleset that
+  restricts updates and deletions, with an empty bypass list. Grifando's `main` still equals
+  its baseline, and PE's `main` equals its baseline.
+- The "GitHub recommended" code security configuration is attached to all three repos, and
+  each repo's default workflow token is read-only.
+- Jhefferson applied the step 1 organization settings on 2026-11-12. They were not read
+  back, because that needs the `admin:org` scope.
+- Each owner chooses the GitHub credentials their agent sessions use (decided 2026-11-12).
 
 ## Setup checklist
 
@@ -62,14 +70,13 @@ migration does not depend on them.
 - [x] Create a free organization. Choose the name together; it is also the product's home.
 - [x] Invite the other owner (`jheffersonsouza` or `levyrodrigues23`) as an organization
       **Owner**. The other owner accepts.
-- [ ] In the organization settings:
+- [x] In the organization settings:
   - Actions → General → Workflow permissions: read repository contents only;
   - Actions → General → fork pull request workflows: require approval for all outside
     contributors;
   - Code security → Configurations: apply the GitHub recommended configuration to all
     repositories (secret scanning, push protection and Dependabot alerts, free on public
-    repos);
-  - Personal access tokens: allow fine-grained tokens, for the agents in step 6.
+    repos).
 
 ### 2. Move Grifando into the organization (Levy)
 
@@ -90,17 +97,17 @@ migration does not depend on them.
 
 ### 4. Grifando baseline (Levy)
 
-- [ ] Pick the commit. Suggested: today's `main`, `74dbb9f`. It is the head of the
+- [x] Pick the commit. Suggested: today's `main`, `74dbb9f`. It is the head of the
       production branch, its CI run on 2026-11-08 was green, and its tree equals `develop`.
       The tag can be created before or after the transfer.
-- [ ] Tag it and push the tag:
+- [x] Tag it and push the tag:
 
   ```bash
   git tag -a parity-baseline -m "Parity baseline for the merge" <sha>
   git push origin parity-baseline
   ```
 
-- [ ] Add a tag ruleset (Settings → Rules → Rulesets → New tag ruleset): target
+- [x] Add a tag ruleset (Settings → Rules → Rulesets → New tag ruleset): target
       `parity-baseline*`, restrict updates, restrict deletions, empty bypass list.
 
 ### 5. Prompt Evolution (Jhefferson)
@@ -148,11 +155,11 @@ GitHub noreply address, so its history exposes no personal email.
   ```
 
 - [x] Add the same tag ruleset as in step 4.
-- [ ] Once the first agent session has verified the pin (see Next session, step 2), archive
-      the repo (Settings → General → Archive this repository). An archived repo is read-only
-      for everyone, including an agent that holds an owner token. It can be unarchived.
+- [ ] Archive the repo (Settings → General → Archive this repository). Its pin was verified
+      on 2026-11-12. An archived repo is read-only for everyone, including an agent that
+      holds an owner token. It can be unarchived.
 
-### 6. Product repo and agent access
+### 6. Product repo
 
 - [x] Choose the repo name. If the product name is still open, use a working name; renaming
       later keeps redirects. Do not reuse `grifando` or `prompt-evolution` while the source
@@ -161,25 +168,6 @@ GitHub noreply address, so its history exposes no personal email.
       LICENSE, no README and no .gitignore.
 - [x] Add a branch ruleset on `main` now: block force pushes and restrict deletions. Pull
       requests only, required checks and the merge queue come in Phase 2, once CI exists.
-- [ ] Give agents their own GitHub access. Agents must not use an owner's personal token: in
-      the organization, that token is an Owner token for all three repos, including the live
-      one.
-  - Recommended: one machine account for the agents (GitHub allows one per person, run by
-    one owner). Add it to the organization as a member with write access to the product
-    repo only. GitHub can then tell agent actions from owner actions, and an owner decision
-    counts only when an owner account posts it (gate G14).
-  - Minimum: fine-grained tokens on an owner's account. G14 then rests on agents never
-    posting decisions.
-  - In both cases, limit each fine-grained token to the product repo:
-    - implementer token: Contents, Issues and Pull requests, read and write; Actions, read
-      (to see CI logs);
-    - coordinator token: the same, plus Workflows read and write, because only the
-      coordinator edits CI.
-  - Neither token has Administration or any access to the source repos, so rulesets change
-    only through an owner. Check this on each token's settings page.
-  - Start each agent session with its token in `GH_TOKEN`. Never store a token in a repo.
-  - Optional cloud agents (Codex cloud, Claude Code on the web): install their GitHub apps
-    on the organization with only the product repo selected.
 - [x] Clone the product repo next to `prompt-evolution`, then push the handoff docs as the
       first commit after LICENSE:
 
@@ -209,8 +197,7 @@ GitHub noreply address, so its history exposes no personal email.
 
 ## Next session
 
-Open Claude Code or Codex in the product repo, with the coordinator token in `GH_TOKEN`, and
-say:
+Open Claude Code or Codex in the product repo and say:
 
 > Read `docs/migration/HANDOFF.md`, verify its setup checklist, then start Phase 0 of
 > `docs/migration/MIGRATION_PROTOCOL.md`.
@@ -221,11 +208,10 @@ The first agent work:
    - the organization owns the three repos, and all three are public;
    - each source repo has the `parity-baseline` tag, under a tag ruleset;
    - the product repo's `main` has its ruleset and holds the docs;
-   - `GH_TOKEN` is a fine-grained token (prefix `github_pat_`), not an owner's OAuth token;
    - the toolchain versions match.
 2. Resolve both tags with `git ls-remote` and write the pins to
    `docs/migration/baselines.json`. Write the toolchains and run commands to
-   `docs/migration/BASELINES.md`. Then tell the owners that PE can be archived.
+   `docs/migration/BASELINES.md`.
 3. Create the issue labels listed in `MIGRATION_PROTOCOL.md` § Work unit cycle.
 4. Run both baseline suites from clones at the pinned commits, outside the product working
    tree, and store the reports in `docs/migration/baseline-runs/`.
