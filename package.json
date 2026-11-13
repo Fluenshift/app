@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
-    "check-types": "turbo run check-types",
+    "check-types": "tsc --noEmit -p scripts/tsconfig.json && turbo run check-types",
     "check:effect": "turbo run check:effect",
     "dev": "turbo run dev",
     "format": "oxfmt --check .",
