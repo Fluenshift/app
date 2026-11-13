@@ -1,0 +1,105 @@
+name: CI
+
+# Gates of docs/migration/MIGRATION_PROTOCOL.md. Every required check also runs on
+# merge_group, or the merge queue waits forever.
+on:
+  pull_request:
+  merge_group:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  DO_NOT_TRACK: "1"
+  TURBO_TELEMETRY_DISABLED: "1"
+
+jobs:
+  verify:
+    name: G1 to G4 (types, lint, tests, build)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: G2 format
+        run: pnpm format
+
+      - name: G2 lint
+        run: pnpm lint
+
+      - name: G2 Effect lint
+        run: pnpm lint:effect
+
+      - name: G1 types
+        run: pnpm check-types
+
+      - name: G1 Effect diagnostics
+        run: pnpm check:effect
+
+      - name: G3 tests
+        run: pnpm test
+
+      - name: G4 build
+        run: pnpm build
+
+  e2e:
+    name: G5 (end to end)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install the Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: G5 journeys against the built process
+        run: pnpm test:e2e
+
+  supply-chain:
+    name: G7 (secrets and dependencies)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # The gitleaks CLI needs no license key; the GitHub Action does in organization repos.
+      - name: Secret scan of the whole history
+        run: >-
+          docker run --rm --volume "$PWD:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f git /repo --no-banner --redact
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level high
