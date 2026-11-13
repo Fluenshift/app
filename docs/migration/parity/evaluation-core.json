@@ -233,7 +233,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/model-assessment.test.ts::Evaluation Model contract > accepts every fixed Rubric Version 1 category and severity"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > rejects invented categories, severities, and excess provider fields",
@@ -242,7 +244,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/model-assessment.test.ts::Evaluation Model contract > rejects invented categories, severities, and excess provider fields"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > rejects whitespace-only summaries and explanations",
@@ -251,7 +255,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/model-assessment.test.ts::Evaluation Model contract > rejects whitespace-only summaries and explanations"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > accepts the predeclared spelling outcome with exact UTF-8 byte offsets",
