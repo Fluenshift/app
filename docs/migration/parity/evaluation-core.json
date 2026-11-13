@@ -3,6 +3,123 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > rejects lone surrogates",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats offsets outside the buffer or between bytes as no boundary",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats the only offset of an empty buffer as a boundary",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats the start, the end and every lead byte as a boundary",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > allows adjacent spans",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > applies several corrections whatever their order",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives another reason when the span's bytes differ from its original text",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives one reason for spans outside the sample, empty, overlapping or split",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives the same reason for an ill-formed correction",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > keeps a leading BOM when a later span is corrected",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > matches a span whose original text starts with a BOM",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > returns the sample unchanged without corrections",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > canonicalizes equivalent wider edits without changing corrected bytes",
       "source": "apps/server/src/evaluation/assessment-localization.test.ts",
       "class": "A",

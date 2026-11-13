@@ -4,6 +4,110 @@
   "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > rejects lone surrogates",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > rejects lone surrogates",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats offsets outside the buffer or between bytes as no boundary",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > treats offsets outside the buffer or between bytes as no boundary",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats the only offset of an empty buffer as a boundary",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > treats the only offset of an empty buffer as a boundary",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats the start, the end and every lead byte as a boundary",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > treats the start, the end and every lead byte as a boundary",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > allows adjacent spans",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > allows adjacent spans",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > applies several corrections whatever their order",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > applies several corrections whatever their order",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives another reason when the span's bytes differ from its original text",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > gives another reason when the span's bytes differ from its original text",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives one reason for spans outside the sample, empty, overlapping or split",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > gives one reason for spans outside the sample, empty, overlapping or split",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives the same reason for an ill-formed correction",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > gives the same reason for an ill-formed correction",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > keeps a leading BOM when a later span is corrected",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > keeps a leading BOM when a later span is corrected",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > matches a span whose original text starts with a BOM",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > matches a span whose original text starts with a BOM",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > returns the sample unchanged without corrections",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > returns the sample unchanged without corrections",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
       "id": "pe:data-policy:deletion:01",
       "kind": "doc-rule",
       "source": "docs/product/DATA-POLICY.md",
