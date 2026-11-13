@@ -18,8 +18,9 @@ answer only explicit "human feedback needed" requests. Phase 0 surfaced five pla
    with the AI faked at the network boundary, a setup the protocol lists as unverified. The
    Academy UI is rebuilt as an SPA under a design language still to be chosen (ADR 0009), so
    most of those journeys would end up `port-changed`.
-3. The protocol assumes owners run Claude Code and Codex sessions side by side. In practice
-   one Claude Code session runs, and Codex is available through `codex exec`.
+3. The protocol assumes Claude Code and Codex sessions run side by side, with a coordinator
+   that implements no units. In practice one Claude Code session does the work, and Codex runs
+   only in the sessions an owner starts.
 4. One decision issue per ADR means 17 issues for owners who read only explicit requests.
 5. Phase 2 needs the `main` ruleset extended (required checks, merge queue). Agent rule 1
    forbids agents from changing rulesets.
@@ -40,9 +41,9 @@ answer only explicit "human feedback needed" requests. Phase 0 surfaced five pla
 3. Reusing baseline code is the default where it fits the stack: pure modules are copied with
    mechanical changes, I/O code is adapted to Effect, Hono and Drizzle. Tests still come first
    (G8): a copied module must turn its ported tests from red to green.
-4. One Claude Code session coordinates and implements both lanes. Codex verifies every PR
-   through `codex exec` in a sandbox, so G12's cross-vendor rule still holds. The coordinator
-   posts each verdict verbatim, with the Codex session id, and never edits it.
+4. One Claude Code session coordinates and implements both lanes. It never starts another
+   harness. Codex verifies PRs in the sessions the owners run, so G12's cross-vendor rule
+   still holds, and a PR waits until its verdict arrives.
 5. One decision issue may carry several ADRs. An owner accepts with one comment naming the ADRs
    accepted, or "all"; each ADR's status line links to that comment.
 6. Once Phase 2 CI runs, the coordinator asks the owners to extend the `main` ruleset with exact
@@ -57,7 +58,7 @@ answer only explicit "human feedback needed" requests. Phase 0 surfaced five pla
 - `MIGRATION_PROTOCOL.md` is edited to match (dispositions, Phase 0 step 7, roles, Phase 1
   step 3, Phase 2 steps 4 and 6) in the PR that records the acceptance.
 - Accepted risk: one coordinating session concentrates mistakes. G8 to G12 and the Codex
-  verification of every PR are the mitigation.
+  verification of every PR are the mitigation. Merges wait for owner-run Codex sessions.
 
 ## Alternatives
 
