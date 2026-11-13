@@ -1,0 +1,429 @@
+{
+  "slice": "academy-web",
+  "lane": "academy",
+  "rows": [
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Code review comment > has three marks",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Code review comment > lets the highlighter mark every mistake, in order",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Code review comment > quotes every mistake span verbatim in the paragraph",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Email to a client > has three marks",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Email to a client > lets the highlighter mark every mistake, in order",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Email to a client > quotes every mistake span verbatim in the paragraph",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Standup update > has three marks",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Standup update > lets the highlighter mark every mistake, in order",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Standup update > quotes every mistake span verbatim in the paragraph",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > has three scenarios with unique ids",
+      "source": "src/components/home/specimenData.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/highlightSegments.test.ts::buildHighlightSegments > handles multiple non-overlapping matches in order",
+      "source": "src/lib/highlightSegments.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/highlightSegments.test.ts::buildHighlightSegments > returns the whole text unhighlighted when there are no mistakes",
+      "source": "src/lib/highlightSegments.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/highlightSegments.test.ts::buildHighlightSegments > skips a later match that overlaps an already-placed one",
+      "source": "src/lib/highlightSegments.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/highlightSegments.test.ts::buildHighlightSegments > skips a span the model didn't quote verbatim instead of throwing",
+      "source": "src/lib/highlightSegments.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/highlightSegments.test.ts::buildHighlightSegments > splits the text around a single matched span",
+      "source": "src/lib/highlightSegments.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/embed/playlist/37i9dQZF1DWWQRwui0ExPn",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/intl-pt/playlist/37i9dQZF1DWWQRwui0ExPn",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn?si=abc123",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/track/37i9dQZF1DWWQRwui0ExPn",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link open.spotify.com/album/37i9dQZF1DWWQRwui0ExPn",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link spotify:playlist:37i9dQZF1DWWQRwui0ExPn",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube playlist link https://music.youtube.com/playlist?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube playlist link https://www.youtube.com/playlist?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube playlist link https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG&index=3",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube playlist link https://youtu.be/dQw4w9WgXcQ?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube video link   https://www.youtube.com/embed/dQw4w9WgXcQ  ",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube video link https://m.youtube.com/watch?v=dQw4w9WgXcQ&t=42s",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube video link https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube video link https://youtu.be/dQw4w9WgXcQ",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://example.com/playlist?list=PL123456789\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://open.spotify.com/artist/37i9dQZF1DWWQRwui0ExPn\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://open.spotify.com/playlist/short\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://www.youtube.com/@somechannel\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://www.youtube.com/watch?v=\\\"><script>\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://www.youtube.com/watch?v=tooshort\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"not a link\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"spotify:show:abc\"",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::toEmbedUrl > builds the Spotify embed URL",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/musicLink.test.ts::toEmbedUrl > builds the YouTube playlist and video embed URLs",
+      "source": "src/lib/musicLink.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/savedPlaylists.test.ts::addPlaylist / removePlaylist > adds to the top, moves an existing source up, and renames it when given a name",
+      "source": "src/lib/savedPlaylists.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/savedPlaylists.test.ts::addPlaylist / removePlaylist > caps the list, dropping the oldest entry",
+      "source": "src/lib/savedPlaylists.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/savedPlaylists.test.ts::addPlaylist / removePlaylist > rejects links that don't parse",
+      "source": "src/lib/savedPlaylists.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/savedPlaylists.test.ts::addPlaylist / removePlaylist > removes by source",
+      "source": "src/lib/savedPlaylists.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/savedPlaylists.test.ts::parseSavedPlaylists > drops invalid and duplicate entries and round-trips through serialize",
+      "source": "src/lib/savedPlaylists.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/savedPlaylists.test.ts::parseSavedPlaylists > falls back to the default playlist for missing or corrupt storage",
+      "source": "src/lib/savedPlaylists.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/savedPlaylists.test.ts::parseSavedPlaylists > keeps a deliberately emptied list empty",
+      "source": "src/lib/savedPlaylists.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "slice": "evaluation-http",
+  "lane": "evaluation",
+  "rows": [
+    {
+      "id": "pe:test:apps/server/src/app.integration.test.ts::integrated same-origin backend > creates, reopens, aggregates, traces, and deletes durable evidence",
+      "source": "apps/server/src/app.integration.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > falls back to uncached index.html for direct browser routes",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > keeps API routes ahead of browser fallback",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > keeps the real HTTP connection open beyond the provider request deadline",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > logs evaluation outcomes with correlation metadata but no Writing Sample",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > maps typed evaluation failures without exposing private causes",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > maps unexpected failures to a safe internal error",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects declared oversized request bodies before evaluation",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0006",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects malformed JSON without echoing private input",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects remote hosts and cross-origin writes before evaluating",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > serves retained History, Progress, deletion, and setup through same-origin API",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0008",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > serves static assets with immutable caching",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > submits one exact Writing Sample through the Evaluation boundary",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > accepts a same-origin browser request through Vite before validating its body",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > provides a self-contained favicon rather than a missing favicon.ico",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > still rejects a hostile Origin through Vite",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > still rejects cross-site requests through Vite",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "slice": "evaluation-judge",
+  "lane": "evaluation",
+  "rows": [
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > allows a provider response beyond 30 seconds without restarting the paid request",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > can disable SDK retries for budget-bounded calibration",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > classifies provider output with whitespace-only prose as a retryable invalid assessment",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > classifies rejected credentials separately from transient provider failures",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > deterministically reanchors uniquely identifiable provider spans",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > distinguishes incomplete and failed response envelopes from malformed assessments",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > forces SDK logging off even when ambient debug logging is enabled",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > makes only one paid attempt by default when the provider is unavailable",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > reports an SDK timeout without exposing its cause or automatically retrying",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > reports missing configuration without making a provider call",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > sends one bounded, tool-free, injection-resistant structured request",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > treats an empty credential as unconfigured",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    }
+  ]
+}
