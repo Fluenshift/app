@@ -1,0 +1,48 @@
+{
+  "system": "grifando",
+  "repository": "Fluenshift/grifando",
+  "tag": "parity-baseline",
+  "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
+  "ranAt": "2026-11-13T11:36:58.715Z",
+  "tools": [
+    {
+      "name": "node",
+      "version": "24.22.2"
+    },
+    {
+      "name": "pnpm",
+      "version": "12.3.4"
+    }
+  ],
+  "services": [
+    {
+      "image": "postgres:17-alpine",
+      "digest": "sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+      "version": "17.11"
+    }
+  ],
+  "install": [
+    "pnpm",
+    "install",
+    "--frozen-lockfile"
+  ],
+  "suites": [
+    {
+      "id": "vitest",
+      "cwd": ".",
+      "runner": "vitest-json",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=vitest.json"
+      ],
+      "env": {},
+      "report": "vitest.json",
+      "exitCode": 0
+    }
+  ]
+}

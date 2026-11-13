@@ -1,0 +1,103 @@
+{
+  "system": "pe",
+  "repository": "Fluenshift/prompt-evolution",
+  "tag": "parity-baseline",
+  "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
+  "ranAt": "2026-11-13T11:36:15.011Z",
+  "tools": [
+    {
+      "name": "bun",
+      "version": "1.4.0"
+    },
+    {
+      "name": "node",
+      "version": "24.22.2"
+    }
+  ],
+  "services": [],
+  "install": [
+    "bun",
+    "install",
+    "--frozen-lockfile"
+  ],
+  "suites": [
+    {
+      "id": "server",
+      "cwd": "apps/server",
+      "runner": "bun-junit",
+      "command": [
+        "bun",
+        "run",
+        "test",
+        "--reporter=junit",
+        "--reporter-outfile=server.junit.xml"
+      ],
+      "env": {},
+      "report": "server.junit.xml",
+      "exitCode": 0
+    },
+    {
+      "id": "db",
+      "cwd": "packages/db",
+      "runner": "bun-junit",
+      "command": [
+        "bun",
+        "run",
+        "test",
+        "--reporter=junit",
+        "--reporter-outfile=db.junit.xml"
+      ],
+      "env": {},
+      "report": "db.junit.xml",
+      "exitCode": 0
+    },
+    {
+      "id": "env",
+      "cwd": "packages/env",
+      "runner": "vitest-json",
+      "command": [
+        "bun",
+        "run",
+        "test",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=env.vitest.json"
+      ],
+      "env": {},
+      "report": "env.vitest.json",
+      "exitCode": 0
+    },
+    {
+      "id": "web",
+      "cwd": "apps/web",
+      "runner": "vitest-json",
+      "command": [
+        "bun",
+        "run",
+        "test",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=web.vitest.json"
+      ],
+      "env": {},
+      "report": "web.vitest.json",
+      "exitCode": 1
+    },
+    {
+      "id": "e2e",
+      "cwd": ".",
+      "runner": "playwright-json",
+      "command": [
+        "bun",
+        "run",
+        "test:e2e",
+        "--reporter=list,json"
+      ],
+      "env": {
+        "PLAYWRIGHT_JSON_OUTPUT_FILE": "e2e.playwright.json"
+      },
+      "report": "e2e.playwright.json",
+      "exitCode": 0
+    }
+  ]
+}

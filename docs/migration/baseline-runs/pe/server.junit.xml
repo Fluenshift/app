@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="bun test" tests="106" assertions="365" failures="0" skipped="0" time="2.491472831">
+  <testsuite name="src/app.test.ts" file="src/app.test.ts" tests="12" assertions="68" failures="0" skipped="0" time="0.377235262">
+    <testsuite name="production HTTP application" file="src/app.test.ts" line="27" tests="12" assertions="68" failures="0" skipped="0" time="0.079">
+      <testcase name="keeps the real HTTP connection open beyond the provider request deadline" classname="production HTTP application" time="0.005387" file="src/app.test.ts" line="28" assertions="1" />
+      <testcase name="serves retained History, Progress, deletion, and setup through same-origin API" classname="production HTTP application" time="0.014196" file="src/app.test.ts" line="34" assertions="9" />
+      <testcase name="rejects malformed JSON without echoing private input" classname="production HTTP application" time="0.012159" file="src/app.test.ts" line="111" assertions="2" />
+      <testcase name="maps unexpected failures to a safe internal error" classname="production HTTP application" time="0.0028" file="src/app.test.ts" line="126" assertions="2" />
+      <testcase name="rejects declared oversized request bodies before evaluation" classname="production HTTP application" time="0.002052" file="src/app.test.ts" line="143" assertions="2" />
+      <testcase name="rejects remote hosts and cross-origin writes before evaluating" classname="production HTTP application" time="0.002696" file="src/app.test.ts" line="163" assertions="3" />
+      <testcase name="submits one exact Writing Sample through the Evaluation boundary" classname="production HTTP application" time="0.003204" file="src/app.test.ts" line="183" assertions="3" />
+      <testcase name="maps typed evaluation failures without exposing private causes" classname="production HTTP application" time="0.028944" file="src/app.test.ts" line="226" assertions="33" />
+      <testcase name="logs evaluation outcomes with correlation metadata but no Writing Sample" classname="production HTTP application" time="0.003325" file="src/app.test.ts" line="333" assertions="3" />
+      <testcase name="keeps API routes ahead of browser fallback" classname="production HTTP application" time="0.003778" file="src/app.test.ts" line="367" assertions="4" />
+      <testcase name="serves static assets with immutable caching" classname="production HTTP application" time="0.003047" file="src/app.test.ts" line="384" assertions="3" />
+      <testcase name="falls back to uncached index.html for direct browser routes" classname="production HTTP application" time="0.002943" file="src/app.test.ts" line="397" assertions="3" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/app.integration.test.ts" file="src/app.integration.test.ts" tests="1" assertions="7" failures="0" skipped="0" time="0.090884894">
+    <testsuite name="integrated same-origin backend" file="src/app.integration.test.ts" line="22" tests="1" assertions="7" failures="0" skipped="0" time="0.055">
+      <testcase name="creates, reopens, aggregates, traces, and deletes durable evidence" classname="integrated same-origin backend" time="0.055102" file="src/app.integration.test.ts" line="23" assertions="7" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/test/dev-proxy.test.ts" file="src/test/dev-proxy.test.ts" tests="4" assertions="7" failures="0" skipped="0" time="1.325665894">
+    <testsuite name="real development proxy same-origin access" file="src/test/dev-proxy.test.ts" line="29" tests="4" assertions="7" failures="0" skipped="0" time="0.095">
+      <testcase name="accepts a same-origin browser request through Vite before validating its body" classname="real development proxy same-origin access" time="0.054249" file="src/test/dev-proxy.test.ts" line="70" assertions="2" />
+      <testcase name="still rejects a hostile Origin through Vite" classname="real development proxy same-origin access" time="0.008633" file="src/test/dev-proxy.test.ts" line="81" assertions="2" />
+      <testcase name="still rejects cross-site requests through Vite" classname="real development proxy same-origin access" time="0.004178" file="src/test/dev-proxy.test.ts" line="95" assertions="2" />
+      <testcase name="provides a self-contained favicon rather than a missing favicon.ico" classname="real development proxy same-origin access" time="0.02906" file="src/test/dev-proxy.test.ts" line="110" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/history/learning-history.test.ts" file="src/history/learning-history.test.ts" tests="4" assertions="8" failures="0" skipped="0" time="0.043291143">
+    <testsuite name="Learning History" file="src/history/learning-history.test.ts" line="65" tests="4" assertions="8" failures="0" skipped="0" time="0.04">
+      <testcase name="retains immutable complete Evaluations newest first" classname="Learning History" time="0.010101" file="src/history/learning-history.test.ts" line="66" assertions="2" />
+      <testcase name="deletes one whole Evaluation while preserving other evidence" classname="Learning History" time="0.008691" file="src/history/learning-history.test.ts" line="85" assertions="3" />
+      <testcase name="reopens complete retained evidence after the database service is replaced" classname="Learning History" time="0.00766" file="src/history/learning-history.test.ts" line="107" assertions="1" />
+      <testcase name="rolls back the parent row when a child insert fails" classname="Learning History" time="0.015917" file="src/history/learning-history.test.ts" line="121" assertions="2" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/openai-evaluation-model.test.ts" file="src/evaluation/openai-evaluation-model.test.ts" tests="12" assertions="70" failures="0" skipped="0" time="0.211159206">
+    <testsuite name="OpenRouter Evaluation Model" file="src/evaluation/openai-evaluation-model.test.ts" line="97" tests="12" assertions="70" failures="0" skipped="0" time="0.147">
+      <testcase name="reports an SDK timeout without exposing its cause or automatically retrying" classname="OpenRouter Evaluation Model" time="0.031764" file="src/evaluation/openai-evaluation-model.test.ts" line="98" assertions="4" />
+      <testcase name="distinguishes incomplete and failed response envelopes from malformed assessments" classname="OpenRouter Evaluation Model" time="0.025481" file="src/evaluation/openai-evaluation-model.test.ts" line="132" assertions="16" />
+      <testcase name="allows a provider response beyond 30 seconds without restarting the paid request" classname="OpenRouter Evaluation Model" time="0.017914" file="src/evaluation/openai-evaluation-model.test.ts" line="204" assertions="2" />
+      <testcase name="makes only one paid attempt by default when the provider is unavailable" classname="OpenRouter Evaluation Model" time="0.009267" file="src/evaluation/openai-evaluation-model.test.ts" line="256" assertions="2" />
+      <testcase name="reports missing configuration without making a provider call" classname="OpenRouter Evaluation Model" time="0.002523" file="src/evaluation/openai-evaluation-model.test.ts" line="287" assertions="1" />
+      <testcase name="treats an empty credential as unconfigured" classname="OpenRouter Evaluation Model" time="0.00117" file="src/evaluation/openai-evaluation-model.test.ts" line="312" assertions="1" />
+      <testcase name="classifies rejected credentials separately from transient provider failures" classname="OpenRouter Evaluation Model" time="0.030559" file="src/evaluation/openai-evaluation-model.test.ts" line="329" assertions="14" />
+      <testcase name="forces SDK logging off even when ambient debug logging is enabled" classname="OpenRouter Evaluation Model" time="0.007413" file="src/evaluation/openai-evaluation-model.test.ts" line="401" assertions="2" />
+      <testcase name="sends one bounded, tool-free, injection-resistant structured request" classname="OpenRouter Evaluation Model" time="0.00688" file="src/evaluation/openai-evaluation-model.test.ts" line="474" assertions="22" />
+      <testcase name="deterministically reanchors uniquely identifiable provider spans" classname="OpenRouter Evaluation Model" time="0.006252" file="src/evaluation/openai-evaluation-model.test.ts" line="604" assertions="3" />
+      <testcase name="can disable SDK retries for budget-bounded calibration" classname="OpenRouter Evaluation Model" time="0.006017" file="src/evaluation/openai-evaluation-model.test.ts" line="646" assertions="2" />
+      <testcase name="classifies provider output with whitespace-only prose as a retryable invalid assessment" classname="OpenRouter Evaluation Model" time="0.007584" file="src/evaluation/openai-evaluation-model.test.ts" line="677" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/protected-content.test.ts" file="src/evaluation/protected-content.test.ts" tests="18" assertions="20" failures="0" skipped="0" time="0.031328937">
+    <testsuite name="Protected Technical Content" file="src/evaluation/protected-content.test.ts" line="8" tests="18" assertions="20" failures="0" skipped="0" time="0.023">
+      <testcase name="protects shell builtins and path executables as complete command lines" classname="Protected Technical Content" time="0.019406" file="src/evaluation/protected-content.test.ts" line="9" assertions="1" />
+      <testcase name="does not mistake slash-separated prose for a path executable" classname="Protected Technical Content" time="0.00024" file="src/evaluation/protected-content.test.ts" line="24" assertions="1" />
+      <testcase name="protects extensionless paths beneath known project roots" classname="Protected Technical Content" time="0.000144" file="src/evaluation/protected-content.test.ts" line="34" assertions="1" />
+      <testcase name="protects YAML, TOML, and XML structured data" classname="Protected Technical Content" time="0.001523" file="src/evaluation/protected-content.test.ts" line="41" assertions="1" />
+      <testcase name="protects nested YAML containing sequence entries" classname="Protected Technical Content" time="0.000581" file="src/evaluation/protected-content.test.ts" line="52" assertions="1" />
+      <testcase name="keeps internal YAML comments and blank lines inside the protected block" classname="Protected Technical Content" time="0.000492" file="src/evaluation/protected-content.test.ts" line="65" assertions="1" />
+      <testcase name="protects explicit-root, indentless, flow, and block-scalar YAML" classname="Protected Technical Content" time="0.000507" file="src/evaluation/protected-content.test.ts" line="77" assertions="2" />
+      <testcase name="protects root YAML flow collections without hiding bracketed prose" classname="Protected Technical Content" time="0.002788" file="src/evaluation/protected-content.test.ts" line="103" assertions="2" />
+      <testcase name="protects a complete balanced nested JSON block" classname="Protected Technical Content" time="0.001135" file="src/evaluation/protected-content.test.ts" line="140" assertions="1" />
+      <testcase name="keeps natural labeled prose and ambiguous equals prose evaluable" classname="Protected Technical Content" time="0.000598" file="src/evaluation/protected-content.test.ts" line="152" assertions="1" />
+      <testcase name="protects commands and structured data copied inside quotes" classname="Protected Technical Content" time="0.000368" file="src/evaluation/protected-content.test.ts" line="167" assertions="1" />
+      <testcase name="honors variable-length Markdown fences" classname="Protected Technical Content" time="0.000706" file="src/evaluation/protected-content.test.ts" line="178" assertions="1" />
+      <testcase name="honors fenced code nested in a Markdown blockquote" classname="Protected Technical Content" time="0.000349" file="src/evaluation/protected-content.test.ts" line="190" assertions="1" />
+      <testcase name="honors matching multi-backtick inline-code delimiters" classname="Protected Technical Content" time="0.000496" file="src/evaluation/protected-content.test.ts" line="196" assertions="1" />
+      <testcase name="leaves sentence punctuation after URLs and Windows paths evaluable" classname="Protected Technical Content" time="0.000622" file="src/evaluation/protected-content.test.ts" line="202" assertions="1" />
+      <testcase name="does not mistake missing sentence spaces for dotted identifiers" classname="Protected Technical Content" time="0.000125" file="src/evaluation/protected-content.test.ts" line="212" assertions="1" />
+      <testcase name="protects opaque UUID and ULID identifiers" classname="Protected Technical Content" time="0.0001" file="src/evaluation/protected-content.test.ts" line="219" assertions="1" />
+      <testcase name="protects space-timestamp, syslog, and uncaught-error log lines" classname="Protected Technical Content" time="0.000155" file="src/evaluation/protected-content.test.ts" line="227" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/live-calibration.test.ts" file="src/evaluation/live-calibration.test.ts" tests="5" assertions="18" failures="0" skipped="0" time="0.010767622">
+    <testsuite name="live model calibration" file="src/evaluation/live-calibration.test.ts" line="14" tests="5" assertions="18" failures="0" skipped="0" time="0.004">
+      <testcase name="includes previous measured spend in the no-retry budget preflight" classname="live model calibration" time="0.000113" file="src/evaluation/live-calibration.test.ts" line="15" assertions="4" />
+      <testcase name="freezes unique fixtures covering every live requirement, category, and severity" classname="live model calibration" time="0.003794" file="src/evaluation/live-calibration.test.ts" line="30" assertions="4" />
+      <testcase name="accepts the predeclared spelling outcome with exact UTF-8 byte offsets" classname="live model calibration" time="0.001141" file="src/evaluation/live-calibration.test.ts" line="52" assertions="2" />
+      <testcase name="rejects a changed category, unsafe span, or unexpected suggestion" classname="live model calibration" time="0.000298" file="src/evaluation/live-calibration.test.ts" line="85" assertions="4" />
+      <testcase name="requires exact non-English bytes and any context suggestion to explain uncertainty" classname="live model calibration" time="0.000565" file="src/evaluation/live-calibration.test.ts" line="127" assertions="4" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/assessment-localization.test.ts" file="src/evaluation/assessment-localization.test.ts" tests="9" assertions="16" failures="0" skipped="0" time="0.004701049">
+    <testsuite name="deterministic assessment localization" file="src/evaluation/assessment-localization.test.ts" line="32" tests="9" assertions="16" failures="0" skipped="0" time="0.001">
+      <testcase name="canonicalizes equivalent wider edits without changing corrected bytes" classname="deterministic assessment localization" time="0.001237" file="src/evaluation/assessment-localization.test.ts" line="33" assertions="2" />
+      <testcase name="expands partial words while preserving the exact edit, including UTF-8" classname="deterministic assessment localization" time="0.0006" file="src/evaluation/assessment-localization.test.ts" line="59" assertions="2" />
+      <testcase name="safely localizes one unique adjacent duplicate as a whole phrase" classname="deterministic assessment localization" time="0.000871" file="src/evaluation/assessment-localization.test.ts" line="81" assertions="2" />
+      <testcase name="does not guess an ambiguous occurrence or manufacture absent source text" classname="deterministic assessment localization" time="0.000109" file="src/evaluation/assessment-localization.test.ts" line="103" assertions="1" />
+      <testcase name="does not repair separate duplicates or make a no-op valid" classname="deterministic assessment localization" time="0.000119" file="src/evaluation/assessment-localization.test.ts" line="114" assertions="1" />
+      <testcase name="never relocates a valid edit to an unrelated adjacent duplicate" classname="deterministic assessment localization" time="0.000102" file="src/evaluation/assessment-localization.test.ts" line="128" assertions="1" />
+      <testcase name="does not coalesce partial hyphenated, apostrophized, or combining-mark words" classname="deterministic assessment localization" time="0.000448" file="src/evaluation/assessment-localization.test.ts" line="140" assertions="3" />
+      <testcase name="requires both complete-word occurrences to form the adjacent pair" classname="deterministic assessment localization" time="0.000118" file="src/evaluation/assessment-localization.test.ts" line="157" assertions="1" />
+      <testcase name="never coalesces part of an alphanumeric or underscore token" classname="deterministic assessment localization" time="0.0001" file="src/evaluation/assessment-localization.test.ts" line="169" assertions="3" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/writing-evaluation.test.ts" file="src/evaluation/writing-evaluation.test.ts" tests="27" assertions="90" failures="0" skipped="0" time="0.28574057">
+    <testsuite name="Writing Evaluation" file="src/evaluation/writing-evaluation.test.ts" line="83" tests="27" assertions="90" failures="0" skipped="0" time="0.271">
+      <testcase name="rejects oversized input before calling the external model" classname="Writing Evaluation" time="0.006846" file="src/evaluation/writing-evaluation.test.ts" line="84" assertions="2" />
+      <testcase name="rejects samples without meaning-bearing English and stores nothing" classname="Writing Evaluation" time="0.009264" file="src/evaluation/writing-evaluation.test.ts" line="108" assertions="2" />
+      <testcase name="preserves and excludes model-identified non-English UTF-8 spans" classname="Writing Evaluation" time="0.010303" file="src/evaluation/writing-evaluation.test.ts" line="138" assertions="4" />
+      <testcase name="returns a complete no-correction Evaluation for correct English" classname="Writing Evaluation" time="0.006819" file="src/evaluation/writing-evaluation.test.ts" line="194" assertions="1" />
+      <testcase name="keeps context-dependent Suggestions score-neutral" classname="Writing Evaluation" time="0.006283" file="src/evaluation/writing-evaluation.test.ts" line="208" assertions="2" />
+      <testcase name="evaluates prose inside quotation marks and Markdown blockquotes" classname="Writing Evaluation" time="0.008169" file="src/evaluation/writing-evaluation.test.ts" line="235" assertions="1" />
+      <testcase name="keeps quoted Protected Technical Content excluded while evaluating quoted prose" classname="Writing Evaluation" time="0.008539" file="src/evaluation/writing-evaluation.test.ts" line="264" assertions="2" />
+      <testcase name="excludes structured data, commands, paths, identifiers, and logs" classname="Writing Evaluation" time="0.015376" file="src/evaluation/writing-evaluation.test.ts" line="293" assertions="2" />
+      <testcase name="protects multiline structured data, bare commands, Windows paths, and timestamped logs" classname="Writing Evaluation" time="0.022442" file="src/evaluation/writing-evaluation.test.ts" line="311" assertions="2" />
+      <testcase name="keeps command-like imperative words in ordinary prose evaluable" classname="Writing Evaluation" time="0.007174" file="src/evaluation/writing-evaluation.test.ts" line="335" assertions="2" />
+      <testcase name="keeps errors beside ambiguous technical-looking prose evaluable" classname="Writing Evaluation" time="0.006845" file="src/evaluation/writing-evaluation.test.ts" line="343" assertions="1" />
+      <testcase name="rejects a provider Finding that edits Protected Technical Content" classname="Writing Evaluation" time="0.007609" file="src/evaluation/writing-evaluation.test.ts" line="396" assertions="3" />
+      <testcase name="rejects a provider Finding inside a nested YAML sequence" classname="Writing Evaluation" time="0.005926" file="src/evaluation/writing-evaluation.test.ts" line="444" assertions="2" />
+      <testcase name="rejects provider Findings inside scalar YAML forms" classname="Writing Evaluation" time="0.037782" file="src/evaluation/writing-evaluation.test.ts" line="488" assertions="16" />
+      <testcase name="rejects a Finding whose Correction is identical to its source" classname="Writing Evaluation" time="0.007234" file="src/evaluation/writing-evaluation.test.ts" line="540" assertions="2" />
+      <testcase name="rejects Suggestions that overlap Findings or excluded content" classname="Writing Evaluation" time="0.006489" file="src/evaluation/writing-evaluation.test.ts" line="572" assertions="2" />
+      <testcase name="rejects Suggestions on protected and non-English spans" classname="Writing Evaluation" time="0.010112" file="src/evaluation/writing-evaluation.test.ts" line="615" assertions="4" />
+      <testcase name="rejects provider spans that split a UTF-8 code point" classname="Writing Evaluation" time="0.004756" file="src/evaluation/writing-evaluation.test.ts" line="683" assertions="2" />
+      <testcase name="excludes fenced and inline code while preserving their exact bytes" classname="Writing Evaluation" time="0.004712" file="src/evaluation/writing-evaluation.test.ts" line="712" assertions="1" />
+      <testcase name="rejects malformed model assessments without History or Progress evidence" classname="Writing Evaluation" time="0.006253" file="src/evaluation/writing-evaluation.test.ts" line="722" assertions="3" />
+      <testcase name="rejects ill-formed Unicode in model-authored text without storage" classname="Writing Evaluation" time="0.00455" file="src/evaluation/writing-evaluation.test.ts" line="763" assertions="2" />
+      <testcase name="derives and atomically stores one complete Evaluation" classname="Writing Evaluation" time="0.006379" file="src/evaluation/writing-evaluation.test.ts" line="785" assertions="4" />
+      <testcase name="persists no credential, hidden reasoning, or raw provider body" classname="Writing Evaluation" time="0.01028" file="src/evaluation/writing-evaluation.test.ts" line="839" assertions="3" />
+      <testcase name="normalizes retained Findings and Suggestions into source order" classname="Writing Evaluation" time="0.01133" file="src/evaluation/writing-evaluation.test.ts" line="879" assertions="2" />
+      <testcase name="retains distinct submission and evaluation completion timestamps" classname="Writing Evaluation" time="0.008482" file="src/evaluation/writing-evaluation.test.ts" line="932" assertions="2" />
+      <testcase name="maps provider failures and stores no History or Progress evidence" classname="Writing Evaluation" time="0.032202" file="src/evaluation/writing-evaluation.test.ts" line="965" assertions="18" />
+      <testcase name="gives identical bytes distinct identities and the same retained hash" classname="Writing Evaluation" time="0.011048" file="src/evaluation/writing-evaluation.test.ts" line="1046" assertions="3" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/evaluation-model.test.ts" file="src/evaluation/evaluation-model.test.ts" tests="3" assertions="33" failures="0" skipped="0" time="0.010342062">
+    <testsuite name="Evaluation Model contract" file="src/evaluation/evaluation-model.test.ts" line="25" tests="3" assertions="33" failures="0" skipped="0" time="0.007">
+      <testcase name="accepts every fixed Rubric Version 1 category and severity" classname="Evaluation Model contract" time="0.004683" file="src/evaluation/evaluation-model.test.ts" line="26" assertions="27" />
+      <testcase name="rejects invented categories, severities, and excess provider fields" classname="Evaluation Model contract" time="0.00224" file="src/evaluation/evaluation-model.test.ts" line="42" assertions="3" />
+      <testcase name="rejects whitespace-only summaries and explanations" classname="Evaluation Model contract" time="0.001741" file="src/evaluation/evaluation-model.test.ts" line="61" assertions="3" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/rubric-v1.test.ts" file="src/evaluation/rubric-v1.test.ts" tests="5" assertions="15" failures="0" skipped="0" time="0.004703436">
+    <testsuite name="Rubric Version 1" file="src/evaluation/rubric-v1.test.ts" line="12" tests="5" assertions="15" failures="0" skipped="0" time="0.001">
+      <testcase name="counts letter words while keeping internal apostrophes and hyphens" classname="Rubric Version 1" time="0.001126" file="src/evaluation/rubric-v1.test.ts" line="13" assertions="2" />
+      <testcase name="matches approved score anchors and band boundaries" classname="Rubric Version 1" time="0.000319" file="src/evaluation/rubric-v1.test.ts" line="18" assertions="10" />
+      <testcase name="applies non-overlapping corrections using UTF-8 byte offsets" classname="Rubric Version 1" time="0.000406" file="src/evaluation/rubric-v1.test.ts" line="31" assertions="1" />
+      <testcase name="rejects mismatched and overlapping correction spans" classname="Rubric Version 1" time="0.000808" file="src/evaluation/rubric-v1.test.ts" line="47" assertions="1" />
+      <testcase name="rejects correction offsets that split a UTF-8 code point" classname="Rubric Version 1" time="0.000468" file="src/evaluation/rubric-v1.test.ts" line="68" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/progress/progress-insights.test.ts" file="src/progress/progress-insights.test.ts" tests="6" assertions="13" failures="0" skipped="0" time="0.085184027">
+    <testsuite name="Progress Insights" file="src/progress/progress-insights.test.ts" line="79" tests="6" assertions="13" failures="0" skipped="0" time="0.081">
+      <testcase name="treats all as every retained Evaluation despite clock rollback" classname="Progress Insights" time="0.014185" file="src/progress/progress-insights.test.ts" line="80" assertions="2" />
+      <testcase name="segments exact period evidence by Rubric Version" classname="Progress Insights" time="0.012632" file="src/progress/progress-insights.test.ts" line="99" assertions="2" />
+      <testcase name="traces every selected Finding while counting each Evaluation once" classname="Progress Insights" time="0.006459" file="src/progress/progress-insights.test.ts" line="134" assertions="3" />
+      <testcase name="traces correction, Finding Rate, and average-score source evidence" classname="Progress Insights" time="0.009694" file="src/progress/progress-insights.test.ts" line="159" assertions="3" />
+      <testcase name="returns exact category recurrence ratios for the browser to format" classname="Progress Insights" time="0.010573" file="src/progress/progress-insights.test.ts" line="210" assertions="1" />
+      <testcase name="recomputes every aggregate from retained rows after deletion" classname="Progress Insights" time="0.030193" file="src/progress/progress-insights.test.ts" line="235" assertions="2" />
+    </testsuite>
+  </testsuite>
+</testsuites>
