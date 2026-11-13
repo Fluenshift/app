@@ -13,23 +13,24 @@ source repository only keeps the commit reachable.
 ## Getting a baseline
 
 The scripts in `scripts/migration/` run on plain Node 26.13.0 (type stripping) with no
-dependencies. Node 26.13.0 is installed with mise but not activated globally, so prefix each
-command with `mise exec node@26.13.0 --`.
+dependencies. Node 26.13.0 is installed with mise but not activated globally, hence the
+`mise exec` prefix.
 
 ```bash
-node scripts/migration/baselines.ts verify              # remote tags still resolve to the pins
-node scripts/migration/baselines.ts sync                # clone or update ../app-baselines/<system> at the pin
-node scripts/migration/baselines.ts add-worktree pe my-task     # disposable worktree at the pin
-node scripts/migration/baselines.ts remove-worktree pe my-task
+mise exec node@26.13.0 -- node scripts/migration/baselines.ts verify                     # remote tags still resolve to the pins
+mise exec node@26.13.0 -- node scripts/migration/baselines.ts sync                       # clone or update ../app-baselines/<system> at the pin
+mise exec node@26.13.0 -- node scripts/migration/baselines.ts add-worktree pe my-task    # disposable worktree at the pin
+mise exec node@26.13.0 -- node scripts/migration/baselines.ts remove-worktree pe my-task
 ```
 
 - Clones live outside this working tree, in `../app-baselines/<system>`; `--root <dir>`
   moves them. Disposable worktrees live in `../app-baselines/worktrees/<system>-<name>`.
 - Every command that touches a clone first checks that the remote tag still resolves to the
   pinned commit, and fails otherwise.
-- `sync` refuses a clone whose `origin` differs from the pin or whose working tree is not
-  clean. Installs, suite runs and characterization tests happen in worktrees; the clone stays
-  pristine.
+- `sync` and `add-worktree` refuse a clone whose `origin` differs from the pin or whose
+  working tree is not clean; `add-worktree` also requires the clone to sit at the pinned
+  commit. Installs, suite runs and characterization tests happen in worktrees; the clone
+  stays pristine.
 - Source repositories are read-only for agents (agent rule 1). Nothing here pushes to them.
 
 ## Toolchains
@@ -58,18 +59,21 @@ mise exec node@26.13.0 -- node scripts/migration/baseline-run.ts grifando
 2. Fails if the worktree's `mise.toml`, `.nvmrc`, `packageManager`, lockfile or CI image no
    longer match the toolchain above. A baseline bump that changes the toolchain must update
    the run plan in the script and this file together.
-3. Runs every command under a scrubbed environment: only `HOME`, `LANG`, `TERM`, a `PATH` of
-   the pinned tools from mise, and opt-outs for husky and telemetry. No credential or AI key
-   reaches baseline code. No suite needs one.
+3. Runs every command under a scrubbed environment: a private, empty `HOME` inside the run's
+   scratch directory, `LANG`, `TERM`, a `PATH` of the pinned tools from mise, opt-outs for
+   husky and telemetry, and the locations of three shared caches that hold no credentials:
+   Bun's package cache, the pnpm store and the Playwright browsers. No credential, no
+   credential file under the real home directory, and no AI key reaches baseline code. No
+   suite needs one.
 4. Installs with the frozen lockfile. For Grifando, starts a throwaway `postgres:17-alpine`
    container on a random loopback port, sets `DATABASE_URL` and `TEST_DATABASE_URL`, runs
    `pnpm db:test:prepare`, and removes the container at the end.
 5. Runs each suite with a machine-readable reporter and stores the report in
    [`baseline-runs/<system>/`](./baseline-runs/), next to a `manifest.json` that records the
    pin, the run time, the tools, the services, each command and its exit code.
-6. Normalizes the stored reports: paths inside the worktree become repo-relative, the home
-   directory becomes `~`, and bun's junit `hostname` attribute is dropped. Nothing else
-   changes.
+6. Normalizes the stored reports: paths inside the worktree become repo-relative, the private
+   and the real home directory become `~`, and bun's junit `hostname` attribute is dropped.
+   Nothing else changes.
 7. Exits 1 when any suite fails. The reports are written either way.
 
 The full log stays outside the repository, at the path the script prints.
