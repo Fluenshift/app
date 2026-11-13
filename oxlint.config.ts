@@ -43,7 +43,12 @@ const nodeBuiltins = [
 
 export default defineConfig({
   extends: [core, react, tanstack],
-  ignorePatterns: [...core.ignorePatterns, "apps/web/src/routeTree.gen.ts"],
+  ignorePatterns: [
+    ...core.ignorePatterns,
+    "apps/web/src/routeTree.gen.ts",
+    // Characterization tests are written for the baselines' stacks and run only there.
+    "migration/**",
+  ],
   rules: {
     "no-restricted-imports": ["error", { paths: [noZod] }],
     // Configuration comes from Effect Config in packages/env, never process.env.

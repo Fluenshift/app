@@ -10,6 +10,7 @@ export default defineConfig({
     "CONTEXT.md",
     "apps/web/src/routeTree.gen.ts",
     "docs/**",
+    "migration/**",
     "pnpm-lock.yaml",
   ],
 });
