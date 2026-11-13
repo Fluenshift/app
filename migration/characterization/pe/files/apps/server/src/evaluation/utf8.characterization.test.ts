@@ -24,8 +24,8 @@ describe("UTF-8 helpers", () => {
     expect(isWellFormedUtf8String("plain ASCII")).toBe(true);
     expect(isWellFormedUtf8String("Olá, naïve café")).toBe(true);
     expect(isWellFormedUtf8String("emoji ✅ 😀")).toBe(true);
-    expect(isWellFormedUtf8String("﻿starts with a BOM")).toBe(true);
-    expect(isWellFormedUtf8String("replacement � character")).toBe(true);
+    expect(isWellFormedUtf8String("\uFEFFstarts with a BOM")).toBe(true);
+    expect(isWellFormedUtf8String("replacement \uFFFD character")).toBe(true);
   });
 
   it("rejects lone surrogates", () => {
@@ -63,30 +63,30 @@ describe("UTF-8 helpers", () => {
 describe("applyCorrections UTF-8 edge cases", () => {
   it("returns the sample unchanged without corrections", async () => {
     const corrected = await Effect.runPromise(
-      applyCorrections("﻿nothing to fix ✅", [])
+      applyCorrections("\uFEFFnothing to fix ✅", [])
     );
 
-    expect(corrected).toBe("﻿nothing to fix ✅");
+    expect(corrected).toBe("\uFEFFnothing to fix ✅");
   });
 
   it("keeps a leading BOM when a later span is corrected", async () => {
     const corrected = await Effect.runPromise(
-      applyCorrections("﻿fail twice", [
+      applyCorrections("\uFEFFfail twice", [
         { byteEnd: 7, byteStart: 3, correction: "fails", originalText: "fail" },
       ])
     );
 
-    expect(corrected).toBe("﻿fails twice");
+    expect(corrected).toBe("\uFEFFfails twice");
   });
 
   it("matches a span whose original text starts with a BOM", async () => {
     const corrected = await Effect.runPromise(
-      applyCorrections("﻿fail twice", [
+      applyCorrections("\uFEFFfail twice", [
         {
           byteEnd: 7,
           byteStart: 0,
           correction: "fails",
-          originalText: "﻿fail",
+          originalText: "\uFEFFfail",
         },
       ])
     );
@@ -136,7 +136,7 @@ describe("applyCorrections UTF-8 edge cases", () => {
     }
 
     const split = await rejection("é is valid", [
-      { byteEnd: 1, byteStart: 0, correction: "e", originalText: "�" },
+      { byteEnd: 1, byteStart: 0, correction: "e", originalText: "\uFFFD" },
     ]);
 
     expect(split.reason).toBe(OUTSIDE_OR_OVERLAPPING);
