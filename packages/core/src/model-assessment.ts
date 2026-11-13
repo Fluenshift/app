@@ -1,6 +1,9 @@
-// Typed stub for the red commit of #11: the ported tests compile and fail on their checks.
-import { Schema, SchemaGetter } from "effect";
+// The structured assessment the Judge must return under Rubric Version 1, ported from PE
+// apps/server/src/evaluation/evaluation-model.ts. Only the pure contract lives here: the
+// EvaluationModel service, its errors and its fake belong to the Judge (Phase 4c).
+import { Schema } from "effect";
 
+import { ERROR_CATEGORIES } from "./rubric-v1";
 import type { ErrorCategory, FindingSeverity } from "./rubric-v1";
 
 export interface AssessmentSpan {
@@ -28,22 +31,37 @@ export interface ModelAssessment {
   readonly summary: string;
 }
 
-export const MeaningfulTextSchema = Schema.String;
+const spanFields = {
+  byteEnd: Schema.Natural,
+  byteStart: Schema.Natural,
+  originalText: Schema.NonEmptyString,
+};
 
-// Accepts any findings array and decodes it to an empty one, so no check can pass yet.
-const StubFindings = Schema.Array(Schema.Unknown).pipe(
-  Schema.decodeTo(Schema.Array(Schema.Unknown), {
-    decode: SchemaGetter.transform(() => []),
-    encode: SchemaGetter.transform((findings) => findings),
+export const MeaningfulTextSchema = Schema.String.check(
+  Schema.isPattern(/\S/u, {
+    expected: "a string containing non-whitespace text",
   })
 );
 
 export const ModelAssessmentSchema = Schema.Struct({
-  findings: StubFindings,
-  nonEnglishSpans: Schema.Array(Schema.Unknown),
-  suggestions: Schema.Array(Schema.Unknown),
-  summary: Schema.String,
-  hiddenReasoning: Schema.optionalKey(Schema.String),
+  findings: Schema.Array(
+    Schema.Struct({
+      ...spanFields,
+      category: Schema.Literals(ERROR_CATEGORIES),
+      correction: Schema.String,
+      explanation: MeaningfulTextSchema,
+      severity: Schema.Literals(["Minor", "Moderate", "Major"]),
+    })
+  ),
+  nonEnglishSpans: Schema.Array(Schema.Struct(spanFields)),
+  suggestions: Schema.Array(
+    Schema.Struct({
+      ...spanFields,
+      alternative: Schema.optionalKey(Schema.String),
+      explanation: MeaningfulTextSchema,
+    })
+  ),
+  summary: MeaningfulTextSchema,
 });
 
 export class InvalidAssessmentError extends Schema.TaggedError<
