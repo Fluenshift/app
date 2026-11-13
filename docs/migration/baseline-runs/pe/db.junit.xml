@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="bun test" tests="2" assertions="5" failures="0" skipped="0" time="0.24363911">
-  <testsuite name="src/index.test.ts" file="src/index.test.ts" tests="2" assertions="5" failures="0" skipped="0" time="0.236006926">
-    <testsuite name="Database" file="src/index.test.ts" line="24" tests="2" assertions="5" failures="0" skipped="0" time="0.014">
-      <testcase name="migrates product tables and enables durable SQLite invariants" classname="Database" time="0.01272" file="src/index.test.ts" line="25" assertions="3" />
-      <testcase name="reports connection startup failures as DatabaseError" classname="Database" time="0.002993" file="src/index.test.ts" line="54" assertions="2" />
+<testsuites name="bun test" tests="2" assertions="5" failures="0" skipped="0" time="0.190760378">
+  <testsuite name="src/index.test.ts" file="src/index.test.ts" tests="2" assertions="5" failures="0" skipped="0" time="0.185841149">
+    <testsuite name="Database" file="src/index.test.ts" line="24" tests="2" assertions="5" failures="0" skipped="0" time="0.012">
+      <testcase name="migrates product tables and enables durable SQLite invariants" classname="Database" time="0.010494" file="src/index.test.ts" line="25" assertions="3" />
+      <testcase name="reports connection startup failures as DatabaseError" classname="Database" time="0.002266" file="src/index.test.ts" line="54" assertions="2" />
     </testsuite>
   </testsuite>
 </testsuites>
