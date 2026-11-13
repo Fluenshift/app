@@ -1,241 +1,97 @@
-// Typed stub for the red commit of #14: the tests compile and fail on their checks.
+// The Academy's closed value sets, ported from the enums of Grifando's prisma/schema.prisma.
+// Each set has three forms: the ordered members, an object whose keys equal its values (so
+// ported modules keep `MasteryLevel.MASTERED` and `Object.values(TechnicalCategory)`), and an
+// Effect Schema for decoding. How MistakeCategory maps onto PE's Error Categories is decided
+// separately (docs/adr/0005).
 import { Schema } from "effect";
 
-export const PROMPT_TYPES = [] as unknown as readonly (
-  | "FREE"
-  | "DAILY_CHALLENGE"
-  | "TECHNICAL"
-  | "EXPLAIN_CODE"
-  | "INTERVIEW"
-)[];
-export const PromptType = {} as {
-  readonly [
-    Member in
-      | "FREE"
-      | "DAILY_CHALLENGE"
-      | "TECHNICAL"
-      | "EXPLAIN_CODE"
-      | "INTERVIEW"
-  ]: Member;
+type LiteralObject<Values extends readonly string[]> = {
+  readonly [Value in Values[number]]: Value;
 };
-export type PromptType =
-  | "FREE"
-  | "DAILY_CHALLENGE"
-  | "TECHNICAL"
-  | "EXPLAIN_CODE"
-  | "INTERVIEW";
-export const PromptTypeSchema = Schema.String as unknown as Schema.Literals<
-  readonly (
-    | "FREE"
-    | "DAILY_CHALLENGE"
-    | "TECHNICAL"
-    | "EXPLAIN_CODE"
-    | "INTERVIEW"
-  )[]
->;
 
-export const TECHNICAL_CATEGORIES = [] as unknown as readonly (
-  | "BACKEND"
-  | "FRONTEND"
-  | "DEVOPS"
-  | "DATABASES"
-  | "CLOUD"
-  | "ARCHITECTURE"
-  | "ALGORITHMS"
-  | "TESTING"
-  | "GIT"
-  | "GITHUB"
-  | "CODE_REVIEW"
-  | "SECURITY"
-  | "AI"
-  | "SYSTEM_DESIGN"
-)[];
-export const TechnicalCategory = {} as {
-  readonly [
-    Member in
-      | "BACKEND"
-      | "FRONTEND"
-      | "DEVOPS"
-      | "DATABASES"
-      | "CLOUD"
-      | "ARCHITECTURE"
-      | "ALGORITHMS"
-      | "TESTING"
-      | "GIT"
-      | "GITHUB"
-      | "CODE_REVIEW"
-      | "SECURITY"
-      | "AI"
-      | "SYSTEM_DESIGN"
-  ]: Member;
-};
-export type TechnicalCategory =
-  | "BACKEND"
-  | "FRONTEND"
-  | "DEVOPS"
-  | "DATABASES"
-  | "CLOUD"
-  | "ARCHITECTURE"
-  | "ALGORITHMS"
-  | "TESTING"
-  | "GIT"
-  | "GITHUB"
-  | "CODE_REVIEW"
-  | "SECURITY"
-  | "AI"
-  | "SYSTEM_DESIGN";
-export const TechnicalCategorySchema =
-  Schema.String as unknown as Schema.Literals<
-    readonly (
-      | "BACKEND"
-      | "FRONTEND"
-      | "DEVOPS"
-      | "DATABASES"
-      | "CLOUD"
-      | "ARCHITECTURE"
-      | "ALGORITHMS"
-      | "TESTING"
-      | "GIT"
-      | "GITHUB"
-      | "CODE_REVIEW"
-      | "SECURITY"
-      | "AI"
-      | "SYSTEM_DESIGN"
-    )[]
-  >;
+const literalObject = <const Values extends readonly string[]>(
+  values: Values
+): LiteralObject<Values> =>
+  Object.fromEntries(
+    values.map((value) => [value, value])
+  ) as LiteralObject<Values>;
 
-export const SESSION_STATUSES = [] as unknown as readonly (
-  | "PENDING"
-  | "ANALYZED"
-  | "FAILED"
-)[];
-export const SessionStatus = {} as {
-  readonly [Member in "PENDING" | "ANALYZED" | "FAILED"]: Member;
-};
-export type SessionStatus = "PENDING" | "ANALYZED" | "FAILED";
-export const SessionStatusSchema = Schema.String as unknown as Schema.Literals<
-  readonly ("PENDING" | "ANALYZED" | "FAILED")[]
->;
+export const PROMPT_TYPES = [
+  "FREE",
+  "DAILY_CHALLENGE",
+  "TECHNICAL",
+  "EXPLAIN_CODE",
+  "INTERVIEW",
+] as const;
+export const PromptType = literalObject(PROMPT_TYPES);
+export type PromptType = (typeof PROMPT_TYPES)[number];
+export const PromptTypeSchema = Schema.Literals(PROMPT_TYPES);
 
-export const MISTAKE_CATEGORIES = [] as unknown as readonly (
-  | "ARTICLES"
-  | "PREPOSITIONS"
-  | "VERB_TENSE"
-  | "SUBJECT_VERB_AGREEMENT"
-  | "VOCABULARY"
-  | "WORD_ORDER"
-  | "SPELLING"
-  | "PUNCTUATION"
-  | "UNNATURAL_PHRASING"
-  | "LITERAL_TRANSLATION"
-  | "COLLOCATION"
-  | "PRONOUNS"
-  | "COUNTABLE_UNCOUNTABLE"
-)[];
-export const MistakeCategory = {} as {
-  readonly [
-    Member in
-      | "ARTICLES"
-      | "PREPOSITIONS"
-      | "VERB_TENSE"
-      | "SUBJECT_VERB_AGREEMENT"
-      | "VOCABULARY"
-      | "WORD_ORDER"
-      | "SPELLING"
-      | "PUNCTUATION"
-      | "UNNATURAL_PHRASING"
-      | "LITERAL_TRANSLATION"
-      | "COLLOCATION"
-      | "PRONOUNS"
-      | "COUNTABLE_UNCOUNTABLE"
-  ]: Member;
-};
-export type MistakeCategory =
-  | "ARTICLES"
-  | "PREPOSITIONS"
-  | "VERB_TENSE"
-  | "SUBJECT_VERB_AGREEMENT"
-  | "VOCABULARY"
-  | "WORD_ORDER"
-  | "SPELLING"
-  | "PUNCTUATION"
-  | "UNNATURAL_PHRASING"
-  | "LITERAL_TRANSLATION"
-  | "COLLOCATION"
-  | "PRONOUNS"
-  | "COUNTABLE_UNCOUNTABLE";
-export const MistakeCategorySchema =
-  Schema.String as unknown as Schema.Literals<
-    readonly (
-      | "ARTICLES"
-      | "PREPOSITIONS"
-      | "VERB_TENSE"
-      | "SUBJECT_VERB_AGREEMENT"
-      | "VOCABULARY"
-      | "WORD_ORDER"
-      | "SPELLING"
-      | "PUNCTUATION"
-      | "UNNATURAL_PHRASING"
-      | "LITERAL_TRANSLATION"
-      | "COLLOCATION"
-      | "PRONOUNS"
-      | "COUNTABLE_UNCOUNTABLE"
-    )[]
-  >;
+export const TECHNICAL_CATEGORIES = [
+  "BACKEND",
+  "FRONTEND",
+  "DEVOPS",
+  "DATABASES",
+  "CLOUD",
+  "ARCHITECTURE",
+  "ALGORITHMS",
+  "TESTING",
+  "GIT",
+  "GITHUB",
+  "CODE_REVIEW",
+  "SECURITY",
+  "AI",
+  "SYSTEM_DESIGN",
+] as const;
+export const TechnicalCategory = literalObject(TECHNICAL_CATEGORIES);
+export type TechnicalCategory = (typeof TECHNICAL_CATEGORIES)[number];
+export const TechnicalCategorySchema = Schema.Literals(TECHNICAL_CATEGORIES);
 
-export const MISTAKE_SEVERITIES = [] as unknown as readonly (
-  | "ERROR"
-  | "UNNATURAL"
-)[];
-export const MistakeSeverity = {} as {
-  readonly [Member in "ERROR" | "UNNATURAL"]: Member;
-};
-export type MistakeSeverity = "ERROR" | "UNNATURAL";
-export const MistakeSeveritySchema =
-  Schema.String as unknown as Schema.Literals<
-    readonly ("ERROR" | "UNNATURAL")[]
-  >;
+export const SESSION_STATUSES = ["PENDING", "ANALYZED", "FAILED"] as const;
+export const SessionStatus = literalObject(SESSION_STATUSES);
+export type SessionStatus = (typeof SESSION_STATUSES)[number];
+export const SessionStatusSchema = Schema.Literals(SESSION_STATUSES);
 
-export const MASTERY_LEVELS = [] as unknown as readonly (
-  | "ACTIVE"
-  | "IMPROVING"
-  | "MASTERED"
-)[];
-export const MasteryLevel = {} as {
-  readonly [Member in "ACTIVE" | "IMPROVING" | "MASTERED"]: Member;
-};
-export type MasteryLevel = "ACTIVE" | "IMPROVING" | "MASTERED";
-export const MasteryLevelSchema = Schema.String as unknown as Schema.Literals<
-  readonly ("ACTIVE" | "IMPROVING" | "MASTERED")[]
->;
+export const MISTAKE_CATEGORIES = [
+  "ARTICLES",
+  "PREPOSITIONS",
+  "VERB_TENSE",
+  "SUBJECT_VERB_AGREEMENT",
+  "VOCABULARY",
+  "WORD_ORDER",
+  "SPELLING",
+  "PUNCTUATION",
+  "UNNATURAL_PHRASING",
+  "LITERAL_TRANSLATION",
+  "COLLOCATION",
+  "PRONOUNS",
+  "COUNTABLE_UNCOUNTABLE",
+] as const;
+export const MistakeCategory = literalObject(MISTAKE_CATEGORIES);
+export type MistakeCategory = (typeof MISTAKE_CATEGORIES)[number];
+export const MistakeCategorySchema = Schema.Literals(MISTAKE_CATEGORIES);
 
-export const EXERCISE_TYPES = [] as unknown as readonly (
-  | "MULTIPLE_CHOICE"
-  | "FILL_BLANK"
-  | "REWRITE"
-  | "TRANSLATION"
-)[];
-export const ExerciseType = {} as {
-  readonly [
-    Member in "MULTIPLE_CHOICE" | "FILL_BLANK" | "REWRITE" | "TRANSLATION"
-  ]: Member;
-};
-export type ExerciseType =
-  | "MULTIPLE_CHOICE"
-  | "FILL_BLANK"
-  | "REWRITE"
-  | "TRANSLATION";
-export const ExerciseTypeSchema = Schema.String as unknown as Schema.Literals<
-  readonly ("MULTIPLE_CHOICE" | "FILL_BLANK" | "REWRITE" | "TRANSLATION")[]
->;
+export const MISTAKE_SEVERITIES = ["ERROR", "UNNATURAL"] as const;
+export const MistakeSeverity = literalObject(MISTAKE_SEVERITIES);
+export type MistakeSeverity = (typeof MISTAKE_SEVERITIES)[number];
+export const MistakeSeveritySchema = Schema.Literals(MISTAKE_SEVERITIES);
 
-export const INTERVIEW_STATUSES = [] as unknown as readonly (
-  | "ACTIVE"
-  | "ENDED"
-)[];
-export const InterviewStatus = {} as {
-  readonly [Member in "ACTIVE" | "ENDED"]: Member;
-};
-export type InterviewStatus = "ACTIVE" | "ENDED";
-export const InterviewStatusSchema =
-  Schema.String as unknown as Schema.Literals<readonly ("ACTIVE" | "ENDED")[]>;
+export const MASTERY_LEVELS = ["ACTIVE", "IMPROVING", "MASTERED"] as const;
+export const MasteryLevel = literalObject(MASTERY_LEVELS);
+export type MasteryLevel = (typeof MASTERY_LEVELS)[number];
+export const MasteryLevelSchema = Schema.Literals(MASTERY_LEVELS);
+
+export const EXERCISE_TYPES = [
+  "MULTIPLE_CHOICE",
+  "FILL_BLANK",
+  "REWRITE",
+  "TRANSLATION",
+] as const;
+export const ExerciseType = literalObject(EXERCISE_TYPES);
+export type ExerciseType = (typeof EXERCISE_TYPES)[number];
+export const ExerciseTypeSchema = Schema.Literals(EXERCISE_TYPES);
+
+export const INTERVIEW_STATUSES = ["ACTIVE", "ENDED"] as const;
+export const InterviewStatus = literalObject(INTERVIEW_STATUSES);
+export type InterviewStatus = (typeof INTERVIEW_STATUSES)[number];
+export const InterviewStatusSchema = Schema.Literals(INTERVIEW_STATUSES);
