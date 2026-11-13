@@ -111,5 +111,38 @@ owners decide, through the `needs-info` issue linked here.
 
 ## Characterization tests
 
-Phase 0 step 7 adds the characterization tests in `migration/characterization/{pe,grifando}/`
-and the commands that run them in a disposable worktree.
+Behavior that no baseline test pins gets a characterization test before it is ported
+(agent rule 5). The tests are kept in this repository, written in the baseline's own idiom,
+and run at the pin:
+
+```bash
+mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts pe
+mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts grifando
+```
+
+- Files live in `migration/characterization/<system>/files/<path>`, where `<path>` is their
+  place inside the baseline, so relative imports work unchanged. Tests are named
+  `*.characterization.test.ts` (or `.tsx`); helper files may sit beside them.
+- The script creates a fresh worktree, `../app-baselines/worktrees/<system>-characterization`,
+  installs under the same scrubbed environment as the suite runs, and copies the files in. It
+  refuses to replace any baseline file, and fails if the run changed a tracked baseline file.
+- Each test runs with the baseline suite that owns its directory (`filesRoot` in the run plan
+  of `baseline-run.ts`), with that suite's machine-readable reporter. PE has no characterization
+  suite for `e2e/`; Grifando's tests run with Vitest against the throwaway Postgres.
+- Normalized reports and a manifest, which lists the copied files, go to
+  `migration/characterization/<system>/reports/`. The script exits 1 when a characterization
+  test fails: a red characterization pins nothing, and the inventory refuses it.
+- `migration/**` is outside this repository's build, lint and format: the files are written
+  for Bun, Elysia, Next.js and Prisma.
+
+After a run, regenerate the inventory, then give the new cases ledger rows (agent rule 13: the
+ledger belongs to the coordinator):
+
+```bash
+mise exec node@26.13.0 -- node scripts/migration/inventory.ts
+mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> --class <A|B|C> <system>:characterization:<path>
+```
+
+| System | File | Pins | Cases |
+| --- | --- | --- | ---: |
+| `pe` | `apps/server/src/evaluation/utf8.characterization.test.ts` | `utf8.ts`, which has no test, and the UTF-8 edge cases of `applyCorrections`: a leading BOM, lone surrogates, code-point boundaries, the two rejection reasons. A port to `TextEncoder` and `TextDecoder` must keep a leading BOM, which a default `TextDecoder` drops. | 13 |
