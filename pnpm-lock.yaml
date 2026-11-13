@@ -438,6 +438,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@fluenshift/contract':
+        specifier: workspace:*
+        version: link:../contract
       effect:
         specifier: 'catalog:'
         version: 4.1.2
