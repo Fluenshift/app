@@ -1,0 +1,499 @@
+[
+  {
+    "author": "levyrodrigues23",
+    "body": "## Contexto\nA migration `prisma/migrations/20260922120000_add_technical_communication_score` foi escrita à mão numa sessão em que o Postgres estava inacessível. O `schema.prisma` já tem o campo `technicalCommunicationScore` (a 5ª nota, específica do Interview Practice — SPEC.md §5.8) e o client do Prisma já foi regenerado, mas **o SQL nunca rodou contra nenhum banco**.\n\n## Problema\nEnquanto a migration não for aplicada, qualquer gravação/leitura de `technicalCommunicationScore` vai falhar contra o banco real (coluna inexistente). O Interview Practice depende disso.\n\n## O que fazer\n1. `docker compose up -d` (abrir o Docker Desktop antes, se necessário).\n2. `pnpm db:migrate` — confirmar que aplica sem gerar uma migration nova (se gerar, o SQL escrito à mão divergiu do schema e precisa ser corrigido).\n3. Aplicar também no banco de teste (`english_coach_test`).\n4. Rodar `pnpm test` e testar uma entrevista ponta a ponta.\n5. Remover a nota \"Pending migration, unapplied\" do `CLAUDE.md`.\n\n## Critérios de aceite\n- [ ] Migration aplicada no banco de dev e de teste\n- [ ] `prisma migrate status` sem pendências\n- [ ] Uma sessão de entrevista grava e exibe a nota de comunicação técnica\n- [ ] Nota removida do `CLAUDE.md`\n",
+    "closedAt": "2026-10-27T02:06:25Z",
+    "comments": [],
+    "createdAt": "2026-10-20T02:55:33Z",
+    "labels": [
+      "infra",
+      "mvp",
+      "tech-debt"
+    ],
+    "number": 1,
+    "state": "CLOSED",
+    "title": "Aplicar a migration pendente add_technical_communication_score",
+    "url": "https://github.com/Fluenshift/grifando/issues/1"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "## Contexto\nO repositório não tem nenhum workflow de CI (`.github/` não existe). Como o repo é privado numa conta gratuita, **branch protection não está disponível** (exige GitHub Pro) — então hoje nada impede código quebrado de chegar em `develop`/`main`. O CI vira a principal rede de segurança.\n\n## O que fazer\nCriar `.github/workflows/ci.yml` rodando em `pull_request` e `push` para `main` e `develop`:\n\n- pnpm + Node LTS, com cache do store\n- `pnpm install --frozen-lockfile` (o `postinstall` já roda `prisma generate`)\n- `pnpm exec next typegen` → `pnpm typecheck` (sem o typegen o tsc falha em `PageProps`/`LayoutProps`)\n- `pnpm lint`\n- `pnpm test` com um **service container `postgres:17-alpine`** (mesma imagem do `docker-compose.yml`)\n\n## Pontos de atenção\n- Os testes de integração exigem `TEST_DATABASE_URL` apontando para `english_coach_test`. Hoje **não há nada no repo que crie esse banco nem aplique as migrations nele** — é feito manualmente. O CI precisa criar o banco e rodar `prisma migrate deploy` contra ele antes do `pnpm test`. Vale documentar o mesmo passo no README para o setup local.\n- Os testes não podem precisar de `ANTHROPIC_API_KEY`/`GEMINI_API_KEY` (o `AIProvider` é mockado) — se algum precisar, é bug.\n- Opcional: `pnpm build` (atenção ao gotcha de prerender estático descrito no `CLAUDE.md`).\n\n## Critérios de aceite\n- [ ] Workflow verde num PR para `develop`\n- [ ] Typecheck, lint e testes (incluindo integração com Postgres) rodando\n- [ ] Setup do banco de teste documentado no README\n",
+    "closedAt": "2026-10-27T02:06:26Z",
+    "comments": [],
+    "createdAt": "2026-10-20T02:55:36Z",
+    "labels": [
+      "infra",
+      "mvp"
+    ],
+    "number": 2,
+    "state": "CLOSED",
+    "title": "Configurar CI no GitHub Actions (typecheck, lint, testes com Postgres)",
+    "url": "https://github.com/Fluenshift/grifando/issues/2"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "## Contexto\nSPEC.md §11 pede \"basic per-user rate limiting on AI-calling routes (in-memory token bucket is enough for a single-user MVP)\". **Não existe nenhum rate limiting hoje.**\n\n## Problema\nCada chamada nessas rotas custa dinheiro na API da Anthropic/Gemini. Um duplo clique, um loop num componente ou um script podem gerar dezenas de chamadas pagas sem limite.\n\n## Rotas afetadas (as que chamam o `AIProvider`)\n- `POST /api/writing-sessions` — `analyzeWriting` (Writing Coach, Technical, Explain Code, Daily)\n- `POST /api/exercises` — `generateExercises`\n- `POST /api/interview` e `POST /api/interview/[id]/turns/[turnId]/answer` — `continueInterview` / `analyzeWriting`\n\nA correção de exercícios (`/api/exercises/[id]/attempts`) é determinística e **não** chama IA — não precisa de limite.\n\n## Proposta\n- Token bucket em memória, chaveado por `DEFAULT_USER_ID` (preparado para receber o userId real quando houver auth).\n- Um módulo pequeno e testável (ex.: `src/server/rateLimit.ts`) com relógio injetável, chamado pelas rotas antes do service — sem lógica de negócio na rota além disso.\n- Ao estourar: `429` com `{ error: \"...\" }` e header `Retry-After`. Os componentes cliente já checam `response.ok`; garantir que mostram uma mensagem clara para 429.\n- Limites iniciais sugeridos (ajustar no uso real): ~10 análises/min, ~5 gerações de exercício/min.\n\n## Critérios de aceite\n- [ ] Testes unitários do bucket (consumo, recarga, estouro) com relógio fake\n- [ ] Rotas de IA retornam 429 ao exceder o limite\n- [ ] UI mostra mensagem amigável no 429\n",
+    "closedAt": "2026-11-07T06:11:55Z",
+    "comments": [],
+    "createdAt": "2026-10-20T02:55:38Z",
+    "labels": [
+      "enhancement",
+      "mvp"
+    ],
+    "number": 3,
+    "state": "CLOSED",
+    "title": "Rate limiting nas rotas que chamam a IA",
+    "url": "https://github.com/Fluenshift/grifando/issues/3"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "## Contexto\nSPEC.md §9/§12: quando a análise da IA falha (resposta inválida no Zod, erro de rede etc.), a `WritingSession` fica `PENDING` com o texto original salvo, \"so the user can retry without re-typing\".\n\n## Comportamento atual\n- ✅ O texto **não se perde na hora**: `WritingCoach.tsx` volta para o editor com o texto no estado e mostra o erro.\n- ❌ Ao reenviar, o cliente faz um **novo** `POST /api/writing-sessions`, criando **outra** sessão. A sessão `PENDING` anterior fica **órfã** para sempre no banco.\n- ❌ Se o usuário recarregar a página ou fechar a aba após a falha, o texto some da tela — ele só existe na sessão órfã, que não aparece em lugar nenhum da UI.\n- Mesmo padrão em `ExplainCodeCoach.tsx` e `InterviewPractice.tsx`.\n\n## Proposta\n- Endpoint `POST /api/writing-sessions/[id]/retry` (ou equivalente) que reanalisa uma sessão `PENDING` existente em vez de criar outra — lógica no `writingCoachService`, rota fina.\n- O cliente guarda o `sessionId` da tentativa que falhou e usa o retry ao reenviar o mesmo texto (se o usuário editar o texto, aí é uma sessão nova — decidir e documentar).\n- Opcional: mostrar no dashboard ou em `/write` as sessões pendentes (\"você tem um texto que não foi analisado — tentar de novo?\").\n\n## Critérios de aceite\n- [ ] Reenviar após falha não cria sessão duplicada\n- [ ] Teste de service: falha → `PENDING` → retry com sucesso → `ANALYZED`, mesma sessão\n- [ ] Texto recuperável mesmo após recarregar a página (se a parte opcional entrar)\n",
+    "closedAt": "2026-11-07T06:11:56Z",
+    "comments": [],
+    "createdAt": "2026-10-20T02:55:41Z",
+    "labels": [
+      "bug",
+      "mvp"
+    ],
+    "number": 4,
+    "state": "CLOSED",
+    "title": "Retry de análise que falhou cria sessão duplicada e deixa PENDING órfã",
+    "url": "https://github.com/Fluenshift/grifando/issues/4"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "## Contexto\nSPEC.md §5.1: \"The user picks a writing mode (free writing, technical explanation, GitHub issue, PR description, README, interview answer, casual/professional message, daily challenge, etc.)\".\n\n## Estado atual\nO enum `PromptType` tem só `FREE | DAILY_CHALLENGE | TECHNICAL | EXPLAIN_CODE | INTERVIEW`. \"GitHub issue\", \"PR description\" etc. existem apenas como **textos de prompt** dentro dos bancos estáticos (`technicalPrompts.ts`, `dailyPrompt.ts`) — não como modos selecionáveis. Não existe modo \"mensagem casual/profissional\".\n\n## Decisão necessária\n- **Opção A — manter como está:** os prompts técnicos já cobrem o caso de uso; atualizar o SPEC.md para refletir isso.\n- **Opção B — modos próprios:** novos valores em `PromptType` (ex.: `PR_DESCRIPTION`, `GITHUB_ISSUE`, `README`, `MESSAGE`), seletor de modo em `/write` e instruções específicas no prompt de análise (ex.: num PR description, avaliar também estrutura/convenções). Exige migration.\n\n## Critérios de aceite\n- [ ] Decisão registrada (nesta issue e no SPEC.md)\n- [ ] Se B: migration, seletor na UI, prompt ajustado, testes de prompt\n",
+    "closedAt": "2026-11-07T06:11:56Z",
+    "comments": [],
+    "createdAt": "2026-10-20T02:55:43Z",
+    "labels": [
+      "mvp",
+      "question"
+    ],
+    "number": 5,
+    "state": "CLOSED",
+    "title": "Decidir: modos de escrita do SPEC §5.1 (PR description, GitHub issue, README, mensagem)",
+    "url": "https://github.com/Fluenshift/grifando/issues/5"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "## Contexto\nExiste trabalho local **não commitado** de um botão \"Focus Music\" no header:\n- `src/components/layout/FocusMusic.tsx` (novo) — client component; abre um popover com o embed de uma playlist editorial pública do Spotify (sem auth); fecha ao clicar fora.\n- `src/components/layout/SiteHeader.tsx` (modificado) — inclui o componente ao lado da navegação.\n\nNão está no SPEC.md — é um extra de conveniência.\n\n## O que fazer\n1. Criar `feature/focus-music` a partir de `develop` com essas mudanças.\n2. Revisar contra o design system do `CLAUDE.md` (sem cores stock do Tailwind, ember só onde permitido, popover com `ring-border` sobre o fundo do card).\n3. Acessibilidade: fechar com `Esc`, foco gerenciado, `title` no iframe.\n4. Checar layout no mobile (popover de `w-72` ancorado à direita).\n5. Typecheck + lint, abrir PR para `develop`.\n\n## Critérios de aceite\n- [ ] Funciona em desktop e mobile\n- [ ] Acessível via teclado\n- [ ] PR mergeado em `develop`\n",
+    "closedAt": "2026-10-27T02:06:27Z",
+    "comments": [
+      {
+        "author": "levyrodrigues23",
+        "body": "Desdobramentos planejados (ver `docs/research/duolingo.md`, Parte A → \"Scope decisions\"):\n- #21 — tocar qualquer playlist colando o link (Spotify ou YouTube), só embeds oficiais, sem OAuth.\n- #22 — bug: fechar o popover desmonta o iframe e a música para; também garantir que navegar entre páginas não interrompe.\n- #23 — playlists salvas.\n\nSugestão: fechar esta issue junto com #22 (mesmo arquivo, mesmo PR), e tratar #21/#23 em seguida.\n",
+        "createdAt": "2026-10-23T13:43:33Z"
+      }
+    ],
+    "createdAt": "2026-10-20T02:55:45Z",
+    "labels": [
+      "enhancement"
+    ],
+    "number": 6,
+    "state": "CLOSED",
+    "title": "Finalizar Focus Music (player no header)",
+    "url": "https://github.com/Fluenshift/grifando/issues/6"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "## Contexto\nSPEC.md §5.10 / §8: vocabulário é **pós-MVP**. O model `VocabularyItem` (`term`, `meaningPt`, `exampleSentence`, `sourceSessionId`) **já existe no schema** justamente para não precisar de migration depois — mas nenhuma funcionalidade o usa.\n\n## Ideia\n- Salvar palavras/expressões interessantes encontradas durante as sessões (ex.: botão \"salvar\" na versão natural do texto ou nas explicações de erros).\n- Página `/vocabulary` para listar e revisar, com significado em PT e frase de exemplo.\n- Fora do escopo inicial: repetição espaçada completa (SPEC.md §8 lista como não-MVP).\n\n## Critérios de aceite (a refinar quando for priorizado)\n- [ ] Salvar item a partir de uma sessão analisada\n- [ ] Listar / revisar / remover itens\n- [ ] Só iniciar depois do MVP fechado\n",
+    "closedAt": "2026-11-07T06:11:57Z",
+    "comments": [
+      {
+        "author": "levyrodrigues23",
+        "body": "Atualização de escopo: repetição espaçada saiu da lista de \"fora do escopo\" (ver #8 e `docs/research/duolingo.md`).\n\nQuando esta issue for priorizada, `VocabularyItem` deve reusar o mesmo modelo de meia-vida e a mesma fila de revisão de #10 / #12, em vez de um mecanismo próprio — a ressalva \"fora do escopo inicial: repetição espaçada completa\" acima não vale mais.\n",
+        "createdAt": "2026-10-23T13:43:34Z"
+      }
+    ],
+    "createdAt": "2026-10-20T02:55:47Z",
+    "labels": [
+      "enhancement",
+      "post-mvp"
+    ],
+    "number": 7,
+    "state": "CLOSED",
+    "title": "Vocabulário: salvar e revisar palavras (VocabularyItem)",
+    "url": "https://github.com/Fluenshift/grifando/issues/7"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Issue guarda-chuva. Lista e ordena #9–#20 (checklist com links). Ordem sugerida: #9 → #10 → #11 → #12 → #13 → #16 → #14 → #15 → #17 → #18 → #19 → #20.\r\nPrincípio: copiar a *maquinaria de memória* do Duolingo (HLR, Birdbrain, intercalação), usar hábito só como andaime leve, medir sucesso por padrões dominados e mantidos — nunca XP.\r\n\r\n## Issues\r\n- [ ] #9 Atualizar SPEC.md com o novo escopo\r\n- [ ] #10 Meia-vida por MistakePattern (HLR simplificado)\r\n- [ ] #11 Padrões \"esvaecendo\": MASTERED decai\r\n- [ ] #12 Fila de revisão: praticar padrões vencidos\r\n- [ ] #13 Sessão diária mista (\"Today\")\r\n- [ ] #14 Dificuldade-alvo (Elo por categoria, ~70% de acerto)\r\n- [ ] #15 \"Explique minha resposta\"\r\n- [ ] #16 Diff contra a resposta aceitável mais próxima (sem IA)\r\n- [ ] #17 Streak simples com descanso\r\n- [ ] #18 Checagem de domínio (estilo Legendary)\r\n- [ ] #19 Marcar interferência do português (L1)\r\n- [ ] #20 Lembrete diário\r\n\r\nFocus Music (fora do épico): #21, #22, #23\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-08T02:10:19Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:23Z",
+    "labels": [
+      "epic",
+      "retention"
+    ],
+    "number": 8,
+    "state": "CLOSED",
+    "title": "[Epic] Do corretor ao coach: retenção estilo Duolingo",
+    "url": "https://github.com/Fluenshift/grifando/issues/8"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "- §8: remover \"full spaced-repetition scheduling\" e \"streaks\" da lista não-MVP; voz/pronúncia, multiusuário, social e mobile continuam fora.\r\n- §6: documentar decaimento de MASTERED e meia-vida por padrão (#10/#11).\r\n- Nova seção curta \"Retention engine\" apontando para `docs/research/duolingo.md`.\r\nAceite: SPEC e CLAUDE.md não contradizem as issues abaixo.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-10-27T02:06:33Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:25Z",
+    "labels": [
+      "documentation",
+      "retention"
+    ],
+    "number": 9,
+    "state": "CLOSED",
+    "title": "Atualizar SPEC.md com o novo escopo",
+    "url": "https://github.com/Fluenshift/grifando/issues/9"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Fonte: [S1]. p = 2^(-Δ/h), h = 2^(θ·x) com x = (seen, correct, incorrect).\r\n- Migration: `seenCount`, `correctCount`, `incorrectCount`, `lastPracticedAt` em `MistakePattern` (backfill: seen = occurrenceCount, lastPracticedAt = lastSeenAt).\r\n- Função pura `recallProbability(pattern, now)` + `estimateHalfLifeDays(counters)` com pesos fixos (sem pesos por padrão — o Duolingo viu que eles fazem overfit).\r\n- Atualizar contadores em cada `ExerciseAttempt` e em cada nova ocorrência do padrão na escrita (ocorrência = erro de recordação).\r\nAceite: testes unitários das funções puras; contadores atualizados nos dois caminhos; `pnpm typecheck && pnpm lint && pnpm test`.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:11:57Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:27Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 10,
+    "state": "CLOSED",
+    "title": "Meia-vida por MistakePattern (HLR simplificado)",
+    "url": "https://github.com/Fluenshift/grifando/issues/10"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Depende de #10. Hoje `applyExerciseResult` (`src/server/domain/mistakes/mastery.ts`) trata MASTERED como terminal.\r\n- MASTERED → IMPROVING quando p < 0,5 (limiar constante, documentado) ou quando o erro reaparece na escrita.\r\n- Dashboard e `/mistakes`: indicador \"fading\" (p baixo) com cor `--destructive`/`--muted`, não ember.\r\nAceite: testes das transições novas; nenhum padrão MASTERED fica \"para sempre\" sem revisão.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:11:54Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:29Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 11,
+    "state": "CLOSED",
+    "title": "Padrões \"esvaecendo\": MASTERED decai",
+    "url": "https://github.com/Fluenshift/grifando/issues/11"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Depende de #10. `selectPatternsForPractice` (`selection.ts`) passa a ordenar por menor p (vencidos primeiro), mantendo frequência como desempate.\r\n- Botão \"Praticar padrões vencidos\" em `/mistakes` (equivalente ao modo Mistakes do Practice Hub [S6]).\r\n- Recomendação do dashboard usa a mesma ordenação.\r\nAceite: testes de seleção; recomendação do dashboard muda quando um padrão envelhece.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:11:58Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:31Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 12,
+    "state": "CLOSED",
+    "title": "Fila de revisão: praticar padrões vencidos",
+    "url": "https://github.com/Fluenshift/grifando/issues/12"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Fonte: caminho intercalado [S5]. Rota `/today`: 1 prompt de escrita (diário ou técnico) + 3–5 exercícios de revisão dos padrões vencidos, intercalados, numa única tela/fluxo.\r\n- Reusa `writingCoachService` e os serviços de exercício — nenhuma lógica nova de IA.\r\n- Conta como a atividade do dia para a streak (#17).\r\nAceite: dá pra fazer a sessão inteira sem sair de `/today`; erros novos da escrita entram na fila na mesma sessão.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:11:58Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:33Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 13,
+    "state": "CLOSED",
+    "title": "Sessão diária mista (\"Today\")",
+    "url": "https://github.com/Fluenshift/grifando/issues/13"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Fonte: Birdbrain V1 [S3][S4], alvo ~70% [S19, secundária].\r\n- Migration: `difficulty` no `Exercise`; habilidade por (userId, categoria) — tabela nova ou campo no User (decidir na issue).\r\n- Função pura de update Elo após cada tentativa (resultado surpreendente move muito, esperado move pouco).\r\n- Prompt de geração recebe a dificuldade-alvo; validação Zod do campo.\r\nAceite: testes da atualização Elo; exercícios gerados registram dificuldade; taxa de acerto observável no dashboard.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:11:59Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:35Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 14,
+    "state": "CLOSED",
+    "title": "Dificuldade-alvo (Elo por categoria, ~70% de acerto)",
+    "url": "https://github.com/Fluenshift/grifando/issues/14"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Fonte: Explain My Answer [S6][S7].\r\n- Novo método `explainAttempt` no `AIProvider`, implementado em **anthropic e gemini**, schema Zod próprio.\r\n- Botão opcional após uma tentativa errada; correção continua determinística e sem chave de API.\r\n- Não persiste? Decidir: guardar em `ExerciseAttempt.feedback` ou só exibir.\r\nAceite: testes com provider fake; falha de IA mostra erro sem afetar a nota.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:11:59Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:37Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 15,
+    "state": "CLOSED",
+    "title": "\"Explique minha resposta\"",
+    "url": "https://github.com/Fluenshift/grifando/issues/15"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Fonte: [S1]. Em REWRITE/TRANSLATION errados, mostrar a resposta aceitável mais próxima (Levenshtein por palavra) com diff destacado.\r\n- Função pura em `answerChecking.ts`; reusa `HighlightedText` para o destaque.\r\n- Ameniza o tradeoff conhecido de correspondência estrita (CLAUDE.md).\r\nAceite: testes da escolha da resposta mais próxima e do diff.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:12:00Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:39Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 16,
+    "state": "CLOSED",
+    "title": "Diff contra a resposta aceitável mais próxima (sem IA)",
+    "url": "https://github.com/Fluenshift/grifando/issues/16"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Fontes: [S8][S10]. Uma atividade qualquer (escrita analisada ou 1 exercício) mantém a streak — barra baixa, separada de meta.\r\n- Até 2 \"dias de descanso\" por semana (freeze automático).\r\n- Cálculo puro a partir de `WritingSession`/`ExerciseAttempt` (sem tabela nova se possível); exibir no dashboard.\r\n- Marcos discretos (7, 30 dias). Sem mecânica de punição / aversão à perda agressiva.\r\nAceite: testes do cálculo com fuso horário local; dashboard mostra streak atual e maior streak.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:12:00Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:42Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 17,
+    "state": "CLOSED",
+    "title": "Streak simples com descanso",
+    "url": "https://github.com/Fluenshift/grifando/issues/17"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Fonte: [S5]. IMPROVING → MASTERED exige acertar um exercício sem andaime (REWRITE ou TRANSLATION livre), não só múltipla escolha.\r\nAceite: testes em `mastery.ts`; seleção gera o exercício de checagem quando o padrão está a um passo de MASTERED.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:12:01Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:43Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 18,
+    "state": "CLOSED",
+    "title": "Checagem de domínio (estilo Legendary)",
+    "url": "https://github.com/Fluenshift/grifando/issues/18"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Inferência (sem fonte Duolingo): falsos cognatos (actually/atualmente, pretend/pretender), preposições, artigos, make/do.\r\n- Schema Zod da análise ganha `l1Transfer: boolean` por erro; migration em `MistakeOccurrence`.\r\n- Prompt pede a marcação e a explicação em PT; `/mistakes` filtra por \"vem do português\".\r\nAceite: testes de schema; filtro funciona.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:12:02Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:46Z",
+    "labels": [
+      "enhancement",
+      "retention"
+    ],
+    "number": 19,
+    "state": "CLOSED",
+    "title": "Marcar interferência do português (L1)",
+    "url": "https://github.com/Fluenshift/grifando/issues/19"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Fonte: bandit de notificações [S13] — 1 lembrete/dia, textos rotativos, \"proteger o canal\".\r\nDecidir antes de implementar: app roda local (Docker). Opções: Web Push (service worker, só com navegador aberto/permitido) vs. e-mail (precisa SMTP) vs. nada. Fechar com a decisão registrada.\r\n\r\nÉpico: #8\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:12:02Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:48Z",
+    "labels": [
+      "question",
+      "retention"
+    ],
+    "number": 20,
+    "state": "CLOSED",
+    "title": "Lembrete diário",
+    "url": "https://github.com/Fluenshift/grifando/issues/20"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "- Função pura `parseMusicLink(url)` → `{ provider: \"spotify\", type: \"playlist\"|\"album\"|\"track\", id }` | `{ provider: \"youtube\", type: \"playlist\"|\"video\", id }` | erro. Aceitar `open.spotify.com/(intl-xx/)?playlist/...`, `spotify:playlist:...`, `youtube.com/playlist?list=`, `youtube.com/watch?v=...&list=`, `youtu.be/`, `music.youtube.com`.\r\n- Spotify: iframe `open.spotify.com/embed/<type>/<id>`. YouTube: iframe `youtube.com/embed?listType=playlist&list=<id>` (ou `embed/<videoId>`).\r\n- Campo para colar o link no popover; último link salvo em `localStorage` (try/catch, conveniência por navegador — sem DB).\r\n- Avisar na UI: Spotify toca faixa completa só se logado no Spotify no navegador; senão prévias de 30s.\r\nAceite: testes do parser (todos os formatos acima + inválidos); funciona com playlist própria nos dois serviços.\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-10-27T02:06:27Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:50Z",
+    "labels": [
+      "enhancement",
+      "music"
+    ],
+    "number": 21,
+    "state": "CLOSED",
+    "title": "Tocar qualquer playlist colando o link (Spotify ou YouTube)",
+    "url": "https://github.com/Fluenshift/grifando/issues/21"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Hoje `FocusMusic.tsx` desmonta o iframe quando o popover fecha (`open ? <div>…</div> : null`) → a música para.\r\n- Manter o iframe montado e só esconder visualmente (fora do fluxo, sem `display:none` se o embed pausar com isso — testar).\r\n- Confirmar que trocar de rota não remonta o header (root layout) e a música continua.\r\n- Indicador discreto no botão quando está tocando (se detectável; senão, \"player aberto\").\r\nAceite: fechar o popover e navegar entre páginas não interrompe a música.\r\nNota: pode ser incorporada à #6 em vez de issue nova.\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-10-27T02:06:28Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:52Z",
+    "labels": [
+      "bug",
+      "music"
+    ],
+    "number": 22,
+    "state": "CLOSED",
+    "title": "Música não para ao fechar o popover nem ao navegar",
+    "url": "https://github.com/Fluenshift/grifando/issues/22"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Lista de links nomeados (adicionar/remover/escolher), em `localStorage`. Uma padrão (a editorial atual) quando vazia.\r\nAceite: troca de playlist sem colar de novo.\r\n\r\n---\r\nContexto: [`docs/research/duolingo.md`](../blob/develop/docs/research/duolingo.md) — Parte A (decisões e mapeamento no código) e Parte B (pesquisa; IDs de fonte [S#]).",
+    "closedAt": "2026-11-07T06:12:03Z",
+    "comments": [],
+    "createdAt": "2026-10-23T13:40:54Z",
+    "labels": [
+      "enhancement",
+      "music"
+    ],
+    "number": 23,
+    "state": "CLOSED",
+    "title": "Playlists salvas",
+    "url": "https://github.com/Fluenshift/grifando/issues/23"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Hoje o visitante só pode usar Gemini ou Claude. Mais provedores dão alternativa quando um está lento ou fora do ar, e quem já tem uma chave de outro serviço consegue usar o site.\n\n**Proposta**\n- Adicionar provedores atrás da interface `AIProvider` (`src/server/ai/provider.ts`), cada um com sua forma de saída estruturada, tudo validado pelo mesmo schema Zod.\n- Prioridade sugerida:\n  1. **OpenRouter**: uma chave dá acesso a vários modelos, inclusive gratuitos.\n  2. **Groq**: muito rápido, com plano gratuito.\n  3. **OpenAI**.\n- Para cada provedor: opção em `/settings`, `testKey`, mapeamento de erros (chave inválida, cota, indisponível), modelo de fallback e testes com cliente falso.\n- Atualizar a página `/privacy` (EN/PT) com a política de dados de cada provedor.\n\n**Critérios de aceite**\n- Cada provedor implementa todos os métodos de `AIProvider`.\n- `pnpm check` verde, sem chave real nos testes.",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-08T03:24:49Z",
+    "labels": [
+      "enhancement",
+      "epic"
+    ],
+    "number": 61,
+    "state": "OPEN",
+    "title": "Suporte a mais provedores de IA (OpenAI, OpenRouter, Groq)",
+    "url": "https://github.com/Fluenshift/grifando/issues/61"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Permitir que o visitante escolha o modelo (por exemplo `gemini-3.5-flash` ou `-lite`) em `/settings`, salvo junto da chave no localStorage e enviado num header.\n\n- O servidor só aceita modelos de uma lista fixa por provedor, nunca uma string livre.\n- Mostrar uma nota curta sobre velocidade e qualidade de cada opção.",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-08T03:24:51Z",
+    "labels": [
+      "enhancement"
+    ],
+    "number": 62,
+    "state": "OPEN",
+    "title": "Escolher o modelo nas configurações",
+    "url": "https://github.com/Fluenshift/grifando/issues/62"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Com chave real, a análise de escrita leva cerca de 30s no `gemini-3.5-flash`, porque o modelo \"pensa\" antes de responder.\n\n- Testar `thinkingConfig` com orçamento baixo (ou zero) na análise e na geração de exercícios.\n- Medir tempo e qualidade antes e depois, com 3 textos de exemplo.\n- Ajustar `maxOutputTokens` se o raciocínio estiver consumindo o orçamento.\n- O timeout de 60s e o fallback continuam como estão.",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-08T03:24:53Z",
+    "labels": [
+      "enhancement",
+      "tech-debt"
+    ],
+    "number": 63,
+    "state": "OPEN",
+    "title": "Reduzir o tempo da análise do Gemini (~30s)",
+    "url": "https://github.com/Fluenshift/grifando/issues/63"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Hoje a tela só mostra um estado de carregamento enquanto a análise roda. Com streaming, dá para mostrar os erros aparecendo à medida que o modelo responde.\n\n- Avaliar o streaming nos dois provedores, com validação Zod feita no fim, sobre o resultado completo.\n- Nada é salvo antes da validação final.",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-08T03:24:55Z",
+    "labels": [
+      "enhancement",
+      "post-mvp"
+    ],
+    "number": 64,
+    "state": "OPEN",
+    "title": "Mostrar o progresso real da análise (streaming)",
+    "url": "https://github.com/Fluenshift/grifando/issues/64"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Como não existe login, quem troca de navegador ou limpa os cookies perde o histórico.\n\n- `GET /api/me/export`: baixar um JSON com textos, erros, exercícios e vocabulário.\n- Importar esse JSON em outro navegador, criando a nova sessão.\n- Validar o arquivo com Zod e aplicar os limites de tamanho e de uso.\n- Atualizar `/privacy`.",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-08T03:24:58Z",
+    "labels": [
+      "enhancement"
+    ],
+    "number": 65,
+    "state": "OPEN",
+    "title": "Exportar e importar meus dados",
+    "url": "https://github.com/Fluenshift/grifando/issues/65"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Cobrir no CI os fluxos que hoje só são testados à mão:\n\n- Primeira visita cria o cookie.\n- `/write` sem chave mostra o aviso e mantém o texto.\n- Com o provedor falso, a escrita mostra a página corrigida.\n- Exercício: responder e ver o resultado.\n- Apagar meus dados.\n\nRodar contra o build de produção com Postgres no CI, sem chave real (provedor falso injetado só em teste).",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-08T03:25:00Z",
+    "labels": [
+      "infra",
+      "tech-debt"
+    ],
+    "number": 66,
+    "state": "OPEN",
+    "title": "Testes ponta a ponta dos fluxos principais (Playwright)",
+    "url": "https://github.com/Fluenshift/grifando/issues/66"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "O logo atual (um \"i\" com ponto e sublinhado violeta) não ficou bom: o significado não está claro e as cores não combinam.\n\n- Definir um conceito com o autor antes de desenhar.\n- Precisa ficar legível a 16px (favicon).\n- Atualizar `icon.svg`, `apple-icon.png`, `public/logo.svg`, o cabeçalho e a imagem OG.",
+    "closedAt": "2026-11-08T04:51:30Z",
+    "comments": [],
+    "createdAt": "2026-11-08T03:25:02Z",
+    "labels": [
+      "enhancement"
+    ],
+    "number": 67,
+    "state": "CLOSED",
+    "title": "Novo logo",
+    "url": "https://github.com/Fluenshift/grifando/issues/67"
+  },
+  {
+    "author": "levyrodrigues23",
+    "body": "Os PRs do Dependabot foram para a `main` e causaram conflito no release. Adicionar `target-branch: develop` em `.github/dependabot.yml`, para todos os ecossistemas.",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-08T03:25:04Z",
+    "labels": [
+      "infra"
+    ],
+    "number": 68,
+    "state": "OPEN",
+    "title": "Dependabot deve abrir PRs em develop",
+    "url": "https://github.com/Fluenshift/grifando/issues/68"
+  },
+  {
+    "author": "jheffersonsouza",
+    "body": "### Área\n\nCamada de IA (providers, prompts, schemas)\n\n### O que aconteceu\n\nQuando o modelo principal está sobrecarregado e o `withResilience` cai para o modelo reserva, a análise é salva com o `modelId` do modelo principal.\n\n- O `modelId` é calculado antes de qualquer chamada, em `createAIProvider` ([`src/server/ai/client.ts:30`](https://github.com/levyrodrigues23/grifando/blob/74dbb9f3305faa4444f981aa2df360c028d3ab08/src/server/ai/client.ts#L30)).\n- As rotas repassam esse valor para o serviço ([`writing-sessions/route.ts:53-54`](https://github.com/levyrodrigues23/grifando/blob/74dbb9f3305faa4444f981aa2df360c028d3ab08/src/app/api/writing-sessions/route.ts#L53-L54) e [`interview/[id]/turns/[turnId]/answer/route.ts:50`](https://github.com/levyrodrigues23/grifando/blob/74dbb9f3305faa4444f981aa2df360c028d3ab08/src/app/api/interview/%5Bid%5D/turns/%5BturnId%5D/answer/route.ts#L50)).\n- O `withResilience` devolve a resposta do reserva sem dizer qual modelo respondeu ([`src/server/ai/resilient.ts:88`](https://github.com/levyrodrigues23/grifando/blob/74dbb9f3305faa4444f981aa2df360c028d3ab08/src/server/ai/resilient.ts#L88)).\n- O `writingCoachService` grava o valor pré-calculado em `WritingAnalysis.modelId` ([`writingCoachService.ts:83`](https://github.com/levyrodrigues23/grifando/blob/74dbb9f3305faa4444f981aa2df360c028d3ab08/src/server/domain/writing/writingCoachService.ts#L83)).\n\nResultado: com os modelos padrão, uma análise feita pelo `gemini-3.5-flash-lite` fica registrada como `gemini-3.5-flash`, e uma feita pelo `claude-haiku-5-5` fica como `claude-sonnet-5`. O reserva é um modelo mais leve, então as notas e os erros encontrados podem sair diferentes, e depois não dá para separar essas análises: o `modelId` é o único registro de qual modelo produziu cada uma.\n\n### Como reproduzir\n\n1. Num teste do `writingCoachService`, montar o provider com `withResilience(primary, fallback, { timeoutMs })`: `primary.analyzeWriting` rejeita com `{ status: 503 }` e `fallback.analyzeWriting` devolve uma análise válida.\n2. Criar o serviço com `modelId: \"gemini-3.5-flash\"` (o valor que `createAIProvider` devolveria) e chamar `submitWriting`.\n3. Ler o `WritingAnalysis` salvo: o `modelId` é `gemini-3.5-flash`, mas quem respondeu foi o reserva.\n\n### Comportamento esperado\n\n`WritingAnalysis.modelId` registra o modelo que de fato respondeu.\n\n- [ ] Com o principal sobrecarregado e o reserva respondendo, a análise grava o id do modelo reserva.\n- [ ] O mesmo vale para as respostas da entrevista, que reaproveitam a `WritingAnalysis`.\n- [ ] Um teste cobre o caminho do fallback.\n\nUma forma de resolver: o `withResilience` informar qual modelo respondeu (por exemplo, cada chamada devolver `{ result, modelId }`), e o serviço gravar esse valor no lugar do `modelId` pré-calculado.\n\n### Provider de IA (se envolver IA)\n\nanthropic e gemini (os dois têm fallback)\n\n### Logs / screenshots\n\nEncontrado lendo o código no commit `74dbb9f`. Não reproduzi em produção.\n",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-09T17:48:33Z",
+    "labels": [],
+    "number": 77,
+    "state": "OPEN",
+    "title": "Fallback de IA grava o modelId do modelo principal na análise",
+    "url": "https://github.com/Fluenshift/grifando/issues/77"
+  },
+  {
+    "author": "jheffersonsouza",
+    "body": "### Área\n\nWriting Coach / Daily Writing\n\n### O que aconteceu\n\n`buildHighlightSegments` localiza cada erro com `text.indexOf(mistake.originalSpan)` ([`src/lib/highlightSegments.ts:11`](https://github.com/levyrodrigues23/grifando/blob/74dbb9f3305faa4444f981aa2df360c028d3ab08/src/lib/highlightSegments.ts#L11)), que sempre devolve a primeira ocorrência do trecho. Na página corrigida (`WritingResults` → `HighlightedText`, sobre `session.originalText`), isso causa dois problemas:\n\n1. **Marca no lugar errado.** Um trecho curto casa dentro de uma palavra anterior, ou numa ocorrência anterior que está correta. Num erro de artigo com `originalSpan: \"a\"`, a marca cai no \"a\" de \"have\", e não em \"a idea\". O aprendiz vê texto correto marcado como erro.\n2. **Erro repetido fica sem marca.** Quando o mesmo erro aparece duas vezes, as duas ocorrências resolvem para a mesma posição e a segunda é descartada como sobreposição. A segunda ocorrência fica sem marca, e o card desse erro não tem marca correspondente no texto.\n\nO comentário da função já prevê pular trechos que o modelo não citou literalmente ou que se sobrepõem, e o teste \"skips a later match that overlaps an already-placed one\" cobre uma sobreposição real. Os dois casos acima são diferentes: o trecho existe no texto, só que em outra posição. E o caso 1 é pior do que pular, porque marca o lugar errado.\n\n### Como reproduzir\n\nA função é pura, então dá para chamar direto:\n\n```ts\nbuildHighlightSegments(\"I have a idea for the API.\", [{ originalSpan: \"a\" }]);\n\nbuildHighlightSegments(\"This PR fix the login and fix the logout.\", [\n  { originalSpan: \"fix\" },\n  { originalSpan: \"fix\" },\n]);\n```\n\nNa interface, acontece quando o texto enviado em `/write` repete o mesmo erro, ou quando o modelo devolve um trecho curto (\"a\", \"in\", \"of\") que também aparece antes no texto.\n\n### Comportamento esperado\n\n- [ ] Uma marca nunca cai dentro de outra palavra nem numa ocorrência que não é o erro.\n- [ ] Quando o mesmo trecho aparece N vezes e o modelo reporta N erros para ele, cada erro marca a sua ocorrência, na ordem.\n- [ ] Quando não dá para saber qual ocorrência é a certa, a função pula a marca em vez de chutar.\n\nCaminhos possíveis: pedir ao modelo a posição de cada erro e conferir contra o texto, reposicionando só quando o trecho for único; ou, no mínimo, procurar cada repetição a partir do fim da anterior e casar trechos curtos só em limite de palavra.\n\n### Provider de IA (se envolver IA)\n\nQualquer um (acontece no front, depois da resposta)\n\n### Logs / screenshots\n\nSaída das duas chamadas acima no commit `74dbb9f`. `[trecho]#N` é o trecho marcado para o erro N.\n\n```shell\n1) short span matches inside an earlier word\n  text:     \"I have a idea for the API.\"\n  spans:    [\"a\"]\n  rendered: I h[a]#1ve a idea for the API.\n  marked:   1\n\n2) same mistake twice\n  text:     \"This PR fix the login and fix the logout.\"\n  spans:    [\"fix\",\"fix\"]\n  rendered: This PR [fix]#1 the login and fix the logout.\n  marked:   1\n```\n",
+    "closedAt": null,
+    "comments": [],
+    "createdAt": "2026-11-09T17:48:35Z",
+    "labels": [],
+    "number": 78,
+    "state": "OPEN",
+    "title": "Página corrigida marca o lugar errado quando o trecho do erro se repete no texto",
+    "url": "https://github.com/Fluenshift/grifando/issues/78"
+  }
+]
