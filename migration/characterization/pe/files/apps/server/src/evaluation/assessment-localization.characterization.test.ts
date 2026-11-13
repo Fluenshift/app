@@ -57,4 +57,13 @@ describe("assessment localization guards", () => {
       localizeModelAssessment(sample, assessmentFor([duplicate])).findings
     ).toEqual([duplicate]);
   });
+
+  it("keeps the start of an edit that begins right after a word", () => {
+    const sample = "Hello,world is down.";
+    const comma = findingFor(",", ", ", 5, "Punctuation/capitalization");
+
+    expect(
+      localizeModelAssessment(sample, assessmentFor([comma])).findings
+    ).toEqual([comma]);
+  });
 });
