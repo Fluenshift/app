@@ -98,6 +98,19 @@ export default defineConfig({
       },
     },
     {
+      // Migration scripts are top-down CLIs on plain Node (type stripping, no dependencies).
+      // Only these purely stylistic rules are relaxed for them; every other rule applies.
+      files: ["scripts/**/*.ts"],
+      rules: {
+        "eslint/curly": "off",
+        "eslint/func-style": "off",
+        "eslint/prefer-named-capture-group": "off",
+        "eslint/require-unicode-regexp": "off",
+        "unicorn/switch-case-braces": "off",
+        "unicorn/text-encoding-identifier-case": "off",
+      },
+    },
+    {
       // Test integrity (agent rule 3): no test may be focused, skipped, left as todo, commented
       // out or defined conditionally, and titles stay unique because the ledger keys on them.
       // Style presets for tests are left out on purpose: ported tests keep their source titles
