@@ -11,3 +11,4 @@ apps/web/src/routeTree.gen.ts
 .data/
 *.log
 .DS_Store
+/reports/
