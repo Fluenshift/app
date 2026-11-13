@@ -12,8 +12,9 @@
     "lint": "oxlint --deny-warnings",
     "lint:effect": "oxlint --deny-warnings --config oxlint.effect.config.ts apps/server packages/contract packages/core packages/db packages/env",
     "prepare": "husky && effect-tsgo patch --typescript --oxlint",
-    "test": "turbo run test",
+    "test": "pnpm test:scripts && turbo run test",
     "test:e2e": "turbo run build --filter=server && playwright test",
+    "test:scripts": "node --test \"scripts/**/*.test.ts\"",
     "verify": "pnpm format && pnpm lint && pnpm lint:effect && pnpm check-types && pnpm check:effect && pnpm test && pnpm build"
   },
   "devDependencies": {
