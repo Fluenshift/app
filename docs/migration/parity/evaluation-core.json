@@ -9,7 +9,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > rejects lone surrogates",
@@ -18,7 +20,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::UTF-8 helpers > rejects lone surrogates"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats offsets outside the buffer or between bytes as no boundary",
@@ -27,7 +31,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::UTF-8 helpers > treats offsets outside the buffer or between bytes as no boundary"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats the only offset of an empty buffer as a boundary",
@@ -36,7 +42,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::UTF-8 helpers > treats the only offset of an empty buffer as a boundary"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats the start, the end and every lead byte as a boundary",
@@ -45,7 +53,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::UTF-8 helpers > treats the start, the end and every lead byte as a boundary"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > allows adjacent spans",
@@ -54,7 +64,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::applyCorrections UTF-8 edge cases > allows adjacent spans"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > applies several corrections whatever their order",
@@ -63,7 +75,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::applyCorrections UTF-8 edge cases > applies several corrections whatever their order"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives another reason when the span's bytes differ from its original text",
@@ -72,7 +86,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::applyCorrections UTF-8 edge cases > gives another reason when the span's bytes differ from its original text"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives one reason for spans outside the sample, empty, overlapping or split",
@@ -81,7 +97,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::applyCorrections UTF-8 edge cases > gives one reason for spans outside the sample, empty, overlapping or split"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives the same reason for an ill-formed correction",
@@ -90,7 +108,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::applyCorrections UTF-8 edge cases > gives the same reason for an ill-formed correction"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > keeps a leading BOM when a later span is corrected",
@@ -99,7 +119,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::applyCorrections UTF-8 edge cases > keeps a leading BOM when a later span is corrected"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > matches a span whose original text starts with a BOM",
@@ -108,7 +130,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::applyCorrections UTF-8 edge cases > matches a span whose original text starts with a BOM"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > returns the sample unchanged without corrections",
@@ -117,7 +141,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/utf8.test.ts::applyCorrections UTF-8 edge cases > returns the sample unchanged without corrections"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > canonicalizes equivalent wider edits without changing corrected bytes",
@@ -441,7 +467,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/rubric-v1.test.ts::Rubric Version 1 > applies non-overlapping corrections using UTF-8 byte offsets"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > counts letter words while keeping internal apostrophes and hyphens",
@@ -450,7 +478,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/rubric-v1.test.ts::Rubric Version 1 > counts letter words while keeping internal apostrophes and hyphens"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > matches approved score anchors and band boundaries",
@@ -459,7 +489,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/rubric-v1.test.ts::Rubric Version 1 > matches approved score anchors and band boundaries"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > rejects correction offsets that split a UTF-8 code point",
@@ -468,7 +500,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/rubric-v1.test.ts::Rubric Version 1 > rejects correction offsets that split a UTF-8 code point"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > rejects mismatched and overlapping correction spans",
@@ -477,7 +511,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/rubric-v1.test.ts::Rubric Version 1 > rejects mismatched and overlapping correction spans"
+      ]
     }
   ]
 }
