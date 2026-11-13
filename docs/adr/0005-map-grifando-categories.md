@@ -1,6 +1,6 @@
 # 0005. Map Grifando's 13 categories onto PE's 9
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Seam: Phase 1 (d). No ledger row waits on it; Academy units implement it.
 
 ## Context

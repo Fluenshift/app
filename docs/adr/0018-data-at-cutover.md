@@ -1,6 +1,6 @@
 # 0018. Start Grifando's hosted data fresh; import PE's local history
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Phase 7 step 5. No ledger row waits on it; it fixes the cutover plan early.
 
 ## Context

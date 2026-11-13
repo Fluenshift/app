@@ -1,6 +1,6 @@
 # 0015. Keep Academy state across Rubric Versions
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Open item from PRE_MIGRATION.
 
 ## Context

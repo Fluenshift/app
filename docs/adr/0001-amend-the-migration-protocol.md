@@ -1,6 +1,6 @@
 # 0001. Amend the migration protocol for the merge goal
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Ledger rows: `decision: "adr:0001"`.
 
 ## Context

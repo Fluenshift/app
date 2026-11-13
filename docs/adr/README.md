@@ -1,7 +1,7 @@
 # Architecture decision records
 
 Each ADR decides one seam or open question of the merge (`docs/migration/MIGRATION_PROTOCOL.md`
-Phase 1). An ADR is **Proposed** until both owners accept it on its decision issue; its
+Phase 1). An ADR is **Proposed** until both owners accept it on its decision issue ([#5](https://github.com/Fluenshift/app/issues/5) for 0001 to 0018); its
 status line then links to the acceptance comments. Only an accepted ADR can make a ledger row
 `port-changed`, `superseded` or `drop`. Ledger rows that wait on one name it as
 `"decision": "adr:NNNN"`.

@@ -1,6 +1,6 @@
 # 0007. Share Effect Schema with the web app through packages/contract
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Seam: Phase 1 (f). Supersedes the web clause of PE ADR 0002.
 
 ## Context

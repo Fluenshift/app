@@ -1,6 +1,6 @@
 # 0010. Evaluate interview answers as practice Writing Samples
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Seam: Phase 1 (i). Ledger rows: `decision: "adr:0010"`.
 
 ## Context

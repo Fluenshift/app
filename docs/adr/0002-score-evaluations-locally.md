@@ -1,6 +1,6 @@
 # 0002. Score Evaluations locally; drop model-supplied scores
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Seam: Phase 1 (a). Ledger rows: `decision: "adr:0002"`.
 
 ## Context

@@ -1,6 +1,6 @@
 # 0011. Run hosted-profile cleanup inside the server process
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Seam: Phase 1 (j). Ledger rows: `decision: "adr:0011"`.
 
 ## Context

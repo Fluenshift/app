@@ -1,6 +1,6 @@
 # 0006. Set input caps per deploy profile
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Seam: Phase 1 (e). Ledger rows: `decision: "adr:0006"`.
 
 ## Context

@@ -1,6 +1,6 @@
 # 0009. Combine Grifando's visual system with PE's Evidence Lens layout
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Seam: Phase 1 (h). Ledger rows: `decision: "adr:0009"`. This one is a matter of
   taste: the recommendation is only a default.
 

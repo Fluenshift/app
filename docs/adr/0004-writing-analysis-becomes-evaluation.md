@@ -1,6 +1,6 @@
 # 0004. Grifando's writing analysis becomes Evaluation plus Trainer enrichment
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Seam: Phase 1 (c), with Grifando #78. Ledger rows: `decision: "adr:0004"`.
 
 ## Context

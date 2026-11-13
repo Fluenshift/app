@@ -1,6 +1,6 @@
 # 0014. A mistake repeated in real text counts as a failed recall
 
-- Status: Proposed. Decided on {issue}; accepted when both owners accept it there.
+- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
 - Open item from PRE_MIGRATION. Its rows wait on ADR 0004, which feeds the Academy.
 
 ## Context
