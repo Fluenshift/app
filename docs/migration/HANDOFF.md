@@ -59,6 +59,15 @@ are done.
   back, because that needs the `admin:org` scope.
 - Each owner chooses the GitHub credentials their agent sessions use (decided 2026-11-12).
 
+Verified again on 2026-11-13 by the first agent session, with `gh` and `git ls-remote`:
+the organization owns the three repos, all public and none archived; both tags resolve to the
+pinned SHAs under active `parity-baseline*` tag rulesets (updates and deletions restricted,
+no bypass); `main` of the product repo has its ruleset (deletion and force pushes blocked, no
+bypass) and holds these docs; the security configuration and read-only workflow tokens are in
+place; the toolchain on Jhefferson's machine matches step 7. Still open: step 2's local clones
+on Levy's machines, step 3 (with Levy), archiving PE (deferred), and the step 3 row of the
+table.
+
 ## Setup checklist
 
 Steps 2–4 (Levy) and step 5 (Jhefferson) can run in parallel. The first agent session needs
