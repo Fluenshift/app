@@ -7,6 +7,7 @@
 // - the pinned commit, read from the clone that baselines.ts maintains (git objects only, not
 //   the working tree);
 // - the stored reports and manifest in docs/migration/baseline-runs/<system>/;
+// - the characterization reports in migration/characterization/<system>/reports/, if any;
 // - for Grifando, the issue snapshot in docs/migration/inventory/grifando-issues.json.
 //
 // --check regenerates in memory and exits 1 if any stored file differs.
@@ -30,7 +31,7 @@ type Baseline = "green" | "baseline-red" | "skipped" | "todo";
 
 interface TestRow {
   readonly id: string;
-  readonly kind: "test";
+  readonly kind: "test" | "characterization";
   readonly source: string;
   readonly title: string;
   readonly suite: string;
@@ -81,6 +82,11 @@ interface Inventory {
 }
 
 const runsDir = path.join(repoRoot, "docs", "migration", "baseline-runs");
+const characterizationDir = path.join(
+  repoRoot,
+  "migration",
+  "characterization"
+);
 const inventoryDir = path.join(repoRoot, "docs", "migration", "inventory");
 const TITLE_SEPARATOR = " > ";
 
@@ -152,8 +158,8 @@ interface ManifestSuite {
   readonly report: string;
 }
 
-function readManifest(system: string, pin: Pin): ManifestSuite[] {
-  const file = path.join(runsDir, system, "manifest.json");
+function readManifest(reportsDir: string, pin: Pin): ManifestSuite[] {
+  const file = path.join(reportsDir, "manifest.json");
   const manifest = asRecord(JSON.parse(readFileSync(file, "utf8")), file);
   if (manifest["commit"] !== pin.commit) {
     throw new BaselineError(
@@ -400,9 +406,9 @@ export function playwrightTests(
   return rows;
 }
 
-function testRows(system: string, pin: Pin): TestRow[] {
-  return readManifest(system, pin).flatMap((suite) => {
-    const text = readFileSync(path.join(runsDir, system, suite.report), "utf8");
+function reportRows(system: string, reportsDir: string, pin: Pin): TestRow[] {
+  return readManifest(reportsDir, pin).flatMap((suite) => {
+    const text = readFileSync(path.join(reportsDir, suite.report), "utf8");
     switch (suite.runner) {
       case "bun-junit":
         return bunJunitTests(text, system, suite);
@@ -415,6 +421,29 @@ function testRows(system: string, pin: Pin): TestRow[] {
           `${system}/${suite.id}: unknown runner "${suite.runner}"`
         );
     }
+  });
+}
+
+function testRows(system: string, pin: Pin): TestRow[] {
+  return reportRows(system, path.join(runsDir, system), pin);
+}
+
+// Cases of the characterization tests kept in this repository and run at the baseline
+// (characterization-run.ts). A characterization that is not green pins nothing, so it is
+// refused here.
+function characterizationRows(system: string, pin: Pin): TestRow[] {
+  const reportsDir = path.join(characterizationDir, system, "reports");
+  if (!existsSync(path.join(reportsDir, "manifest.json"))) return [];
+  return reportRows(system, reportsDir, pin).map((row) => {
+    if (row.baseline !== "green")
+      throw new BaselineError(
+        `${row.id}: a characterization test must pass at the baseline`
+      );
+    return {
+      ...row,
+      id: `${system}:characterization:${row.id.slice(`${system}:test:`.length)}`,
+      kind: "characterization",
+    };
   });
 }
 
@@ -859,7 +888,11 @@ export function buildInventory(
   if (!existsSync(clone))
     throw new BaselineError(`${clone} is missing; run baselines.ts sync first`);
   git(["cat-file", "-e", `${pin.commit}^{commit}`], clone);
-  const rows = [...testRows(system, pin), ...documents(clone, pin)];
+  const rows = [
+    ...testRows(system, pin),
+    ...characterizationRows(system, pin),
+    ...documents(clone, pin),
+  ];
   const seen = new Set<string>();
   for (const row of rows) {
     if (seen.has(row.id))
