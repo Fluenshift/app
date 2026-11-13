@@ -21,6 +21,15 @@
       "targets": []
     },
     {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > keeps the start of an edit that begins right after a word",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > treats overlapping occurrences of the original text as ambiguous",
       "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
       "class": "A",
