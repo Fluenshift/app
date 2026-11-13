@@ -138,6 +138,19 @@ export function verifyRemote(system: string, pin: Pin): void {
   }
 }
 
+// The clone must come from the pinned repository and hold no edits; baselines are never
+// edited, so anything else means the clone cannot be trusted as a reference.
+function assertCleanClone(dir: string, pin: Pin): void {
+  const origin = git(["remote", "get-url", "origin"], dir);
+  if (origin !== remoteUrl(pin)) {
+    throw new BaselineError(`${dir}: origin is ${origin}, expected ${remoteUrl(pin)}`);
+  }
+  const status = git(["status", "--porcelain"], dir);
+  if (status !== "") {
+    throw new BaselineError(`${dir}: working tree is not clean; baselines are never edited`);
+  }
+}
+
 function assertPinnedCheckout(dir: string, pin: Pin): void {
   const head = git(["rev-parse", "HEAD"], dir);
   if (head !== pin.commit) throw new BaselineError(`${dir}: HEAD is ${head}, expected ${pin.commit}`);
@@ -149,14 +162,7 @@ export function syncClone(system: string, pin: Pin, root = defaultRoot): string 
   verifyRemote(system, pin);
   const dir = clonePath(system, root);
   if (existsSync(dir)) {
-    const origin = git(["remote", "get-url", "origin"], dir);
-    if (origin !== remoteUrl(pin)) {
-      throw new BaselineError(`${dir}: origin is ${origin}, expected ${remoteUrl(pin)}`);
-    }
-    const status = git(["status", "--porcelain"], dir);
-    if (status !== "") {
-      throw new BaselineError(`${dir}: working tree is not clean; baselines are never edited`);
-    }
+    assertCleanClone(dir, pin);
     git(["fetch", "--quiet", "--no-tags", "origin", pin.commit], dir);
   } else {
     git(["clone", "--quiet", "--no-checkout", remoteUrl(pin), dir]);
@@ -171,6 +177,8 @@ export function syncClone(system: string, pin: Pin, root = defaultRoot): string 
 export function addWorktree(system: string, pin: Pin, name: string, root = defaultRoot): string {
   const clone = clonePath(system, root);
   if (!existsSync(clone)) throw new BaselineError(`${clone} is missing; run sync first`);
+  assertCleanClone(clone, pin);
+  assertPinnedCheckout(clone, pin);
   const dir = worktreePath(system, name, root);
   if (existsSync(dir)) throw new BaselineError(`${dir} already exists; remove it first`);
   git(["worktree", "add", "--quiet", "--detach", dir, pin.commit], clone);
@@ -234,7 +242,7 @@ function main(argv: readonly string[]): void {
       if (system === undefined || name === undefined || rest.length !== 2) {
         throw new BaselineError("usage: remove-worktree <system> <name>");
       }
-      pinFor(pins, system);
+      verifyRemote(system, pinFor(pins, system));
       removeWorktree(system, name, root);
       return;
     }
