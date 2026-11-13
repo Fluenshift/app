@@ -3,6 +3,33 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > coalesces an adjacent duplicate only for an Other finding",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > does not coalesce a word that occurs a third time",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > treats overlapping occurrences of the original text as ambiguous",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
       "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
       "class": "A",
