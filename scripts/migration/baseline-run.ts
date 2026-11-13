@@ -5,11 +5,12 @@
 //   node scripts/migration/baseline-run.ts <system> [--root <dir>]
 //
 // The run happens in a fresh disposable worktree (<root>/worktrees/<system>-run), under a
-// scrubbed environment: no inherited variables, so no credentials or AI keys reach the
-// baseline code. Toolchains come from mise. Grifando gets a throwaway postgres:17-alpine
-// container. Reports are normalized before they are stored: paths inside the worktree become
-// repo-relative, the home directory becomes "~", and bun's junit hostname attribute is
-// dropped. Exits 1 when any suite fails; the reports are written either way.
+// scrubbed environment: no inherited variables and a private empty HOME, so no credentials,
+// credential files or AI keys reach the baseline code. Toolchains come from mise. Grifando
+// gets a throwaway postgres:17-alpine container. Reports are normalized before they are
+// stored: paths inside the worktree become repo-relative, home directories become "~", and
+// bun's junit hostname attribute is dropped. Exits 1 when any suite fails; the reports are
+// written either way.
 
 import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, openSync, closeSync, readFileSync, rmSync, writeFileSync, existsSync } from "node:fs";
@@ -245,10 +246,11 @@ function startPostgres(postgres: Postgres): Service {
   }
 }
 
-// Paths inside the worktree become repo-relative; the home directory becomes "~"; bun's
-// junit hostname attribute is dropped.
-export function normalizeReport(text: string, worktree: string, home: string, runner: Runner): string {
-  let normalized = text.replaceAll(`${worktree}/`, "").replaceAll(worktree, ".").replaceAll(`${home}/`, "~/");
+// Paths inside the worktree become repo-relative; the run's private home and the real home
+// directory become "~"; bun's junit hostname attribute is dropped.
+export function normalizeReport(text: string, worktree: string, homes: readonly string[], runner: Runner): string {
+  let normalized = text.replaceAll(`${worktree}/`, "").replaceAll(worktree, ".");
+  for (const home of homes) normalized = normalized.replaceAll(`${home}/`, "~/");
   if (runner === "bun-junit") normalized = normalized.replaceAll(/ hostname="[^"]*"/g, "");
   return normalized.endsWith("\n") ? normalized : `${normalized}\n`;
 }
@@ -275,9 +277,19 @@ function main(argv: readonly string[]): number {
   const scratch = mkdtempSync(path.join(os.tmpdir(), `baseline-run-${system}-`));
   const rawDir = path.join(scratch, "reports");
   mkdirSync(rawDir);
+  // Baseline code never sees the real home directory, so no credential file (.npmrc, tool
+  // configs) is reachable. Only content-addressed package caches and the Playwright browsers
+  // are shared; they hold no credentials, and they keep installs fast and reproducible.
+  const runHome = path.join(scratch, "home");
+  mkdirSync(runHome);
   const log = path.join(scratch, "run.log");
+  const pnpmStore = path.join(home, ".local", "share", "pnpm", "store");
   const baseEnv: NodeJS.ProcessEnv = {
-    HOME: home,
+    HOME: runHome,
+    PLAYWRIGHT_BROWSERS_PATH: path.join(home, ".cache", "ms-playwright"),
+    BUN_INSTALL_CACHE_DIR: path.join(home, ".bun", "install", "cache"),
+    npm_config_store_dir: pnpmStore,
+    pnpm_config_store_dir: pnpmStore,
     LANG: "C.UTF-8",
     TERM: "dumb",
     PATH: [...resolveTools(plan.tools), "/usr/local/bin", "/usr/bin", "/bin"].join(path.delimiter),
@@ -315,7 +327,7 @@ function main(argv: readonly string[]): number {
   mkdirSync(outDir, { recursive: true });
   for (const { suite } of results) {
     const text = readFileSync(path.join(rawDir, suite.report), "utf8");
-    writeFileSync(path.join(outDir, suite.report), normalizeReport(text, worktree, home, suite.runner));
+    writeFileSync(path.join(outDir, suite.report), normalizeReport(text, worktree, [runHome, home], suite.runner));
   }
   const manifest = {
     system,
