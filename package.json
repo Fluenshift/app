@@ -1,0 +1,35 @@
+{
+  "name": "fluenshift-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "turbo run build",
+    "check-types": "turbo run check-types",
+    "check:effect": "turbo run check:effect",
+    "dev": "turbo run dev",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
+    "lint": "oxlint --deny-warnings",
+    "lint:effect": "oxlint --deny-warnings --config oxlint.effect.config.ts apps/server packages/contract packages/core packages/db packages/env",
+    "prepare": "husky && effect-tsgo patch --typescript --oxlint",
+    "test": "turbo run test",
+    "test:e2e": "turbo run build --filter=server && playwright test",
+    "verify": "pnpm format && pnpm lint && pnpm lint:effect && pnpm check-types && pnpm check:effect && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@effect/tsgo": "catalog:",
+    "@playwright/test": "catalog:",
+    "@types/node": "catalog:",
+    "husky": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "ultracite": "catalog:"
+  },
+  "engines": {
+    "node": "26.13.0"
+  },
+  "packageManager": "pnpm@12.18.0"
+}
