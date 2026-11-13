@@ -81,6 +81,26 @@ jobs:
       - name: G5 journeys against the built process
         run: pnpm test:e2e
 
+  migration:
+    name: Migration records (pins and inventory)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Baseline tags still resolve to the pins
+        run: node scripts/migration/baselines.ts verify
+
+      - name: Clone the baselines at their pins
+        run: node scripts/migration/baselines.ts sync
+
+      - name: The inventory reproduces byte for byte
+        run: node scripts/migration/inventory.ts --check
+
   supply-chain:
     name: G7 (secrets and dependencies)
     runs-on: ubuntu-24.04
