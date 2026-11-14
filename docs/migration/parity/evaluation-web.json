@@ -9,7 +9,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client failures > keeps a failure's code and retries one without a flag only from status 500"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation",
@@ -27,7 +29,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > deletes exactly one encoded Evaluation identity"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > loads Progress and encoded source evidence",
@@ -36,7 +40,9 @@
       "slice": "evaluation-web",
       "disposition": "port-changed",
       "decision": "adr:0008",
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > loads Progress and encoded source evidence"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > loads accurate server-side setup status",
@@ -45,7 +51,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > loads accurate server-side setup status"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > maps a deleted or unknown Evaluation to missing",
@@ -54,7 +62,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > maps a deleted or unknown Evaluation to missing"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > opens a retained Evaluation using an encoded identity",
@@ -63,7 +73,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > opens a retained Evaluation using an encoded identity"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > preserves the no-English result returned with validation status",
@@ -72,7 +84,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > preserves the no-English result returned with validation status"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > raises safe typed errors for failed API operations",
@@ -81,7 +95,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > raises safe typed errors for failed API operations"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > reads retained history from the same-origin API",
@@ -90,7 +106,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > reads retained history from the same-origin API"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > submits exact writing and receives its durable Evaluation",
@@ -99,7 +117,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/api.test.ts::HTTP Evaluation client > submits exact writing and receives its durable Evaluation"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts::in-memory evaluation client > a no-English fixture creates no Evaluation",
@@ -108,7 +128,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts::in-memory evaluation client > a no-English fixture creates no Evaluation"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts::in-memory evaluation client > applies an explicit fixture without interpreting the Writing Sample",
@@ -117,7 +139,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts::in-memory evaluation client > applies an explicit fixture without interpreting the Writing Sample"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > clicking a finding opens the Grammarly-style popover card",
