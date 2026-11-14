@@ -43,6 +43,9 @@ jobs:
       - name: Documented commands exist
         run: pnpm check:docs
 
+      - name: G11 gate integrity
+        run: pnpm check:gates
+
       - name: G2 lint
         run: pnpm lint
 
