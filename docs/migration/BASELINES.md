@@ -146,3 +146,6 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | System | File | Pins | Cases |
 | --- | --- | --- | ---: |
 | `pe` | `apps/server/src/evaluation/utf8.characterization.test.ts` | `utf8.ts`, which has no test, and the UTF-8 edge cases of `applyCorrections`: a leading BOM, lone surrogates, code-point boundaries, the two rejection reasons. A port to `TextEncoder` and `TextDecoder` must keep a leading BOM, which a default `TextDecoder` drops. | 13 |
+| `grifando` | `src/server/ai/schemas/exerciseGeneration.characterization.test.ts` | Every bound of the exercise generation schema, at its limit and one past it; that undeclared properties are dropped; the out-of-range check at the last option; both error messages of `validateExerciseGenerationResult`. The baseline tests pin three bounds. | 8 |
+| `grifando` | `src/server/domain/exercises/answerChecking.characterization.test.ts` | How a multiple-choice answer is read (`Number.parseInt` semantics, so a blank answer is never option 0); which trailing punctuation is stripped; whitespace collapsing; trimming before stripping; grading of rewrite and translation answers. | 6 |
+| `grifando` | `src/server/domain/exercises/publicView.characterization.test.ts` | The whole public view of multiple-choice, rewrite and translation exercises. The baseline test pins fill-blank only. | 1 |

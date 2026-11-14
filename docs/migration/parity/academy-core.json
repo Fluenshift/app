@@ -3,6 +3,69 @@
   "lane": "academy",
   "rows": [
     {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > grades rewrite and translation answers against their acceptable answers",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > never reads a blank or non-numeric multiple-choice answer as option 0",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > reads a multiple-choice answer as its leading decimal integer",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > collapses every inner whitespace run to one space",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > strips any trailing run of periods, exclamation marks and question marks",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > trims before it strips trailing punctuation",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/publicView.characterization.test.ts::toPublicExercise guards > keeps exactly the visible content of the other exercise types",
+      "source": "src/server/domain/exercises/publicView.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "grifando:test:src/lib/answerDiff.test.ts::diffWords > handles an empty answer",
       "source": "src/lib/answerDiff.test.ts",
       "class": "A",
