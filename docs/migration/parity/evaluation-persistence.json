@@ -351,7 +351,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/db/src/database.test.ts::Database > reports connection startup failures as DatabaseError"
+      ]
     }
   ]
 }
