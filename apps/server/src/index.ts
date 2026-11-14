@@ -7,8 +7,14 @@ import { createApp } from "./app";
 
 const HttpServer = Layer.effectDiscard(
   Effect.gen(function* () {
-    const { host, port } = yield* ServerConfig;
-    const app = createApp();
+    const { host, limits, nodeEnv, port, profile, webDistPath } =
+      yield* ServerConfig;
+    const app = createApp({
+      limits,
+      profile,
+      serveWeb: nodeEnv === "production",
+      webDistPath,
+    });
     yield* Effect.acquireRelease(
       Effect.sync(() => serve({ fetch: app.fetch, hostname: host, port })),
       (server) =>

@@ -14,7 +14,7 @@ Node 26.13.0 and pnpm 12.18.0. With [mise](https://mise.jdx.dev/), prefix the co
 pnpm install --frozen-lockfile   # install and patch TypeScript and oxlint with Effect diagnostics
 pnpm verify                      # every local gate
 pnpm test                        # unit and integration tests
-pnpm test:e2e                    # Playwright journeys against the built server
+pnpm test:e2e                    # Playwright journeys against the built server and web app
 pnpm dev                         # server and web in watch mode
 pnpm build                       # server bundle and SPA build
 ```
