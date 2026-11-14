@@ -4,6 +4,582 @@
   "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
   "rows": [
     {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts > answers 400 with the validation issues for an empty answer",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "title": "POST /api/exercises/[id]/attempts > answers 400 with the validation issues for an empty answer",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts > answers 404 for an unknown exercise and for another user's",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "title": "POST /api/exercises/[id]/attempts > answers 404 for an unknown exercise and for another user's",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts > grades an answer and returns the attempt with the whole exercise",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "title": "POST /api/exercises/[id]/attempts > grades an answer and returns the attempt with the whole exercise",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > answers 401 AI_KEY_REQUIRED without a key and 404 for an unknown attempt",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "title": "POST /api/exercises/[id]/attempts/[attemptId]/explanation > answers 401 AI_KEY_REQUIRED without a key and 404 for an unknown attempt",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > explains an attempt with the provider's text",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "title": "POST /api/exercises/[id]/attempts/[attemptId]/explanation > explains an attempt with the provider's text",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > keeps the grade and answers 502, 500 or the AI code when the explanation fails",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "title": "POST /api/exercises/[id]/attempts/[attemptId]/explanation > keeps the grade and answers 502, 500 or the AI code when the explanation fails",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::GET /api/exercises > lists the visitor's pending exercises by their public view only",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "title": "GET /api/exercises > lists the visitor's pending exercises by their public view only",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::GET /api/exercises pending > drops an exercise once it has an attempt",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "title": "GET /api/exercises pending > drops an exercise once it has an attempt",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 201 with the new exercises by their public view",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "title": "POST /api/exercises > answers 201 with the new exercises by their public view",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 400 with the validation issues for a malformed body",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "title": "POST /api/exercises > answers 400 with the validation issues for a malformed body",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 422 before the first mistake pattern exists",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "title": "POST /api/exercises > answers 422 before the first mistake pattern exists",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 500 with a generic message when generation fails unexpectedly",
+      "kind": "characterization",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "title": "POST /api/exercises > answers 500 with a generic message when generation fails unexpectedly",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > answers 404 to another user's turn",
+      "kind": "characterization",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "title": "interview routes > answers 404 to another user's turn",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > answers a turn with its analysis and the next question",
+      "kind": "characterization",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "title": "interview routes > answers a turn with its analysis and the next question",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > ends a session once, and 404s for an unknown or another user's session",
+      "kind": "characterization",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "title": "interview routes > ends a session once, and 404s for an unknown or another user's session",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > reads a session with its turns, and 404s for an unknown or another user's session",
+      "kind": "characterization",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "title": "interview routes > reads a session with its turns, and 404s for an unknown or another user's session",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > returns the FAILED writing session when the analysis fails, and validates the answer",
+      "kind": "characterization",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "title": "interview routes > returns the FAILED writing session when the analysis fails, and validates the answer",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > starts a session with its opening question",
+      "kind": "characterization",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "title": "interview routes > starts a session with its opening question",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/me/me.characterization.test.ts::DELETE /api/me guards > expires the session cookie as HttpOnly, SameSite=Lax and site-wide, Secure in production only",
+      "kind": "characterization",
+      "source": "src/app/api/me/me.characterization.test.ts",
+      "title": "DELETE /api/me guards > expires the session cookie as HttpOnly, SameSite=Lax and site-wide, Secure in production only",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/rateLimitFirst.characterization.test.ts::rate limit before the user > refuses every state-changing route at its rate limit before creating the visitor's user",
+      "kind": "characterization",
+      "source": "src/app/api/rateLimitFirst.characterization.test.ts",
+      "title": "rate limit before the user > refuses every state-changing route at its rate limit before creating the visitor's user",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > answers 400 with the validation issues for a missing field",
+      "kind": "characterization",
+      "source": "src/app/api/vocabulary/vocabulary.characterization.test.ts",
+      "title": "vocabulary routes > answers 400 with the validation issues for a missing field",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > deletes the visitor's item with 204, and 404s for an unknown or another user's item",
+      "kind": "characterization",
+      "source": "src/app/api/vocabulary/vocabulary.characterization.test.ts",
+      "title": "vocabulary routes > deletes the visitor's item with 204, and 404s for an unknown or another user's item",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > saves an item and answers 201 with it",
+      "kind": "characterization",
+      "source": "src/app/api/vocabulary/vocabulary.characterization.test.ts",
+      "title": "vocabulary routes > saves an item and answers 201 with it",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > analyzes a submitted text and answers 201 with the session and its analysis",
+      "kind": "characterization",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "title": "writing session routes > analyzes a submitted text and answers 201 with the session and its analysis",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > answers 201 with the FAILED session when the analysis fails",
+      "kind": "characterization",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "title": "writing session routes > answers 201 with the FAILED session when the analysis fails",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > answers 400 with the validation issues for an unknown prompt type",
+      "kind": "characterization",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "title": "writing session routes > answers 400 with the validation issues for an unknown prompt type",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > lists at most the 20 newest sessions",
+      "kind": "characterization",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "title": "writing session routes > lists at most the 20 newest sessions",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > lists the visitor's sessions newest first, without their analyses",
+      "kind": "characterization",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "title": "writing session routes > lists the visitor's sessions newest first, without their analyses",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > reads one session with its analysis, and 404s for an unknown or another user's session",
+      "kind": "characterization",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "title": "writing session routes > reads one session with its analysis, and 404s for an unknown or another user's session",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/ > feeds the dashboard's streak, progress, weak areas and recent lists",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/ > feeds the dashboard's streak, progress, weak areas and recent lists",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > shows each pattern once with its mastery, the category breakdown and the due count",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/mistakes > shows each pattern once with its mastery, the category breakdown and the due count",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/today > hands TodaySession today's challenge, biased toward the visitor's active categories",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/today > hands TodaySession today's challenge, biased toward the visitor's active categories",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/vocabulary > lists the visitor's items newest first and prefills the form from the query",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/vocabulary > lists the visitor's items newest first and prefills the form from the query",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/write > takes its challenge and heading from the query",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/write > takes its challenge and heading from the query",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/lib/answerDiff.characterization.test.ts::diffWords guards > ignores periods, commas, question and exclamation marks, semicolons, colons and double quotes only",
+      "kind": "characterization",
+      "source": "src/lib/answerDiff.characterization.test.ts",
+      "title": "diffWords guards > ignores periods, commas, question and exclamation marks, semicolons, colons and double quotes only",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/lib/answerDiff.characterization.test.ts::diffWords guards > splits words on any run of whitespace",
+      "kind": "characterization",
+      "source": "src/lib/answerDiff.characterization.test.ts",
+      "title": "diffWords guards > splits words on any run of whitespace",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/lib/responseError.characterization.test.ts::failedSessionIdFrom > answers undefined without a string session id or without a JSON body",
+      "kind": "characterization",
+      "source": "src/lib/responseError.characterization.test.ts",
+      "title": "failedSessionIdFrom > answers undefined without a string session id or without a JSON body",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/lib/responseError.characterization.test.ts::failedSessionIdFrom > reads the FAILED session id from a clone, leaving the body for errorMessageFor",
+      "kind": "characterization",
+      "source": "src/lib/responseError.characterization.test.ts",
+      "title": "failedSessionIdFrom > reads the FAILED session id from a clone, leaving the body for errorMessageFor",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/aiErrorResponse.characterization.test.ts::aiErrorResponse guards > carries the FAILED session id of a typed AI error, and only when there is one",
+      "kind": "characterization",
+      "source": "src/server/ai/aiErrorResponse.characterization.test.ts",
+      "title": "aiErrorResponse guards > carries the FAILED session id of a typed AI error, and only when there is one",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > answers with gemini-3.5-flash and claude-sonnet-5 unless the environment names a model",
+      "kind": "characterization",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "title": "AI client model choice > answers with gemini-3.5-flash and claude-sonnet-5 unless the environment names a model",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > falls back to gemini-3.5-flash-lite and claude-haiku-5-5",
+      "kind": "characterization",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "title": "AI client model choice > falls back to gemini-3.5-flash-lite and claude-haiku-5-5",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > tests a key on the light fallback model, not the primary one",
+      "kind": "characterization",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "title": "AI client model choice > tests a key on the light fallback model, not the primary one",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > accepts one to ten exercises",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > accepts one to ten exercises",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds fill-blank templates to 1-300 characters and answers to 1-5 of 1-100",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > bounds fill-blank templates to 1-300 characters and answers to 1-5 of 1-100",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds multiple choice to 2-5 options of 1-300 characters and a non-negative integer index",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > bounds multiple choice to 2-5 options of 1-300 characters and a non-negative integer index",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds rewrite and translation texts to 1-500 characters and answers to 1-3 of 1-500",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > bounds rewrite and translation texts to 1-500 characters and answers to 1-3 of 1-500",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds the instruction to 1-300 characters and the explanation to 1-1000",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > bounds the instruction to 1-300 characters and the explanation to 1-1000",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > drops properties the schema does not declare",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > drops properties the schema does not declare",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::validateExerciseGenerationResult guards > accepts the last option as the correct one and rejects the index past it",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "validateExerciseGenerationResult guards > accepts the last option as the correct one and rejects the index past it",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::validateExerciseGenerationResult guards > explains each rejection",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "validateExerciseGenerationResult guards > explains each rejection",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > grades rewrite and translation answers against their acceptable answers",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "evaluateExerciseAnswer guards > grades rewrite and translation answers against their acceptable answers",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > never reads a blank or non-numeric multiple-choice answer as option 0",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "evaluateExerciseAnswer guards > never reads a blank or non-numeric multiple-choice answer as option 0",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > reads a multiple-choice answer as its leading decimal integer",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "evaluateExerciseAnswer guards > reads a multiple-choice answer as its leading decimal integer",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > collapses every inner whitespace run to one space",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "isTextAnswerAcceptable guards > collapses every inner whitespace run to one space",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > strips any trailing run of periods, exclamation marks and question marks",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "isTextAnswerAcceptable guards > strips any trailing run of periods, exclamation marks and question marks",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > trims before it strips trailing punctuation",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "isTextAnswerAcceptable guards > trims before it strips trailing punctuation",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > gives 10-to-1 odds at a 400-point lead",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
+      "title": "difficulty scale > gives 10-to-1 odds at a 400-point lead",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > moves the ability 16 points on an even-odds result",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
+      "title": "difficulty scale > moves the ability 16 points on an even-odds result",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > picks the level nearest the rating with 70% expected success",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
+      "title": "difficulty scale > picks the level nearest the rating with 70% expected success",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > rates level 1 at 800 and each further level 100 higher",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
+      "title": "difficulty scale > rates level 1 at 800 and each further level 100 higher",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > starts every ability at 1000",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
+      "title": "difficulty scale > starts every ability at 1000",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/publicView.characterization.test.ts::toPublicExercise guards > keeps exactly the visible content of the other exercise types",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/publicView.characterization.test.ts",
+      "title": "toPublicExercise guards > keeps exactly the visible content of the other exercise types",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/selection.characterization.test.ts::selectReviewSet guards > gives today's mistakes the larger half of an odd count",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/selection.characterization.test.ts",
+      "title": "selectReviewSet guards > gives today's mistakes the larger half of an odd count",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/interview/interviewService.characterization.test.ts::interviewService.answerTurn retry > returns the FAILED writing session of a failed answer and re-analyzes that session on retry",
+      "kind": "characterization",
+      "source": "src/server/domain/interview/interviewService.characterization.test.ts",
+      "title": "interviewService.answerTurn retry > returns the FAILED writing session of a failed answer and re-analyzes that session on retry",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/mistakes/mastery.characterization.test.ts::isFading guards > never flags an IMPROVING pattern, however long unpracticed",
+      "kind": "characterization",
+      "source": "src/server/domain/mistakes/mastery.characterization.test.ts",
+      "title": "isFading guards > never flags an IMPROVING pattern, however long unpracticed",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/mistakes/recall.characterization.test.ts::isDueForReview > is due only once recall falls below 0.5",
+      "kind": "characterization",
+      "source": "src/server/domain/mistakes/recall.characterization.test.ts",
+      "title": "isDueForReview > is due only once recall falls below 0.5",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/progress/streak.characterization.test.ts::streak guards > counts a Sunday rest day in the week that began on Monday",
+      "kind": "characterization",
+      "source": "src/server/domain/progress/streak.characterization.test.ts",
+      "title": "streak guards > counts a Sunday rest day in the week that began on Monday",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/progress/streak.characterization.test.ts::streak guards > names 7, 30, 100 and 365 days as milestones",
+      "kind": "characterization",
+      "source": "src/server/domain/progress/streak.characterization.test.ts",
+      "title": "streak guards > names 7, 30, 100 and 365 days as milestones",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/dailyPrompt.characterization.test.ts::daily prompt guards > keeps the prompt bank as written",
+      "kind": "characterization",
+      "source": "src/server/domain/writing/dailyPrompt.characterization.test.ts",
+      "title": "daily prompt guards > keeps the prompt bank as written",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/dailyPrompt.characterization.test.ts::daily prompt guards > picks the same prompt as the baseline on fixed days",
+      "kind": "characterization",
+      "source": "src/server/domain/writing/dailyPrompt.characterization.test.ts",
+      "title": "daily prompt guards > picks the same prompt as the baseline on fixed days",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/technicalPrompts.characterization.test.ts::technical prompt guards > keeps the technical prompt bank as written",
+      "kind": "characterization",
+      "source": "src/server/domain/writing/technicalPrompts.characterization.test.ts",
+      "title": "technical prompt guards > keeps the technical prompt bank as written",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:claude-md:architecture-rules:01",
       "kind": "doc-bullet",
       "source": "CLAUDE.md",
