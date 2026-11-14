@@ -64,6 +64,38 @@ jobs:
       - name: G4 build
         run: pnpm build
 
+  postgres:
+    name: G3 (Postgres integration)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready --username postgres" --health-interval 2s --health-timeout 5s --health-retries 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: G3 the Database service against Postgres 17
+        env:
+          DATABASE_URL: postgres://postgres@localhost:5432/postgres
+          DEPLOY_PROFILE: hosted
+        run: pnpm test:postgres
+
   e2e:
     name: G5 (end to end)
     runs-on: ubuntu-24.04

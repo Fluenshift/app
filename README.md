@@ -15,6 +15,7 @@ pnpm install --frozen-lockfile   # install and patch TypeScript and oxlint with 
 pnpm verify                      # every local gate
 pnpm test                        # unit and integration tests
 pnpm test:e2e                    # Playwright journeys against the built server and web app
+pnpm test:postgres               # the Database service against a Postgres 17 server
 pnpm dev                         # server and web in watch mode
 pnpm build                       # server bundle and SPA build
 ```

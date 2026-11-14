@@ -397,6 +397,7 @@ export const GATE_SCRIPTS = [
   "prepare",
   "test",
   "test:e2e",
+  "test:postgres",
   "test:scripts",
   "verify",
 ];
