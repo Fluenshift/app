@@ -3,6 +3,24 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample",
+      "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > protects lines of JSON that are not YAML",
+      "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
       "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
       "class": "A",
