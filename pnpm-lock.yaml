@@ -386,6 +386,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@fluenshift/contract':
+        specifier: workspace:*
+        version: link:../../packages/contract
       '@fluenshift/ui':
         specifier: workspace:*
         version: link:../../packages/ui

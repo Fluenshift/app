@@ -10,6 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@fluenshift/contract": "workspace:*",
     "@fluenshift/ui": "workspace:*",
     "@tanstack/react-router": "catalog:",
     "hono": "catalog:",
