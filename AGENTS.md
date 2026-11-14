@@ -22,13 +22,14 @@ Node 26.13.0 and pnpm 12.18.0. Where they are not on `PATH`, prefix commands wit
 | Command | What it does |
 | --- | --- |
 | `pnpm install --frozen-lockfile` | Install; also patches TypeScript and oxlint with the Effect diagnostics. |
-| `pnpm verify` | Every local gate: format, lint, Effect lint, types, Effect diagnostics, tests, build. |
+| `pnpm verify` | Every local gate: format, gate integrity, lint, Effect lint, types, Effect diagnostics, tests, build. |
 | `pnpm format` / `pnpm format:fix` | Check or apply oxfmt. |
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
 | `pnpm test` | Vitest in every workspace. |
 | `pnpm test:e2e` | Build the server, then run the Playwright journeys against it. |
 | `pnpm build` | Server bundle and SPA build. |
+| `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, CI and test setting is at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
 
 Migration scripts run on plain Node, with no dependencies:
 `node scripts/migration/<script>.ts` (see `docs/migration/BASELINES.md` and `README.md`).
