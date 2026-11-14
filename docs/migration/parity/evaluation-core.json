@@ -1,0 +1,366 @@
+{
+  "slice": "evaluation-core",
+  "lane": "evaluation",
+  "rows": [
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > canonicalizes equivalent wider edits without changing corrected bytes",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not coalesce partial hyphenated, apostrophized, or combining-mark words",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not repair separate duplicates or make a no-op valid",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > never coalesces part of an alphanumeric or underscore token",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > requires both complete-word occurrences to form the adjacent pair",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > safely localizes one unique adjacent duplicate as a whole phrase",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > accepts every fixed Rubric Version 1 category and severity",
+      "source": "apps/server/src/evaluation/evaluation-model.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > rejects invented categories, severities, and excess provider fields",
+      "source": "apps/server/src/evaluation/evaluation-model.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > rejects whitespace-only summaries and explanations",
+      "source": "apps/server/src/evaluation/evaluation-model.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > accepts the predeclared spelling outcome with exact UTF-8 byte offsets",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > freezes unique fixtures covering every live requirement, category, and severity",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > includes previous measured spend in the no-retry budget preflight",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > rejects a changed category, unsafe span, or unexpected suggestion",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > requires exact non-English bytes and any context suggestion to explain uncertainty",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > does not mistake missing sentence spaces for dotted identifiers",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > does not mistake slash-separated prose for a path executable",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors fenced code nested in a Markdown blockquote",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors matching multi-backtick inline-code delimiters",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors variable-length Markdown fences",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > keeps internal YAML comments and blank lines inside the protected block",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > keeps natural labeled prose and ambiguous equals prose evaluable",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > leaves sentence punctuation after URLs and Windows paths evaluable",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects YAML, TOML, and XML structured data",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects a complete balanced nested JSON block",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects commands and structured data copied inside quotes",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects explicit-root, indentless, flow, and block-scalar YAML",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects extensionless paths beneath known project roots",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects nested YAML containing sequence entries",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects opaque UUID and ULID identifiers",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects root YAML flow collections without hiding bracketed prose",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects shell builtins and path executables as complete command lines",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects space-timestamp, syslog, and uncaught-error log lines",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > applies non-overlapping corrections using UTF-8 byte offsets",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > counts letter words while keeping internal apostrophes and hyphens",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > matches approved score anchors and band boundaries",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > rejects correction offsets that split a UTF-8 code point",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > rejects mismatched and overlapping correction spans",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}

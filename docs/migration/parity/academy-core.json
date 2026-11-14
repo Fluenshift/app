@@ -1,0 +1,780 @@
+{
+  "slice": "academy-core",
+  "lane": "academy",
+  "rows": [
+    {
+      "id": "grifando:test:src/lib/answerDiff.test.ts::diffWords > handles an empty answer",
+      "source": "src/lib/answerDiff.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/answerDiff.test.ts::diffWords > ignores case and punctuation when comparing words",
+      "source": "src/lib/answerDiff.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/answerDiff.test.ts::diffWords > marks swapped words as removed + added and keeps the rest",
+      "source": "src/lib/answerDiff.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/answerDiff.test.ts::diffWords > reports missing and extra words at the edges",
+      "source": "src/lib/answerDiff.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/answerDiff.test.ts::findClosestAnswer > keeps the generator's order on ties and handles an empty list",
+      "source": "src/lib/answerDiff.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/answerDiff.test.ts::findClosestAnswer > picks the acceptable answer closest to what the user wrote",
+      "source": "src/lib/answerDiff.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::evaluateExerciseAnswer > dispatches fill-blank by text match",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::evaluateExerciseAnswer > dispatches multiple choice by numeric index",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isMultipleChoiceCorrect > matches the exact correct index",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isMultipleChoiceCorrect > rejects a different index",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > ignores leading/trailing whitespace and trailing punctuation",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > is case-insensitive",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > matches an exact acceptable answer",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > matches any of several acceptable answers",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > rejects an answer that matches none of the acceptable answers",
+      "source": "src/server/domain/exercises/answerChecking.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::expectedSuccess > is 50% when ability matches difficulty and rises as ability exceeds it",
+      "source": "src/server/domain/exercises/difficulty.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::targetLevel > aims at about 70% expected success",
+      "source": "src/server/domain/exercises/difficulty.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::targetLevel > gets harder as ability grows and stays within 1-5",
+      "source": "src/server/domain/exercises/difficulty.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::updateAbility > moves more on a surprising result than on an expected one",
+      "source": "src/server/domain/exercises/difficulty.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::updateAbility > rises on success and falls on failure",
+      "source": "src/server/domain/exercises/difficulty.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseType.test.ts::assignExerciseType > cycles through all four types in order",
+      "source": "src/server/domain/exercises/exerciseType.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseType.test.ts::assignExerciseType > wraps around after the fourth index",
+      "source": "src/server/domain/exercises/exerciseType.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseType.test.ts::assignExerciseTypeFor > follows the normal rotation otherwise",
+      "source": "src/server/domain/exercises/exerciseType.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseType.test.ts::assignExerciseTypeFor > gives a pattern one step from MASTERED an unscaffolded mastery check",
+      "source": "src/server/domain/exercises/exerciseType.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/publicView.test.ts::toPublicExercise > never includes acceptableAnswers for fill-blank/rewrite/translation",
+      "source": "src/server/domain/exercises/publicView.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/publicView.test.ts::toPublicExercise > never includes correctOptionIndex for multiple choice",
+      "source": "src/server/domain/exercises/publicView.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/publicView.test.ts::toPublicExercise > preserves the visible prompt content",
+      "source": "src/server/domain/exercises/publicView.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > breaks ties by occurrence count, most frequent first",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > caps the result, does not mutate the input, and handles an empty list",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > changes the pick as a pattern ages",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > lets a well-practiced pattern wait longer than a weak one with the same gap",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > puts the pattern most likely forgotten first",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectReviewSet > falls back to due patterns when the session had no mistakes",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectReviewSet > ignores fresh ids that aren't among the patterns",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectReviewSet > interleaves today's mistakes with the most due patterns, half each",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectReviewSet > lets fresh mistakes fill the slots when few patterns are due",
+      "source": "src/server/domain/exercises/selection.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/analytics.test.ts::computeCategoryBreakdown > computes percentages relative to the total count",
+      "source": "src/server/domain/mistakes/analytics.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/analytics.test.ts::computeCategoryBreakdown > returns an empty array without dividing by zero when there are no counts",
+      "source": "src/server/domain/mistakes/analytics.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/analytics.test.ts::computeCategoryBreakdown > rounds percentages to one decimal place",
+      "source": "src/server/domain/mistakes/analytics.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/analytics.test.ts::computeCategoryBreakdown > sorts by count descending regardless of input order",
+      "source": "src/server/domain/mistakes/analytics.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > drops IMPROVING back to ACTIVE on an incorrect attempt",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > keeps ACTIVE after a single correct attempt",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > keeps IMPROVING waiting for the mastery check after a scaffolded correct answer",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > keeps MASTERED on a correct attempt and drops it to IMPROVING on a failure",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > only asks for the mastery check one step from MASTERED",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > promotes ACTIVE to IMPROVING after two consecutive correct attempts",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > promotes IMPROVING to MASTERED when the second correct answer is unscaffolded",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > resets the streak on an incorrect attempt from ACTIVE",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::isFading > flags a MASTERED pattern once its recall drops below the review threshold",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::isFading > never flags patterns that aren't MASTERED",
+      "source": "src/server/domain/mistakes/mastery.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/patternKey.test.ts::normalizePatternKey > caps length at 64 characters without a trailing dash",
+      "source": "src/server/domain/mistakes/patternKey.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/patternKey.test.ts::normalizePatternKey > collapses non-alphanumeric runs into single dashes",
+      "source": "src/server/domain/mistakes/patternKey.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/patternKey.test.ts::normalizePatternKey > falls back to a stable key when normalization empties the string",
+      "source": "src/server/domain/mistakes/patternKey.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/patternKey.test.ts::normalizePatternKey > lowercases and trims",
+      "source": "src/server/domain/mistakes/patternKey.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/patternKey.test.ts::normalizePatternKey > strips leading and trailing dashes",
+      "source": "src/server/domain/mistakes/patternKey.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/patternKey.test.ts::normalizePatternKey > treats different raw casings/punctuation of the same concept as identical keys",
+      "source": "src/server/domain/mistakes/patternKey.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::estimateHalfLifeDays > doubles with each correct recall and shrinks with each failure",
+      "source": "src/server/domain/mistakes/recall.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::estimateHalfLifeDays > is clamped to a sane range",
+      "source": "src/server/domain/mistakes/recall.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::recallProbability > decays faster for a pattern with more failures",
+      "source": "src/server/domain/mistakes/recall.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::recallProbability > is 1 right after practice and 0.5 one half-life later",
+      "source": "src/server/domain/mistakes/recall.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::recallProbability > treats a future lastPracticedAt as just practiced",
+      "source": "src/server/domain/mistakes/recall.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/progress.test.ts::computeAverageScores > averages each dimension independently across sessions",
+      "source": "src/server/domain/progress/progress.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "pending-decision",
+      "decision": "adr:0002",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/progress.test.ts::computeAverageScores > returns null for an empty list rather than dividing by zero",
+      "source": "src/server/domain/progress/progress.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "pending-decision",
+      "decision": "adr:0002",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/progress.test.ts::computeAverageScores > returns the scores unchanged for a single session",
+      "source": "src/server/domain/progress/progress.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "pending-decision",
+      "decision": "adr:0002",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/progress.test.ts::computeAverageScores > rounds to the nearest whole number",
+      "source": "src/server/domain/progress/progress.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "pending-decision",
+      "decision": "adr:0002",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/streak.test.ts::computeStreak > breaks on a third consecutive rest day even across weeks",
+      "source": "src/server/domain/progress/streak.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/streak.test.ts::computeStreak > breaks on the third rest day in the same week",
+      "source": "src/server/domain/progress/streak.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/streak.test.ts::computeStreak > counts consecutive active days and doesn't break on an empty today",
+      "source": "src/server/domain/progress/streak.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/streak.test.ts::computeStreak > forgives up to 2 rest days a week without counting them",
+      "source": "src/server/domain/progress/streak.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/streak.test.ts::computeStreak > groups activity by the local calendar day, not UTC",
+      "source": "src/server/domain/progress/streak.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/streak.test.ts::computeStreak > is zero without activity",
+      "source": "src/server/domain/progress/streak.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/streak.test.ts::computeStreak > resets the weekly allowance in a new week",
+      "source": "src/server/domain/progress/streak.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/progress/streak.test.ts::reachedMilestone > returns the highest milestone reached",
+      "source": "src/server/domain/progress/streak.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/dailyPrompt.test.ts::extractActiveWeakCategories > deduplicates repeated categories",
+      "source": "src/server/domain/writing/dailyPrompt.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/dailyPrompt.test.ts::extractActiveWeakCategories > excludes MASTERED categories",
+      "source": "src/server/domain/writing/dailyPrompt.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/dailyPrompt.test.ts::extractActiveWeakCategories > includes ACTIVE and IMPROVING categories",
+      "source": "src/server/domain/writing/dailyPrompt.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/dailyPrompt.test.ts::selectDailyPrompt > can return a different prompt on a different day",
+      "source": "src/server/domain/writing/dailyPrompt.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/dailyPrompt.test.ts::selectDailyPrompt > falls back to the full bank when no prompt matches the weak categories",
+      "source": "src/server/domain/writing/dailyPrompt.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/dailyPrompt.test.ts::selectDailyPrompt > only picks from prompts tagged with a weak category, when any match",
+      "source": "src/server/domain/writing/dailyPrompt.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/dailyPrompt.test.ts::selectDailyPrompt > returns the same prompt for the same calendar day",
+      "source": "src/server/domain/writing/dailyPrompt.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/dailyPrompt.test.ts::selectDailyPrompt > uses the full bank when no weak categories are given",
+      "source": "src/server/domain/writing/dailyPrompt.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/technicalPrompts.test.ts::TECHNICAL_PROMPTS > has at least one prompt for every technical category",
+      "source": "src/server/domain/writing/technicalPrompts.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/technicalPrompts.test.ts::TECHNICAL_PROMPTS > has unique ids across the whole bank",
+      "source": "src/server/domain/writing/technicalPrompts.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/technicalPrompts.test.ts::findTechnicalPromptById > finds a prompt by id",
+      "source": "src/server/domain/writing/technicalPrompts.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/technicalPrompts.test.ts::findTechnicalPromptById > returns undefined for an unknown id",
+      "source": "src/server/domain/writing/technicalPrompts.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/technicalPrompts.test.ts::getTechnicalPromptsByCategory > only returns prompts from the requested category",
+      "source": "src/server/domain/writing/technicalPrompts.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "slice": "evaluation-persistence",
+  "lane": "evaluation",
+  "rows": [
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > derives and atomically stores one complete Evaluation",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > evaluates prose inside quotation marks and Markdown blockquotes",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > excludes fenced and inline code while preserving their exact bytes",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > excludes structured data, commands, paths, identifiers, and logs",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > gives identical bytes distinct identities and the same retained hash",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps command-like imperative words in ordinary prose evaluable",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps context-dependent Suggestions score-neutral",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps errors beside ambiguous technical-looking prose evaluable",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps quoted Protected Technical Content excluded while evaluating quoted prose",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > maps provider failures and stores no History or Progress evidence",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > normalizes retained Findings and Suggestions into source order",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > persists no credential, hidden reasoning, or raw provider body",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > preserves and excludes model-identified non-English UTF-8 spans",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > protects multiline structured data, bare commands, Windows paths, and timestamped logs",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects Suggestions on protected and non-English spans",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects Suggestions that overlap Findings or excluded content",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a Finding whose Correction is identical to its source",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a provider Finding inside a nested YAML sequence",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a provider Finding that edits Protected Technical Content",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects ill-formed Unicode in model-authored text without storage",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects malformed model assessments without History or Progress evidence",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects oversized input before calling the external model",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0006",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects provider Findings inside scalar YAML forms",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects provider spans that split a UTF-8 code point",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects samples without meaning-bearing English and stores nothing",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > retains distinct submission and evaluation completion timestamps",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > returns a complete no-correction Evaluation for correct English",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > deletes one whole Evaluation while preserving other evidence",
+      "source": "apps/server/src/history/learning-history.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > reopens complete retained evidence after the database service is replaced",
+      "source": "apps/server/src/history/learning-history.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > retains immutable complete Evaluations newest first",
+      "source": "apps/server/src/history/learning-history.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > rolls back the parent row when a child insert fails",
+      "source": "apps/server/src/history/learning-history.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > recomputes every aggregate from retained rows after deletion",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > returns exact category recurrence ratios for the browser to format",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > segments exact period evidence by Rubric Version",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > traces correction, Finding Rate, and average-score source evidence",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > traces every selected Finding while counting each Evaluation once",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > treats all as every retained Evaluation despite clock rollback",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:packages/db/src/index.test.ts::Database > migrates product tables and enables durable SQLite invariants",
+      "source": "packages/db/src/index.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0017",
+      "targets": []
+    },
+    {
+      "id": "pe:test:packages/db/src/index.test.ts::Database > reports connection startup failures as DatabaseError",
+      "source": "packages/db/src/index.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}

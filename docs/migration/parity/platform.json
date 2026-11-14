@@ -1,0 +1,42 @@
+{
+  "slice": "platform",
+  "lane": "platform",
+  "rows": [
+    {
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > applies defaults when only DATABASE_URL is set",
+      "source": "packages/env/src/server.test.ts",
+      "class": "A",
+      "slice": "platform",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > fails when DATABASE_URL is missing",
+      "source": "packages/env/src/server.test.ts",
+      "class": "A",
+      "slice": "platform",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > reads explicit values",
+      "source": "packages/env/src/server.test.ts",
+      "class": "A",
+      "slice": "platform",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > rejects a NODE_ENV outside the allowed set",
+      "source": "packages/env/src/server.test.ts",
+      "class": "A",
+      "slice": "platform",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    }
+  ]
+}

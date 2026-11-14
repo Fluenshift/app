@@ -1,0 +1,843 @@
+{
+  "slice": "academy-spec",
+  "lane": "academy",
+  "rows": [
+    {
+      "id": "grifando:claude-md:architecture-rules:01",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:02",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:03",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:04",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:05",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:06",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:07",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:08",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:09",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:10",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:11",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:12",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:13",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:14",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:architecture-rules:15",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:public-deployment-model:01",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:public-deployment-model:02",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:public-deployment-model:03",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:public-deployment-model:04",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:public-deployment-model:05",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:public-deployment-model:06",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:claude-md:public-deployment-model:07",
+      "source": "CLAUDE.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:02f4ffd",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:2a86084",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:8b80767",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:8dc1a06",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:9ba8040",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:9e86e94",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:9f5e47e",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0009",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:22b6067",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:032c115",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:0083c7f",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:218b7b7",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:397b0b4",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0009",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:648cf5d",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:80957b6",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "grifando:fix-commit:cf0c6b6",
+      "source": "git",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:1",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:2",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:3",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:4",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:5",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:6",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:7",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:8",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:9",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:10",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:11",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:12",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:13",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:14",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:15",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:16",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:17",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:18",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:19",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:20",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:21",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:22",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:23",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:61",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:62",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:63",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:64",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:65",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:66",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:67",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:68",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0001",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:77",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "grifando:issue:78",
+      "source": "github",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:1",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:2",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:3",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0016",
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:4",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.1",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.2",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.3",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.4",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.5",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.6",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.7",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.8",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.9",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0002",
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:5.10",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:6",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:6.1",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:7",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:8",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:9",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:10",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "informative",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:11",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:spec:12",
+      "source": "SPEC.md",
+      "class": null,
+      "slice": "academy-spec",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}
