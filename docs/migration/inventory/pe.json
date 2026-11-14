@@ -540,6 +540,30 @@
       "baseline": "green"
     },
     {
+      "id": "pe:characterization:apps/web/src/features/evaluations/spell-checker.characterization.test.ts::SpellChecker mark placement > keeps a span for its Finding when a Suggestion names the same text",
+      "kind": "characterization",
+      "source": "apps/web/src/features/evaluations/spell-checker.characterization.test.ts",
+      "title": "SpellChecker mark placement > keeps a span for its Finding when a Suggestion names the same text",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/web/src/features/evaluations/spell-checker.characterization.test.ts::SpellChecker mark placement > places a mark at UTF-8 byte offsets that hold its text, otherwise at an occurrence of the text",
+      "kind": "characterization",
+      "source": "apps/web/src/features/evaluations/spell-checker.characterization.test.ts",
+      "title": "SpellChecker mark placement > places a mark at UTF-8 byte offsets that hold its text, otherwise at an occurrence of the text",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/web/src/features/evaluations/spell-checker.characterization.test.ts::SpellChecker mark placement > searches from the start when no occurrence follows the previous mark",
+      "kind": "characterization",
+      "source": "apps/web/src/features/evaluations/spell-checker.characterization.test.ts",
+      "title": "SpellChecker mark placement > searches from the start when no occurrence follows the previous mark",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
       "id": "pe:data-policy:deletion:01",
       "kind": "doc-rule",
       "source": "docs/product/DATA-POLICY.md",

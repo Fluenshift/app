@@ -14,6 +14,33 @@
       ]
     },
     {
+      "id": "pe:characterization:apps/web/src/features/evaluations/spell-checker.characterization.test.ts::SpellChecker mark placement > keeps a span for its Finding when a Suggestion names the same text",
+      "source": "apps/web/src/features/evaluations/spell-checker.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/web/src/features/evaluations/spell-checker.characterization.test.ts::SpellChecker mark placement > places a mark at UTF-8 byte offsets that hold its text, otherwise at an occurrence of the text",
+      "source": "apps/web/src/features/evaluations/spell-checker.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/web/src/features/evaluations/spell-checker.characterization.test.ts::SpellChecker mark placement > searches from the start when no occurrence follows the previous mark",
+      "source": "apps/web/src/features/evaluations/spell-checker.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:test:apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation",
       "source": "apps/web/src/components/-loader.test.tsx",
       "class": "A",
