@@ -152,7 +152,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::Progress endpoints > accepts exactly the 7-days, 30-days and all periods"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > answers 503 not-ready when Progress is unavailable",
@@ -161,7 +163,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::Progress endpoints > answers 503 not-ready when Progress is unavailable"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > refuses an unknown insight, an unknown category, a half correction and a bad period",
@@ -296,7 +300,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.integration.test.ts::integrated same-origin backend > creates, reopens, aggregates, traces, and deletes durable evidence"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > falls back to uncached index.html for direct browser routes",
@@ -405,7 +411,9 @@
       "slice": "evaluation-http",
       "disposition": "port-changed",
       "decision": "adr:0008",
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::production HTTP application > serves retained History, Progress, deletion, and setup through same-origin API"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > serves static assets with immutable caching",
