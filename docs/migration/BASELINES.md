@@ -146,3 +146,36 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | System | File | Pins | Cases |
 | --- | --- | --- | ---: |
 | `pe` | `apps/server/src/evaluation/utf8.characterization.test.ts` | `utf8.ts`, which has no test, and the UTF-8 edge cases of `applyCorrections`: a leading BOM, lone surrogates, code-point boundaries, the two rejection reasons. A port to `TextEncoder` and `TextDecoder` must keep a leading BOM, which a default `TextDecoder` drops. | 13 |
+| `grifando` | `src/app/api/exercises/exercises.characterization.test.ts` | `GET` and `POST /api/exercises` beyond the AI error cases of `route.test.ts`; see the table below. | 6 |
+| `grifando` | `src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts` | Grading and explaining an attempt; neither route has a test. | 6 |
+| `grifando` | `src/app/api/interview/interview.characterization.test.ts` | The four interview routes; none has a test. | 6 |
+| `grifando` | `src/app/api/me/me.characterization.test.ts` | The attributes the session cookie is expired with. | 1 |
+| `grifando` | `src/app/api/vocabulary/vocabulary.characterization.test.ts` | Saving and deleting a vocabulary item; neither route has a test. | 3 |
+| `grifando` | `src/app/api/writing-sessions/writingSessions.characterization.test.ts` | Submitting, listing and reading writing sessions beyond the missing-key cases of `route.test.ts`. | 6 |
+
+Grifando's API routes, by the test that pins each behavior (#22). The characterizations run the
+handlers against the throwaway Postgres, with the session, the rate limit and the AI provider
+faked as the existing route tests fake them; the rate-limit refusals are in
+`rateLimitFirst.characterization.test.ts` (#23).
+
+| Route | Baseline test | Characterization |
+| --- | --- | --- |
+| `POST /api/ai-key/test` | `route.test.ts`: works, invalid, busy, timeout, malformed key, rate limit, missing key | nothing more |
+| `GET /api/cron/cleanup` | `route.test.ts`: missing, wrong and unset secret; the counts | nothing more |
+| `GET /api/exercises` | none | the public view of pending exercises, only the visitor's, and none once answered |
+| `POST /api/exercises` | `route.test.ts`: missing key, typed AI error | 400 with issues, 422 before any pattern, 201 with public views, safe 500 |
+| `POST /api/exercises/[id]/attempts` | none | 200 with the grade and the whole exercise, 400 with issues, 404 for unknown and foreign exercises |
+| `POST /api/exercises/[id]/attempts/[attemptId]/explanation` | none | 200 with the explanation, 401 without a key, 404, and 502, 500 or the AI code when explaining fails |
+| `POST /api/interview` | none | 201 with the session and its opening turn, 401 without a key |
+| `GET /api/interview/[id]` | none | the session with its turns, 404 for unknown and foreign sessions |
+| `POST /api/interview/[id]/turns/[turnId]/answer` | none | answered with the analysis and the next turn, failed with its session, 400 with issues, 404 for a foreign turn |
+| `POST /api/interview/[id]/end` | none | `{ status: "ended" }`, 404 for unknown and foreign sessions |
+| `DELETE /api/me` | `route.test.ts`: 204, the cookie's name and expiry, rate limit | the cookie's attributes, with `Secure` in production only |
+| `POST /api/vocabulary` | none | 201 with the item, 400 with issues |
+| `DELETE /api/vocabulary/[id]` | none | 204 with no body, 404 for unknown and foreign items |
+| `POST /api/writing-sessions` | `route.test.ts`: missing and malformed key | 201 with the analyzed session (field by field), 201 with a failed session, 400 with issues |
+| `GET /api/writing-sessions` | none | newest first, at most 20, only the visitor's, without analyses |
+| `GET /api/writing-sessions/[id]` | none | the session with its analysis, 404 for unknown and foreign sessions |
+
+The five pages that read repositories in Server Components (`/`, `mistakes`, `vocabulary`,
+`today`, `write`) are not characterized yet; #22 stays open for them.
