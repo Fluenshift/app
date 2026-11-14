@@ -101,7 +101,7 @@ tests that carry it in this repository. Each file is one object: `slice`, `lane`
 | `class` | Test rows only: `A` ports nearly verbatim (pure code), `B` keeps its assertions on new persistence fixtures (SQLite or Postgres to PGlite), `C` is re-expressed as a contract test (SDK, Elysia, Next.js or Bun bound). `null` for other rows. |
 | `slice` | The slice, also the file name. |
 | `disposition` | `port`, `port-changed`, `superseded`, `drop`, `informative` or `pending-decision` (below). |
-| `decision` | `adr:NNNN` (`docs/adr/NNNN-*.md`) or `issue:N` (a `needs-info` issue in this repo). Required for `pending-decision`, `port-changed`, `superseded` and `drop`; `null` otherwise. |
+| `decision` | `adr:NNNN` (`docs/adr/NNNN-*.md`) or `issue:N` (a `needs-info` issue in this repo). Required for `pending-decision`, `port-changed`, `superseded` and `drop`; kept on rows that ADR 0001 made `informative`; `null` otherwise. |
 | `targets` | Target tests as `file::full title`, written by the unit that ports the row. A class C row also lists the source or characterization test it re-expresses. |
 
 Dispositions:
@@ -111,7 +111,8 @@ Dispositions:
 - `port-changed`: the behavior moves with the change an accepted ADR describes.
 - `superseded`: replaced by other rows under an accepted ADR.
 - `drop`: removed under an accepted ADR.
-- `informative`: a non-normative clause with no behavior to port; a verifier confirms each.
+- `informative`: a row with no behavior to port: a non-normative clause, or, under ADR 0001, an
+  issue or a commit that changes only the build, tests or tooling.
 - `pending-decision`: blocked by the open decision named in `decision`; nobody implements
   either side until it is settled (agent rule 7). Only these rows may have skipped tests.
 
@@ -239,7 +240,8 @@ as it is. To read a PR's verdict locally, without setting any status:
 mise exec node@26.13.0 -- node scripts/migration/verdict-check.ts --repo Fluenshift/app --pr <number>
 ```
 
-Until the workflow is on `main`, the coordinator checks verdicts by hand.
+The owner's amendment to ADR 0001 of 2026-11-14 waives this gate: the status stays on PRs as
+information, and a PR merges once its CI gates are green.
 
 ## Mechanical mapping
 

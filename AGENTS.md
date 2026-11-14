@@ -68,7 +68,8 @@ Work units and decision requests are GitHub Issues; state lives in labels, never
    test fails, revert, and list the mutations in the PR.
 6. Write the ledger targets as `file::full title`, open one PR that closes the issue, label it
    `implementer:<vendor>`, and move the issue to `in-review`.
-7. A verifier from the other vendor posts the G12 verdict. Never push to a branch you verify.
+7. Merge the PR once every CI gate is green. The cross-vendor verdict (G12) is waived by the
+   owner's amendment to ADR 0001; its status on a PR is information only.
 8. Stop rule: after two failed attempts at the same gate failure, or whenever green would need
    a changed expected value, gate or disposition, post the failing output on the issue, label
    it `needs-info`, and stop.
