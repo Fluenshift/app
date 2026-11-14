@@ -158,6 +158,16 @@ export const ProgressEvidenceSelection = Schema.Union([
 export type ProgressEvidenceSelection = typeof ProgressEvidenceSelection.Type;
 
 /**
+ * The body of `POST /api/progress/evidence`. A Correction selection carries text the Learner
+ * wrote, so the selection travels in the body, never in the URL (docs/adr/0008).
+ */
+export const ProgressEvidenceRequest = Schema.Struct({
+  period: ProgressPeriod,
+  selection: ProgressEvidenceSelection,
+});
+export type ProgressEvidenceRequest = typeof ProgressEvidenceRequest.Type;
+
+/**
  * A retained Finding located by its Evaluation and its position inside that Evaluation,
  * because Findings carry no durable identity yet.
  */

@@ -43,6 +43,7 @@ export {
   ProgressEvidence,
   ProgressEvidenceEvaluation,
   ProgressEvidenceFinding,
+  ProgressEvidenceRequest,
   ProgressEvidenceSelection,
   ProgressPeriod,
   ProgressSegment,
