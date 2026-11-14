@@ -3,6 +3,50 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > coalesces an adjacent duplicate only for an Other finding",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::assessment localization guards > coalesces an adjacent duplicate only for an Other finding"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > does not coalesce a word that occurs a third time",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::assessment localization guards > does not coalesce a word that occurs a third time"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > keeps the start of an edit that begins right after a word",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::assessment localization guards > keeps the start of an edit that begins right after a word"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > treats overlapping occurrences of the original text as ambiguous",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::assessment localization guards > treats overlapping occurrences of the original text as ambiguous"
+      ]
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
       "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
       "class": "A",
@@ -152,7 +196,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > canonicalizes equivalent wider edits without changing corrected bytes"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not coalesce partial hyphenated, apostrophized, or combining-mark words",
@@ -161,7 +207,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > does not coalesce partial hyphenated, apostrophized, or combining-mark words"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text",
@@ -170,7 +218,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not repair separate duplicates or make a no-op valid",
@@ -179,7 +229,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > does not repair separate duplicates or make a no-op valid"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8",
@@ -188,7 +240,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > never coalesces part of an alphanumeric or underscore token",
@@ -197,7 +251,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > never coalesces part of an alphanumeric or underscore token"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate",
@@ -206,7 +262,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > requires both complete-word occurrences to form the adjacent pair",
@@ -215,7 +273,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > requires both complete-word occurrences to form the adjacent pair"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > safely localizes one unique adjacent duplicate as a whole phrase",
@@ -224,7 +284,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > safely localizes one unique adjacent duplicate as a whole phrase"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > accepts every fixed Rubric Version 1 category and severity",
