@@ -1,19 +1,63 @@
 import { readFile } from "node:fs/promises";
+import { createServer } from "node:http";
 import path from "node:path";
 
-import type { HealthResponse } from "@fluenshift/contract";
+import type { HealthResponse, SetupStatus } from "@fluenshift/contract";
+import type { DatabaseError } from "@fluenshift/db";
 import type { DeployProfile, InputLimits } from "@fluenshift/env";
+import { getRequestListener } from "@hono/node-server";
+import type { Effect, ManagedRuntime } from "effect";
 import { Hono } from "hono";
 import type { Handler, MiddlewareHandler } from "hono";
 import { getMimeType } from "hono/utils/mime";
 
 import { INTERNAL_ERROR } from "./edge";
 import type { EdgeFailure } from "./edge";
+import type {
+  EvaluationEndpointResult,
+  EvaluationFailureCode,
+} from "./evaluation/evaluation-endpoint";
+import type { CurrentLearner, LearnerIdentity } from "./learner-identity";
 
-export interface AppOptions {
+export interface EvaluationLogEvent {
+  readonly code:
+    | EvaluationFailureCode
+    | "created"
+    | "internal-error"
+    | "no-english";
+  readonly correlationId: string;
+  readonly durationMilliseconds: number;
+  readonly maxOutputTokens: number;
+  readonly model: string;
+  readonly provider: string;
+  readonly requestTimeoutMilliseconds: number;
+}
+
+// Typed stub for the red commit: the boundaries are accepted and ignored.
+export interface AppBoundaries<R = never> {
+  readonly deleteEvaluation?: (
+    evaluationId: string
+  ) => Effect.Effect<void, DatabaseError, R | CurrentLearner>;
+  readonly evaluateWriting?: (
+    writingSample: string
+  ) => Effect.Effect<EvaluationEndpointResult, never, R | CurrentLearner>;
+  readonly getEvaluation?: (
+    evaluationId: string
+  ) => Effect.Effect<unknown, DatabaseError, R | CurrentLearner>;
+  readonly listEvaluations?: () => Effect.Effect<
+    readonly unknown[],
+    DatabaseError,
+    R | CurrentLearner
+  >;
+  readonly logEvaluation?: (event: EvaluationLogEvent) => void;
+  readonly setup?: SetupStatus;
+}
+
+export interface AppOptions<R = never> extends AppBoundaries<R> {
   /** The input caps of the deploy profile (docs/adr/0006). */
   readonly limits: InputLimits;
   readonly profile: DeployProfile;
+  readonly runtime?: ManagedRuntime.ManagedRuntime<R | LearnerIdentity, never>;
   /** Whether this process also serves the web build, as it does in production. */
   readonly serveWeb: boolean;
   readonly webDistPath: string;
@@ -53,7 +97,7 @@ const isForeign = (request: Request): boolean => {
 
 const refusalOf = (
   request: Request,
-  { limits, profile }: AppOptions
+  { limits, profile }: Pick<AppOptions, "limits" | "profile">
 ): EdgeFailure | undefined => {
   if (profile === "local" && isForeign(request)) {
     return FORBIDDEN;
@@ -68,7 +112,7 @@ const refusalOf = (
  * exists, because a route may answer with a `Response` of its own, as the edge helper does.
  */
 const guard =
-  (options: AppOptions): MiddlewareHandler =>
+  (options: Pick<AppOptions, "limits" | "profile">): MiddlewareHandler =>
   (context, next) => {
     const markApi = () => {
       if (context.req.path.startsWith("/api/")) {
@@ -123,7 +167,7 @@ const webFallback = (webDistPath: string): Handler => {
  * The HTTP application: the API and, in production, the web build, from one process. Routes
  * answer from Effects through the edge helper (`./edge`).
  */
-export const createApp = (options: AppOptions) => {
+export const createApp = <R = never>(options: AppOptions<R>) => {
   const app = new Hono()
     .use(guard(options))
     .get("/api/health", (context) =>
@@ -142,4 +186,14 @@ export const createApp = (options: AppOptions) => {
   return app;
 };
 
-export type AppType = ReturnType<typeof createApp>;
+export type AppType = ReturnType<typeof createApp<never>>;
+
+// Typed stub for the red commit: the server keeps Node's default idle timeout.
+export const serveApp = (
+  app: { readonly fetch: (request: Request) => Response | Promise<Response> },
+  address: { readonly hostname: string; readonly port: number }
+) =>
+  createServer(getRequestListener(app.fetch)).listen(
+    address.port,
+    address.hostname
+  );
