@@ -1,0 +1,25 @@
+{
+  "name": "@fluenshift/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit -p tsconfig.json",
+    "check:effect": "effect-tsgo diagnostics --project tsconfig.json --format pretty --strict",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@fluenshift/contract": "workspace:*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/tsgo": "catalog:",
+    "@effect/vitest": "catalog:",
+    "@fluenshift/config": "workspace:*",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

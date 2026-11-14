@@ -1,0 +1,348 @@
+{
+  "slice": "academy-http",
+  "lane": "academy",
+  "rows": [
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts > answers 400 with the validation issues for an empty answer",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts > answers 404 for an unknown exercise and for another user's",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts > grades an answer and returns the attempt with the whole exercise",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > answers 401 AI_KEY_REQUIRED without a key and 404 for an unknown attempt",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > explains an attempt with the provider's text",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > keeps the grade and answers 502, 500 or the AI code when the explanation fails",
+      "source": "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::GET /api/exercises > lists the visitor's pending exercises by their public view only",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::GET /api/exercises pending > drops an exercise once it has an attempt",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 201 with the new exercises by their public view",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 400 with the validation issues for a malformed body",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 422 before the first mistake pattern exists",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 500 with a generic message when generation fails unexpectedly",
+      "source": "src/app/api/exercises/exercises.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > answers 404 to another user's turn",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > answers a turn with its analysis and the next question",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > ends a session once, and 404s for an unknown or another user's session",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > reads a session with its turns, and 404s for an unknown or another user's session",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > returns the FAILED writing session when the analysis fails, and validates the answer",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > starts a session with its opening question",
+      "source": "src/app/api/interview/interview.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > answers 400 with the validation issues for a missing field",
+      "source": "src/app/api/vocabulary/vocabulary.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > deletes the visitor's item with 204, and 404s for an unknown or another user's item",
+      "source": "src/app/api/vocabulary/vocabulary.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > saves an item and answers 201 with it",
+      "source": "src/app/api/vocabulary/vocabulary.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > analyzes a submitted text and answers 201 with the session and its analysis",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > answers 201 with the FAILED session when the analysis fails",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > answers 400 with the validation issues for an unknown prompt type",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > lists at most the 20 newest sessions",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > lists the visitor's sessions newest first, without their analyses",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > reads one session with its analysis, and 404s for an unknown or another user's session",
+      "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/ > feeds the dashboard's streak, progress, weak areas and recent lists",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0005",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > shows each pattern once with its mastery, the category breakdown and the due count",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0005",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/today > hands TodaySession today's challenge, biased toward the visitor's active categories",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/vocabulary > lists the visitor's items newest first and prefills the form from the query",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/write > takes its challenge and heading from the query",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/aiErrorResponse.characterization.test.ts::aiErrorResponse guards > carries the FAILED session id of a typed AI error, and only when there is one",
+      "source": "src/server/ai/aiErrorResponse.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/exercises/route.test.ts::POST /api/exercises > answers 401 AI_KEY_REQUIRED without credentials",
+      "source": "src/app/api/exercises/route.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/exercises/route.test.ts::POST /api/exercises > maps a typed AI error from generation to its coded response",
+      "source": "src/app/api/exercises/route.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/writing-sessions/route.test.ts::POST /api/writing-sessions without an AI key > answers 400 AI_KEY_INVALID for a malformed key",
+      "source": "src/app/api/writing-sessions/route.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/writing-sessions/route.test.ts::POST /api/writing-sessions without an AI key > answers 401 AI_KEY_REQUIRED and creates no WritingSession",
+      "source": "src/app/api/writing-sessions/route.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    }
+  ]
+}

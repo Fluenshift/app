@@ -1,0 +1,213 @@
+{
+  "slice": "evaluation-e2e",
+  "lane": "evaluation",
+  "rows": [
+    {
+      "id": "pe:docker-smoke:L354",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L397",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L406",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L424",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L429",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L439",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L440",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L441",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L451",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L464",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L471",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L479",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L491",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L495",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L499",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L500",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L506",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L516",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L517",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L525",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L532",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:docker-smoke:L536",
+      "source": "scripts/docker-smoke.ts",
+      "class": null,
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:e2e/mvp.spec.ts::complete retained-evidence journey",
+      "source": "e2e/mvp.spec.ts",
+      "class": "A",
+      "slice": "evaluation-e2e",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}

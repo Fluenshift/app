@@ -98,8 +98,9 @@ L = weak; in the Risk column, H means low risk.
 | 5 Direct code translation | L | M | L | M | H |
 | **6 Ledger-driven test-first port** | **H** | **H** | **H** | **H** | **H** |
 
-Test suites total 10,249 lines (PE 6,290 in 28 files, about 165 cases; Grifando 3,959 in
-49 files, about 276 cases). By how they port:
+Test suites total 10,249 lines (PE 6,290 in 28 files; Grifando 3,959 in 49 files). The
+runners report 178 PE cases (server 106, db 2, env 4, web 65, E2E 1) and 305 Grifando cases
+at the pinned commits (`docs/migration/BASELINES.md`). By how they port:
 
 - **Class A, about 51%, ports nearly verbatim**: PE server pure 844, PE web and E2E 2,462,
   Grifando pure 1,896.
@@ -119,8 +120,9 @@ Verdicts:
    converting in place swaps nearly every server dependency at once (Bun → Node, Elysia →
    Hono, bun:sqlite → Postgres, openai → AI SDK, bun:test → Vitest, Effect RC → 4.1.2), so
    the repo stays red and the gates cannot act as reviewer. It also carries PE-only
-   constraints (loopback only, no sessions, no learner scoping) and has no history worth
-   keeping (3 commits, 30 of 31 server files untracked). Kept as the tooling template.
+   constraints (loopback only, no sessions, no learner scoping) and has little history to
+   keep (4 commits; the whole MVP landed in one commit at setup). Kept as the tooling
+   template.
 3. **2b Grifando as base — rejected.** Farthest from the target (Next.js App Router with
    Server Components reading repositories, Prisma, Zod, TS 5.9, ESLint, no Effect), so it
    means rewriting a live product; its UI has no tests; its model-supplied scores conflict
@@ -201,6 +203,11 @@ everything they do.
    - PE: `bun test --reporter=junit` for server and db, Vitest `--reporter=json` for web and
      env, Playwright `--reporter=json` for E2E;
    - Grifando: Vitest `--reporter=json` against Postgres 17, after `pnpm db:test:prepare`.
+     Call it as `pnpm exec vitest run`: pnpm 12 takes `--reporter` after `pnpm test` as its
+     own flag.
+
+   `scripts/migration/baseline-run.ts` runs both, records the exact commands and toolchain,
+   and hides credentials from baseline code (`docs/migration/BASELINES.md`).
 
    Mark any red test `baseline-red` and open a `needs-info` issue for it. It cannot serve as
    spec until the owners decide.
@@ -223,8 +230,9 @@ everything they do.
    row; `informative` only for non-normative doc clauses, and a verifier must confirm each.
 7. Characterize uncovered behavior: Grifando's 11 pages, its Server Component reads
    (`src/app/page.tsx`, mistakes, vocabulary, today, write), the HTTP status and body shapes
-   of every endpoint in both apps, and every fix commit with no test. Write these tests in the
-   baseline clone, in the old idiom with the AI boundary faked, and run them green there. UI
+   of every endpoint in both apps, and every fix commit with no test. Keep these tests in this
+   repository, in the old idiom with the AI boundary faked; run them green in a disposable
+   worktree of the baseline (`baselines.ts add-worktree`), never in the clone itself. UI
    journeys assert roles, labels and contractual copy, not layout. Store tests and run
    reports in `migration/characterization/{pe,grifando}/`.
    - Grifando has no runtime fake provider: `src/server/ai/credentials.ts:32` picks Anthropic
@@ -323,7 +331,7 @@ should.
    - the Learner identity service (local implementation only);
    - the loopback and Host/Origin guard (port of PE's `app.ts` onRequest);
    - one process serving the API and the static SPA;
-   - a `node:26-slim`, non-root Dockerfile.
+   - a non-root Dockerfile on `node:26.13.0-slim`, pinned by digest.
 4. Write the CI pipeline for gates G1–G12. Run the integration suite against a real Postgres
    service on main. Port docker-smoke from PE `scripts/docker-smoke.ts` for the local profile.
    CI gets the baselines through `scripts/migration/baselines.ts`. Once CI runs, an owner
@@ -333,7 +341,14 @@ should.
 
    Every required check also runs on the `merge_group` event, or the queue waits forever.
    Checks that only make sense on a pull request (G8, G12) report success on `merge_group`,
-   because they already gated the PR.
+   because a PR enters the queue only when they passed on its head.
+
+   G12 cannot come from the `pull_request` run alone: the verdict comment arrives after it, and
+   comments do not rerun it. A workflow on `issue_comment` (and on `pull_request`, for new
+   heads) runs `verdict-check.ts`. Because `issue_comment` workflows run from the default
+   branch, a PR cannot change the checker. It reads the PR's head SHA and labels through the
+   API, validates the newest verdict for that head, and sets a `G12` commit status on that
+   SHA (`permissions: statuses: write`, nothing else). The ruleset requires that status.
 5. Write the migration tooling:
    - `scripts/migration/parity-check.ts` validates the ledger and derives each row's status
      from the Vitest and Playwright JSON reports and the ADR index. The ledger stores no
@@ -397,7 +412,7 @@ Calibration deferred).
    Move the Progress evidence selection out of the query string (`port-changed` under its
    ADR).
 5. **4e:** web. Port PE's routes and features (Writing Desk, Evaluation Detail, History,
-   Progress, Setup & privacy, SpellChecker) and their 56 web cases. Build first against the
+   Progress, Setup & privacy, SpellChecker) and their 65 web cases. Build first against the
    in-memory client, then against the `hc` client. Per ADR 0001 the real backend replaces
    the fake; they never coexist.
 6. **4f (serial):** port `e2e/mvp.spec.ts`, then run docker smoke for the local profile.
@@ -443,8 +458,12 @@ Goal: port the remaining Grifando features and the hosted-deployment behavior.
 2. BYOK: the key stays in browser storage and travels only in the `x-ai-provider` and
    `x-ai-key` headers; it is never logged, persisted or put in a URL. Port the key-test
    endpoint and `noKeyInLogs.test.ts`.
-3. Hosted profile, as one serial unit for the request pipeline: signed anonymous session;
-   rate limits in Postgres fixed windows per Learner and per hashed IP; `DELETE /api/me`;
+3. Hosted profile, as one serial unit for the request pipeline: signed anonymous session,
+   its cookie `HttpOnly`, `Secure` and `SameSite=Lax`, with the attributes characterized at the
+   Grifando baseline; an Origin check on every state-changing request; the trusted-proxy
+   setting that decides which header carries the client IP; a documented rotation of the
+   session secret; rate limits in Postgres fixed windows per Learner and per hashed IP;
+   `DELETE /api/me`;
    90-day idle cleanup run by the scheduler chosen in its ADR; CSP for a static SPA; privacy
    page in EN and PT; landing page and OG image generated at build time; robots and sitemap.
 4. Automate the `docs/deploy.md` §5 checklist as the hosted-profile docker smoke.
@@ -681,7 +700,7 @@ These add to PRE_MIGRATION § Rules for the new repo's AGENTS.md / CLAUDE.md.
 | Privacy regresses (keys in logs, user text in URLs, telemetry). | G7: ported no-key-in-logs test, URL-leak test, no telemetry by default until an ADR decides otherwise. |
 | Behavior only Next.js provides is lost in the SPA (CSP nonce, OG image, robots and sitemap, cookie on first render). | Explicit ledger rows from `src/proxy.ts`, `opengraph-image.tsx`, `robots.ts` and `sitemap.ts`, each `port-changed` under an ADR (static-SPA CSP, OG image built at build time). |
 | A late design-language decision churns UI tests. | Decide it in Phase 1, before 4e; UI tests assert roles, labels and copy, not layout. |
-| Licensing and ownership: Grifando is MIT; PE has no license file; the product name is open. | The product license is chosen at setup, before the new repo exists; PE's author chooses PE's license before it goes public; a Phase 1 ADR settles the product name; ported Grifando code keeps the MIT notice. |
+| Licensing and ownership: Grifando and PE are MIT; the product name is open. | The product license is chosen at setup, before the new repo exists; PE's author chooses PE's license before it goes public; a Phase 1 ADR settles the product name; ported Grifando code keeps the MIT notice. |
 | Moving Grifando into the organization breaks its live deploy or CI. | Deferred by the owners, together with the deploy decision; `HANDOFF.md` § Deferred lists the fixes. The migration depends on neither: the baselines are pinned SHAs, and their suites run outside Grifando's CI. |
 | A source repo changes after its baseline. | Change policy decided at setup (`HANDOFF.md` step 3); every change goes through a baseline bump with an inventory diff. |
 | A baseline tag is moved or deleted. | The SHA pin is the authority; `baselines.ts` fails on a mismatch; tag rulesets restrict updates and deletions. |
@@ -690,11 +709,13 @@ These add to PRE_MIGRATION § Rules for the new repo's AGENTS.md / CLAUDE.md.
 
 ## Evidence
 
-- PE git: only `apps/server/src/index.ts` is tracked under `apps/server/src` (1 of 31 files,
-  re-checked 2026-11-10); the web features, `e2e/` and the migrations are untracked.
-- Suite sizes (`wc -l` and static `it`/`test` counts): PE 6,290 lines in 28 files, about 165
-  cases (108 server, db and env; 56 web; 1 E2E). Grifando 3,959 lines in 49 files, about 276
-  cases.
+- PE git: on 2026-11-10 only `apps/server/src/index.ts` was tracked under `apps/server/src`
+  (1 of 31 files). Setup committed the MVP in one commit, `5e831bb`, the pinned baseline:
+  all 31 files are tracked there.
+- Suite sizes (`wc -l` and static `it`/`test` counts, 2026-11-10): PE 6,290 lines in 28
+  files, about 165 cases; Grifando 3,959 lines in 49 files, about 276 cases. Runner counts at
+  the pinned commits (2026-11-13): PE 178 (server 106, db 2, env 4, web 65, E2E 1), Grifando
+  305.
 - Grifando UI: 11 pages, 4,134 lines of TSX in `src/app` and `src/components`, zero
   `.test.tsx` files (re-checked). Five pages read repositories directly in Server Components.
 - PE server tests use `bun:test` and Bun-only APIs (`import.meta.dir`, `Bun.spawn`, `Bun.env`)
@@ -737,7 +758,7 @@ These add to PRE_MIGRATION § Rules for the new repo's AGENTS.md / CLAUDE.md.
   that must not be renumbered (REQUIREMENTS.md:4, `live-calibration-fixtures.ts:7-19`).
 - PE forbids Effect in `apps/web` (`docs/agents/effect.md`, ADR 0002), but the approved stack
   shares Effect Schema with the web — a superseding ADR is required.
-- Grifando is MIT; PE has no license file. PE's commits use the GitHub noreply address.
+- Grifando and PE are MIT. PE's commits use the GitHub noreply address.
 - Organization facts, checked 2026-11-10:
   - a transfer keeps issues, PRs, webhooks, secrets and deploy keys, and redirects web and
     git URLs until a repo is created at the old location

@@ -1,0 +1,591 @@
+{
+  "slice": "evaluation-web",
+  "lane": "evaluation",
+  "rows": [
+    {
+      "id": "pe:test:apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation",
+      "source": "apps/web/src/components/-loader.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > deletes exactly one encoded Evaluation identity",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > loads Progress and encoded source evidence",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0008",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > loads accurate server-side setup status",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > maps a deleted or unknown Evaluation to missing",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > opens a retained Evaluation using an encoded identity",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > preserves the no-English result returned with validation status",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > raises safe typed errors for failed API operations",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > reads retained history from the same-origin API",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > submits exact writing and receives its durable Evaluation",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts::in-memory evaluation client > a no-English fixture creates no Evaluation",
+      "source": "apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts::in-memory evaluation client > applies an explicit fixture without interpreting the Writing Sample",
+      "source": "apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > clicking a finding opens the Grammarly-style popover card",
+      "source": "apps/web/src/features/evaluations/spell-checker.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > navigates through issues using toolbar stepper",
+      "source": "apps/web/src/features/evaluations/spell-checker.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > renders the original text with inline wavy marks for findings and suggestions",
+      "source": "apps/web/src/features/evaluations/spell-checker.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > SpellChecker renders findings directly on original text with Grammarly popover and 1-click accept",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > a later provider failure preserves the changed draft and previous saved evidence",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > editing after success marks stale evidence without automatic evaluation",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > is the production root even when an old prototype query remains",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keeps a completed Evaluation inline with complete evidence",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "pending-decision",
+      "decision": "issue:1",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keeps long unbroken Finding and Suggestion evidence reachable",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keyboard submission and repeat submission both remain explicit",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > pending work preserves exact writing and prevents duplicate submission",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > a failed deletion keeps the record and offers a safe retry",
+      "source": "apps/web/src/routes/-evaluations.deletion.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > confirmation removes only that complete record and returns to History",
+      "source": "apps/web/src/routes/-evaluations.deletion.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > the safe cancel path explains deletion and keeps the Evaluation",
+      "source": "apps/web/src/routes/-evaluations.deletion.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Evaluation Detail uses accessible work, evidence, and history regions",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Evidence Lens shows every Finding, Correction, and Suggestion",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Original section displays interactive SpellChecker with findings on original text",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::finding exposes its original text and Correction as labeled definitions",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::learner can inspect a non-error Suggestion",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > empty history points the Learner to their first Evaluation",
+      "source": "apps/web/src/routes/-evaluations.history.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > populated history shows every Evaluation newest first",
+      "source": "apps/web/src/routes/-evaluations.history.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > repeated Writing Samples remain distinct newest-first observations",
+      "source": "apps/web/src/routes/-evaluations.history.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > selecting a History row reopens its complete Evaluation",
+      "source": "apps/web/src/routes/-evaluations.history.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.new.test.tsx::New Evaluation compatibility route > primary navigation exposes permanent product surfaces only",
+      "source": "apps/web/src/routes/-evaluations.new.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.new.test.tsx::New Evaluation compatibility route > redirects old creation links to the Writing Desk",
+      "source": "apps/web/src/routes/-evaluations.new.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a network failure gives connection guidance without showing private causes",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a no-English outcome keeps the exact sample and explains what is required",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a provider timeout explains the delay without discarding the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a retryable failure preserves exact writing and can succeed",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > configuration-missing failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > forbidden failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > invalid-assessment failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > keeps evaluation disabled until the provider is configured",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > persistence-failure failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-credits-exhausted failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-output-incomplete failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-rate-limited failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-rejected failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-unavailable failures show actionable feedback while preserving the draft",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > an Error Category selection reveals its exact source Findings",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > deletion recomputes Progress even after an intent preload",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > each period window contains exactly its retained Evaluations",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > incompatible Rubric Versions stay separate and labeled",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > keeps long unbroken source explanations reachable",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > no compatible evidence shows an honest empty state",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > one Evaluation counts once per category but reveals every Finding",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > primary rate, secondary score, and descriptive measures",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > recurring Correction and summary selections reveal their evidence",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > repeated Writing Samples remain separate observations",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > sparse evidence stays descriptive",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-root.light-theme.test.tsx::light-only application shell > does not read or write a stored theme",
+      "source": "apps/web/src/routes/-root.light-theme.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-setup.test.tsx::Setup & privacy > keeps setup to essential provider, privacy, data, and access facts",
+      "source": "apps/web/src/routes/-setup.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-setup.test.tsx::Setup & privacy > reports when the provider is ready",
+      "source": "apps/web/src/routes/-setup.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}
