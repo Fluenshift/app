@@ -97,7 +97,8 @@ jobs:
         run: pnpm test:postgres
 
   e2e:
-    name: G5 (end to end)
+    # G4 too: the journeys start the one built process that serves /api/health and the SPA.
+    name: G4 and G5 (the built process, end to end)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
