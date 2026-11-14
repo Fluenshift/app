@@ -163,6 +163,17 @@ Rows for inventory rows added later, such as new characterization cases, are add
 `scripts/migration/ledger-add.ts`: it appends `port` rows to one slice and never touches an
 existing row.
 
+`scripts/migration/parity-audit.ts` (gate G10) reads each class A and class B `port` row's
+source test, at the pin or in `migration/characterization/`, and its target tests, and fails
+when the targets make fewer `expect` or `assert` calls, drop a literal that a source matcher
+expects, or check with a weaker matcher (`toBe` and `toStrictEqual`, then `toEqual`, then
+`toMatchObject`; any other matcher by name). Class C rows are only reported. It needs the
+baseline clones (`baselines.ts sync`); from a worktree, point `--root` at them:
+
+```bash
+mise exec node@26.13.0 -- node scripts/migration/parity-audit.ts --root ../app-baselines
+```
+
 ## Issue labels
 
 Work units and decision requests are GitHub Issues in this repository. State lives in labels,
