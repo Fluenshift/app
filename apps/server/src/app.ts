@@ -3,7 +3,12 @@ import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 
-import type { HealthResponse, SetupStatus } from "@fluenshift/contract";
+import type {
+  HealthResponse,
+  ProgressEvidenceSelection,
+  ProgressPeriod,
+  SetupStatus,
+} from "@fluenshift/contract";
 import {
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
   EVALUATION_MAX_OUTPUT_TOKENS,
@@ -55,6 +60,13 @@ export interface AppBoundaries<R = never> {
   readonly getEvaluation?: (
     evaluationId: string
   ) => Effect.Effect<unknown, DatabaseError, R | CurrentLearner>;
+  readonly getProgressEvidence?: (request: {
+    readonly period: ProgressPeriod;
+    readonly selection: ProgressEvidenceSelection;
+  }) => Effect.Effect<unknown, DatabaseError, R | CurrentLearner>;
+  readonly getProgressSummary?: (request: {
+    readonly period: ProgressPeriod;
+  }) => Effect.Effect<unknown, DatabaseError, R | CurrentLearner>;
   readonly listEvaluations?: () => Effect.Effect<
     readonly unknown[],
     DatabaseError,

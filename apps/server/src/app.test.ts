@@ -102,6 +102,9 @@ const setup: SetupStatus = {
   rubricVersion: "1",
 };
 
+const summary = ({ period }: { readonly period: string }) =>
+  Effect.succeed({ evaluationCount: 0, period });
+
 const created = (writingSample: string): EvaluationEndpointResult => ({
   evaluation: {
     band: "Natural",
@@ -348,6 +351,89 @@ describe("production HTTP application", () => {
     await once(server, "close");
 
     expect(idle / 1000).toBe(120);
+  });
+
+  it("serves retained History, Progress, deletion, and setup through same-origin API", async () => {
+    const deleted: string[] = [];
+    const app = localApp({
+      deleteEvaluation: (id) =>
+        Effect.sync(() => {
+          deleted.push(id);
+        }),
+      getEvaluation: (id) =>
+        Effect.succeed(id === "kept" ? { id: "kept" } : null),
+      getProgressEvidence: ({ period, selection }) =>
+        Effect.succeed({
+          evaluations: [],
+          findings: [],
+          period,
+          rubricVersion: "1",
+          selection,
+        }),
+      getProgressSummary: ({ period }) =>
+        Effect.succeed({
+          evaluationCount: 0,
+          incompatibleSegments: [],
+          period,
+          rubricVersion: "1",
+        }),
+      listEvaluations: () => Effect.succeed([{ id: "kept" }]),
+      serveWeb: false,
+      setup: {
+        configured: false,
+        dataLocation: "/data/local.db",
+        model: "openai/gpt-5.6-terra",
+        provider: "OpenRouter",
+        rubricVersion: "1",
+      },
+      webDistPath,
+    });
+
+    const historyResponse = await app.request(
+      new Request("http://localhost/api/evaluations")
+    );
+    expect(historyResponse.headers.get("cache-control")).toBe("no-store");
+    expect(await historyResponse.json()).toEqual([{ id: "kept" }]);
+    const detailResponse = await app.request(
+      new Request("http://localhost/api/evaluations/kept")
+    );
+    expect(await detailResponse.json()).toEqual({ id: "kept" });
+    const missingResponse = await app.request(
+      new Request("http://localhost/api/evaluations/missing")
+    );
+    expect(missingResponse.status).toBe(404);
+    const deletionResponse = await app.request(
+      new Request("http://localhost/api/evaluations/delete", {
+        method: "DELETE",
+      })
+    );
+    expect(deletionResponse.status).toBe(204);
+    expect(deleted).toEqual(["delete"]);
+    const progressResponse = await app.request(
+      new Request("http://localhost/api/progress?period=7-days")
+    );
+    expect(await progressResponse.json()).toMatchObject({ period: "7-days" });
+    // ADR 0008: the selection travels in the body, out of the URL.
+    const evidenceResponse = await app.request(
+      new Request("http://localhost/api/progress/evidence", {
+        body: JSON.stringify({
+          period: "all",
+          selection: { kind: "average-score" },
+        }),
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      })
+    );
+    expect(await evidenceResponse.json()).toMatchObject({
+      selection: { kind: "average-score" },
+    });
+    const setupResponse = await app.request(
+      new Request("http://localhost/api/setup")
+    );
+    expect(await setupResponse.json()).toMatchObject({
+      configured: false,
+      provider: "OpenRouter",
+    });
   });
 
   it("rejects malformed JSON without echoing private input", async () => {
@@ -914,6 +1000,70 @@ describe("History endpoints", () => {
 
     expect(response.status).toBe(204);
     expect(await response.text()).toBe("");
+  });
+});
+
+describe("Progress endpoints", () => {
+  it("answers 503 not-ready when Progress is unavailable", async () => {
+    const app = appWith();
+    const responses = await Promise.all([
+      app.request(get("http://localhost/api/progress?period=all")),
+      app.request(
+        get(
+          "http://localhost/api/progress/evidence?period=all&insight=finding-rate"
+        )
+      ),
+    ]);
+    const bodies = await Promise.all(
+      responses.map((response) => response.json())
+    );
+
+    for (const response of responses) {
+      expect(response.status).toBe(503);
+    }
+    for (const body of bodies) {
+      expect(body).toEqual({
+        code: "not-ready",
+        error: "Progress is not available",
+      });
+    }
+  });
+
+  it("accepts exactly the 7-days, 30-days and all periods", async () => {
+    const app = appWith({ getProgressSummary: summary });
+    const accepted = await Promise.all(
+      ["7-days", "30-days", "all"].map(async (period) => {
+        const response = await app.request(
+          get(`http://localhost/api/progress?period=${period}`)
+        );
+        return response.json();
+      })
+    );
+    const refused = await Promise.all(
+      [
+        "http://localhost/api/progress",
+        "http://localhost/api/progress?period=90-days",
+        "http://localhost/api/progress?period=All",
+      ].map((url) => app.request(get(url)))
+    );
+    const refusals = await Promise.all(
+      refused.map((response) => response.json())
+    );
+
+    expect(accepted).toEqual([
+      { evaluationCount: 0, period: "7-days" },
+      { evaluationCount: 0, period: "30-days" },
+      { evaluationCount: 0, period: "all" },
+    ]);
+    for (const response of refused) {
+      expect(response.status).toBe(400);
+    }
+    for (const body of refusals) {
+      expect(body).toEqual({
+        code: "invalid-period",
+        error: "Progress period is invalid",
+      });
+    }
   });
 });
 
