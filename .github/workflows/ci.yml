@@ -263,3 +263,6 @@ jobs:
 
       - name: Audit production dependencies
         run: pnpm audit --prod --audit-level high
+
+      - name: No route reads user text from a URL
+        run: node scripts/check-url-text.ts

@@ -8,6 +8,7 @@
     "check:docs": "node scripts/check-doc-commands.ts",
     "check:effect": "turbo run check:effect",
     "check:gates": "node scripts/check-gates.ts",
+    "check:url-text": "node scripts/check-url-text.ts",
     "db:generate": "pnpm --filter @fluenshift/db run db:generate",
     "dev": "turbo run dev",
     "docker:down": "docker compose down",
@@ -24,7 +25,7 @@
     "test:e2e": "turbo run build && playwright test",
     "test:postgres": "pnpm --filter @fluenshift/db run test:postgres",
     "test:scripts": "node --test \"scripts/**/*.test.ts\"",
-    "verify": "pnpm format && pnpm check:docs && pnpm check:gates && pnpm lint && pnpm lint:effect && pnpm check-types && pnpm check:effect && pnpm test && pnpm build"
+    "verify": "pnpm format && pnpm check:docs && pnpm check:gates && pnpm check:url-text && pnpm lint && pnpm lint:effect && pnpm check-types && pnpm check:effect && pnpm test && pnpm build"
   },
   "devDependencies": {
     "@effect/tsgo": "catalog:",

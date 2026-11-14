@@ -390,6 +390,7 @@ export const GATE_SCRIPTS = [
   "check:docs",
   "check:effect",
   "check:gates",
+  "check:url-text",
   "docker:smoke",
   "format",
   "lint",
