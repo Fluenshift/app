@@ -1,0 +1,330 @@
+{
+  "slice": "academy-persistence",
+  "lane": "academy",
+  "rows": [
+    {
+      "id": "grifando:characterization:src/server/domain/interview/interviewService.characterization.test.ts::interviewService.answerTurn retry > returns the FAILED writing session of a failed answer and re-analyzes that session on retry",
+      "source": "src/server/domain/interview/interviewService.characterization.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::attemptExplanationService.explainAttempt > explains a graded attempt without changing it",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::attemptExplanationService.explainAttempt > returns null for an attempt that isn't the user's on that exercise",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::difficulty targeting > asks the generator for a difficulty and stores it on the exercise",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::difficulty targeting > raises the category ability after a correct attempt on a rated exercise",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseAttemptService ownership > rejects another user's exercise and leaves the owner's data untouched",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseAttemptService.submitAttempt > does not require an AI provider to grade an attempt",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseAttemptService.submitAttempt > records a correct attempt and promotes the pattern's mastery streak",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseAttemptService.submitAttempt > records an incorrect attempt and resets an IMPROVING pattern to ACTIVE",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseGenerationService.generatePracticeSet > generates and persists one exercise per selected pattern",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseGenerationService.generatePracticeSet > returns nothing when the user has no mistake patterns yet",
+      "source": "src/server/domain/exercises/exerciseService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interview ownership > hides, refuses to answer and refuses to end another user's session",
+      "source": "src/server/domain/interview/interviewService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interviewService.answerTurn > ends the session instead of asking another question once the turn cap is reached",
+      "source": "src/server/domain/interview/interviewService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interviewService.answerTurn > returns a failed result and does not create a follow-up question when analysis fails",
+      "source": "src/server/domain/interview/interviewService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interviewService.answerTurn > scores the answer via the Writing Coach pipeline and asks a follow-up",
+      "source": "src/server/domain/interview/interviewService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interviewService.startInterview > creates a session with one opening question",
+      "source": "src/server/domain/interview/interviewService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0010",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mistakePattern.repository.test.ts::mistakePatternRepository.upsertPattern > collapses repeated occurrences of the same concept into one growing pattern",
+      "source": "src/server/domain/mistakes/mistakePattern.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mistakePattern.repository.test.ts::mistakePatternRepository.upsertPattern > creates a new pattern on the first occurrence",
+      "source": "src/server/domain/mistakes/mistakePattern.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mistakePattern.repository.test.ts::mistakePatternRepository.upsertPattern > keeps distinct categories as separate patterns even with the same raw key",
+      "source": "src/server/domain/mistakes/mistakePattern.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/mistakes/mistakePattern.repository.test.ts::mistakePatternRepository.upsertPattern > orders patterns by occurrence count, most frequent first",
+      "source": "src/server/domain/mistakes/mistakePattern.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/vocabulary/vocabulary.repository.test.ts::vocabularyRepository > creates, lists newest first, and deletes the user's items",
+      "source": "src/server/domain/vocabulary/vocabulary.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/vocabulary/vocabulary.repository.test.ts::vocabularyRepository > keeps a source session only when it belongs to the user",
+      "source": "src/server/domain/vocabulary/vocabulary.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/vocabulary/vocabulary.repository.test.ts::vocabularyRepository > refuses to delete another user's item",
+      "source": "src/server/domain/vocabulary/vocabulary.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > creates a new session when the retry id isn't a FAILED session of this user",
+      "source": "src/server/domain/writing/writingCoachService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > drops a MASTERED pattern to IMPROVING when the mistake reappears in writing",
+      "source": "src/server/domain/writing/writingCoachService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > leaves one FAILED session, exposes its id on a typed access error, and reuses it on retry",
+      "source": "src/server/domain/writing/writingCoachService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > marks the session FAILED and preserves the original text when the AI call fails",
+      "source": "src/server/domain/writing/writingCoachService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > passes codeSnippet to the AI but never persists it on the session",
+      "source": "src/server/domain/writing/writingCoachService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > persists the analysis and folds repeated mistakes into one pattern",
+      "source": "src/server/domain/writing/writingCoachService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > re-analyzes the failed session on retry instead of creating a duplicate",
+      "source": "src/server/domain/writing/writingCoachService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > stores the Portuguese-interference flag and filters patterns by it",
+      "source": "src/server/domain/writing/writingCoachService.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingSession.repository.test.ts::writingAnalysisRepository.createForSession > moves the session to ANALYZED when an analysis is attached",
+      "source": "src/server/domain/writing/writingSession.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingSession.repository.test.ts::writingSessionRepository > creates a session in PENDING status",
+      "source": "src/server/domain/writing/writingSession.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingSession.repository.test.ts::writingSessionRepository > lists sessions for a user, most recent first",
+      "source": "src/server/domain/writing/writingSession.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingSession.repository.test.ts::writingSessionRepository > marks a session as FAILED without touching its original text",
+      "source": "src/server/domain/writing/writingSession.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/writing/writingSession.repository.test.ts::writingSessionRepository.findByIdForUser > returns the owner's session and null for another user",
+      "source": "src/server/domain/writing/writingSession.repository.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    }
+  ]
+}

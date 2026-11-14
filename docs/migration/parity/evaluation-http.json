@@ -1,0 +1,402 @@
+{
+  "slice": "evaluation-http",
+  "lane": "evaluation",
+  "rows": [
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers a body that is not JSON with an invalid-request code",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers a body without a writingSample with an invalid-request code",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers an unknown API route with a not-found code",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > answers 503 with a correlation ID when Evaluation is not configured",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > keeps the outcome when logging throws",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > logs internal-error and answers a safe 500 when evaluation throws",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > logs the configured model and provider with whole milliseconds",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns a created Evaluation whole",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns each typed failure as its code, kind and retryable flag",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns no-english as its kind alone",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers 503 not-ready when History is unavailable",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers a deletion with an empty 204",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers a missing Evaluation with a not-found code",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > accepts exactly the 7-days, 30-days and all periods",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > answers 503 not-ready when Progress is unavailable",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > refuses an unknown insight, an unknown category, a half correction and a bad period",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > selects evidence by insight, Error Category or correction",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Setup endpoint > answers 503 not-ready without a setup status",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Setup endpoint > returns the setup status whole",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers a missing asset with a plain-text 404",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers a request that is not a GET outside the API with a not-found code",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers an unknown API path with a bare not-found body",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > never serves a file from outside the assets directory",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > accepts the three loopback host names",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > allows a declared body of exactly 256 KiB and refuses one byte more",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > allows a same-origin fetch that names its own Origin and Host",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > forbids a remote host, a foreign Host header, a cross-site fetch and a foreign Origin alike",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.integration.test.ts::integrated same-origin backend > creates, reopens, aggregates, traces, and deletes durable evidence",
+      "source": "apps/server/src/app.integration.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > falls back to uncached index.html for direct browser routes",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > keeps API routes ahead of browser fallback",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > keeps the real HTTP connection open beyond the provider request deadline",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > logs evaluation outcomes with correlation metadata but no Writing Sample",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > maps typed evaluation failures without exposing private causes",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > maps unexpected failures to a safe internal error",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects declared oversized request bodies before evaluation",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0006",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects malformed JSON without echoing private input",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects remote hosts and cross-origin writes before evaluating",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > serves retained History, Progress, deletion, and setup through same-origin API",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0008",
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > serves static assets with immutable caching",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > submits one exact Writing Sample through the Evaluation boundary",
+      "source": "apps/server/src/app.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > accepts a same-origin browser request through Vite before validating its body",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > provides a self-contained favicon rather than a missing favicon.ico",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > still rejects a hostile Origin through Vite",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > still rejects cross-site requests through Vite",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "class": "C",
+      "slice": "evaluation-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}

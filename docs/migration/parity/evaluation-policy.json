@@ -1,0 +1,1023 @@
+{
+  "slice": "evaluation-policy",
+  "lane": "evaluation",
+  "rows": [
+    {
+      "id": "pe:data-policy:deletion:01",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:data-policy:external-transmission:01",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:data-policy:external-transmission:02",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:data-policy:external-transmission:03",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "pending-decision",
+      "decision": "adr:0013",
+      "targets": []
+    },
+    {
+      "id": "pe:data-policy:local-access-boundary:01",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:data-policy:never-stored:01",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:data-policy:never-stored:02",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "pe:data-policy:stored-locally:01",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "pending-decision",
+      "decision": "adr:0017",
+      "targets": []
+    },
+    {
+      "id": "pe:data-policy:stored-locally:02",
+      "source": "docs/product/DATA-POLICY.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-01",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-02",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-03",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-04",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-05",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-06",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-07",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-08",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-09",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-10",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-11",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-12",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-13",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-14",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-15",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-16",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-17",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-18",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-19",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-20",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-21",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-22",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-23",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-24",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-25",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-26",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-27",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-28",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:FR-29",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-01",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-02",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-03",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-04",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-05",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-06",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-07",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-08",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-09",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-10",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:requirement:QR-11",
+      "source": "docs/product/REQUIREMENTS.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:english-word-count:01",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:english-word-count:02",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:english-word-count:03",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:english-word-count:04",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:english-word-count:05",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:01",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:02",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:03",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:04",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:05",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:06",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:07",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:08",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:09",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:10",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:11",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:12",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:13",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:14",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:15",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:16",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:17",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:error-categories:18",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:finding-severity:01",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:finding-severity:02",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:finding-severity:03",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:finding-severity:04",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:findings-and-suggestions:01",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:findings-and-suggestions:02",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:findings-and-suggestions:03",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:progress-insights:01",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:progress-insights:02",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:progress-insights:03",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:progress-insights:04",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:progress-insights:05",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:progress-insights:06",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:progress-insights:07",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:rubric-version-1:01",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:rubric-version-1:02",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:scope:01",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:scope:02",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:scope:03",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:scope:04",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:scope:05",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:scope:06",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:scope:07",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:01",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:02",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:03",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:04",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:05",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:06",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:07",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:08",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:09",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:10",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:11",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:12",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:13",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:14",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:15",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:16",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:17",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:rubric:score-and-bands:18",
+      "source": "docs/product/RUBRIC.md",
+      "class": null,
+      "slice": "evaluation-policy",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    }
+  ]
+}

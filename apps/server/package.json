@@ -1,0 +1,33 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./app": "./src/app.ts"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc --noEmit -p tsconfig.json",
+    "check:effect": "effect-tsgo diagnostics --project tsconfig.json --format pretty --strict",
+    "start": "node dist/index.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@effect/platform-node": "catalog:",
+    "@fluenshift/contract": "workspace:*",
+    "@fluenshift/env": "workspace:*",
+    "@hono/node-server": "catalog:",
+    "effect": "catalog:",
+    "hono": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/tsgo": "catalog:",
+    "@effect/vitest": "catalog:",
+    "@fluenshift/config": "workspace:*",
+    "@types/node": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

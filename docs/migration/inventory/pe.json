@@ -1,0 +1,2879 @@
+{
+  "system": "pe",
+  "repository": "Fluenshift/prompt-evolution",
+  "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
+  "rows": [
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers a body that is not JSON with an invalid-request code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "API errors > answers a body that is not JSON with an invalid-request code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers a body without a writingSample with an invalid-request code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "API errors > answers a body without a writingSample with an invalid-request code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers an unknown API route with a not-found code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "API errors > answers an unknown API route with a not-found code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > answers 503 with a correlation ID when Evaluation is not configured",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > answers 503 with a correlation ID when Evaluation is not configured",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > keeps the outcome when logging throws",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > keeps the outcome when logging throws",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > logs internal-error and answers a safe 500 when evaluation throws",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > logs internal-error and answers a safe 500 when evaluation throws",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > logs the configured model and provider with whole milliseconds",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > logs the configured model and provider with whole milliseconds",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns a created Evaluation whole",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > returns a created Evaluation whole",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns each typed failure as its code, kind and retryable flag",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > returns each typed failure as its code, kind and retryable flag",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns no-english as its kind alone",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > returns no-english as its kind alone",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers 503 not-ready when History is unavailable",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "History endpoints > answers 503 not-ready when History is unavailable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers a deletion with an empty 204",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "History endpoints > answers a deletion with an empty 204",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers a missing Evaluation with a not-found code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "History endpoints > answers a missing Evaluation with a not-found code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > accepts exactly the 7-days, 30-days and all periods",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Progress endpoints > accepts exactly the 7-days, 30-days and all periods",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > answers 503 not-ready when Progress is unavailable",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Progress endpoints > answers 503 not-ready when Progress is unavailable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > refuses an unknown insight, an unknown category, a half correction and a bad period",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Progress endpoints > refuses an unknown insight, an unknown category, a half correction and a bad period",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > selects evidence by insight, Error Category or correction",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Progress endpoints > selects evidence by insight, Error Category or correction",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Setup endpoint > answers 503 not-ready without a setup status",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Setup endpoint > answers 503 not-ready without a setup status",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Setup endpoint > returns the setup status whole",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Setup endpoint > returns the setup status whole",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers a missing asset with a plain-text 404",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "browser fallback > answers a missing asset with a plain-text 404",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers a request that is not a GET outside the API with a not-found code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "browser fallback > answers a request that is not a GET outside the API with a not-found code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers an unknown API path with a bare not-found body",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "browser fallback > answers an unknown API path with a bare not-found body",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > never serves a file from outside the assets directory",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "browser fallback > never serves a file from outside the assets directory",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > accepts the three loopback host names",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "request guards > accepts the three loopback host names",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > allows a declared body of exactly 256 KiB and refuses one byte more",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "request guards > allows a declared body of exactly 256 KiB and refuses one byte more",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > allows a same-origin fetch that names its own Origin and Host",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "request guards > allows a same-origin fetch that names its own Origin and Host",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > forbids a remote host, a foreign Host header, a cross-site fetch and a foreign Origin alike",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "request guards > forbids a remote host, a foreign Host header, a cross-site fetch and a foreign Origin alike",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > coalesces an adjacent duplicate only for an Other finding",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "title": "assessment localization guards > coalesces an adjacent duplicate only for an Other finding",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > does not coalesce a word that occurs a third time",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "title": "assessment localization guards > does not coalesce a word that occurs a third time",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > keeps the start of an edit that begins right after a word",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "title": "assessment localization guards > keeps the start of an edit that begins right after a word",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > treats overlapping occurrences of the original text as ambiguous",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "title": "assessment localization guards > treats overlapping occurrences of the original text as ambiguous",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",
+      "title": "Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > protects lines of JSON that are not YAML",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",
+      "title": "Protected Technical Content guards > protects lines of JSON that are not YAML",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > rejects lone surrogates",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > rejects lone surrogates",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats offsets outside the buffer or between bytes as no boundary",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > treats offsets outside the buffer or between bytes as no boundary",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats the only offset of an empty buffer as a boundary",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > treats the only offset of an empty buffer as a boundary",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > treats the start, the end and every lead byte as a boundary",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "UTF-8 helpers > treats the start, the end and every lead byte as a boundary",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > allows adjacent spans",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > allows adjacent spans",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > applies several corrections whatever their order",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > applies several corrections whatever their order",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives another reason when the span's bytes differ from its original text",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > gives another reason when the span's bytes differ from its original text",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives one reason for spans outside the sample, empty, overlapping or split",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > gives one reason for spans outside the sample, empty, overlapping or split",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > gives the same reason for an ill-formed correction",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > gives the same reason for an ill-formed correction",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > keeps a leading BOM when a later span is corrected",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > keeps a leading BOM when a later span is corrected",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > matches a span whose original text starts with a BOM",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > matches a span whose original text starts with a BOM",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::applyCorrections UTF-8 edge cases > returns the sample unchanged without corrections",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
+      "title": "applyCorrections UTF-8 edge cases > returns the sample unchanged without corrections",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:data-policy:deletion:01",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > Deletion",
+      "line": 48,
+      "text": "Deleting an Evaluation removes its Writing Sample, Findings, Suggestions, and metadata, and Progress recalculates without that evidence. There are no application-managed backups, so deletion cannot be undone through the product. Introducing backups later requires a new explicit policy."
+    },
+    {
+      "id": "pe:data-policy:external-transmission:01",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > External transmission",
+      "line": 26,
+      "text": "Evaluating sends the full current Writing Sample to OpenRouter, routed to `openai/gpt-5.6-terra` with `store: false`, no tools, and no conversation state. The provider receives only that sample, the rubric instructions, and structural annotations."
+    },
+    {
+      "id": "pe:data-policy:external-transmission:02",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > External transmission",
+      "line": 31,
+      "text": "OpenRouter says prompt retention is opt-in and off by default, but the routed model provider has its own logging and retention policy. **This is not a fully local evaluation, and the product must never describe it as one.** See [OpenRouter data collection](https://openrouter.ai/docs/guides/privacy/data-collection) and [provider logging](https://openrouter.ai/docs/guides/privacy/provider-logging)."
+    },
+    {
+      "id": "pe:data-policy:external-transmission:03",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > External transmission",
+      "line": 37,
+      "text": "No telemetry or remote analytics."
+    },
+    {
+      "id": "pe:data-policy:local-access-boundary:01",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > Local access boundary",
+      "line": 41,
+      "text": "The application has no authentication, so it must stay host-only. Compose publishes to IPv4 loopback explicitly. The server also rejects unexpected Host headers and cross-origin state-changing requests — loopback binding alone does not stop a hostile web page from driving the local app. CORS is off."
+    },
+    {
+      "id": "pe:data-policy:never-stored:01",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > Never stored",
+      "line": 17,
+      "text": "API keys or other credentials, hidden model reasoning, raw HTTP request or response bodies, unstructured provider output after validation."
+    },
+    {
+      "id": "pe:data-policy:never-stored:02",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > Never stored",
+      "line": 20,
+      "text": "Credentials are read server-side from `OPENROUTER_API_KEY` through Effect Config/Redacted. They never reach browser code, history, or logs. Request logging excludes Writing Sample text and provider bodies."
+    },
+    {
+      "id": "pe:data-policy:stored-locally:01",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > Stored locally",
+      "line": 5,
+      "text": "A successful Evaluation stays in local SQLite until deliberately deleted. No expiration."
+    },
+    {
+      "id": "pe:data-policy:stored-locally:02",
+      "kind": "doc-rule",
+      "source": "docs/product/DATA-POLICY.md",
+      "title": "Data policy > Stored locally",
+      "line": 8,
+      "text": "Original Writing Sample and its content hash; submission and evaluation timestamps; corrected version and summary; evaluated English word count; score and band; Findings (category, severity, original text, Correction, explanation); Suggestions (original text, optional alternative, context explanation); provider, model, Rubric Version; token usage and latency when the provider reports them."
+    },
+    {
+      "id": "pe:docker-smoke:L354",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "main",
+      "line": 354,
+      "text": "assert.ok(resolvedTempRoot.startsWith(path.resolve(TEMP_PREFIX)), \"refusing to remove an unexpected path\")"
+    },
+    {
+      "id": "pe:docker-smoke:L397",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: validating release Compose boundary",
+      "line": 397,
+      "text": "assert.deepEqual(parsedConfig.services?.app?.ports, [ { host_ip: \"127.0.0.1\", mode: \"ingress\", protocol: \"tcp\", published: \"3001\", target: 3000, }, ])"
+    },
+    {
+      "id": "pe:docker-smoke:L406",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: validating release Compose boundary",
+      "line": 406,
+      "text": "assert.equal(parsedConfig.services?.app?.user, `${HOST_USER_ID}:${HOST_GROUP_ID}`)"
+    },
+    {
+      "id": "pe:docker-smoke:L424",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: building and starting isolated application",
+      "line": 424,
+      "text": "assert.equal(runtimeUser.stdout.trim(), `${HOST_USER_ID}:${HOST_GROUP_ID}`, \"production application must run as the invoking host identity\")"
+    },
+    {
+      "id": "pe:docker-smoke:L429",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: building and starting isolated application",
+      "line": 429,
+      "text": "compose([ \"exec\", \"-T\", \"app\", \"sh\", \"-c\", \"test ! -e /app/.mcp.json && test ! -e /app/.codex && test ! -e /app/.scratch\", ])"
+    },
+    {
+      "id": "pe:docker-smoke:L439",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: building and starting isolated application",
+      "line": 439,
+      "text": "assert.equal(publishedPort.stdout.trim(), `127.0.0.1:${hostPort}`)"
+    },
+    {
+      "id": "pe:docker-smoke:L440",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: building and starting isolated application",
+      "line": 440,
+      "text": "assertNonLoopbackConnectionFails(hostPort)"
+    },
+    {
+      "id": "pe:docker-smoke:L441",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: building and starting isolated application",
+      "line": 441,
+      "text": "assert.equal(await hostileHostStatus(hostPort), 403)"
+    },
+    {
+      "id": "pe:docker-smoke:L451",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: building and starting isolated application",
+      "line": 451,
+      "text": "assert.equal(hostileOrigin.status, 403)"
+    },
+    {
+      "id": "pe:docker-smoke:L464",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: seeding deterministic retained evidence",
+      "line": 464,
+      "text": "assert.match(evaluationId, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u)"
+    },
+    {
+      "id": "pe:docker-smoke:L471",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: seeding deterministic retained evidence",
+      "line": 471,
+      "text": "assert.deepEqual(beforeReplacement, expectedEvaluation(evaluationId, writingSample))"
+    },
+    {
+      "id": "pe:docker-smoke:L479",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: replacing container and reopening evidence",
+      "line": 479,
+      "text": "assert.notEqual(firstContainer, \"\")"
+    },
+    {
+      "id": "pe:docker-smoke:L491",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: replacing container and reopening evidence",
+      "line": 491,
+      "text": "assert.notEqual(replacementContainer, firstContainer)"
+    },
+    {
+      "id": "pe:docker-smoke:L495",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: replacing container and reopening evidence",
+      "line": 495,
+      "text": "assert.deepEqual(afterReplacement, beforeReplacement)"
+    },
+    {
+      "id": "pe:docker-smoke:L499",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: scanning browser assets and logs",
+      "line": 499,
+      "text": "assert.equal(indexResponse.status, 200)"
+    },
+    {
+      "id": "pe:docker-smoke:L500",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: scanning browser assets and logs",
+      "line": 500,
+      "text": "assertNoSentinels(\"browser index\", new Uint8Array(await indexResponse.arrayBuffer()), [secretSentinel, sampleSentinel])"
+    },
+    {
+      "id": "pe:docker-smoke:L506",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: scanning browser assets and logs",
+      "line": 506,
+      "text": "assert.ok(assetFiles.length > 0, \"production browser assets are missing\")"
+    },
+    {
+      "id": "pe:docker-smoke:L516",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: scanning browser assets and logs",
+      "line": 516,
+      "text": "assert.equal(assetResponse.status, 200, `${assetFile} was not served`)"
+    },
+    {
+      "id": "pe:docker-smoke:L517",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: scanning browser assets and logs",
+      "line": 517,
+      "text": "assertNoSentinels(`browser asset ${assetFile}`, new Uint8Array(await assetResponse.arrayBuffer()), [secretSentinel, sampleSentinel])"
+    },
+    {
+      "id": "pe:docker-smoke:L525",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: scanning browser assets and logs",
+      "line": 525,
+      "text": "assert.deepEqual(setup, { configured: true, dataLocation: path.join(dataDirectory, \"local.db\"), model: \"openai/gpt-5.6-terra\", provider: \"OpenRouter\", rubricVersion: \"1\", })"
+    },
+    {
+      "id": "pe:docker-smoke:L532",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: scanning browser assets and logs",
+      "line": 532,
+      "text": "assertNoSentinels(\"setup response\", JSON.stringify(setup), [ secretSentinel, ])"
+    },
+    {
+      "id": "pe:docker-smoke:L536",
+      "kind": "smoke-check",
+      "source": "scripts/docker-smoke.ts",
+      "title": "Docker smoke: scanning browser assets and logs",
+      "line": 536,
+      "text": "assertNoSentinels(\"container logs\", `${logs.stdout}${logs.stderr}`, [ secretSentinel, sampleSentinel, ])"
+    },
+    {
+      "id": "pe:requirement:FR-01",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-01",
+      "line": 11,
+      "text": "The full journey — submit, inspect, browse, Progress, delete — works in a browser on the Linux host."
+    },
+    {
+      "id": "pe:requirement:FR-02",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-02",
+      "line": 12,
+      "text": "Inbound traffic is accepted through host loopback only."
+    },
+    {
+      "id": "pe:requirement:FR-03",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-03",
+      "line": 13,
+      "text": "No sign-up, login, session, or user administration."
+    },
+    {
+      "id": "pe:requirement:FR-04",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-04",
+      "line": 14,
+      "text": "Product data survives container restart or replacement."
+    },
+    {
+      "id": "pe:requirement:FR-05",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-05",
+      "line": 15,
+      "text": "Only deliberately submitted text is sent or stored. No background capture."
+    },
+    {
+      "id": "pe:requirement:FR-06",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-06",
+      "line": 16,
+      "text": "The exact submitted bytes are stored and returned unnormalized."
+    },
+    {
+      "id": "pe:requirement:FR-07",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-07",
+      "line": 17,
+      "text": "A stable content hash is computed; identical text may be submitted repeatedly."
+    },
+    {
+      "id": "pe:requirement:FR-08",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-08",
+      "line": 18,
+      "text": "Evaluate spelling, grammar, articles, verb tense, word choice, punctuation, and clarity in English Passages only."
+    },
+    {
+      "id": "pe:requirement:FR-09",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-09",
+      "line": 19,
+      "text": "Corrections keep technical meaning and intended tone, and leave non-English text unchanged."
+    },
+    {
+      "id": "pe:requirement:FR-10",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-10",
+      "line": 20,
+      "text": "Every Evaluation has an integer score 0–100, its band, and Findings carrying one approved category, one approved severity, original text, Correction, and explanation."
+    },
+    {
+      "id": "pe:requirement:FR-11",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-11",
+      "line": 21,
+      "text": "Zero Findings is a valid Evaluation and states that no correction is needed."
+    },
+    {
+      "id": "pe:requirement:FR-12",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-12",
+      "line": 22,
+      "text": "Provider, model, Rubric Version, and evaluated English word count are retained and shown."
+    },
+    {
+      "id": "pe:requirement:FR-13",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-13",
+      "line": 23,
+      "text": "Stored records are immutable — readable and deletable only."
+    },
+    {
+      "id": "pe:requirement:FR-14",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-14",
+      "line": 24,
+      "text": "History lists Evaluations newest first with date, summary, score, and band."
+    },
+    {
+      "id": "pe:requirement:FR-15",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-15",
+      "line": 25,
+      "text": "Opening a record shows original text, corrected text, all Findings, all Suggestions, and context."
+    },
+    {
+      "id": "pe:requirement:FR-16",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-16",
+      "line": 26,
+      "text": "Identical text submitted twice creates two separately addressable records."
+    },
+    {
+      "id": "pe:requirement:FR-17",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-17",
+      "line": 27,
+      "text": "Progress covers last 7 days, last 30 days, and all compatible history."
+    },
+    {
+      "id": "pe:requirement:FR-18",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-18",
+      "line": 28,
+      "text": "Finding Rate is the primary measure and shows its underlying counts."
+    },
+    {
+      "id": "pe:requirement:FR-19",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-19",
+      "line": 29,
+      "text": "Category Recurrence counts each sample once per category; recurring Corrections link phrase to Corrections."
+    },
+    {
+      "id": "pe:requirement:FR-20",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-20",
+      "line": 30,
+      "text": "Every Progress Insight reveals the exact source Findings behind it."
+    },
+    {
+      "id": "pe:requirement:FR-21",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-21",
+      "line": 31,
+      "text": "Finding Rate is labeled primary, score secondary, raw counts descriptive; values recompute from retained rows."
+    },
+    {
+      "id": "pe:requirement:FR-22",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-22",
+      "line": 32,
+      "text": "History shows each Rubric Version; Progress defaults to the current one and never merges undeclared-incompatible versions."
+    },
+    {
+      "id": "pe:requirement:FR-23",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-23",
+      "line": 33,
+      "text": "Retain the approved fields only. Never persist API keys, hidden reasoning, or raw HTTP bodies. See [`DATA-POLICY.md`](./DATA-POLICY.md)."
+    },
+    {
+      "id": "pe:requirement:FR-24",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-24",
+      "line": 34,
+      "text": "Disclose local data location, receiving provider, separate provider retention, and the loopback-only rule."
+    },
+    {
+      "id": "pe:requirement:FR-25",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-25",
+      "line": 35,
+      "text": "Deliberate deletion removes one Evaluation with its sample, Findings, Suggestions, and metadata; Progress recalculates."
+    },
+    {
+      "id": "pe:requirement:FR-26",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-26",
+      "line": 36,
+      "text": "Protected Technical Content produces no Findings, is excluded from scoring, and is preserved byte-for-byte."
+    },
+    {
+      "id": "pe:requirement:FR-27",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-27",
+      "line": 37,
+      "text": "A sample with no meaning-bearing English Passage is rejected and stored nowhere."
+    },
+    {
+      "id": "pe:requirement:FR-28",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-28",
+      "line": 38,
+      "text": "Context-dependent wording gets no Finding or Correction — at most a Suggestion labeled non-error."
+    },
+    {
+      "id": "pe:requirement:FR-29",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "FR-29",
+      "line": 39,
+      "text": "English inside quotes and blockquotes is evaluated normally."
+    },
+    {
+      "id": "pe:requirement:QR-01",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-01",
+      "line": 45,
+      "text": "The same kind of error with the same effect gets the same category and severity within one Rubric Version."
+    },
+    {
+      "id": "pe:requirement:QR-02",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-02",
+      "line": 46,
+      "text": "Progress Insights are reproducible from retained Findings alone."
+    },
+    {
+      "id": "pe:requirement:QR-03",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-03",
+      "line": 47,
+      "text": "A failed or incomplete evaluation never appears as successful history."
+    },
+    {
+      "id": "pe:requirement:QR-04",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-04",
+      "line": 48,
+      "text": "Never imply a Writing Sample stays local when an external model receives it."
+    },
+    {
+      "id": "pe:requirement:QR-05",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-05",
+      "line": 49,
+      "text": "Text inside a Writing Sample cannot alter evaluator policy."
+    },
+    {
+      "id": "pe:requirement:QR-06",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-06",
+      "line": 50,
+      "text": "Feedback is understandable without specialist grammar terminology; necessary terms are explained."
+    },
+    {
+      "id": "pe:requirement:QR-07",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-07",
+      "line": 51,
+      "text": "Container defaults keep access host-only and make accidental external publication evident."
+    },
+    {
+      "id": "pe:requirement:QR-08",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-08",
+      "line": 52,
+      "text": "Every bundled font, icon, and visual asset has a documented license. See [`ASSET-LICENSES.md`](./ASSET-LICENSES.md)."
+    },
+    {
+      "id": "pe:requirement:QR-09",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-09",
+      "line": 53,
+      "text": "Scoring concerns English writing only — never prompt or instruction effectiveness."
+    },
+    {
+      "id": "pe:requirement:QR-10",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-10",
+      "line": 54,
+      "text": "Non-English text stays unchanged and affects no score, band, Finding, or insight."
+    },
+    {
+      "id": "pe:requirement:QR-11",
+      "kind": "requirement",
+      "source": "docs/product/REQUIREMENTS.md",
+      "title": "QR-11",
+      "line": 55,
+      "text": "Suggestions stay visually and statistically distinct from Findings and never touch score, corrected text, or metrics."
+    },
+    {
+      "id": "pe:rubric:english-word-count:01",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > English word count",
+      "line": 124,
+      "text": "Count only after Protected Technical Content and model-identified non-English spans are excluded."
+    },
+    {
+      "id": "pe:rubric:english-word-count:02",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > English word count",
+      "line": 127,
+      "text": "A word is one maximal run of Unicode letters and combining marks. An internal apostrophe (ASCII or curly) or hyphen (ASCII or non-breaking) keeps the word whole only when letters sit on both sides."
+    },
+    {
+      "id": "pe:rubric:english-word-count:03",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > English word count",
+      "line": 131,
+      "text": "Contractions, possessives, hyphenated compounds, letter-only acronyms: 1."
+    },
+    {
+      "id": "pe:rubric:english-word-count:04",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > English word count",
+      "line": 132,
+      "text": "Standalone numbers, punctuation, emoji, protected identifiers: 0."
+    },
+    {
+      "id": "pe:rubric:english-word-count:05",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > English word count",
+      "line": 133,
+      "text": "Case and surrounding whitespace are irrelevant."
+    },
+    {
+      "id": "pe:rubric:error-categories:01",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 57,
+      "text": "Exactly one per Finding, from this fixed list. The evaluator cannot invent categories."
+    },
+    {
+      "id": "pe:rubric:error-categories:02",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 62,
+      "text": "Spelling | A word is misspelled or malformed. Do not claim intent proves it was a typo."
+    },
+    {
+      "id": "pe:rubric:error-categories:03",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 63,
+      "text": "Article | `a`, `an`, or `the` is missing, unnecessary, or incorrect."
+    },
+    {
+      "id": "pe:rubric:error-categories:04",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 64,
+      "text": "Verb form/tense | Wrong tense, aspect, auxiliary, conjugation, or subject–verb agreement."
+    },
+    {
+      "id": "pe:rubric:error-categories:05",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 65,
+      "text": "Preposition | A preposition is missing, unnecessary, or incorrect."
+    },
+    {
+      "id": "pe:rubric:error-categories:06",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 66,
+      "text": "Word choice | A word is demonstrably wrong or forms an invalid collocation. If choosing among valid words needs unstated intent, use a Suggestion."
+    },
+    {
+      "id": "pe:rubric:error-categories:07",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 67,
+      "text": "Grammar/syntax | Structure, pronoun use, or number agreement is wrong and no narrower category applies."
+    },
+    {
+      "id": "pe:rubric:error-categories:08",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 68,
+      "text": "Punctuation/capitalization | Punctuation or letter case is incorrect."
+    },
+    {
+      "id": "pe:rubric:error-categories:09",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 69,
+      "text": "Clarity | The text itself prevents a reasonable reader from recovering the meaning. Not for optional rewrites, verbosity, tone, or elegance."
+    },
+    {
+      "id": "pe:rubric:error-categories:10",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 70,
+      "text": "Other | A real problem fitting nothing above. Rare; explain why."
+    },
+    {
+      "id": "pe:rubric:error-categories:11",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 72,
+      "text": "Precedence when a problem fits several — first applicable rule wins:"
+    },
+    {
+      "id": "pe:rubric:error-categories:12",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 74,
+      "text": "Spelling or Punctuation/capitalization for observable mechanics."
+    },
+    {
+      "id": "pe:rubric:error-categories:13",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 75,
+      "text": "Article, Verb form/tense, or Preposition."
+    },
+    {
+      "id": "pe:rubric:error-categories:14",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 76,
+      "text": "Word choice for lexical meaning or collocation."
+    },
+    {
+      "id": "pe:rubric:error-categories:15",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 77,
+      "text": "Grammar/syntax for remaining structural grammar."
+    },
+    {
+      "id": "pe:rubric:error-categories:16",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 78,
+      "text": "Clarity only when the text blocks interpretation."
+    },
+    {
+      "id": "pe:rubric:error-categories:17",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 79,
+      "text": "Other."
+    },
+    {
+      "id": "pe:rubric:error-categories:18",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Error Categories",
+      "line": 81,
+      "text": "Never duplicate one problem across categories. Separate Findings are fine when one phrase holds distinct problems (missing preposition *and* wrong verb form)."
+    },
+    {
+      "id": "pe:rubric:finding-severity:01",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Finding Severity",
+      "line": 46,
+      "text": "Severity describes the error's effect in its actual passage. Category never determines severity — a Spelling error can be Minor or Major."
+    },
+    {
+      "id": "pe:rubric:finding-severity:02",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Finding Severity",
+      "line": 51,
+      "text": "Minor | Local; meaning stays clear with little interruption."
+    },
+    {
+      "id": "pe:rubric:finding-severity:03",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Finding Severity",
+      "line": 52,
+      "text": "Moderate | Reading is interrupted, but meaning is recoverable without guesswork."
+    },
+    {
+      "id": "pe:rubric:finding-severity:04",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Finding Severity",
+      "line": 53,
+      "text": "Major | Meaning becomes wrong, obscured, or hard to recover."
+    },
+    {
+      "id": "pe:rubric:findings-and-suggestions:01",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Findings and Suggestions",
+      "line": 32,
+      "text": "A **Finding** is a demonstrable error. It gets one Error Category and one Finding Severity, contributes to the corrected version, and affects the score and Progress Insights."
+    },
+    {
+      "id": "pe:rubric:findings-and-suggestions:02",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Findings and Suggestions",
+      "line": 36,
+      "text": "A **Suggestion** is an optional alternative where correctness depends on unstated context or intended nuance. It has no category, no severity, and no effect on corrected text, score, band, or any Progress Insight. It must state that the original is not confirmed wrong and name the missing context."
+    },
+    {
+      "id": "pe:rubric:findings-and-suggestions:03",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Findings and Suggestions",
+      "line": 41,
+      "text": "If uncertain whether text is erroneous, do not create a Finding. Omit it, or create a Suggestion."
+    },
+    {
+      "id": "pe:rubric:progress-insights:01",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Progress Insights",
+      "line": 137,
+      "text": "Only successful, retained Evaluations contribute. Suggestions never enter any calculation. Deleted Evaluations vanish from recalculated insights; repeated Writing Samples stay separate observations."
+    },
+    {
+      "id": "pe:rubric:progress-insights:02",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Progress Insights",
+      "line": 141,
+      "text": "**Primary — Finding Rate:** `Findings / evaluated English words × 100`. Lower is better within one compatible version. Always shown with its Evaluation, word, and Finding counts."
+    },
+    {
+      "id": "pe:rubric:progress-insights:03",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Progress Insights",
+      "line": 144,
+      "text": "**Habit — Category Recurrence:** `samples containing the category / evaluated samples × 100`. Count each sample once per category."
+    },
+    {
+      "id": "pe:rubric:progress-insights:04",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Progress Insights",
+      "line": 146,
+      "text": "**Secondary — average Overall Score.** Model variation makes it weaker evidence than Finding Rate."
+    },
+    {
+      "id": "pe:rubric:progress-insights:05",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Progress Insights",
+      "line": 148,
+      "text": "**Descriptive:** raw Finding count, distribution by category, frequently corrected phrases with their Corrections, Evaluation and word counts."
+    },
+    {
+      "id": "pe:rubric:progress-insights:06",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Progress Insights",
+      "line": 151,
+      "text": "Windows: last 7 days, last 30 days, all compatible history. Each shows its Evaluation count. Progress defaults to the current Rubric Version and segments incompatible versions instead of merging them."
+    },
+    {
+      "id": "pe:rubric:progress-insights:07",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Progress Insights",
+      "line": 155,
+      "text": "No period is ever labeled \"improved\" or \"declined\" — the MVP shows values and evidence only, so it needs no minimum sample size. Adding directional claims later requires defining and validating that threshold first."
+    },
+    {
+      "id": "pe:rubric:rubric-version-1:01",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1",
+      "line": 3,
+      "text": "Evaluation policy: what gets assessed, how Findings are classified, how the score is derived, and when two Evaluations may be compared. Vocabulary is defined in `CONTEXT.md`."
+    },
+    {
+      "id": "pe:rubric:rubric-version-1:02",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1",
+      "line": 7,
+      "text": "Rubric Version is immutable on a stored Evaluation. Versions are incompatible by default; combining them in Progress requires an explicit code-level compatibility declaration. Changing provider, model, reasoning config, structured contract, prompt, word-count rule, or score formula defaults to a new incompatible version. Historical rows are never rewritten."
+    },
+    {
+      "id": "pe:rubric:scope:01",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Scope",
+      "line": 15,
+      "text": "Assess the English writing in one Writing Sample — never prompt effectiveness, instruction quality, task design, or likely model performance."
+    },
+    {
+      "id": "pe:rubric:scope:02",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Scope",
+      "line": 18,
+      "text": "Only English Passages are evaluated. Non-English text stays byte-for-byte unchanged and affects no score, Finding, or Progress Insight."
+    },
+    {
+      "id": "pe:rubric:scope:03",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Scope",
+      "line": 20,
+      "text": "A sample with no meaning-bearing English Passage is rejected; no Evaluation is stored."
+    },
+    {
+      "id": "pe:rubric:scope:04",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Scope",
+      "line": 22,
+      "text": "Protected Technical Content (fenced/inline code, structured data, commands, paths, identifiers, logs) is excluded from scoring and Findings, and preserved byte-for-byte in the corrected version."
+    },
+    {
+      "id": "pe:rubric:scope:05",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Scope",
+      "line": 25,
+      "text": "Quotation marks and Markdown blockquotes protect nothing. English inside them is evaluated normally; only Protected Technical Content is excluded."
+    },
+    {
+      "id": "pe:rubric:scope:06",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Scope",
+      "line": 27,
+      "text": "Judge concise technical prose in its intended context, not as formal prose."
+    },
+    {
+      "id": "pe:rubric:scope:07",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Scope",
+      "line": 28,
+      "text": "Never penalize one valid formulation because another could be preferable."
+    },
+    {
+      "id": "pe:rubric:score-and-bands:01",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 88,
+      "text": "Minor | 3"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:02",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 89,
+      "text": "Moderate | 7"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:03",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 90,
+      "text": "Major | 12"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:04",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 92,
+      "text": "With `W` = evaluated English word count, `E` = total error points, and `D = max(W, 20)`:"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:05",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 95,
+      "text": "Overall Score = clamp(round_half_up(100 - 100 × E / D), 0, 100)"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:06",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 99,
+      "text": "The 20-word floor stops one local typo from dominating a short sample. It applies to the score only — Finding Rate always uses the actual word count."
+    },
+    {
+      "id": "pe:rubric:score-and-bands:07",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 104,
+      "text": "0–49 | Needs revision | Problems substantially obstruct meaning."
+    },
+    {
+      "id": "pe:rubric:score-and-bands:08",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 105,
+      "text": "50–69 | Understandable | Intent recoverable, but several problems interrupt reading."
+    },
+    {
+      "id": "pe:rubric:score-and-bands:09",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 106,
+      "text": "70–84 | Clear | Intent reads clearly despite limited, localized problems."
+    },
+    {
+      "id": "pe:rubric:score-and-bands:10",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 107,
+      "text": "85–100 | Natural | Correct or nearly correct for its technical context."
+    },
+    {
+      "id": "pe:rubric:score-and-bands:11",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 109,
+      "text": "Calibration intent — these anchors fix the weights:"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:12",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 113,
+      "text": "9 | none | 100 | Natural"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:13",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 114,
+      "text": "9 | 1 Minor | 85 | Natural"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:14",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 115,
+      "text": "9 | 1 Moderate | 65 | Understandable"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:15",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 116,
+      "text": "9 | 1 Major | 40 | Needs revision"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:16",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 117,
+      "text": "40 | 1 Major | 70 | Clear"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:17",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 119,
+      "text": "The score is derived locally, never supplied by the model. Zero Findings gives"
+    },
+    {
+      "id": "pe:rubric:score-and-bands:18",
+      "kind": "doc-rule",
+      "source": "docs/product/RUBRIC.md",
+      "title": "Rubric Version 1 > Score and bands",
+      "line": 120,
+      "text": "Suggestions add zero. Always display the score with its band."
+    },
+    {
+      "id": "pe:test:apps/server/src/app.integration.test.ts::integrated same-origin backend > creates, reopens, aggregates, traces, and deletes durable evidence",
+      "kind": "test",
+      "source": "apps/server/src/app.integration.test.ts",
+      "title": "integrated same-origin backend > creates, reopens, aggregates, traces, and deletes durable evidence",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > falls back to uncached index.html for direct browser routes",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > falls back to uncached index.html for direct browser routes",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > keeps API routes ahead of browser fallback",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > keeps API routes ahead of browser fallback",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > keeps the real HTTP connection open beyond the provider request deadline",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > keeps the real HTTP connection open beyond the provider request deadline",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > logs evaluation outcomes with correlation metadata but no Writing Sample",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > logs evaluation outcomes with correlation metadata but no Writing Sample",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > maps typed evaluation failures without exposing private causes",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > maps typed evaluation failures without exposing private causes",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > maps unexpected failures to a safe internal error",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > maps unexpected failures to a safe internal error",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects declared oversized request bodies before evaluation",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > rejects declared oversized request bodies before evaluation",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects malformed JSON without echoing private input",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > rejects malformed JSON without echoing private input",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects remote hosts and cross-origin writes before evaluating",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > rejects remote hosts and cross-origin writes before evaluating",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > serves retained History, Progress, deletion, and setup through same-origin API",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > serves retained History, Progress, deletion, and setup through same-origin API",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > serves static assets with immutable caching",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > serves static assets with immutable caching",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > submits one exact Writing Sample through the Evaluation boundary",
+      "kind": "test",
+      "source": "apps/server/src/app.test.ts",
+      "title": "production HTTP application > submits one exact Writing Sample through the Evaluation boundary",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > canonicalizes equivalent wider edits without changing corrected bytes",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > canonicalizes equivalent wider edits without changing corrected bytes",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not coalesce partial hyphenated, apostrophized, or combining-mark words",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > does not coalesce partial hyphenated, apostrophized, or combining-mark words",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not repair separate duplicates or make a no-op valid",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > does not repair separate duplicates or make a no-op valid",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > never coalesces part of an alphanumeric or underscore token",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > never coalesces part of an alphanumeric or underscore token",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > requires both complete-word occurrences to form the adjacent pair",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > requires both complete-word occurrences to form the adjacent pair",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > safely localizes one unique adjacent duplicate as a whole phrase",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/assessment-localization.test.ts",
+      "title": "deterministic assessment localization > safely localizes one unique adjacent duplicate as a whole phrase",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > accepts every fixed Rubric Version 1 category and severity",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/evaluation-model.test.ts",
+      "title": "Evaluation Model contract > accepts every fixed Rubric Version 1 category and severity",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > rejects invented categories, severities, and excess provider fields",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/evaluation-model.test.ts",
+      "title": "Evaluation Model contract > rejects invented categories, severities, and excess provider fields",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > rejects whitespace-only summaries and explanations",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/evaluation-model.test.ts",
+      "title": "Evaluation Model contract > rejects whitespace-only summaries and explanations",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > accepts the predeclared spelling outcome with exact UTF-8 byte offsets",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "title": "live model calibration > accepts the predeclared spelling outcome with exact UTF-8 byte offsets",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > freezes unique fixtures covering every live requirement, category, and severity",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "title": "live model calibration > freezes unique fixtures covering every live requirement, category, and severity",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > includes previous measured spend in the no-retry budget preflight",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "title": "live model calibration > includes previous measured spend in the no-retry budget preflight",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > rejects a changed category, unsafe span, or unexpected suggestion",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "title": "live model calibration > rejects a changed category, unsafe span, or unexpected suggestion",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/live-calibration.test.ts::live model calibration > requires exact non-English bytes and any context suggestion to explain uncertainty",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/live-calibration.test.ts",
+      "title": "live model calibration > requires exact non-English bytes and any context suggestion to explain uncertainty",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > allows a provider response beyond 30 seconds without restarting the paid request",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > allows a provider response beyond 30 seconds without restarting the paid request",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > can disable SDK retries for budget-bounded calibration",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > can disable SDK retries for budget-bounded calibration",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > classifies provider output with whitespace-only prose as a retryable invalid assessment",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > classifies provider output with whitespace-only prose as a retryable invalid assessment",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > classifies rejected credentials separately from transient provider failures",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > classifies rejected credentials separately from transient provider failures",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > deterministically reanchors uniquely identifiable provider spans",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > deterministically reanchors uniquely identifiable provider spans",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > distinguishes incomplete and failed response envelopes from malformed assessments",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > distinguishes incomplete and failed response envelopes from malformed assessments",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > forces SDK logging off even when ambient debug logging is enabled",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > forces SDK logging off even when ambient debug logging is enabled",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > makes only one paid attempt by default when the provider is unavailable",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > makes only one paid attempt by default when the provider is unavailable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > reports an SDK timeout without exposing its cause or automatically retrying",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > reports an SDK timeout without exposing its cause or automatically retrying",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > reports missing configuration without making a provider call",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > reports missing configuration without making a provider call",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > sends one bounded, tool-free, injection-resistant structured request",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > sends one bounded, tool-free, injection-resistant structured request",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > treats an empty credential as unconfigured",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
+      "title": "OpenRouter Evaluation Model > treats an empty credential as unconfigured",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > does not mistake missing sentence spaces for dotted identifiers",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > does not mistake missing sentence spaces for dotted identifiers",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > does not mistake slash-separated prose for a path executable",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > does not mistake slash-separated prose for a path executable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors fenced code nested in a Markdown blockquote",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > honors fenced code nested in a Markdown blockquote",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors matching multi-backtick inline-code delimiters",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > honors matching multi-backtick inline-code delimiters",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors variable-length Markdown fences",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > honors variable-length Markdown fences",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > keeps internal YAML comments and blank lines inside the protected block",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > keeps internal YAML comments and blank lines inside the protected block",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > keeps natural labeled prose and ambiguous equals prose evaluable",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > keeps natural labeled prose and ambiguous equals prose evaluable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > leaves sentence punctuation after URLs and Windows paths evaluable",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > leaves sentence punctuation after URLs and Windows paths evaluable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects YAML, TOML, and XML structured data",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects YAML, TOML, and XML structured data",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects a complete balanced nested JSON block",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects a complete balanced nested JSON block",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects commands and structured data copied inside quotes",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects commands and structured data copied inside quotes",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects explicit-root, indentless, flow, and block-scalar YAML",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects explicit-root, indentless, flow, and block-scalar YAML",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects extensionless paths beneath known project roots",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects extensionless paths beneath known project roots",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects nested YAML containing sequence entries",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects nested YAML containing sequence entries",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects opaque UUID and ULID identifiers",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects opaque UUID and ULID identifiers",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects root YAML flow collections without hiding bracketed prose",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects root YAML flow collections without hiding bracketed prose",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects shell builtins and path executables as complete command lines",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects shell builtins and path executables as complete command lines",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects space-timestamp, syslog, and uncaught-error log lines",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/protected-content.test.ts",
+      "title": "Protected Technical Content > protects space-timestamp, syslog, and uncaught-error log lines",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > applies non-overlapping corrections using UTF-8 byte offsets",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "title": "Rubric Version 1 > applies non-overlapping corrections using UTF-8 byte offsets",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > counts letter words while keeping internal apostrophes and hyphens",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "title": "Rubric Version 1 > counts letter words while keeping internal apostrophes and hyphens",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > matches approved score anchors and band boundaries",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "title": "Rubric Version 1 > matches approved score anchors and band boundaries",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > rejects correction offsets that split a UTF-8 code point",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "title": "Rubric Version 1 > rejects correction offsets that split a UTF-8 code point",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > rejects mismatched and overlapping correction spans",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/rubric-v1.test.ts",
+      "title": "Rubric Version 1 > rejects mismatched and overlapping correction spans",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > derives and atomically stores one complete Evaluation",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > derives and atomically stores one complete Evaluation",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > evaluates prose inside quotation marks and Markdown blockquotes",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > evaluates prose inside quotation marks and Markdown blockquotes",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > excludes fenced and inline code while preserving their exact bytes",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > excludes fenced and inline code while preserving their exact bytes",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > excludes structured data, commands, paths, identifiers, and logs",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > excludes structured data, commands, paths, identifiers, and logs",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > gives identical bytes distinct identities and the same retained hash",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > gives identical bytes distinct identities and the same retained hash",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps command-like imperative words in ordinary prose evaluable",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > keeps command-like imperative words in ordinary prose evaluable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps context-dependent Suggestions score-neutral",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > keeps context-dependent Suggestions score-neutral",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps errors beside ambiguous technical-looking prose evaluable",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > keeps errors beside ambiguous technical-looking prose evaluable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps quoted Protected Technical Content excluded while evaluating quoted prose",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > keeps quoted Protected Technical Content excluded while evaluating quoted prose",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > maps provider failures and stores no History or Progress evidence",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > maps provider failures and stores no History or Progress evidence",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > normalizes retained Findings and Suggestions into source order",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > normalizes retained Findings and Suggestions into source order",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > persists no credential, hidden reasoning, or raw provider body",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > persists no credential, hidden reasoning, or raw provider body",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > preserves and excludes model-identified non-English UTF-8 spans",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > preserves and excludes model-identified non-English UTF-8 spans",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > protects multiline structured data, bare commands, Windows paths, and timestamped logs",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > protects multiline structured data, bare commands, Windows paths, and timestamped logs",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects Suggestions on protected and non-English spans",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects Suggestions on protected and non-English spans",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects Suggestions that overlap Findings or excluded content",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects Suggestions that overlap Findings or excluded content",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a Finding whose Correction is identical to its source",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects a Finding whose Correction is identical to its source",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a provider Finding inside a nested YAML sequence",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects a provider Finding inside a nested YAML sequence",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a provider Finding that edits Protected Technical Content",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects a provider Finding that edits Protected Technical Content",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects ill-formed Unicode in model-authored text without storage",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects ill-formed Unicode in model-authored text without storage",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects malformed model assessments without History or Progress evidence",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects malformed model assessments without History or Progress evidence",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects oversized input before calling the external model",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects oversized input before calling the external model",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects provider Findings inside scalar YAML forms",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects provider Findings inside scalar YAML forms",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects provider spans that split a UTF-8 code point",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects provider spans that split a UTF-8 code point",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects samples without meaning-bearing English and stores nothing",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > rejects samples without meaning-bearing English and stores nothing",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > retains distinct submission and evaluation completion timestamps",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > retains distinct submission and evaluation completion timestamps",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > returns a complete no-correction Evaluation for correct English",
+      "kind": "test",
+      "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
+      "title": "Writing Evaluation > returns a complete no-correction Evaluation for correct English",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > deletes one whole Evaluation while preserving other evidence",
+      "kind": "test",
+      "source": "apps/server/src/history/learning-history.test.ts",
+      "title": "Learning History > deletes one whole Evaluation while preserving other evidence",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > reopens complete retained evidence after the database service is replaced",
+      "kind": "test",
+      "source": "apps/server/src/history/learning-history.test.ts",
+      "title": "Learning History > reopens complete retained evidence after the database service is replaced",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > retains immutable complete Evaluations newest first",
+      "kind": "test",
+      "source": "apps/server/src/history/learning-history.test.ts",
+      "title": "Learning History > retains immutable complete Evaluations newest first",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > rolls back the parent row when a child insert fails",
+      "kind": "test",
+      "source": "apps/server/src/history/learning-history.test.ts",
+      "title": "Learning History > rolls back the parent row when a child insert fails",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > recomputes every aggregate from retained rows after deletion",
+      "kind": "test",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "title": "Progress Insights > recomputes every aggregate from retained rows after deletion",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > returns exact category recurrence ratios for the browser to format",
+      "kind": "test",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "title": "Progress Insights > returns exact category recurrence ratios for the browser to format",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > segments exact period evidence by Rubric Version",
+      "kind": "test",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "title": "Progress Insights > segments exact period evidence by Rubric Version",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > traces correction, Finding Rate, and average-score source evidence",
+      "kind": "test",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "title": "Progress Insights > traces correction, Finding Rate, and average-score source evidence",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > traces every selected Finding while counting each Evaluation once",
+      "kind": "test",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "title": "Progress Insights > traces every selected Finding while counting each Evaluation once",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > treats all as every retained Evaluation despite clock rollback",
+      "kind": "test",
+      "source": "apps/server/src/progress/progress-insights.test.ts",
+      "title": "Progress Insights > treats all as every retained Evaluation despite clock rollback",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > accepts a same-origin browser request through Vite before validating its body",
+      "kind": "test",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "title": "real development proxy same-origin access > accepts a same-origin browser request through Vite before validating its body",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > provides a self-contained favicon rather than a missing favicon.ico",
+      "kind": "test",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "title": "real development proxy same-origin access > provides a self-contained favicon rather than a missing favicon.ico",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > still rejects a hostile Origin through Vite",
+      "kind": "test",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "title": "real development proxy same-origin access > still rejects a hostile Origin through Vite",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin access > still rejects cross-site requests through Vite",
+      "kind": "test",
+      "source": "apps/server/src/test/dev-proxy.test.ts",
+      "title": "real development proxy same-origin access > still rejects cross-site requests through Vite",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation",
+      "kind": "test",
+      "source": "apps/web/src/components/-loader.test.tsx",
+      "title": "Loader > announces pending navigation",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > deletes exactly one encoded Evaluation identity",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > deletes exactly one encoded Evaluation identity",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > loads Progress and encoded source evidence",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > loads Progress and encoded source evidence",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > loads accurate server-side setup status",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > loads accurate server-side setup status",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > maps a deleted or unknown Evaluation to missing",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > maps a deleted or unknown Evaluation to missing",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > opens a retained Evaluation using an encoded identity",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > opens a retained Evaluation using an encoded identity",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > preserves the no-English result returned with validation status",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > preserves the no-English result returned with validation status",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > raises safe typed errors for failed API operations",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > raises safe typed errors for failed API operations",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > reads retained history from the same-origin API",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > reads retained history from the same-origin API",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > submits exact writing and receives its durable Evaluation",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
+      "title": "HTTP Evaluation client > submits exact writing and receives its durable Evaluation",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts::in-memory evaluation client > a no-English fixture creates no Evaluation",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts",
+      "title": "in-memory evaluation client > a no-English fixture creates no Evaluation",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts::in-memory evaluation client > applies an explicit fixture without interpreting the Writing Sample",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/in-memory-evaluation-client.test.ts",
+      "title": "in-memory evaluation client > applies an explicit fixture without interpreting the Writing Sample",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > clicking a finding opens the Grammarly-style popover card",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/spell-checker.test.tsx",
+      "title": "SpellChecker > clicking a finding opens the Grammarly-style popover card",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > navigates through issues using toolbar stepper",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/spell-checker.test.tsx",
+      "title": "SpellChecker > navigates through issues using toolbar stepper",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > renders the original text with inline wavy marks for findings and suggestions",
+      "kind": "test",
+      "source": "apps/web/src/features/evaluations/spell-checker.test.tsx",
+      "title": "SpellChecker > renders the original text with inline wavy marks for findings and suggestions",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > SpellChecker renders findings directly on original text with Grammarly popover and 1-click accept",
+      "kind": "test",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "title": "Writing Desk > SpellChecker renders findings directly on original text with Grammarly popover and 1-click accept",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > a later provider failure preserves the changed draft and previous saved evidence",
+      "kind": "test",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "title": "Writing Desk > a later provider failure preserves the changed draft and previous saved evidence",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > editing after success marks stale evidence without automatic evaluation",
+      "kind": "test",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "title": "Writing Desk > editing after success marks stale evidence without automatic evaluation",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > is the production root even when an old prototype query remains",
+      "kind": "test",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "title": "Writing Desk > is the production root even when an old prototype query remains",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keeps a completed Evaluation inline with complete evidence",
+      "kind": "test",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "title": "Writing Desk > keeps a completed Evaluation inline with complete evidence",
+      "suite": "web",
+      "baseline": "baseline-red"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keeps long unbroken Finding and Suggestion evidence reachable",
+      "kind": "test",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "title": "Writing Desk > keeps long unbroken Finding and Suggestion evidence reachable",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keyboard submission and repeat submission both remain explicit",
+      "kind": "test",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "title": "Writing Desk > keyboard submission and repeat submission both remain explicit",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > pending work preserves exact writing and prevents duplicate submission",
+      "kind": "test",
+      "source": "apps/web/src/routes/-dashboard.test.tsx",
+      "title": "Writing Desk > pending work preserves exact writing and prevents duplicate submission",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > a failed deletion keeps the record and offers a safe retry",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.deletion.test.tsx",
+      "title": "Evaluation deletion > a failed deletion keeps the record and offers a safe retry",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > confirmation removes only that complete record and returns to History",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.deletion.test.tsx",
+      "title": "Evaluation deletion > confirmation removes only that complete record and returns to History",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > the safe cancel path explains deletion and keeps the Evaluation",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.deletion.test.tsx",
+      "title": "Evaluation deletion > the safe cancel path explains deletion and keeps the Evaluation",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Evaluation Detail uses accessible work, evidence, and history regions",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "title": "Evaluation Detail uses accessible work, evidence, and history regions",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Evidence Lens shows every Finding, Correction, and Suggestion",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "title": "Evidence Lens shows every Finding, Correction, and Suggestion",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Original section displays interactive SpellChecker with findings on original text",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "title": "Original section displays interactive SpellChecker with findings on original text",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::finding exposes its original text and Correction as labeled definitions",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "title": "finding exposes its original text and Correction as labeled definitions",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::learner can inspect a non-error Suggestion",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.detail.test.tsx",
+      "title": "learner can inspect a non-error Suggestion",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > empty history points the Learner to their first Evaluation",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.history.test.tsx",
+      "title": "History > empty history points the Learner to their first Evaluation",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > populated history shows every Evaluation newest first",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.history.test.tsx",
+      "title": "History > populated history shows every Evaluation newest first",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > repeated Writing Samples remain distinct newest-first observations",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.history.test.tsx",
+      "title": "History > repeated Writing Samples remain distinct newest-first observations",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > selecting a History row reopens its complete Evaluation",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.history.test.tsx",
+      "title": "History > selecting a History row reopens its complete Evaluation",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.new.test.tsx::New Evaluation compatibility route > primary navigation exposes permanent product surfaces only",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.new.test.tsx",
+      "title": "New Evaluation compatibility route > primary navigation exposes permanent product surfaces only",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.new.test.tsx::New Evaluation compatibility route > redirects old creation links to the Writing Desk",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.new.test.tsx",
+      "title": "New Evaluation compatibility route > redirects old creation links to the Writing Desk",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a network failure gives connection guidance without showing private causes",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > a network failure gives connection guidance without showing private causes",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a no-English outcome keeps the exact sample and explains what is required",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > a no-English outcome keeps the exact sample and explains what is required",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a provider timeout explains the delay without discarding the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > a provider timeout explains the delay without discarding the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a retryable failure preserves exact writing and can succeed",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > a retryable failure preserves exact writing and can succeed",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > configuration-missing failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > configuration-missing failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > forbidden failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > forbidden failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > invalid-assessment failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > invalid-assessment failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > keeps evaluation disabled until the provider is configured",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > keeps evaluation disabled until the provider is configured",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > persistence-failure failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > persistence-failure failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-credits-exhausted failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > provider-credits-exhausted failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-output-incomplete failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > provider-output-incomplete failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-rate-limited failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > provider-rate-limited failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-rejected failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > provider-rejected failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-unavailable failures show actionable feedback while preserving the draft",
+      "kind": "test",
+      "source": "apps/web/src/routes/-evaluations.validation.test.tsx",
+      "title": "Writing Desk validation > provider-unavailable failures show actionable feedback while preserving the draft",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > an Error Category selection reveals its exact source Findings",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > an Error Category selection reveals its exact source Findings",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > deletion recomputes Progress even after an intent preload",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > deletion recomputes Progress even after an intent preload",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > each period window contains exactly its retained Evaluations",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > each period window contains exactly its retained Evaluations",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > incompatible Rubric Versions stay separate and labeled",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > incompatible Rubric Versions stay separate and labeled",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > keeps long unbroken source explanations reachable",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > keeps long unbroken source explanations reachable",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > no compatible evidence shows an honest empty state",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > no compatible evidence shows an honest empty state",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > one Evaluation counts once per category but reveals every Finding",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > one Evaluation counts once per category but reveals every Finding",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > primary rate, secondary score, and descriptive measures",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > primary rate, secondary score, and descriptive measures",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > recurring Correction and summary selections reveal their evidence",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > recurring Correction and summary selections reveal their evidence",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > repeated Writing Samples remain separate observations",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > repeated Writing Samples remain separate observations",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > sparse evidence stays descriptive",
+      "kind": "test",
+      "source": "apps/web/src/routes/-progress.test.tsx",
+      "title": "Progress > sparse evidence stays descriptive",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-root.light-theme.test.tsx::light-only application shell > does not read or write a stored theme",
+      "kind": "test",
+      "source": "apps/web/src/routes/-root.light-theme.test.tsx",
+      "title": "light-only application shell > does not read or write a stored theme",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-setup.test.tsx::Setup & privacy > keeps setup to essential provider, privacy, data, and access facts",
+      "kind": "test",
+      "source": "apps/web/src/routes/-setup.test.tsx",
+      "title": "Setup & privacy > keeps setup to essential provider, privacy, data, and access facts",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:apps/web/src/routes/-setup.test.tsx::Setup & privacy > reports when the provider is ready",
+      "kind": "test",
+      "source": "apps/web/src/routes/-setup.test.tsx",
+      "title": "Setup & privacy > reports when the provider is ready",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:e2e/mvp.spec.ts::complete retained-evidence journey",
+      "kind": "test",
+      "source": "e2e/mvp.spec.ts",
+      "title": "complete retained-evidence journey",
+      "suite": "e2e",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:packages/db/src/index.test.ts::Database > migrates product tables and enables durable SQLite invariants",
+      "kind": "test",
+      "source": "packages/db/src/index.test.ts",
+      "title": "Database > migrates product tables and enables durable SQLite invariants",
+      "suite": "db",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:packages/db/src/index.test.ts::Database > reports connection startup failures as DatabaseError",
+      "kind": "test",
+      "source": "packages/db/src/index.test.ts",
+      "title": "Database > reports connection startup failures as DatabaseError",
+      "suite": "db",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > applies defaults when only DATABASE_URL is set",
+      "kind": "test",
+      "source": "packages/env/src/server.test.ts",
+      "title": "ServerConfig > applies defaults when only DATABASE_URL is set",
+      "suite": "env",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > fails when DATABASE_URL is missing",
+      "kind": "test",
+      "source": "packages/env/src/server.test.ts",
+      "title": "ServerConfig > fails when DATABASE_URL is missing",
+      "suite": "env",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > reads explicit values",
+      "kind": "test",
+      "source": "packages/env/src/server.test.ts",
+      "title": "ServerConfig > reads explicit values",
+      "suite": "env",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > rejects a NODE_ENV outside the allowed set",
+      "kind": "test",
+      "source": "packages/env/src/server.test.ts",
+      "title": "ServerConfig > rejects a NODE_ENV outside the allowed set",
+      "suite": "env",
+      "baseline": "green"
+    }
+  ]
+}

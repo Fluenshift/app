@@ -1,0 +1,708 @@
+{
+  "slice": "hosted",
+  "lane": "platform",
+  "rows": [
+    {
+      "id": "grifando:characterization:src/app/api/me/me.characterization.test.ts::DELETE /api/me guards > expires the session cookie as HttpOnly, SameSite=Lax and site-wide, Secure in production only",
+      "source": "src/app/api/me/me.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/api/rateLimitFirst.characterization.test.ts::rate limit before the user > refuses every state-changing route at its rate limit before creating the visitor's user",
+      "source": "src/app/api/rateLimitFirst.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:01",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:02",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:03",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:04",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:05",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:06",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:07",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:08",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:deploy-smoke:09",
+      "source": "docs/deploy.md",
+      "class": null,
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers 401 AI_KEY_REQUIRED when no key headers are sent (env keys are never tested)",
+      "source": "src/app/api/ai-key/test/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers busy when the provider does not answer in time",
+      "source": "src/app/api/ai-key/test/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers busy when the provider is unavailable or out of quota",
+      "source": "src/app/api/ai-key/test/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers invalid for a malformed key without calling the provider",
+      "source": "src/app/api/ai-key/test/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers invalid when the provider rejects the key",
+      "source": "src/app/api/ai-key/test/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers works when the provider accepts the key",
+      "source": "src/app/api/ai-key/test/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > passes the rate limiter's 429 through without calling the provider",
+      "source": "src/app/api/ai-key/test/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > uses the Anthropic helper for an Anthropic key",
+      "source": "src/app/api/ai-key/test/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/cron/cleanup/route.test.ts::GET /api/cron/cleanup > 401s with a wrong bearer",
+      "source": "src/app/api/cron/cleanup/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0011",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/cron/cleanup/route.test.ts::GET /api/cron/cleanup > 401s without a bearer",
+      "source": "src/app/api/cron/cleanup/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0011",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/cron/cleanup/route.test.ts::GET /api/cron/cleanup > fails closed when CRON_SECRET is unset",
+      "source": "src/app/api/cron/cleanup/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0011",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/cron/cleanup/route.test.ts::GET /api/cron/cleanup > returns counts with the right bearer",
+      "source": "src/app/api/cron/cleanup/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0011",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/me/route.test.ts::DELETE /api/me > deletes the data, expires the cookie and answers 204",
+      "source": "src/app/api/me/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/api/me/route.test.ts::DELETE /api/me > is rate limited",
+      "source": "src/app/api/me/route.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/sitemap.test.ts::getSiteUrl > prefers NEXT_PUBLIC_SITE_URL, then the Vercel production host, then localhost",
+      "source": "src/app/sitemap.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/app/sitemap.test.ts::sitemap > lists the four public routes and nothing under /api",
+      "source": "src/app/sitemap.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiFetch > refuses absolute and protocol-relative URLs without calling fetch",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiFetch > rejects with MissingAIKeyError and never calls fetch when no key is stored",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiFetch > saveAIKey reports false when storage throws",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiFetch > sends the provider and key headers, keeping the caller's headers",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > clears the stored key",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > returns null for a stored value with an unknown provider or empty key",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > returns null for corrupt stored JSON",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > returns null outside the browser",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > returns null when storage throws (blocked site data)",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > saves a trimmed key and reads it back",
+      "source": "src/lib/aiKeyStore.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/proxy.test.ts::proxy > answers 401 SESSION_REQUIRED to an /api request without a valid cookie and mints nothing",
+      "source": "src/proxy.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/proxy.test.ts::proxy > builds the exact production policy, adding 'unsafe-eval' only in dev",
+      "source": "src/proxy.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/proxy.test.ts::proxy > leaves a valid cookie untouched",
+      "source": "src/proxy.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/proxy.test.ts::proxy > lets /api/cron requests through without a session or a new cookie",
+      "source": "src/proxy.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/proxy.test.ts::proxy > lets an /api request with a valid cookie through",
+      "source": "src/proxy.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/proxy.test.ts::proxy > mints a cookie when none is present and forwards it to the same render",
+      "source": "src/proxy.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/proxy.test.ts::proxy > replaces tampered and wrong-secret cookies, keeping other cookies",
+      "source": "src/proxy.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/proxy.test.ts::proxy > sets a nonce CSP on the response and forwards it to the render",
+      "source": "src/proxy.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::accessErrorForStatus > classifies provider statuses",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::aiErrorResponse > maps a rejected key to 401 AI_KEY_REJECTED without echoing the key",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::aiErrorResponse > returns null for unrelated errors",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::readAICredentials > rejects unknown provider, oversized and non-printable keys",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::readAICredentials > returns null without headers",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::readAICredentials > trims the key",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::resolveAICredentials > falls back to env keys outside production",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::resolveAICredentials > never uses env keys in production",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/credentials.test.ts::resolveAICredentials > prefers header credentials over env",
+      "source": "src/server/ai/credentials.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::testKey > makes one 1-token request and resolves when the key works",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::testKey > maps a 401 to AIKeyRejectedError and a 529 to AIProviderUnavailableError",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::testKey > makes one 1-token request and resolves when the key works",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::testKey > maps an invalid-key 400 to AIKeyRejectedError and a 429 to AIQuotaExceededError",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/clientIp.test.ts::hashedClientIp > differs per IP and falls back to a stable value when missing",
+      "source": "src/server/clientIp.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/clientIp.test.ts::hashedClientIp > never returns the raw IP and is stable for the same input",
+      "source": "src/server/clientIp.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/clientIp.test.ts::hashedClientIp > uses only the first x-forwarded-for entry",
+      "source": "src/server/clientIp.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/privacy/cleanup.test.ts::cleanupIdleData > removes rate-limit windows older than 2 days only",
+      "source": "src/server/domain/privacy/cleanup.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/privacy/cleanup.test.ts::cleanupIdleData > removes users idle 91 days with their data, keeps 89-day ones",
+      "source": "src/server/domain/privacy/cleanup.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/domain/privacy/cleanup.test.ts::deleteUserData > deletes the user and their data but not others",
+      "source": "src/server/domain/privacy/cleanup.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/rateLimit.test.ts::consume > allows again in a new window",
+      "source": "src/server/rateLimit.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/rateLimit.test.ts::consume > allows max calls then blocks with retryAfterSeconds within the window",
+      "source": "src/server/rateLimit.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/rateLimit.test.ts::consume > blocks when any rule is exceeded and reports the largest retry",
+      "source": "src/server/rateLimit.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/rateLimit.test.ts::consume > keeps subjects independent",
+      "source": "src/server/rateLimit.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/rateLimit.test.ts::rateLimitResponse > returns 429 with Retry-After once the bucket is exhausted",
+      "source": "src/server/rateLimit.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/rateLimit.test.ts::rateLimitResponse > stores no raw IP",
+      "source": "src/server/rateLimit.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/session/currentUser.test.ts::ensureUser > bumps lastActiveAt at most once per hour",
+      "source": "src/server/session/currentUser.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/session/currentUser.test.ts::ensureUser > creates the user on first write and isolates two sessions",
+      "source": "src/server/session/currentUser.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/session/currentUser.test.ts::ensureUser > recreates a deleted user on the next write",
+      "source": "src/server/session/currentUser.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/session/getCurrentUserId.test.ts::getCurrentUserId > returns the id from a valid signed cookie",
+      "source": "src/server/session/getCurrentUserId.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/session/getCurrentUserId.test.ts::getCurrentUserId > throws MissingSessionError for a missing, tampered or wrong-secret cookie",
+      "source": "src/server/session/getCurrentUserId.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/session/sessionToken.test.ts::sessionToken > mints distinct ids",
+      "source": "src/server/session/sessionToken.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/session/sessionToken.test.ts::sessionToken > rejects a tampered id, a wrong secret, and junk",
+      "source": "src/server/session/sessionToken.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/session/sessionToken.test.ts::sessionToken > round-trips a signed id",
+      "source": "src/server/session/sessionToken.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    }
+  ]
+}

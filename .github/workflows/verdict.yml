@@ -1,0 +1,58 @@
+name: G12 verdict
+
+# Gate G12 of docs/migration/MIGRATION_PROTOCOL.md. Sets the `G12` commit status on a pull
+# request's head whenever the pull request or its comments change. Both triggers run the
+# workflow and the script from the default branch, never from the pull request, so a pull
+# request cannot rewrite its own gate. The merge queue admits only pull requests whose `G12`
+# status already passed, so the merge group commit gets a passing status as it is.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  issue_comment:
+    types: [created, edited, deleted]
+  merge_group:
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+  statuses: write
+
+concurrency:
+  group: g12-${{ github.event.pull_request.number || github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  verdict:
+    name: G12 (cross-vendor verdict)
+    if: github.event_name == 'pull_request_target' || (github.event_name == 'issue_comment' && github.event.issue.pull_request)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      # The base branch, not the pull request's head.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Set the G12 status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+        run: node scripts/migration/verdict-check.ts --repo "$GITHUB_REPOSITORY" --pr "$PR_NUMBER" --set-status
+
+  merge-group:
+    name: G12 (merge queue)
+    if: github.event_name == 'merge_group'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Set the G12 status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.merge_group.head_sha }}
+        run: >-
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$HEAD_SHA" -f state=success -f context=G12 -f description="Checked on each pull request before it entered the queue"

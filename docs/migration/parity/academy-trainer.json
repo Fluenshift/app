@@ -1,0 +1,731 @@
+{
+  "slice": "academy-trainer",
+  "lane": "academy",
+  "rows": [
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > answers with gemini-3.5-flash and claude-sonnet-5 unless the environment names a model",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > falls back to gemini-3.5-flash-lite and claude-haiku-5-5",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > tests a key on the light fallback model, not the primary one",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0012",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > accepts one to ten exercises",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > accepts one to ten exercises"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds fill-blank templates to 1-300 characters and answers to 1-5 of 1-100",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > bounds fill-blank templates to 1-300 characters and answers to 1-5 of 1-100"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds multiple choice to 2-5 options of 1-300 characters and a non-negative integer index",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > bounds multiple choice to 2-5 options of 1-300 characters and a non-negative integer index"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds rewrite and translation texts to 1-500 characters and answers to 1-3 of 1-500",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > bounds rewrite and translation texts to 1-500 characters and answers to 1-3 of 1-500"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds the instruction to 1-300 characters and the explanation to 1-1000",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > bounds the instruction to 1-300 characters and the explanation to 1-1000"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > drops properties the schema does not declare",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > drops properties the schema does not declare"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::validateExerciseGenerationResult guards > accepts the last option as the correct one and rejects the index past it",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult guards > accepts the last option as the correct one and rejects the index past it"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::validateExerciseGenerationResult guards > explains each rejection",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult guards > explains each rejection"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/noKeyInLogs.test.ts::the visitor's AI key never reaches the logs > when building the provider throws a generic error that reaches the route's log",
+      "source": "src/server/ai/noKeyInLogs.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/noKeyInLogs.test.ts::the visitor's AI key never reaches the logs > when the provider call throws a generic error",
+      "source": "src/server/ai/noKeyInLogs.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/answerExplanation.test.ts::buildAnswerExplanationUserMessage > includes the learner's answer and the accepted answers for free-text exercises",
+      "source": "src/server/ai/prompts/answerExplanation.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/answerExplanation.test.ts::buildAnswerExplanationUserMessage > resolves the chosen and correct options for multiple choice",
+      "source": "src/server/ai/prompts/answerExplanation.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/exerciseGeneration.test.ts::buildExerciseGenerationUserMessage > includes every target's type, category, and example",
+      "source": "src/server/ai/prompts/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/exerciseGeneration.test.ts::buildExerciseGenerationUserMessage > numbers targets in order",
+      "source": "src/server/ai/prompts/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/interview.test.ts::buildInterviewUserMessage > asks for an opening question when there is no history",
+      "source": "src/server/ai/prompts/interview.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/interview.test.ts::buildInterviewUserMessage > includes every prior question and answer in order",
+      "source": "src/server/ai/prompts/interview.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisSystemPrompt > instructs the model not to evaluate code correctness for EXPLAIN_CODE",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisSystemPrompt > instructs the model to score technicalCommunication for INTERVIEW mode",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisSystemPrompt > lists every mistake category so the model can't invent new ones",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisUserMessage > includes the code snippet when present",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisUserMessage > includes the prompt text when present",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisUserMessage > includes the technical category when present",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisUserMessage > includes the writing text verbatim",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisUserMessage > omits the code snippet line when absent",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisUserMessage > omits the technical category line when absent",
+      "source": "src/server/ai/prompts/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.analyzeWriting > forces the tool_choice to the writing-analysis tool",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.analyzeWriting > never touches the network — a broken client rejects instead of hanging",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.analyzeWriting > returns the validated result when the model returns a well-formed tool_use block",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.analyzeWriting > throws AIResponseValidationError when no tool_use block is returned",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.analyzeWriting > throws AIResponseValidationError when the tool input fails schema validation",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.continueInterview > returns the validated next question",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.continueInterview > throws AIResponseValidationError when the tool input fails schema validation",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.explainAttempt > returns the validated explanation",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.explainAttempt > throws AIResponseValidationError on an invalid tool input",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.generateExercises > returns the validated exercises when the model returns a well-formed tool_use block",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when a multiple-choice correctOptionIndex is out of range",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when no tool_use block is returned",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when the exercise count doesn't match the target count",
+      "source": "src/server/ai/providers/anthropic.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.analyzeWriting > never touches the network — a broken client rejects instead of hanging",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.analyzeWriting > requests JSON mode with the schema attached",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.analyzeWriting > returns the validated result when the model returns well-formed JSON text",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.analyzeWriting > throws AIResponseValidationError when the JSON fails schema validation",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.analyzeWriting > throws AIResponseValidationError when the model returns malformed JSON",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.analyzeWriting > throws AIResponseValidationError when the model returns no text",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.continueInterview > returns the validated next question",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.explainAttempt > returns the validated explanation",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.explainAttempt > throws AIResponseValidationError on an invalid response",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.generateExercises > returns the validated exercises for well-formed JSON",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.generateExercises > throws AIResponseValidationError when the exercise count doesn't match",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/providers/gemini.test.ts::toGeminiSchema > drops array bounds and $schema that Gemini rejects, keeping the rest",
+      "source": "src/server/ai/providers/gemini.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/resilient.test.ts::isOverloaded > recognises overload shapes and rejects the rest",
+      "source": "src/server/ai/resilient.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > does not retry on a rejected key or exhausted quota",
+      "source": "src/server/ai/resilient.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > passes a non-overload error from the fallback through untouched",
+      "source": "src/server/ai/resilient.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > retries once on the fallback when the primary is overloaded",
+      "source": "src/server/ai/resilient.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > throws AIProviderUnavailableError when both are overloaded",
+      "source": "src/server/ai/resilient.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > throws AIProviderUnavailableError, not the timeout error, when both time out",
+      "source": "src/server/ai/resilient.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > times out a hanging call and then uses the fallback",
+      "source": "src/server/ai/resilient.test.ts",
+      "class": "C",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > accepts one well-formed exercise of each type",
+      "source": "src/server/ai/schemas/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > accepts one well-formed exercise of each type"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > rejects a fill-blank exercise with no acceptable answers",
+      "source": "src/server/ai/schemas/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > rejects a fill-blank exercise with no acceptable answers"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > rejects a multiple-choice exercise with fewer than two options",
+      "source": "src/server/ai/schemas/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > rejects a multiple-choice exercise with fewer than two options"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > rejects an empty exercises array",
+      "source": "src/server/ai/schemas/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > rejects an empty exercises array"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > rejects an unknown exercise type",
+      "source": "src/server/ai/schemas/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > rejects an unknown exercise type"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::validateExerciseGenerationResult > returns the exercises when the count matches and every MC index is in range",
+      "source": "src/server/ai/schemas/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult > returns the exercises when the count matches and every MC index is in range"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::validateExerciseGenerationResult > throws when a multiple-choice correctOptionIndex is out of range",
+      "source": "src/server/ai/schemas/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult > throws when a multiple-choice correctOptionIndex is out of range"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::validateExerciseGenerationResult > throws when the exercise count doesn't match the requested target count",
+      "source": "src/server/ai/schemas/exerciseGeneration.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult > throws when the exercise count doesn't match the requested target count"
+      ]
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > accepts a response with an empty mistakes array",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > accepts a well-formed response",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > accepts an optional technicalCommunication score for INTERVIEW mode",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > accepts the optional l1Transfer flag and rejects a non-boolean one",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > omitting technicalCommunication is fine for every other mode",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > rejects a completely malformed payload without throwing",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > rejects a missing required field",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > rejects a score outside 0-100",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > rejects an unknown mistake category",
+      "source": "src/server/ai/schemas/writingAnalysis.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    }
+  ]
+}
