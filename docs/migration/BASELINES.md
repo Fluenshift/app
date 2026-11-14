@@ -146,3 +146,22 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | System | File | Pins | Cases |
 | --- | --- | --- | ---: |
 | `pe` | `apps/server/src/evaluation/utf8.characterization.test.ts` | `utf8.ts`, which has no test, and the UTF-8 edge cases of `applyCorrections`: a leading BOM, lone surrogates, code-point boundaries, the two rejection reasons. A port to `TextEncoder` and `TextDecoder` must keep a leading BOM, which a default `TextDecoder` drops. | 13 |
+| `pe` | `apps/server/src/app.characterization.test.ts` | Every HTTP behavior of `app.ts` that `app.test.ts` leaves out; see the table below. | 27 |
+
+PE's HTTP endpoints, by the test that pins each behavior (#21):
+
+| Endpoint | `app.test.ts` | `app.characterization.test.ts` |
+| --- | --- | --- |
+| Every `/api/` response | `cache-control: no-store` on History and on every Evaluation failure | `no-store` on 403, 413, an unknown route and the setup status |
+| Request guards | 403 for a remote host and a foreign Origin; 413 for a declared body over 256 KiB | the three loopback host names; 403 for a foreign Host header and a cross-site fetch; a same-origin fetch; the 403 and 413 bodies; a body of exactly 256 KiB passes |
+| Unknown `/api/` route | 404 with a JSON content type under the browser fallback | the not-found body, with and without the browser fallback |
+| `GET /api/health` | 200 and `{ status: "ok" }` | nothing more |
+| `POST /api/evaluations` | 201 and the created Evaluation; the status of every failure code; no private text in failures; the log event without the sample; 400 for a mistyped field | 503 when Evaluation is not configured; the whole created, no-english and failure bodies; the invalid-request body for a body that is not JSON and for a missing field; a throwing evaluation (500 and an `internal-error` log); a throwing logger; the configured model in the log |
+| `GET /api/evaluations` | 200 and the list; the safe 500 | 503 not-ready |
+| `GET /api/evaluations/:evaluationId` | 200 and 404 | 503 not-ready; the not-found body |
+| `DELETE /api/evaluations/:evaluationId` | 204 | 503 not-ready; the empty body |
+| `GET /api/progress` | 200 for `7-days` | 503 not-ready; `30-days` and `all`; 400 invalid-period |
+| `GET /api/progress/evidence` | 200 for `average-score` | 503 not-ready; `finding-rate`, category and correction selections; 400 invalid-selection |
+| `GET /api/setup` | 200, part of the status | 503 not-ready; the whole status |
+| `GET /*` browser fallback | immutable assets; uncached `index.html` | the bare not-found body for `/api/`; a missing asset; no file outside `assets/`; 404 for a request that is not a GET |
+| HTTP idle timeout | 120 seconds | nothing more |

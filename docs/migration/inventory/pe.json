@@ -4,6 +4,222 @@
   "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers a body that is not JSON with an invalid-request code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "API errors > answers a body that is not JSON with an invalid-request code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers a body without a writingSample with an invalid-request code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "API errors > answers a body without a writingSample with an invalid-request code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::API errors > answers an unknown API route with a not-found code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "API errors > answers an unknown API route with a not-found code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > answers 503 with a correlation ID when Evaluation is not configured",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > answers 503 with a correlation ID when Evaluation is not configured",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > keeps the outcome when logging throws",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > keeps the outcome when logging throws",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > logs internal-error and answers a safe 500 when evaluation throws",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > logs internal-error and answers a safe 500 when evaluation throws",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > logs the configured model and provider with whole milliseconds",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > logs the configured model and provider with whole milliseconds",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns a created Evaluation whole",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > returns a created Evaluation whole",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns each typed failure as its code, kind and retryable flag",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > returns each typed failure as its code, kind and retryable flag",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > returns no-english as its kind alone",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Evaluation endpoint > returns no-english as its kind alone",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers 503 not-ready when History is unavailable",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "History endpoints > answers 503 not-ready when History is unavailable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers a deletion with an empty 204",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "History endpoints > answers a deletion with an empty 204",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::History endpoints > answers a missing Evaluation with a not-found code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "History endpoints > answers a missing Evaluation with a not-found code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > accepts exactly the 7-days, 30-days and all periods",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Progress endpoints > accepts exactly the 7-days, 30-days and all periods",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > answers 503 not-ready when Progress is unavailable",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Progress endpoints > answers 503 not-ready when Progress is unavailable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > refuses an unknown insight, an unknown category, a half correction and a bad period",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Progress endpoints > refuses an unknown insight, an unknown category, a half correction and a bad period",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Progress endpoints > selects evidence by insight, Error Category or correction",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Progress endpoints > selects evidence by insight, Error Category or correction",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Setup endpoint > answers 503 not-ready without a setup status",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Setup endpoint > answers 503 not-ready without a setup status",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Setup endpoint > returns the setup status whole",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "Setup endpoint > returns the setup status whole",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers a missing asset with a plain-text 404",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "browser fallback > answers a missing asset with a plain-text 404",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers a request that is not a GET outside the API with a not-found code",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "browser fallback > answers a request that is not a GET outside the API with a not-found code",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers an unknown API path with a bare not-found body",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "browser fallback > answers an unknown API path with a bare not-found body",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > never serves a file from outside the assets directory",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "browser fallback > never serves a file from outside the assets directory",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > accepts the three loopback host names",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "request guards > accepts the three loopback host names",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > allows a declared body of exactly 256 KiB and refuses one byte more",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "request guards > allows a declared body of exactly 256 KiB and refuses one byte more",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > allows a same-origin fetch that names its own Origin and Host",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "request guards > allows a same-origin fetch that names its own Origin and Host",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > forbids a remote host, a foreign Host header, a cross-site fetch and a foreign Origin alike",
+      "kind": "characterization",
+      "source": "apps/server/src/app.characterization.test.ts",
+      "title": "request guards > forbids a remote host, a foreign Host header, a cross-site fetch and a foreign Origin alike",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
       "kind": "characterization",
       "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
