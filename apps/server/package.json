@@ -21,6 +21,8 @@
     "@fluenshift/db": "workspace:*",
     "@fluenshift/env": "workspace:*",
     "@hono/node-server": "catalog:",
+    "@openrouter/ai-sdk-provider": "catalog:",
+    "ai": "catalog:",
     "drizzle-orm": "catalog:",
     "effect": "catalog:",
     "hono": "catalog:",

@@ -332,6 +332,22 @@
       "baseline": "green"
     },
     {
+      "id": "pe:characterization:apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts::OpenRouter Evaluation Model guards > classifies an assessment with an undeclared property as a retryable invalid assessment",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts",
+      "title": "OpenRouter Evaluation Model guards > classifies an assessment with an undeclared property as a retryable invalid assessment",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts::OpenRouter Evaluation Model guards > drops a null alternative from a Suggestion",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts",
+      "title": "OpenRouter Evaluation Model guards > drops a null alternative from a Suggestion",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample",
       "kind": "characterization",
       "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",

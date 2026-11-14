@@ -3,13 +3,37 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts::OpenRouter Evaluation Model guards > classifies an assessment with an undeclared property as a retryable invalid assessment",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model guards > classifies an assessment with an undeclared property as a retryable invalid assessment"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts::OpenRouter Evaluation Model guards > drops a null alternative from a Suggestion",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model guards > drops a null alternative from a Suggestion"
+      ]
+    },
+    {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > allows a provider response beyond 30 seconds without restarting the paid request",
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > allows a provider response beyond 30 seconds without restarting the paid request"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > can disable SDK retries for budget-bounded calibration",
@@ -18,7 +42,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > can disable SDK retries for budget-bounded calibration"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > classifies provider output with whitespace-only prose as a retryable invalid assessment",
@@ -27,7 +53,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > classifies provider output with whitespace-only prose as a retryable invalid assessment"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > classifies rejected credentials separately from transient provider failures",
@@ -36,7 +64,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > classifies rejected credentials separately from transient provider failures"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > deterministically reanchors uniquely identifiable provider spans",
@@ -45,7 +75,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > deterministically reanchors uniquely identifiable provider spans"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > distinguishes incomplete and failed response envelopes from malformed assessments",
@@ -54,7 +86,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > distinguishes incomplete and failed response envelopes from malformed assessments"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > forces SDK logging off even when ambient debug logging is enabled",
@@ -63,7 +97,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > forces SDK logging off even when ambient debug logging is enabled"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > makes only one paid attempt by default when the provider is unavailable",
@@ -72,7 +108,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > makes only one paid attempt by default when the provider is unavailable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > reports an SDK timeout without exposing its cause or automatically retrying",
@@ -81,7 +119,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > reports an SDK timeout without exposing its cause or automatically retrying"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > reports missing configuration without making a provider call",
@@ -90,7 +130,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > reports missing configuration without making a provider call"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > sends one bounded, tool-free, injection-resistant structured request",
@@ -99,7 +141,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > sends one bounded, tool-free, injection-resistant structured request"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > treats an empty credential as unconfigured",
@@ -108,7 +152,9 @@
       "slice": "evaluation-judge",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/openrouter-evaluation-model.test.ts::OpenRouter Evaluation Model > treats an empty credential as unconfigured"
+      ]
     }
   ]
 }
