@@ -1,14 +1,35 @@
-// Typed stub for the red commit of #16: the ported tests compile and fail on their checks.
-import type { ExerciseType } from "@fluenshift/contract";
+// Ported from Grifando src/server/domain/exercises/exerciseType.ts.
+import { ExerciseType } from "@fluenshift/contract";
 
+import { needsMasteryCheck } from "./mastery";
 import type { MasteryState } from "./mastery";
 
-// Two different values that are no exercise type, so no expected type matches and the
-// mastery-check choice never equals the plain rotation.
-export const assignExerciseType = (_index: number): ExerciseType =>
-  "" as ExerciseType;
+const ROTATION = [
+  ExerciseType.MULTIPLE_CHOICE,
+  ExerciseType.FILL_BLANK,
+  ExerciseType.REWRITE,
+  ExerciseType.TRANSLATION,
+] as const;
 
+// Cycles deterministically through the four exercise types rather than
+// letting the model choose, so a practice set stays varied and predictable.
+// As in Grifando, a negative index reads past the rotation as undefined.
+export const assignExerciseType = (index: number): ExerciseType =>
+  ROTATION[index % ROTATION.length] as ExerciseType;
+
+const MASTERY_CHECK_ROTATION = [
+  ExerciseType.REWRITE,
+  ExerciseType.TRANSLATION,
+] as const;
+
+// A pattern one step from MASTERED gets its unscaffolded mastery check
+// (REWRITE or TRANSLATION); every other pattern follows the normal rotation.
 export const assignExerciseTypeFor = (
-  _pattern: MasteryState,
-  _index: number
-): ExerciseType => "-" as ExerciseType;
+  pattern: MasteryState,
+  index: number
+): ExerciseType =>
+  needsMasteryCheck(pattern)
+    ? (MASTERY_CHECK_ROTATION[
+        index % MASTERY_CHECK_ROTATION.length
+      ] as ExerciseType)
+    : assignExerciseType(index);
