@@ -3,6 +3,50 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > evidences Finding Rate and the average score with every retained Evaluation, even one without Findings",
+      "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights guards > evidences Finding Rate and the average score with every retained Evaluation, even one without Findings"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > keeps the first millisecond of a 7-day or 30-day period and nothing before it or after now",
+      "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights guards > keeps the first millisecond of a 7-day or 30-day period and nothing before it or after now"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > orders distributions and recurrences by count, then category, and recurring Corrections by occurrences, original text and Correction",
+      "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights guards > orders distributions and recurrences by count, then category, and recurring Corrections by occurrences, original text and Correction"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > rounds the average score to one decimal place",
+      "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights guards > rounds the average score to one decimal place"
+      ]
+    },
+    {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > derives and atomically stores one complete Evaluation",
       "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
       "class": "B",
@@ -296,7 +340,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights > recomputes every aggregate from retained rows after deletion"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > returns exact category recurrence ratios for the browser to format",
@@ -305,7 +351,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights > returns exact category recurrence ratios for the browser to format"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > segments exact period evidence by Rubric Version",
@@ -314,7 +362,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights > segments exact period evidence by Rubric Version"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > traces correction, Finding Rate, and average-score source evidence",
@@ -323,7 +373,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights > traces correction, Finding Rate, and average-score source evidence"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > traces every selected Finding while counting each Evaluation once",
@@ -332,7 +384,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights > traces every selected Finding while counting each Evaluation once"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > treats all as every retained Evaluation despite clock rollback",
@@ -341,7 +395,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/progress/progress-insights.test.ts::Progress Insights > treats all as every retained Evaluation despite clock rollback"
+      ]
     },
     {
       "id": "pe:test:packages/db/src/index.test.ts::Database > migrates product tables and enables durable SQLite invariants",

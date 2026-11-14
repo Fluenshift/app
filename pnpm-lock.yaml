@@ -325,6 +325,9 @@ importers:
       '@fluenshift/contract':
         specifier: workspace:*
         version: link:../../packages/contract
+      '@fluenshift/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@fluenshift/db':
         specifier: workspace:*
         version: link:../../packages/db

@@ -452,6 +452,38 @@
       "baseline": "green"
     },
     {
+      "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > evidences Finding Rate and the average score with every retained Evaluation, even one without Findings",
+      "kind": "characterization",
+      "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
+      "title": "Progress Insights guards > evidences Finding Rate and the average score with every retained Evaluation, even one without Findings",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > keeps the first millisecond of a 7-day or 30-day period and nothing before it or after now",
+      "kind": "characterization",
+      "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
+      "title": "Progress Insights guards > keeps the first millisecond of a 7-day or 30-day period and nothing before it or after now",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > orders distributions and recurrences by count, then category, and recurring Corrections by occurrences, original text and Correction",
+      "kind": "characterization",
+      "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
+      "title": "Progress Insights guards > orders distributions and recurrences by count, then category, and recurring Corrections by occurrences, original text and Correction",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > rounds the average score to one decimal place",
+      "kind": "characterization",
+      "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
+      "title": "Progress Insights guards > rounds the average score to one decimal place",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
       "id": "pe:data-policy:deletion:01",
       "kind": "doc-rule",
       "source": "docs/product/DATA-POLICY.md",

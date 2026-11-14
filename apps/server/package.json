@@ -17,6 +17,7 @@
     "@effect/platform-node": "catalog:",
     "@electric-sql/pglite": "catalog:",
     "@fluenshift/contract": "workspace:*",
+    "@fluenshift/core": "workspace:*",
     "@fluenshift/db": "workspace:*",
     "@fluenshift/env": "workspace:*",
     "@hono/node-server": "catalog:",
