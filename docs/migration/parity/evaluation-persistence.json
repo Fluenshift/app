@@ -9,7 +9,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation guards > answers a missing model configuration as configuration-missing, not retryable"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses a Finding inside model-identified non-English text",
@@ -18,7 +20,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation guards > refuses a Finding inside model-identified non-English text"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses a whitespace-only Writing Sample before calling the model",
@@ -27,7 +31,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation guards > refuses a whitespace-only Writing Sample before calling the model"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses an assessment with a property the schema does not declare",
@@ -36,7 +42,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation guards > refuses an assessment with a property the schema does not declare"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > evidences Finding Rate and the average score with every retained Evaluation, even one without Findings",
@@ -89,7 +97,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > derives and atomically stores one complete Evaluation"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > evaluates prose inside quotation marks and Markdown blockquotes",
@@ -98,7 +108,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > evaluates prose inside quotation marks and Markdown blockquotes"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > excludes fenced and inline code while preserving their exact bytes",
@@ -107,7 +119,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > excludes fenced and inline code while preserving their exact bytes"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > excludes structured data, commands, paths, identifiers, and logs",
@@ -116,7 +130,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > excludes structured data, commands, paths, identifiers, and logs"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > gives identical bytes distinct identities and the same retained hash",
@@ -125,7 +141,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > gives identical bytes distinct identities and the same retained hash"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps command-like imperative words in ordinary prose evaluable",
@@ -134,7 +152,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps command-like imperative words in ordinary prose evaluable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps context-dependent Suggestions score-neutral",
@@ -143,7 +163,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps context-dependent Suggestions score-neutral"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps errors beside ambiguous technical-looking prose evaluable",
@@ -152,7 +174,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps errors beside ambiguous technical-looking prose evaluable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps quoted Protected Technical Content excluded while evaluating quoted prose",
@@ -161,7 +185,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > keeps quoted Protected Technical Content excluded while evaluating quoted prose"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > maps provider failures and stores no History or Progress evidence",
@@ -170,7 +196,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > maps provider failures and stores no History or Progress evidence"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > normalizes retained Findings and Suggestions into source order",
@@ -179,7 +207,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > normalizes retained Findings and Suggestions into source order"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > persists no credential, hidden reasoning, or raw provider body",
@@ -188,7 +218,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > persists no credential, hidden reasoning, or raw provider body"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > preserves and excludes model-identified non-English UTF-8 spans",
@@ -197,7 +229,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > preserves and excludes model-identified non-English UTF-8 spans"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > protects multiline structured data, bare commands, Windows paths, and timestamped logs",
@@ -206,7 +240,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > protects multiline structured data, bare commands, Windows paths, and timestamped logs"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects Suggestions on protected and non-English spans",
@@ -215,7 +251,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects Suggestions on protected and non-English spans"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects Suggestions that overlap Findings or excluded content",
@@ -224,7 +262,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects Suggestions that overlap Findings or excluded content"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a Finding whose Correction is identical to its source",
@@ -233,7 +273,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a Finding whose Correction is identical to its source"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a provider Finding inside a nested YAML sequence",
@@ -242,7 +284,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a provider Finding inside a nested YAML sequence"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a provider Finding that edits Protected Technical Content",
@@ -251,7 +295,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects a provider Finding that edits Protected Technical Content"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects ill-formed Unicode in model-authored text without storage",
@@ -260,7 +306,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects ill-formed Unicode in model-authored text without storage"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects malformed model assessments without History or Progress evidence",
@@ -269,7 +317,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects malformed model assessments without History or Progress evidence"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects oversized input before calling the external model",
@@ -278,7 +328,10 @@
       "slice": "evaluation-persistence",
       "disposition": "port-changed",
       "decision": "adr:0006",
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects oversized input before calling the external model in the local profile",
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects oversized input before calling the external model in the hosted profile"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects provider Findings inside scalar YAML forms",
@@ -287,7 +340,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects provider Findings inside scalar YAML forms"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects provider spans that split a UTF-8 code point",
@@ -296,7 +351,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects provider spans that split a UTF-8 code point"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects samples without meaning-bearing English and stores nothing",
@@ -305,7 +362,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > rejects samples without meaning-bearing English and stores nothing"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > retains distinct submission and evaluation completion timestamps",
@@ -314,7 +373,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > retains distinct submission and evaluation completion timestamps"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > returns a complete no-correction Evaluation for correct English",
@@ -323,7 +384,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/evaluation/writing-evaluation.test.ts::Writing Evaluation > returns a complete no-correction Evaluation for correct English"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > deletes one whole Evaluation while preserving other evidence",
