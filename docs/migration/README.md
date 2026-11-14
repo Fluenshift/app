@@ -190,6 +190,11 @@ baseline clones (`baselines.ts sync`); from a worktree, point `--root` at them:
 mise exec node@26.13.0 -- node scripts/migration/parity-audit.ts --root ../app-baselines
 ```
 
+`scripts/check-url-text.ts` is the G7 check of ADR 0008: no server route reads user text from a
+URL, because loggers record URLs. A query string may carry only the period, the insight and the
+Error Category, and a path only the Evaluation ID; the check also refuses search parameters and
+query or path validators, which read a URL whole. `pnpm verify` and CI's G7 job run it.
+
 `scripts/gate-selftest.ts` proves that each gate fails when it should (#20). In a disposable
 worktree beside this repository it applies one broken change per gate and checks that the
 intended gate rejects it while a control gate still accepts it: a focused, a skipped and a
@@ -197,10 +202,9 @@ intended gate rejects it while a control gate still accepts it: a focused, a ski
 `packages/env` (G2, the built-in also G1); a floating Effect (G1); a lowered oxlint severity and
 a lowered Effect diagnostic severity (G11); a ledger row pointing at a missing test and a `port`
 target with a changed title (G9); a weakened matcher (G10); a first commit whose tests already
-pass (G8); a verdict for an older head and one from the implementing vendor (G12). CI runs it
-in its own job. A tagged error with no entry at the edge is a type error, so its case is
-rejected by G1. One case waits for the code it tests: user text in a query string (G7) arrives
-with the Hono routes of Phase 4d.
+pass (G8); a verdict for an older head and one from the implementing vendor (G12); a route that
+reads user text from a query string (G7). CI runs it in its own job. A tagged error with no
+entry at the edge is a type error, so its case is rejected by G1.
 
 ```bash
 mise exec node@26.13.0 pnpm@12.18.0 -- node scripts/gate-selftest.ts --root ../app-baselines
