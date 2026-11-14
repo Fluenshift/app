@@ -4,6 +4,70 @@
   "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
   "rows": [
     {
+      "id": "grifando:characterization:src/app/api/rateLimitFirst.characterization.test.ts::rate limit before the user > refuses every state-changing route at its rate limit before creating the visitor's user",
+      "kind": "characterization",
+      "source": "src/app/api/rateLimitFirst.characterization.test.ts",
+      "title": "rate limit before the user > refuses every state-changing route at its rate limit before creating the visitor's user",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/lib/responseError.characterization.test.ts::failedSessionIdFrom > answers undefined without a string session id or without a JSON body",
+      "kind": "characterization",
+      "source": "src/lib/responseError.characterization.test.ts",
+      "title": "failedSessionIdFrom > answers undefined without a string session id or without a JSON body",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/lib/responseError.characterization.test.ts::failedSessionIdFrom > reads the FAILED session id from a clone, leaving the body for errorMessageFor",
+      "kind": "characterization",
+      "source": "src/lib/responseError.characterization.test.ts",
+      "title": "failedSessionIdFrom > reads the FAILED session id from a clone, leaving the body for errorMessageFor",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/aiErrorResponse.characterization.test.ts::aiErrorResponse guards > carries the FAILED session id of a typed AI error, and only when there is one",
+      "kind": "characterization",
+      "source": "src/server/ai/aiErrorResponse.characterization.test.ts",
+      "title": "aiErrorResponse guards > carries the FAILED session id of a typed AI error, and only when there is one",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > answers with gemini-3.5-flash and claude-sonnet-5 unless the environment names a model",
+      "kind": "characterization",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "title": "AI client model choice > answers with gemini-3.5-flash and claude-sonnet-5 unless the environment names a model",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > falls back to gemini-3.5-flash-lite and claude-haiku-5-5",
+      "kind": "characterization",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "title": "AI client model choice > falls back to gemini-3.5-flash-lite and claude-haiku-5-5",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/client.characterization.test.ts::AI client model choice > tests a key on the light fallback model, not the primary one",
+      "kind": "characterization",
+      "source": "src/server/ai/client.characterization.test.ts",
+      "title": "AI client model choice > tests a key on the light fallback model, not the primary one",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/interview/interviewService.characterization.test.ts::interviewService.answerTurn retry > returns the FAILED writing session of a failed answer and re-analyzes that session on retry",
+      "kind": "characterization",
+      "source": "src/server/domain/interview/interviewService.characterization.test.ts",
+      "title": "interviewService.answerTurn retry > returns the FAILED writing session of a failed answer and re-analyzes that session on retry",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:claude-md:architecture-rules:01",
       "kind": "doc-bullet",
       "source": "CLAUDE.md",

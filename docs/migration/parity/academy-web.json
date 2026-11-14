@@ -3,6 +3,24 @@
   "lane": "academy",
   "rows": [
     {
+      "id": "grifando:characterization:src/lib/responseError.characterization.test.ts::failedSessionIdFrom > answers undefined without a string session id or without a JSON body",
+      "source": "src/lib/responseError.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/lib/responseError.characterization.test.ts::failedSessionIdFrom > reads the FAILED session id from a clone, leaving the body for errorMessageFor",
+      "source": "src/lib/responseError.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-web",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Code review comment > has three marks",
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
