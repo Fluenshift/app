@@ -146,6 +146,7 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | System | File | Pins | Cases |
 | --- | --- | --- | ---: |
 | `pe` | `apps/server/src/evaluation/utf8.characterization.test.ts` | `utf8.ts`, which has no test, and the UTF-8 edge cases of `applyCorrections`: a leading BOM, lone surrogates, code-point boundaries, the two rejection reasons. A port to `TextEncoder` and `TextDecoder` must keep a leading BOM, which a default `TextDecoder` drops. | 13 |
+| `pe` | `apps/server/src/evaluation/protected-content.characterization.test.ts` | Two gaps of `protected-content.test.ts`: lines of JSON that only the JSON block pass protects, because they are not YAML, and the byte offsets of each span, which its cases never compare. | 2 |
 | `grifando` | `src/server/domain/exercises/difficulty.characterization.test.ts` | The scale constants of `difficulty.ts`: the starting ability, the level ratings, the 400-point Elo scale, the K-factor and the 70% success target. The baseline tests only compare results with each other. | 5 |
 | `grifando` | `src/server/domain/exercises/selection.characterization.test.ts` | How `selectReviewSet` splits an odd count: today's mistakes take the larger half. The baseline tests use even counts. | 1 |
 | `grifando` | `src/server/domain/mistakes/mastery.characterization.test.ts` | `isFading` never flags an IMPROVING pattern. The baseline test checks an ACTIVE one. | 1 |
