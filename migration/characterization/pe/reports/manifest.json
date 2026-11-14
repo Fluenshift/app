@@ -3,7 +3,7 @@
   "repository": "Fluenshift/prompt-evolution",
   "tag": "parity-baseline",
   "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
-  "ranAt": "2026-11-13T13:23:49.401Z",
+  "ranAt": "2026-11-14T16:20:30.063Z",
   "tools": [
     {
       "name": "bun",
@@ -22,6 +22,7 @@
   ],
   "files": [
     "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+    "apps/server/src/evaluation/protected-content.characterization.test.ts",
     "apps/server/src/evaluation/utf8.characterization.test.ts"
   ],
   "suites": [
@@ -33,6 +34,7 @@
         "bun",
         "test",
         "src/evaluation/assessment-localization.characterization.test.ts",
+        "src/evaluation/protected-content.characterization.test.ts",
         "src/evaluation/utf8.characterization.test.ts",
         "--reporter=junit",
         "--reporter-outfile=server.junit.xml"
