@@ -9,7 +9,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > protects lines of JSON that are not YAML",
@@ -18,7 +20,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content guards > protects lines of JSON that are not YAML"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
@@ -329,7 +333,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > does not mistake missing sentence spaces for dotted identifiers"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > does not mistake slash-separated prose for a path executable",
@@ -338,7 +344,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > does not mistake slash-separated prose for a path executable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors fenced code nested in a Markdown blockquote",
@@ -347,7 +355,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > honors fenced code nested in a Markdown blockquote"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors matching multi-backtick inline-code delimiters",
@@ -356,7 +366,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > honors matching multi-backtick inline-code delimiters"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors variable-length Markdown fences",
@@ -365,7 +377,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > honors variable-length Markdown fences"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > keeps internal YAML comments and blank lines inside the protected block",
@@ -374,7 +388,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > keeps internal YAML comments and blank lines inside the protected block"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > keeps natural labeled prose and ambiguous equals prose evaluable",
@@ -383,7 +399,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > keeps natural labeled prose and ambiguous equals prose evaluable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > leaves sentence punctuation after URLs and Windows paths evaluable",
@@ -392,7 +410,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > leaves sentence punctuation after URLs and Windows paths evaluable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects YAML, TOML, and XML structured data",
@@ -401,7 +421,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects YAML, TOML, and XML structured data"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects a complete balanced nested JSON block",
@@ -410,7 +432,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects a complete balanced nested JSON block"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects commands and structured data copied inside quotes",
@@ -419,7 +443,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects commands and structured data copied inside quotes"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects explicit-root, indentless, flow, and block-scalar YAML",
@@ -428,7 +454,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects explicit-root, indentless, flow, and block-scalar YAML"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects extensionless paths beneath known project roots",
@@ -437,7 +465,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects extensionless paths beneath known project roots"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects nested YAML containing sequence entries",
@@ -446,7 +476,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects nested YAML containing sequence entries"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects opaque UUID and ULID identifiers",
@@ -455,7 +487,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects opaque UUID and ULID identifiers"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects root YAML flow collections without hiding bracketed prose",
@@ -464,7 +498,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects root YAML flow collections without hiding bracketed prose"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects shell builtins and path executables as complete command lines",
@@ -473,7 +509,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects shell builtins and path executables as complete command lines"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects space-timestamp, syslog, and uncaught-error log lines",
@@ -482,7 +520,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects space-timestamp, syslog, and uncaught-error log lines"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > applies non-overlapping corrections using UTF-8 byte offsets",
