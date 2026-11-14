@@ -3,7 +3,7 @@
   "repository": "Fluenshift/prompt-evolution",
   "tag": "parity-baseline",
   "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
-  "ranAt": "2026-11-14T20:15:18.219Z",
+  "ranAt": "2026-11-14T21:12:47.727Z",
   "tools": [
     {
       "name": "bun",
@@ -28,7 +28,8 @@
     "apps/server/src/evaluation/protected-content.characterization.test.ts",
     "apps/server/src/evaluation/utf8.characterization.test.ts",
     "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
-    "apps/server/src/progress/progress-insights.characterization.test.ts"
+    "apps/server/src/progress/progress-insights.characterization.test.ts",
+    "apps/web/src/features/evaluations/http-evaluation-client.characterization.test.ts"
   ],
   "suites": [
     {
@@ -51,6 +52,23 @@
       ],
       "env": {},
       "report": "server.junit.xml",
+      "exitCode": 0
+    },
+    {
+      "id": "web",
+      "cwd": "apps/web",
+      "runner": "vitest-json",
+      "command": [
+        "bun",
+        "run",
+        "test",
+        "src/features/evaluations/http-evaluation-client.characterization.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=web.vitest.json"
+      ],
+      "env": {},
+      "report": "web.vitest.json",
       "exitCode": 0
     }
   ]

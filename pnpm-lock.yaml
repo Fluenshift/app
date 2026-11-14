@@ -386,12 +386,18 @@ importers:
 
   apps/web:
     dependencies:
+      '@fluenshift/contract':
+        specifier: workspace:*
+        version: link:../../packages/contract
       '@fluenshift/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       '@tanstack/react-router':
         specifier: 'catalog:'
         version: 1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      effect:
+        specifier: 'catalog:'
+        version: 4.1.2
       hono:
         specifier: 'catalog:'
         version: 4.13.18
