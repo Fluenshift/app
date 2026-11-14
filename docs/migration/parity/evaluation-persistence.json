@@ -3,6 +3,42 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > answers a missing model configuration as configuration-missing, not retryable",
+      "source": "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses a Finding inside model-identified non-English text",
+      "source": "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses a whitespace-only Writing Sample before calling the model",
+      "source": "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses an assessment with a property the schema does not declare",
+      "source": "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
+      "class": "B",
+      "slice": "evaluation-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > evidences Finding Rate and the average score with every retained Evaluation, even one without Findings",
       "source": "apps/server/src/progress/progress-insights.characterization.test.ts",
       "class": "B",
