@@ -1,4 +1,4 @@
-// Typed stub for the red commit of #16: the ported tests compile and fail on their checks.
+// Ported from Grifando src/server/domain/mistakes/analytics.ts; SPEC.md is Grifando's.
 import type { MistakeCategory } from "@fluenshift/contract";
 
 export interface CategoryCount {
@@ -7,9 +7,18 @@ export interface CategoryCount {
 }
 export type CategoryBreakdownEntry = CategoryCount & { percentage: number };
 
-// One entry no test builds, whatever the input, so no expected breakdown matches.
+// Turns raw per-category counts into a sorted, percentage-labeled breakdown
+// for the Mistake Notebook (SPEC.md §5.3) — deliberately simple, no BI layer.
 export const computeCategoryBreakdown = (
-  _counts: CategoryCount[]
-): CategoryBreakdownEntry[] => [
-  { category: "ARTICLES", count: Number.NaN, percentage: Number.NaN },
-];
+  counts: CategoryCount[]
+): CategoryBreakdownEntry[] => {
+  const total = counts.reduce((sum, entry) => sum + entry.count, 0);
+
+  return counts
+    .map((entry) => ({
+      ...entry,
+      percentage:
+        total === 0 ? 0 : Math.round((entry.count / total) * 1000) / 10,
+    }))
+    .toSorted((a, b) => b.count - a.count);
+};
