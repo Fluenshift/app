@@ -3,7 +3,7 @@
   "repository": "Fluenshift/prompt-evolution",
   "tag": "parity-baseline",
   "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
-  "ranAt": "2026-11-13T13:06:31.053Z",
+  "ranAt": "2026-11-14T16:24:22.102Z",
   "tools": [
     {
       "name": "bun",
@@ -21,6 +21,9 @@
     "--frozen-lockfile"
   ],
   "files": [
+    "apps/server/src/app.characterization.test.ts",
+    "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+    "apps/server/src/evaluation/protected-content.characterization.test.ts",
     "apps/server/src/evaluation/utf8.characterization.test.ts"
   ],
   "suites": [
@@ -31,6 +34,9 @@
       "command": [
         "bun",
         "test",
+        "src/app.characterization.test.ts",
+        "src/evaluation/assessment-localization.characterization.test.ts",
+        "src/evaluation/protected-content.characterization.test.ts",
         "src/evaluation/utf8.characterization.test.ts",
         "--reporter=junit",
         "--reporter-outfile=server.junit.xml"
