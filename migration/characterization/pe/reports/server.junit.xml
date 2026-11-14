@@ -1,36 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="bun test" tests="19" assertions="45" failures="0" skipped="0" time="0.098937561">
-  <testsuite name="src/evaluation/assessment-localization.characterization.test.ts" file="src/evaluation/assessment-localization.characterization.test.ts" tests="4" assertions="4" failures="0" skipped="0" time="0.006355483">
-    <testsuite name="assessment localization guards" file="src/evaluation/assessment-localization.characterization.test.ts" line="33" tests="4" assertions="4" failures="0" skipped="0" time="0.002">
-      <testcase name="coalesces an adjacent duplicate only for an Other finding" classname="assessment localization guards" time="0.001198" file="src/evaluation/assessment-localization.characterization.test.ts" line="34" assertions="1" />
-      <testcase name="treats overlapping occurrences of the original text as ambiguous" classname="assessment localization guards" time="0.000077" file="src/evaluation/assessment-localization.characterization.test.ts" line="43" assertions="1" />
-      <testcase name="does not coalesce a word that occurs a third time" classname="assessment localization guards" time="0.001394" file="src/evaluation/assessment-localization.characterization.test.ts" line="52" assertions="1" />
-      <testcase name="keeps the start of an edit that begins right after a word" classname="assessment localization guards" time="0.000799" file="src/evaluation/assessment-localization.characterization.test.ts" line="61" assertions="1" />
+<testsuites name="bun test" tests="46" assertions="137" failures="0" skipped="0" time="0.269694643">
+  <testsuite name="src/app.characterization.test.ts" file="src/app.characterization.test.ts" tests="27" assertions="92" failures="0" skipped="0" time="0.251676705">
+    <testsuite name="API errors" file="src/app.characterization.test.ts" line="74" tests="3" assertions="8" failures="0" skipped="0" time="0.031">
+      <testcase name="answers an unknown API route with a not-found code" classname="API errors" time="0.012267" file="src/app.characterization.test.ts" line="75" assertions="4" />
+      <testcase name="answers a body that is not JSON with an invalid-request code" classname="API errors" time="0.013951" file="src/app.characterization.test.ts" line="89" assertions="2" />
+      <testcase name="answers a body without a writingSample with an invalid-request code" classname="API errors" time="0.006425" file="src/app.characterization.test.ts" line="101" assertions="2" />
+    </testsuite>
+    <testsuite name="request guards" file="src/app.characterization.test.ts" line="114" tests="4" assertions="20" failures="0" skipped="0" time="0.007">
+      <testcase name="accepts the three loopback host names" classname="request guards" time="0.002389" file="src/app.characterization.test.ts" line="115" assertions="1" />
+      <testcase name="forbids a remote host, a foreign Host header, a cross-site fetch and a foreign Origin alike" classname="request guards" time="0.001834" file="src/app.characterization.test.ts" line="127" assertions="13" />
+      <testcase name="allows a same-origin fetch that names its own Origin and Host" classname="request guards" time="0.00144" file="src/app.characterization.test.ts" line="159" assertions="1" />
+      <testcase name="allows a declared body of exactly 256 KiB and refuses one byte more" classname="request guards" time="0.003171" file="src/app.characterization.test.ts" line="171" assertions="5" />
+    </testsuite>
+    <testsuite name="Evaluation endpoint" file="src/app.characterization.test.ts" line="201" tests="7" assertions="18" failures="0" skipped="0" time="0.021">
+      <testcase name="answers 503 with a correlation ID when Evaluation is not configured" classname="Evaluation endpoint" time="0.001987" file="src/app.characterization.test.ts" line="202" assertions="3" />
+      <testcase name="returns a created Evaluation whole" classname="Evaluation endpoint" time="0.001802" file="src/app.characterization.test.ts" line="214" assertions="3" />
+      <testcase name="returns no-english as its kind alone" classname="Evaluation endpoint" time="0.001492" file="src/app.characterization.test.ts" line="225" assertions="2" />
+      <testcase name="returns each typed failure as its code, kind and retryable flag" classname="Evaluation endpoint" time="0.013027" file="src/app.characterization.test.ts" line="234" assertions="1" />
+      <testcase name="logs internal-error and answers a safe 500 when evaluation throws" classname="Evaluation endpoint" time="0.001736" file="src/app.characterization.test.ts" line="266" assertions="3" />
+      <testcase name="keeps the outcome when logging throws" classname="Evaluation endpoint" time="0.002116" file="src/app.characterization.test.ts" line="283" assertions="2" />
+      <testcase name="logs the configured model and provider with whole milliseconds" classname="Evaluation endpoint" time="0.002389" file="src/app.characterization.test.ts" line="295" assertions="4" />
+    </testsuite>
+    <testsuite name="History endpoints" file="src/app.characterization.test.ts" line="317" tests="3" assertions="10" failures="0" skipped="0" time="0.006">
+      <testcase name="answers 503 not-ready when History is unavailable" classname="History endpoints" time="0.003253" file="src/app.characterization.test.ts" line="318" assertions="6" />
+      <testcase name="answers a missing Evaluation with a not-found code" classname="History endpoints" time="0.002135" file="src/app.characterization.test.ts" line="339" assertions="2" />
+      <testcase name="answers a deletion with an empty 204" classname="History endpoints" time="0.001975" file="src/app.characterization.test.ts" line="351" assertions="2" />
+    </testsuite>
+    <testsuite name="Progress endpoints" file="src/app.characterization.test.ts" line="365" tests="4" assertions="22" failures="0" skipped="0" time="0.005">
+      <testcase name="answers 503 not-ready when Progress is unavailable" classname="Progress endpoints" time="0.002435" file="src/app.characterization.test.ts" line="376" assertions="4" />
+      <testcase name="accepts exactly the 7-days, 30-days and all periods" classname="Progress endpoints" time="0.001999" file="src/app.characterization.test.ts" line="396" assertions="7" />
+      <testcase name="selects evidence by insight, Error Category or correction" classname="Progress endpoints" time="0.001788" file="src/app.characterization.test.ts" line="429" assertions="1" />
+      <testcase name="refuses an unknown insight, an unknown category, a half correction and a bad period" classname="Progress endpoints" time="0.001515" file="src/app.characterization.test.ts" line="464" assertions="10" />
+    </testsuite>
+    <testsuite name="Setup endpoint" file="src/app.characterization.test.ts" line="488" tests="2" assertions="5" failures="0" skipped="0" time="0.005">
+      <testcase name="answers 503 not-ready without a setup status" classname="Setup endpoint" time="0.00453" file="src/app.characterization.test.ts" line="489" assertions="2" />
+      <testcase name="returns the setup status whole" classname="Setup endpoint" time="0.001274" file="src/app.characterization.test.ts" line="499" assertions="3" />
+    </testsuite>
+    <testsuite name="browser fallback" file="src/app.characterization.test.ts" line="510" tests="4" assertions="9" failures="0" skipped="0" time="0.005">
+      <testcase name="answers an unknown API path with a bare not-found body" classname="browser fallback" time="0.001454" file="src/app.characterization.test.ts" line="513" assertions="2" />
+      <testcase name="answers a missing asset with a plain-text 404" classname="browser fallback" time="0.001834" file="src/app.characterization.test.ts" line="520" assertions="2" />
+      <testcase name="never serves a file from outside the assets directory" classname="browser fallback" time="0.002759" file="src/app.characterization.test.ts" line="529" assertions="3" />
+      <testcase name="answers a request that is not a GET outside the API with a not-found code" classname="browser fallback" time="0.001693" file="src/app.characterization.test.ts" line="545" assertions="2" />
     </testsuite>
   </testsuite>
-  <testsuite name="src/evaluation/utf8.characterization.test.ts" file="src/evaluation/utf8.characterization.test.ts" tests="13" assertions="35" failures="0" skipped="0" time="0.080759627">
+  <testsuite name="src/evaluation/assessment-localization.characterization.test.ts" file="src/evaluation/assessment-localization.characterization.test.ts" tests="4" assertions="4" failures="0" skipped="0" time="0.001962204">
+    <testsuite name="assessment localization guards" file="src/evaluation/assessment-localization.characterization.test.ts" line="33" tests="4" assertions="4" failures="0" skipped="0" time="0">
+      <testcase name="coalesces an adjacent duplicate only for an Other finding" classname="assessment localization guards" time="0.000473" file="src/evaluation/assessment-localization.characterization.test.ts" line="34" assertions="1" />
+      <testcase name="treats overlapping occurrences of the original text as ambiguous" classname="assessment localization guards" time="0.000031" file="src/evaluation/assessment-localization.characterization.test.ts" line="43" assertions="1" />
+      <testcase name="does not coalesce a word that occurs a third time" classname="assessment localization guards" time="0.000271" file="src/evaluation/assessment-localization.characterization.test.ts" line="52" assertions="1" />
+      <testcase name="keeps the start of an edit that begins right after a word" classname="assessment localization guards" time="0.000158" file="src/evaluation/assessment-localization.characterization.test.ts" line="61" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/utf8.characterization.test.ts" file="src/evaluation/utf8.characterization.test.ts" tests="13" assertions="35" failures="0" skipped="0" time="0.002932546">
     <testsuite name="UTF-8 helpers" file="src/evaluation/utf8.characterization.test.ts" line="21" tests="5" assertions="16" failures="0" skipped="0" time="0">
-      <testcase name="accepts every well-formed string, including a BOM and U+FFFD" classname="UTF-8 helpers" time="0.00007" file="src/evaluation/utf8.characterization.test.ts" line="22" assertions="6" />
-      <testcase name="rejects lone surrogates" classname="UTF-8 helpers" time="0.000019" file="src/evaluation/utf8.characterization.test.ts" line="31" assertions="4" />
-      <testcase name="treats the start, the end and every lead byte as a boundary" classname="UTF-8 helpers" time="0.000046" file="src/evaluation/utf8.characterization.test.ts" line="38" assertions="2" />
-      <testcase name="treats the only offset of an empty buffer as a boundary" classname="UTF-8 helpers" time="0.000012" file="src/evaluation/utf8.characterization.test.ts" line="50" assertions="1" />
-      <testcase name="treats offsets outside the buffer or between bytes as no boundary" classname="UTF-8 helpers" time="0.000076" file="src/evaluation/utf8.characterization.test.ts" line="54" assertions="3" />
+      <testcase name="accepts every well-formed string, including a BOM and U+FFFD" classname="UTF-8 helpers" time="0.00006" file="src/evaluation/utf8.characterization.test.ts" line="22" assertions="6" />
+      <testcase name="rejects lone surrogates" classname="UTF-8 helpers" time="0.000018" file="src/evaluation/utf8.characterization.test.ts" line="31" assertions="4" />
+      <testcase name="treats the start, the end and every lead byte as a boundary" classname="UTF-8 helpers" time="0.000038" file="src/evaluation/utf8.characterization.test.ts" line="38" assertions="2" />
+      <testcase name="treats the only offset of an empty buffer as a boundary" classname="UTF-8 helpers" time="0.000011" file="src/evaluation/utf8.characterization.test.ts" line="50" assertions="1" />
+      <testcase name="treats offsets outside the buffer or between bytes as no boundary" classname="UTF-8 helpers" time="0.000057" file="src/evaluation/utf8.characterization.test.ts" line="54" assertions="3" />
     </testsuite>
     <testsuite name="applyCorrections UTF-8 edge cases" file="src/evaluation/utf8.characterization.test.ts" line="63" tests="8" assertions="19" failures="0" skipped="0" time="0.001">
-      <testcase name="returns the sample unchanged without corrections" classname="applyCorrections UTF-8 edge cases" time="0.000801" file="src/evaluation/utf8.characterization.test.ts" line="64" assertions="1" />
-      <testcase name="keeps a leading BOM when a later span is corrected" classname="applyCorrections UTF-8 edge cases" time="0.000121" file="src/evaluation/utf8.characterization.test.ts" line="72" assertions="1" />
-      <testcase name="matches a span whose original text starts with a BOM" classname="applyCorrections UTF-8 edge cases" time="0.00009" file="src/evaluation/utf8.characterization.test.ts" line="82" assertions="1" />
-      <testcase name="applies several corrections whatever their order" classname="applyCorrections UTF-8 edge cases" time="0.000107" file="src/evaluation/utf8.characterization.test.ts" line="97" assertions="1" />
-      <testcase name="allows adjacent spans" classname="applyCorrections UTF-8 edge cases" time="0.00008" file="src/evaluation/utf8.characterization.test.ts" line="108" assertions="1" />
-      <testcase name="gives one reason for spans outside the sample, empty, overlapping or split" classname="applyCorrections UTF-8 edge cases" time="0.001952" file="src/evaluation/utf8.characterization.test.ts" line="119" assertions="11" />
-      <testcase name="gives the same reason for an ill-formed correction" classname="applyCorrections UTF-8 edge cases" time="0.000121" file="src/evaluation/utf8.characterization.test.ts" line="145" assertions="1" />
-      <testcase name="gives another reason when the span&apos;s bytes differ from its original text" classname="applyCorrections UTF-8 edge cases" time="0.000104" file="src/evaluation/utf8.characterization.test.ts" line="153" assertions="2" />
+      <testcase name="returns the sample unchanged without corrections" classname="applyCorrections UTF-8 edge cases" time="0.000397" file="src/evaluation/utf8.characterization.test.ts" line="64" assertions="1" />
+      <testcase name="keeps a leading BOM when a later span is corrected" classname="applyCorrections UTF-8 edge cases" time="0.0001" file="src/evaluation/utf8.characterization.test.ts" line="72" assertions="1" />
+      <testcase name="matches a span whose original text starts with a BOM" classname="applyCorrections UTF-8 edge cases" time="0.000072" file="src/evaluation/utf8.characterization.test.ts" line="82" assertions="1" />
+      <testcase name="applies several corrections whatever their order" classname="applyCorrections UTF-8 edge cases" time="0.000099" file="src/evaluation/utf8.characterization.test.ts" line="97" assertions="1" />
+      <testcase name="allows adjacent spans" classname="applyCorrections UTF-8 edge cases" time="0.000105" file="src/evaluation/utf8.characterization.test.ts" line="108" assertions="1" />
+      <testcase name="gives one reason for spans outside the sample, empty, overlapping or split" classname="applyCorrections UTF-8 edge cases" time="0.001213" file="src/evaluation/utf8.characterization.test.ts" line="119" assertions="11" />
+      <testcase name="gives the same reason for an ill-formed correction" classname="applyCorrections UTF-8 edge cases" time="0.000123" file="src/evaluation/utf8.characterization.test.ts" line="145" assertions="1" />
+      <testcase name="gives another reason when the span&apos;s bytes differ from its original text" classname="applyCorrections UTF-8 edge cases" time="0.000105" file="src/evaluation/utf8.characterization.test.ts" line="153" assertions="2" />
     </testsuite>
   </testsuite>
-  <testsuite name="src/evaluation/protected-content.characterization.test.ts" file="src/evaluation/protected-content.characterization.test.ts" tests="2" assertions="6" failures="0" skipped="0" time="0.007403355">
-    <testsuite name="Protected Technical Content guards" file="src/evaluation/protected-content.characterization.test.ts" line="12" tests="2" assertions="6" failures="0" skipped="0" time="0.004">
-      <testcase name="protects lines of JSON that are not YAML" classname="Protected Technical Content guards" time="0.003978" file="src/evaluation/protected-content.characterization.test.ts" line="13" assertions="3" />
-      <testcase name="measures each span in UTF-8 bytes of the whole Writing Sample" classname="Protected Technical Content guards" time="0.001179" file="src/evaluation/protected-content.characterization.test.ts" line="19" assertions="3" />
+  <testsuite name="src/evaluation/protected-content.characterization.test.ts" file="src/evaluation/protected-content.characterization.test.ts" tests="2" assertions="6" failures="0" skipped="0" time="0.007949579">
+    <testsuite name="Protected Technical Content guards" file="src/evaluation/protected-content.characterization.test.ts" line="12" tests="2" assertions="6" failures="0" skipped="0" time="0.005">
+      <testcase name="protects lines of JSON that are not YAML" classname="Protected Technical Content guards" time="0.004129" file="src/evaluation/protected-content.characterization.test.ts" line="13" assertions="3" />
+      <testcase name="measures each span in UTF-8 bytes of the whole Writing Sample" classname="Protected Technical Content guards" time="0.001703" file="src/evaluation/protected-content.characterization.test.ts" line="19" assertions="3" />
     </testsuite>
   </testsuite>
 </testsuites>
