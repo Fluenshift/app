@@ -20,7 +20,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/http-evaluation-client.test.ts::HTTP Evaluation client > deletes exactly one encoded Evaluation identity",
@@ -357,7 +359,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.new.test.tsx::New Evaluation compatibility route > primary navigation exposes permanent product surfaces only"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.new.test.tsx::New Evaluation compatibility route > redirects old creation links to the Writing Desk",
@@ -366,7 +370,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.new.test.tsx::New Evaluation compatibility route > redirects old creation links to the Writing Desk"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a network failure gives connection guidance without showing private causes",
@@ -609,7 +615,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-setup.test.tsx::Setup & privacy > keeps setup to essential provider, privacy, data, and access facts"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-setup.test.tsx::Setup & privacy > reports when the provider is ready",
@@ -618,7 +626,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-setup.test.tsx::Setup & privacy > reports when the provider is ready"
+      ]
     }
   ]
 }
