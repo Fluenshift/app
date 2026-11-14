@@ -1,6 +1,6 @@
 # 0018. Start Grifando's hosted data fresh; import PE's local history
 
-- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
+- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
 - Phase 7 step 5. No ledger row waits on it; it fixes the cutover plan early.
 
 ## Context

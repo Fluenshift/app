@@ -1,6 +1,6 @@
 # 0016. Offer practice; never impose it
 
-- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
+- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
 - Open item from PRE_MIGRATION. Ledger rows: `decision: "adr:0016"`.
 
 ## Context
