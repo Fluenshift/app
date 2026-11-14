@@ -9,7 +9,9 @@
       "slice": "platform",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "packages/env/src/server.test.ts::ServerConfig > applies defaults when only DATA_DIRECTORY is set"
+      ]
     },
     {
       "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > fails when DATABASE_URL is missing",
@@ -18,16 +20,21 @@
       "slice": "platform",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "packages/env/src/server.test.ts::ServerConfig > fails when DATA_DIRECTORY is missing in the local profile",
+        "packages/env/src/server.test.ts::ServerConfig > fails when DATABASE_URL is missing in the hosted profile"
+      ]
     },
     {
-      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > reads explicit values",
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > reads explicit values for the hosted profile",
       "source": "packages/env/src/server.test.ts",
       "class": "A",
       "slice": "platform",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "packages/env/src/server.test.ts::ServerConfig > reads explicit values for the hosted profile"
+      ]
     },
     {
       "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > rejects a NODE_ENV outside the allowed set",
@@ -36,7 +43,9 @@
       "slice": "platform",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "packages/env/src/server.test.ts::ServerConfig > rejects a NODE_ENV outside the allowed set"
+      ]
     }
   ]
 }
