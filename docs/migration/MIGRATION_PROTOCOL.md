@@ -678,7 +678,7 @@ These add to PRE_MIGRATION § Rules for the new repo's AGENTS.md / CLAUDE.md.
 | `scripts/migration/baselines.ts` | Clones each source repo at its pin, outside the working tree, and fails if the remote tag no longer resolves to the pin. |
 | `scripts/migration/{inventory,parity-check,parity-audit,red-green,verdict-check}.ts` | Inventory generation and gates G8–G10 and G12. |
 | `scripts/check-gates.ts`, `gates/baseline.json` | Gate integrity (G11): configuration and severity baseline, suppression counts. |
-| `scripts/docker-smoke.ts` | G6 per deploy profile, ported from PE and extended with Grifando's `docs/deploy.md` §5 checks. |
+| `smoke/` | G6 per deploy profile: the Docker smoke as a Vitest suite, so each check is a test the ledger can name. Ported from PE `scripts/docker-smoke.ts` and extended with Grifando's `docs/deploy.md` §5 checks. |
 | GitHub Issues in the new repo | Work units and decision requests. State is in labels (Work unit cycle); verdicts are PR comments; a closed issue is done. |
 | `docs/migration/SPEND.md` | Paid calibration budget and spend log, carried over from PE `.scratch/testing-spend.md`. |
 

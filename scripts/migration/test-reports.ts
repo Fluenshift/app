@@ -1,9 +1,12 @@
-// Runs every workspace's Vitest suite with a JSON reporter, for parity-check.ts.
+// Runs every Vitest suite with a JSON reporter, for parity-check.ts.
 //
 //   node scripts/migration/test-reports.ts <dir>
 //
-// Writes <dir>/<workspace>.json for each workspace whose `test` script runs Vitest, and exits
-// 1 if any suite fails. The reports keep absolute paths; parity-check makes them relative.
+// A suite is a workspace whose `test` or `smoke` script runs Vitest. The `smoke` workspace holds
+// the Docker smoke, which builds and starts the image of the local profile, so this needs
+// Docker. Workspaces are those pnpm-workspace.yaml lists. Writes <dir>/<workspace>.json for each
+// suite and exits 1 if any suite fails. The reports keep absolute paths; parity-check makes
+// them relative.
 
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync } from "node:fs";
@@ -11,22 +14,42 @@ import path from "node:path";
 
 import { BaselineError, repoRoot } from "./baselines.ts";
 
-export function vitestWorkspaces(root: string): string[] {
-  return ["apps", "packages"].flatMap((group) => {
-    const dir = path.join(root, group);
-    if (!existsSync(dir)) return [];
-    return readdirSync(dir)
-      .map((name) => path.join(dir, name))
-      .filter((workspace) => {
-        const manifest = path.join(workspace, "package.json");
-        if (!existsSync(manifest)) return false;
-        const { scripts } = JSON.parse(readFileSync(manifest, "utf8")) as {
-          readonly scripts?: Readonly<Record<string, string>>;
-        };
-        return scripts?.["test"]?.startsWith("vitest") ?? false;
-      })
-      .toSorted();
+export const SUITE_SCRIPTS = ["test", "smoke"];
+
+// The directories of the `packages` list of pnpm-workspace.yaml: `dir/*` names every directory
+// in dir, anything else names one directory.
+export function workspaceDirectories(root: string): string[] {
+  const lines = readFileSync(path.join(root, "pnpm-workspace.yaml"), "utf8")
+    .split("\n")
+    .map((line) => line.trimEnd());
+  const patterns: string[] = [];
+  for (const line of lines.slice(lines.indexOf("packages:") + 1)) {
+    const entry = /^\s+-\s+["']?([^"'\s]+)["']?$/.exec(line);
+    if (entry === null) break;
+    patterns.push(entry[1] ?? "");
+  }
+  return patterns.flatMap((pattern) => {
+    if (!pattern.endsWith("/*")) return [path.join(root, pattern)];
+    const dir = path.join(root, pattern.slice(0, -2));
+    return existsSync(dir)
+      ? readdirSync(dir).map((name) => path.join(dir, name))
+      : [];
   });
+}
+
+export function vitestWorkspaces(root: string): string[] {
+  return workspaceDirectories(root)
+    .filter((workspace) => {
+      const manifest = path.join(workspace, "package.json");
+      if (!existsSync(manifest)) return false;
+      const { scripts } = JSON.parse(readFileSync(manifest, "utf8")) as {
+        readonly scripts?: Readonly<Record<string, string>>;
+      };
+      return SUITE_SCRIPTS.some(
+        (name) => scripts?.[name]?.startsWith("vitest") ?? false
+      );
+    })
+    .toSorted();
 }
 
 function main(argv: readonly string[]): number {

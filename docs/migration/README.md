@@ -130,6 +130,10 @@ dispositions, the ADR index and the Vitest and Playwright reports:
 mise exec node@26.13.0 pnpm@12.18.0 -- pnpm parity   # run every suite with JSON reports, then check
 ```
 
+Every suite means each workspace whose `test` or `smoke` script runs Vitest. The `smoke` workspace
+is the Docker smoke (gate G6), which builds and starts the image of the local profile, so
+`pnpm parity` needs Docker.
+
 It fails when an inventory row is missing from the ledger or present twice, when a row is
 malformed or not in the inventory, when a `port-changed`, `superseded` or `drop` row lacks an
 accepted ADR, when a target is missing, failing, or skipped outside `pending-decision`, and

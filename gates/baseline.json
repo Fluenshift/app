@@ -81,6 +81,15 @@
       "webServer: {",
       "});",
       "},"
+    ],
+    "smoke/vitest.config.ts": [
+      "export default defineConfig({",
+      "hookTimeout: 5 * 60_000,",
+      "import { defineConfig } from \"vitest/config\";",
+      "test: {",
+      "testTimeout: 15 * 60_000,",
+      "});",
+      "},"
     ]
   },
   "lint": {
@@ -1209,6 +1218,7 @@
       "check:docs": "node scripts/check-doc-commands.ts",
       "check:effect": "turbo run check:effect",
       "check:gates": "node scripts/check-gates.ts",
+      "docker:smoke": "pnpm --filter smoke run smoke",
       "format": "oxfmt --check .",
       "lint": "oxlint --deny-warnings",
       "lint:effect": "oxlint --deny-warnings --config oxlint.effect.config.ts apps/server packages/contract packages/core packages/db packages/env",
@@ -1245,6 +1255,10 @@
     "packages/ui/package.json": {
       "check-types": "tsc --noEmit -p tsconfig.json",
       "test": "vitest run --passWithNoTests"
+    },
+    "smoke/package.json": {
+      "check-types": "tsc --noEmit -p tsconfig.json",
+      "smoke": "vitest run"
     }
   },
   "suppressions": {},
@@ -1801,6 +1815,64 @@
         "useUnknownInCatchVariables": true,
         "verbatimModuleSyntax": true
       }
+    },
+    "smoke/tsconfig.json": {
+      "effect": {
+        "allowedUnstableApis": [
+          "@effect/platform-node/NodeRuntime#runMain",
+          "@effect/vitest"
+        ],
+        "severities": {
+          "duplicatePackage": "error",
+          "effectFnIife": "error",
+          "effectGenUsesAdapter": "error",
+          "effectInFailure": "error",
+          "effectInVoidSuccess": "error",
+          "experimentalApiUsage": "error",
+          "genericEffectServices": "error",
+          "globalErrorInEffectCatch": "error",
+          "globalErrorInEffectFailure": "error",
+          "layerMergeAllWithDependencies": "error",
+          "lazyPromiseInEffectSync": "error",
+          "multipleEffectProvide": "error",
+          "obsoleteMatchImport": "error",
+          "obsoleteSchemaImport": "error",
+          "outdatedApi": "error",
+          "promiseInEffectSuccess": "error",
+          "schemaClassObjectLiteral": "error",
+          "scopeInLayerEffect": "error",
+          "unknownInEffectCatch": "error",
+          "unstableApiUsage": "error"
+        }
+      },
+      "options": {
+        "allowUnreachableCode": null,
+        "allowUnusedLabels": null,
+        "alwaysStrict": true,
+        "erasableSyntaxOnly": null,
+        "exactOptionalPropertyTypes": null,
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noPropertyAccessFromIndexSignature": null,
+        "noUncheckedIndexedAccess": true,
+        "noUncheckedSideEffectImports": null,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "strictBindCallApply": true,
+        "strictBuiltinIteratorReturn": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "useUnknownInCatchVariables": true,
+        "verbatimModuleSyntax": true
+      }
     }
   },
   "workflows": {
@@ -1822,6 +1894,7 @@
         "pnpm check:docs",
         "pnpm check:effect",
         "pnpm check:gates",
+        "pnpm docker:smoke",
         "pnpm exec playwright install --with-deps chromium",
         "pnpm format",
         "pnpm install --frozen-lockfile",
