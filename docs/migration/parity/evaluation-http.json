@@ -27,7 +27,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::API errors > answers an unknown API route with a not-found code"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::Evaluation endpoint > answers 503 with a correlation ID when Evaluation is not configured",
@@ -180,7 +182,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::browser fallback > answers a missing asset with a plain-text 404"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers a request that is not a GET outside the API with a not-found code",
@@ -189,7 +193,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::browser fallback > answers a request that is not a GET outside the API with a not-found code"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > answers an unknown API path with a bare not-found body",
@@ -198,7 +204,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::browser fallback > answers an unknown API path with a bare not-found body"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::browser fallback > never serves a file from outside the assets directory",
@@ -207,7 +215,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::browser fallback > never serves a file from outside the assets directory"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > accepts the three loopback host names",
@@ -216,7 +226,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::request guards > accepts the three loopback host names"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > allows a declared body of exactly 256 KiB and refuses one byte more",
@@ -234,7 +246,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::request guards > allows a same-origin fetch that names its own Origin and Host"
+      ]
     },
     {
       "id": "pe:characterization:apps/server/src/app.characterization.test.ts::request guards > forbids a remote host, a foreign Host header, a cross-site fetch and a foreign Origin alike",
@@ -261,7 +275,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::production HTTP application > falls back to uncached index.html for direct browser routes"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > keeps API routes ahead of browser fallback",
@@ -270,7 +286,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::production HTTP application > keeps API routes ahead of browser fallback"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > keeps the real HTTP connection open beyond the provider request deadline",
@@ -315,7 +333,10 @@
       "slice": "evaluation-http",
       "disposition": "port-changed",
       "decision": "adr:0006",
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::production HTTP application > rejects declared oversized request bodies before evaluation in the local profile",
+        "apps/server/src/app.test.ts::production HTTP application > rejects declared oversized request bodies before evaluation in the hosted profile"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > rejects malformed JSON without echoing private input",
@@ -333,7 +354,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::production HTTP application > rejects remote hosts and cross-origin writes before evaluating"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > serves retained History, Progress, deletion, and setup through same-origin API",
@@ -351,7 +374,9 @@
       "slice": "evaluation-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::production HTTP application > serves static assets with immutable caching"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/app.test.ts::production HTTP application > submits one exact Writing Sample through the Evaluation boundary",
