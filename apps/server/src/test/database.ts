@@ -1,6 +1,6 @@
 // A database for the persistence tests: PGlite in a fresh temporary directory with the product
-// migrations applied, acting for the local Learner. Ported from PE apps/server/src/test/database.ts,
-// whose SQLite file it replaces.
+// migrations applied, acting for the local Learner under the configuration of the local
+// profile. Ported from PE apps/server/src/test/database.ts, whose SQLite file it replaces.
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -30,8 +30,9 @@ export const makeTemporaryDatabase = () =>
     );
     return {
       directory,
-      layer: Layer.merge(
+      layer: Layer.mergeAll(
         Database.layer.pipe(Layer.provide(config)),
+        config,
         CurrentLearner.local
       ),
     };
