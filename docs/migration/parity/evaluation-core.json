@@ -3,6 +3,72 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > coalesces an adjacent duplicate only for an Other finding",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::assessment localization guards > coalesces an adjacent duplicate only for an Other finding"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > does not coalesce a word that occurs a third time",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::assessment localization guards > does not coalesce a word that occurs a third time"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > keeps the start of an edit that begins right after a word",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::assessment localization guards > keeps the start of an edit that begins right after a word"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > treats overlapping occurrences of the original text as ambiguous",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::assessment localization guards > treats overlapping occurrences of the original text as ambiguous"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample",
+      "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > protects lines of JSON that are not YAML",
+      "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content guards > protects lines of JSON that are not YAML"
+      ]
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/utf8.characterization.test.ts::UTF-8 helpers > accepts every well-formed string, including a BOM and U+FFFD",
       "source": "apps/server/src/evaluation/utf8.characterization.test.ts",
       "class": "A",
@@ -152,7 +218,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > canonicalizes equivalent wider edits without changing corrected bytes"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not coalesce partial hyphenated, apostrophized, or combining-mark words",
@@ -161,7 +229,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > does not coalesce partial hyphenated, apostrophized, or combining-mark words"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text",
@@ -170,7 +240,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > does not repair separate duplicates or make a no-op valid",
@@ -179,7 +251,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > does not repair separate duplicates or make a no-op valid"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8",
@@ -188,7 +262,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > never coalesces part of an alphanumeric or underscore token",
@@ -197,7 +273,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > never coalesces part of an alphanumeric or underscore token"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate",
@@ -206,7 +284,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > requires both complete-word occurrences to form the adjacent pair",
@@ -215,7 +295,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > requires both complete-word occurrences to form the adjacent pair"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/assessment-localization.test.ts::deterministic assessment localization > safely localizes one unique adjacent duplicate as a whole phrase",
@@ -224,7 +306,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > safely localizes one unique adjacent duplicate as a whole phrase"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/evaluation-model.test.ts::Evaluation Model contract > accepts every fixed Rubric Version 1 category and severity",
@@ -311,7 +395,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > does not mistake missing sentence spaces for dotted identifiers"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > does not mistake slash-separated prose for a path executable",
@@ -320,7 +406,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > does not mistake slash-separated prose for a path executable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors fenced code nested in a Markdown blockquote",
@@ -329,7 +417,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > honors fenced code nested in a Markdown blockquote"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors matching multi-backtick inline-code delimiters",
@@ -338,7 +428,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > honors matching multi-backtick inline-code delimiters"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > honors variable-length Markdown fences",
@@ -347,7 +439,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > honors variable-length Markdown fences"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > keeps internal YAML comments and blank lines inside the protected block",
@@ -356,7 +450,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > keeps internal YAML comments and blank lines inside the protected block"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > keeps natural labeled prose and ambiguous equals prose evaluable",
@@ -365,7 +461,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > keeps natural labeled prose and ambiguous equals prose evaluable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > leaves sentence punctuation after URLs and Windows paths evaluable",
@@ -374,7 +472,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > leaves sentence punctuation after URLs and Windows paths evaluable"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects YAML, TOML, and XML structured data",
@@ -383,7 +483,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects YAML, TOML, and XML structured data"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects a complete balanced nested JSON block",
@@ -392,7 +494,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects a complete balanced nested JSON block"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects commands and structured data copied inside quotes",
@@ -401,7 +505,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects commands and structured data copied inside quotes"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects explicit-root, indentless, flow, and block-scalar YAML",
@@ -410,7 +516,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects explicit-root, indentless, flow, and block-scalar YAML"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects extensionless paths beneath known project roots",
@@ -419,7 +527,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects extensionless paths beneath known project roots"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects nested YAML containing sequence entries",
@@ -428,7 +538,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects nested YAML containing sequence entries"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects opaque UUID and ULID identifiers",
@@ -437,7 +549,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects opaque UUID and ULID identifiers"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects root YAML flow collections without hiding bracketed prose",
@@ -446,7 +560,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects root YAML flow collections without hiding bracketed prose"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects shell builtins and path executables as complete command lines",
@@ -455,7 +571,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects shell builtins and path executables as complete command lines"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/protected-content.test.ts::Protected Technical Content > protects space-timestamp, syslog, and uncaught-error log lines",
@@ -464,7 +582,9 @@
       "slice": "evaluation-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/protected-content.test.ts::Protected Technical Content > protects space-timestamp, syslog, and uncaught-error log lines"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/evaluation/rubric-v1.test.ts::Rubric Version 1 > applies non-overlapping corrections using UTF-8 byte offsets",
