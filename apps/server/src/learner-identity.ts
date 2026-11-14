@@ -20,3 +20,18 @@ export class LearnerIdentity extends Context.Service<
     })
   );
 }
+
+/**
+ * The Learner the current request acts for. Every History and Progress query is scoped by it;
+ * the edge provides it from `LearnerIdentity`.
+ */
+export class CurrentLearner extends Context.Service<
+  CurrentLearner,
+  { readonly id: LearnerId }
+>()("server/CurrentLearner") {
+  /** The local profile acts for its one implicit Learner. */
+  static readonly local = Layer.succeed(
+    CurrentLearner,
+    CurrentLearner.of({ id: LOCAL_LEARNER_ID })
+  );
+}
