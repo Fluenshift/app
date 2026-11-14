@@ -185,6 +185,22 @@ baseline clones (`baselines.ts sync`); from a worktree, point `--root` at them:
 mise exec node@26.13.0 -- node scripts/migration/parity-audit.ts --root ../app-baselines
 ```
 
+`scripts/gate-selftest.ts` proves that each gate fails when it should (#20). In a disposable
+worktree beside this repository it applies one broken change per gate and checks that the
+intended gate rejects it while a control gate still accepts it: a focused, a skipped and a
+`todo` test, a `zod` import and a Node built-in in `packages/core`, `process.env` outside
+`packages/env` (G2, the built-in also G1); a floating Effect (G1); a lowered oxlint severity and
+a lowered Effect diagnostic severity (G11); a ledger row pointing at a missing test and a `port`
+target with a changed title (G9); a weakened matcher (G10); a first commit whose tests already
+pass (G8); a verdict for an older head and one from the implementing vendor (G12). CI runs it
+in its own job. Two cases wait for the code they test: user text in a query string (G7) and an
+unmapped tagged error at the edge (G11) arrive with the Hono routes and the edge helper of
+Phase 4d.
+
+```bash
+mise exec node@26.13.0 pnpm@12.18.0 -- node scripts/gate-selftest.ts --root ../app-baselines
+```
+
 ## Issue labels
 
 Work units and decision requests are GitHub Issues in this repository. State lives in labels,
