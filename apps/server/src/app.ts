@@ -3,10 +3,14 @@ import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 
+import {
+  ErrorCategory,
+  ProgressEvidenceRequest,
+  ProgressPeriod,
+} from "@fluenshift/contract";
 import type {
   HealthResponse,
   ProgressEvidenceSelection,
-  ProgressPeriod,
   SetupStatus,
 } from "@fluenshift/contract";
 import {
@@ -194,6 +198,43 @@ const INVALID_REQUEST = {
 
 const notReady = (error: string) => ({ code: "not-ready", error });
 
+const PROGRESS_NOT_READY = notReady("Progress is not available");
+
+const INVALID_PERIOD = {
+  code: "invalid-period",
+  error: "Progress period is invalid",
+};
+
+const INVALID_SELECTION = {
+  code: "invalid-selection",
+  error: "Progress selection is invalid",
+};
+
+const decodePeriod = Schema.decodeUnknownOption(ProgressPeriod);
+const decodeCategory = Schema.decodeUnknownOption(ErrorCategory);
+const decodeEvidenceRequest = Schema.decodeUnknownOption(
+  ProgressEvidenceRequest
+);
+
+/**
+ * The selection a query string may carry: an insight or an Error Category, never a Correction,
+ * whose text the Learner wrote and which travels in a request body instead (docs/adr/0008).
+ */
+const selectionInQuery = (
+  insight: string | undefined,
+  category: string | undefined
+): Option.Option<ProgressEvidenceSelection> => {
+  if (insight === "finding-rate" || insight === "average-score") {
+    return Option.some({ kind: insight });
+  }
+  if (insight === "category") {
+    return decodeCategory(category).pipe(
+      Option.map((value) => ({ category: value, kind: "category" as const }))
+    );
+  }
+  return Option.none();
+};
+
 const FAILURE_STATUS = {
   "configuration-missing": 503,
   "invalid-assessment": 502,
@@ -260,6 +301,19 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       )
     );
   const failedHistory = { DatabaseError: () => INTERNAL_ERROR };
+
+  // Both evidence routes answer here once they have read a selection, or failed to.
+  const evidence = (
+    context: HonoContext,
+    getProgressEvidence: NonNullable<AppBoundaries<R>["getProgressEvidence"]>,
+    request: Option.Option<ProgressEvidenceRequest>
+  ): Response | Promise<Response> =>
+    Option.isNone(request)
+      ? context.json(INVALID_SELECTION, 400)
+      : edge(forLearner(context.req.raw, getProgressEvidence(request.value)), {
+          errors: failedHistory,
+          success: (found) => Response.json(found),
+        });
 
   // PE's route checked the body before its handler ran, so a malformed request is a 400 even
   // when Evaluation is not configured; every answer of the handler names its correlation ID.
@@ -379,6 +433,55 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         );
       }
     )
+    .get("/api/progress", (context): Response | Promise<Response> => {
+      const { getProgressSummary } = options;
+      if (getProgressSummary === undefined) {
+        return context.json(PROGRESS_NOT_READY, 503);
+      }
+      const period = decodePeriod(context.req.query("period"));
+      if (Option.isNone(period)) {
+        return context.json(INVALID_PERIOD, 400);
+      }
+      return edge(
+        forLearner(
+          context.req.raw,
+          getProgressSummary({ period: period.value })
+        ),
+        {
+          errors: failedHistory,
+          success: (summary) => Response.json(summary),
+        }
+      );
+    })
+    .get("/api/progress/evidence", (context): Response | Promise<Response> => {
+      const { getProgressEvidence } = options;
+      if (getProgressEvidence === undefined) {
+        return context.json(PROGRESS_NOT_READY, 503);
+      }
+      const period = decodePeriod(context.req.query("period"));
+      const selection = selectionInQuery(
+        context.req.query("insight"),
+        context.req.query("category")
+      );
+      return evidence(
+        context,
+        getProgressEvidence,
+        Option.isSome(period) && Option.isSome(selection)
+          ? Option.some({ period: period.value, selection: selection.value })
+          : Option.none()
+      );
+    })
+    .post("/api/progress/evidence", (context): Response | Promise<Response> => {
+      const { getProgressEvidence } = options;
+      if (getProgressEvidence === undefined) {
+        return context.json(PROGRESS_NOT_READY, 503);
+      }
+      return context.req.json<unknown>().then(
+        (body) =>
+          evidence(context, getProgressEvidence, decodeEvidenceRequest(body)),
+        () => context.json(INVALID_SELECTION, 400)
+      );
+    })
     .get("/api/setup", (context) =>
       options.setup === undefined
         ? context.json(notReady("Setup status is not available"), 503)

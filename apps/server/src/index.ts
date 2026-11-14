@@ -16,6 +16,10 @@ import {
   listEvaluations,
 } from "./history/learning-history";
 import { LearnerIdentity } from "./learner-identity";
+import {
+  getProgressEvidence,
+  getProgressSummary,
+} from "./progress/progress-insights";
 
 const HttpServer = Layer.effectDiscard(
   Effect.gen(function* () {
@@ -41,6 +45,8 @@ const HttpServer = Layer.effectDiscard(
       evaluateWriting: (writingSample) =>
         evaluateWritingForEndpoint(writingSample, new Date()),
       getEvaluation,
+      getProgressEvidence,
+      getProgressSummary,
       limits: config.limits,
       listEvaluations: () => listEvaluations(),
       // The event carries codes, timings and the model, never the Writing Sample.
