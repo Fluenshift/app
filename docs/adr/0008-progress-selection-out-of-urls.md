@@ -1,6 +1,6 @@
 # 0008. Keep the Progress drill-down selection out of URLs
 
-- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
+- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
 - Seam: Phase 1 (g). Ledger rows: `decision: "adr:0008"`.
 
 ## Context

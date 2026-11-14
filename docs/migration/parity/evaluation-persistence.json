@@ -196,7 +196,7 @@
       "source": "apps/server/src/evaluation/writing-evaluation.test.ts",
       "class": "B",
       "slice": "evaluation-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0006",
       "targets": []
     },
@@ -340,7 +340,7 @@
       "source": "packages/db/src/index.test.ts",
       "class": "B",
       "slice": "evaluation-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0017",
       "targets": []
     },

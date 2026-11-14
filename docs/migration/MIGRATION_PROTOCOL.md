@@ -143,20 +143,13 @@ Verdicts:
 
 - **Owners** (Jhefferson and Levy) make product decisions (G14) and trigger paid
   calibration. They never review code.
-- **Coordinator**: one session, from either vendor. Generates the inventory, creates and
-  assigns unit issues, owns shared files, adds verified PRs to the merge queue, maintains the
-  ledger. Implements no feature units; the other vendor verifies its PRs too.
-- **Implementers**: one unit at a time each, in their own git worktree or sandbox clone, on
-  a `wu/<issue>-<slug>` branch.
-- **Verifiers**: started on demand, always from the vendor that did not implement the unit.
-
-Default pairing (swappable):
-
-- Claude Code implements the Evaluation lane (PE-derived: PE units of Phase 3, and 4b–4f)
-  and verifies the Academy lane.
-- Codex implements the Academy lane (Grifando-derived: Grifando units of Phase 3, Phases 5
-  and 6) and verifies the Evaluation lane.
-- Web units of a slice can go to either vendor, as long as the verifier is the other one.
+- **Coordinator and implementer** (ADR 0001): one Claude Code session coordinates and
+  implements both lanes. It generates the inventory, creates the unit issues, owns shared
+  files, maintains the ledger, and works one unit at a time in its own git worktree, on a
+  `wu/<issue>-<slug>` branch. It never starts another harness.
+- **Verification**: the cross-vendor verification of every PR (G12) is waived by the owner's
+  amendment to ADR 0001 of 2026-11-14. A PR merges once every CI gate is green. The `G12`
+  status still reports whether a verdict exists, as information.
 
 Concurrency:
 
@@ -227,13 +220,18 @@ everything they do.
    PGlite) or C (framework- or SDK-bound, re-expressed as contract tests).
 6. Seed the ledger at `docs/migration/parity/<slice>.json`, one row per inventory item.
    Default disposition `port`; `pending-decision` where a seam or open decision touches the
-   row; `informative` only for non-normative doc clauses, and a verifier must confirm each.
-7. Characterize uncovered behavior: Grifando's 11 pages, its Server Component reads
-   (`src/app/page.tsx`, mistakes, vocabulary, today, write), the HTTP status and body shapes
-   of every endpoint in both apps, and every fix commit with no test. Keep these tests in this
-   repository, in the old idiom with the AI boundary faked; run them green in a disposable
-   worktree of the baseline (`baselines.ts add-worktree`), never in the clone itself. UI
-   journeys assert roles, labels and contractual copy, not layout. Store tests and run
+   row; `informative` for non-normative doc clauses and, under ADR 0001, for inventory rows
+   that carry no product behavior of their own: issues, and commits that change only the
+   build, tests or tooling. Issues and commits that do carry behavior stay `port` and point at
+   the tests that pin it.
+7. Characterize uncovered behavior at the HTTP and data level (ADR 0001): the HTTP status and
+   body shapes of every endpoint in both apps, the data each of Grifando's Server Component
+   pages reads (`src/app/page.tsx`, mistakes, vocabulary, today, write), and every
+   behavior-bearing fix commit with no test. Keep these tests in this repository, in the old
+   idiom with the AI boundary faked; run them green in a disposable worktree of the baseline
+   (`baselines.ts add-worktree`), never in the clone itself. Browser journeys for the Academy
+   screens are written once, against the new SPA, from those characterizations and the SPEC
+   sections; they assert roles, labels and contractual copy, not layout. Store tests and run
    reports in `migration/characterization/{pe,grifando}/`.
    - Grifando has no runtime fake provider: `src/server/ai/credentials.ts:32` picks Anthropic
      or Gemini, and the key comes from the visitor's headers. Its journeys therefore fake the
@@ -285,10 +283,10 @@ before the code that depends on it exists, and redesign nothing else.
    - j. Cleanup scheduling without Vercel cron.
    - k. The items still open in PRE_MIGRATION § Product direction.
 3. Each ADR lists the ledger rows it changes and their new dispositions (`port-changed`,
-   `superseded` or `drop`). Each ADR also has a decision issue (label `decision`). Owners
-   accept by commenting on that issue from their own accounts. The ADR's status line then
-   records both names, the date and links to both comments. Until then the rows stay
-   `pending-decision`.
+   `superseded` or `drop`). Each ADR also has a decision issue (label `decision`), and one
+   issue may carry several ADRs (ADR 0001). An owner accepts with one comment naming the
+   ADRs accepted, or "all"; each ADR's status line then records the name, the date and a link
+   to that comment. Until then the rows stay `pending-decision`.
 4. Draft the merged `docs/product/REQUIREMENTS.md`. Keep PE's FR/QR IDs unchanged — the
    calibration fixtures reference them and REQUIREMENTS.md:4 forbids renumbering. Add new ID
    ranges for Academy and hosted behavior, mapped to Grifando's SPEC sections. Rubric
@@ -334,8 +332,9 @@ should.
    - a non-root Dockerfile on `node:26.13.0-slim`, pinned by digest.
 4. Write the CI pipeline for gates G1–G12. Run the integration suite against a real Postgres
    service on main. Port docker-smoke from PE `scripts/docker-smoke.ts` for the local profile.
-   CI gets the baselines through `scripts/migration/baselines.ts`. Once CI runs, an owner
-   extends the `main` ruleset:
+   CI gets the baselines through `scripts/migration/baselines.ts`. Once CI runs, the
+   coordinator asks the owners to extend the `main` ruleset with exact settings, or for a
+   one-time permission to apply them itself (ADR 0001):
    - pull requests only, with required status checks;
    - a required merge queue, with build concurrency 1, that merges only when checks pass.
 
@@ -360,15 +359,16 @@ should.
      counts suppressions;
    - a doc-command check confirms every command named in README or docs exists in
      `package.json`.
-6. Self-test the gates with one deliberately broken "canary" PR per gate — e.g. an unmapped
-   tagged error, a `.skip` test, a lowered oxlint severity, user text in a query string, a
-   Node built-in in `packages/core`, a ledger row pointing at a missing test, a weakened
-   matcher, a G12 verdict for an older head SHA, a verdict from the implementing vendor.
-   Confirm each is rejected by the intended gate, then close it.
+6. Self-test the gates as one CI job (ADR 0001): `scripts/gate-selftest.ts` applies one
+   deliberately broken change per gate in a disposable worktree — e.g. an unmapped tagged
+   error, a `.skip` test, a lowered oxlint severity, user text in a query string, a Node
+   built-in in `packages/core`, a ledger row pointing at a missing test, a weakened matcher, a
+   G12 verdict for an older head SHA, a verdict from the implementing vendor — and confirms
+   that the intended gate rejects it while a control gate still accepts it.
 7. Steps 1, 2, 4, 5 and 6 can start during Phase 1. Step 3 waits for the tenancy and
    deploy-profile ADR.
 
-Exit: CI green on main with zero features; every canary PR rejected by its intended gate;
+Exit: CI green on main with zero features; every self-test case rejected by its intended gate;
 docker smoke passes for the skeleton; parity-check runs in CI and reports 0% verified.
 
 ### Phase 3 — Pure domain cores
@@ -542,9 +542,10 @@ Phase 2 builds CI, the coordinator checks the verdicts by hand.
 9. Open one PR for the unit, with `Closes #<issue>` in its body and the
    `implementer:<vendor>` label, and move the issue to `in-review`. CI must be green on every
    gate, red-green, parity-audit and parity-check.
-10. **Cross-vendor verification:** an agent from the other vendor reads the source tests,
-    the target tests, the ledger diff and the CI artifacts. It never pushes to the PR branch.
-    It posts one PR comment that starts with these three lines:
+10. **Cross-vendor verification** (waived by the amendment to ADR 0001 of 2026-11-14; kept
+    here because `verdict-check.ts` still reads this format): an agent from the other vendor
+    reads the source tests, the target tests, the ledger diff and the CI artifacts. It never
+    pushes to the PR branch. It posts one PR comment that starts with these three lines:
 
     ```text
     G12 PASS
@@ -555,9 +556,9 @@ Phase 2 builds CI, the coordinator checks the verdicts by hand.
     The first line is `G12 PASS` or `G12 BLOCK`, and `Verifier` names the verifying vendor.
     Reasons follow, and are required for BLOCK. A verdict covers only that head SHA; any new
     commit needs a new verdict. BLOCK sends the unit back to step 3 or step 5.
-11. Merge: the coordinator adds the PR to the merge queue once every required check is
-    green, G12 included. The merge closes the issue. A row is `verified` once its targets
-    pass on main, so no follow-up commit is needed.
+11. Merge: the coordinator merges the PR once every CI gate is green; no PR waits for a
+    G12 verdict. The merge closes the issue. A row is `verified` once its targets pass on
+    main, so no follow-up commit is needed.
 12. **Stop rule:** after two failed attempts to fix the same gate failure, or whenever green
     would require changing an expected value, a gate or a disposition, comment the failing
     output on the issue, label it `needs-info`, and stop.
@@ -577,7 +578,7 @@ Phase 2 builds CI, the coordinator checks the verdicts by hand.
 | G9 Parity check | Every inventory row present with a valid disposition, its status derived from the reports (the ledger stores none); every `port-changed`, `superseded` or `drop` row cites an accepted ADR; every target exists in the Vitest and Playwright JSON reports and passes; `port` targets keep their source titles; only `pending-decision` rows may have skipped tests. |
 | G10 Parity audit | For class-A and class-B `port` rows, the target matches or exceeds the source in assertion count, expected literals and matcher strength (no `toEqual` turned into `toMatchObject`). Report-only for class C; its output feeds G12. |
 | G11 Gate integrity | Lint and tsgo severities and the CI, Vitest and tsconfig settings are equal to or stricter than `gates/baseline.json`; suppression comments (`oxlint-disable`, `@ts-expect-error`) do not increase without an ADR; the edge helper maps every tagged error to a status, with one test per error. |
-| G12 Cross-vendor verification | A required check computed by `verdict-check.ts` on the PR head. It passes only when the newest verdict for the current head SHA is `G12 PASS`, its `Verifier` differs from the PR's `implementer:` label, and its author is an organization member (the repo is public, so anyone can comment). |
+| G12 Cross-vendor verification | Waived by the amendment to ADR 0001 of 2026-11-14: informational, and no PR waits for it. A status computed by `verdict-check.ts` on the PR head. It passes only when the newest verdict for the current head SHA is `G12 PASS`, its `Verifier` differs from the PR's `implementer:` label, and its author is an organization member (the repo is public, so anyone can comment). |
 | G13 Live calibration | Deferred: not a merge gate until the owners schedule it (see Calibration deferred). When it runs: paid and owner-triggered, with frozen fixtures, one request at a time, no retries, a budget preflight and the spend recorded. Once it has passed, it is required again for any change to the Judge's model, prompt, structured contract or Rubric Version. |
 | G14 Owner decisions | Accepting the Phase 1 ADRs, answering every `needs-info` product question, setting the calibration budget, giving final product acceptance and approving cutover. Owners decide product behavior and never review code. A decision counts only when an owner posts it. Agents post from the owners' accounts too, so this rests on agent rule 19. |
 
@@ -585,7 +586,7 @@ Phase 2 builds CI, the coordinator checks the verdicts by hand.
 
 1. parity-check is green on main and every inventory row is terminal: `verified` (a `port`
    or `port-changed` row whose targets pass on main), `superseded` or `drop` under an
-   accepted ADR, or `informative`, merged through a PR with a G12 PASS. No `pending-decision`
+   accepted ADR, or `informative`, merged through a PR with green gates. No `pending-decision`
    row remains unless an accepted ADR defers it past parity.
 2. G1–G11 pass on a fresh clone of the release commit, and docker smoke passes for every
    deploy profile the owners kept.
@@ -604,7 +605,7 @@ Phase 2 builds CI, the coordinator checks the verdicts by hand.
 7. Both owners have recorded product acceptance; only then are the old apps retired and the
    source repos archived.
 8. Per unit: ported tests keep their source titles and assertions, red then green proven,
-   mutation spot-check listed, rows `verified`, CI green, cross-vendor PASS recorded.
+   mutation spot-check listed, rows `verified`, CI green.
 
 ## Agent rules
 
@@ -685,7 +686,7 @@ These add to PRE_MIGRATION § Rules for the new repo's AGENTS.md / CLAUDE.md.
 
 | Risk | Mitigation |
 | --- | --- |
-| Agents weaken tests or gates to get green. | G8, G10, G11 and the Phase 2 canary PRs; `port` rows forbid changing expected values or titles; cross-vendor PASS on every unit (G12); the stop rule halts before a gate is weakened. |
+| Agents weaken tests or gates to get green. | G8, G10, G11 and the Phase 2 gate self-tests; `port` rows forbid changing expected values or titles; the stop rule halts before a gate is weakened. |
 | Untested behavior is silently lost (Grifando UI, Server Component reads, fix-commit-only behavior). | The Phase 0 inventory includes normative doc clauses and fix commits; characterization tests run against the baselines first; UI journeys assert roles, labels and contractual copy. |
 | Docs contradict code and agents follow the prose. | Precedence: baseline tests, then code, then docs; any contradiction becomes a decision request; the doc-command check catches commands that no longer exist. |
 | Seam or open decisions stall the work, or agents invent behavior. | Phase 1 gate; `pending-decision` rows are blocked and are the only ones allowed skipped tests; agents implement neither side; each decision request lists the rows it blocks. |

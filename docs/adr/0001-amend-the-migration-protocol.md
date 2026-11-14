@@ -1,6 +1,7 @@
 # 0001. Amend the migration protocol for the merge goal
 
-- Status: Proposed. Decided on [#5](https://github.com/Fluenshift/app/issues/5); accepted when both owners accept it there.
+- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
+- Amended at acceptance: item 4's Codex verification of every PR is waived ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880963426)). PRs merge once CI is green; the `G12` status stays on PRs as information.
 - Ledger rows: `decision: "adr:0001"`.
 
 ## Context
@@ -57,8 +58,8 @@ answer only explicit "human feedback needed" requests. Phase 0 surfaced five pla
 - Rows marked `adr:0001` (Grifando issues and build or test commits) become `informative`.
 - `MIGRATION_PROTOCOL.md` is edited to match (dispositions, Phase 0 step 7, roles, Phase 1
   step 3, Phase 2 steps 4 and 6) in the PR that records the acceptance.
-- Accepted risk: one coordinating session concentrates mistakes. G8 to G12 and the Codex
-  verification of every PR are the mitigation. Merges wait for owner-run Codex sessions.
+- Accepted risk: one coordinating session concentrates mistakes. Gates G1 to G11 are the
+  mitigation; with the amendment above no cross-vendor verification stands behind them.
 
 ## Alternatives
 

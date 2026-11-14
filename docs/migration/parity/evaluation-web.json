@@ -25,7 +25,7 @@
       "source": "apps/web/src/features/evaluations/http-evaluation-client.test.ts",
       "class": "A",
       "slice": "evaluation-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0008",
       "targets": []
     },
@@ -178,8 +178,8 @@
       "source": "apps/web/src/routes/-dashboard.test.tsx",
       "class": "A",
       "slice": "evaluation-web",
-      "disposition": "pending-decision",
-      "decision": "issue:1",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {

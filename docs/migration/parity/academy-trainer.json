@@ -7,7 +7,7 @@
       "source": "src/server/ai/client.characterization.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0012",
       "targets": []
     },
@@ -16,7 +16,7 @@
       "source": "src/server/ai/client.characterization.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0012",
       "targets": []
     },
@@ -25,7 +25,7 @@
       "source": "src/server/ai/client.characterization.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0012",
       "targets": []
     },
@@ -194,7 +194,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -203,7 +203,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -212,7 +212,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -221,7 +221,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -230,7 +230,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -239,7 +239,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -248,7 +248,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -257,7 +257,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -266,7 +266,7 @@
       "source": "src/server/ai/prompts/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -275,7 +275,7 @@
       "source": "src/server/ai/providers/anthropic.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -284,7 +284,7 @@
       "source": "src/server/ai/providers/anthropic.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -293,7 +293,7 @@
       "source": "src/server/ai/providers/anthropic.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -302,7 +302,7 @@
       "source": "src/server/ai/providers/anthropic.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -311,7 +311,7 @@
       "source": "src/server/ai/providers/anthropic.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -392,7 +392,7 @@
       "source": "src/server/ai/providers/gemini.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -401,7 +401,7 @@
       "source": "src/server/ai/providers/gemini.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -410,7 +410,7 @@
       "source": "src/server/ai/providers/gemini.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -419,7 +419,7 @@
       "source": "src/server/ai/providers/gemini.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -428,7 +428,7 @@
       "source": "src/server/ai/providers/gemini.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -437,7 +437,7 @@
       "source": "src/server/ai/providers/gemini.test.ts",
       "class": "C",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -651,7 +651,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -660,7 +660,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -669,7 +669,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -678,7 +678,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -687,7 +687,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -696,7 +696,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -705,7 +705,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -714,7 +714,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -723,7 +723,7 @@
       "source": "src/server/ai/schemas/writingAnalysis.test.ts",
       "class": "A",
       "slice": "academy-trainer",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     }

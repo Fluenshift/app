@@ -7,7 +7,7 @@
       "source": "src/lib/responseError.characterization.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -16,7 +16,7 @@
       "source": "src/lib/responseError.characterization.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -25,7 +25,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -34,7 +34,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -43,7 +43,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -52,7 +52,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -61,7 +61,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -70,7 +70,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -79,7 +79,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -88,7 +88,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -97,7 +97,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -106,7 +106,7 @@
       "source": "src/components/home/specimenData.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -115,7 +115,7 @@
       "source": "src/lib/highlightSegments.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -124,7 +124,7 @@
       "source": "src/lib/highlightSegments.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -133,7 +133,7 @@
       "source": "src/lib/highlightSegments.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -142,7 +142,7 @@
       "source": "src/lib/highlightSegments.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -151,7 +151,7 @@
       "source": "src/lib/highlightSegments.test.ts",
       "class": "A",
       "slice": "academy-web",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },

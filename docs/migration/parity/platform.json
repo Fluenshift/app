@@ -7,7 +7,7 @@
       "source": "packages/env/src/server.test.ts",
       "class": "A",
       "slice": "platform",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0003",
       "targets": []
     },
@@ -16,7 +16,7 @@
       "source": "packages/env/src/server.test.ts",
       "class": "A",
       "slice": "platform",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0003",
       "targets": []
     },
@@ -25,7 +25,7 @@
       "source": "packages/env/src/server.test.ts",
       "class": "A",
       "slice": "platform",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0003",
       "targets": []
     },
@@ -34,7 +34,7 @@
       "source": "packages/env/src/server.test.ts",
       "class": "A",
       "slice": "platform",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0003",
       "targets": []
     }
