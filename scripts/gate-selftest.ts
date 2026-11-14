@@ -86,6 +86,8 @@ const tests =
   (tree) =>
     run(path.join(tree, workspace), "pnpm", ["exec", "vitest", "run", file]);
 const gates: Check = (tree) => run(tree, "node", ["scripts/check-gates.ts"]);
+const urlText: Check = (tree) =>
+  run(tree, "node", ["scripts/check-url-text.ts"]);
 
 const TEST_FILE = "packages/core/src/selftest.test.ts";
 const testFile = (body: string) =>
@@ -230,6 +232,28 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
         ),
       rejectedBy: [["types", types("apps/server")]],
       acceptedBy: [["lint", lint("apps/server/src/selftest.ts")]],
+    },
+    {
+      gate: "G7",
+      name: "user text in a query string",
+      apply: (tree) =>
+        write(
+          tree,
+          "apps/server/src/selftest.ts",
+          [
+            'import { Hono } from "hono";',
+            "",
+            'export const search = new Hono().get("/api/search", (context) =>',
+            '  context.text(context.req.query("writingSample") ?? "")',
+            ");",
+            "",
+          ].join("\n")
+        ),
+      rejectedBy: [["url text", urlText]],
+      acceptedBy: [
+        ["types", types("apps/server")],
+        ["lint", lint("apps/server/src/selftest.ts")],
+      ],
     },
     {
       gate: "G11",
