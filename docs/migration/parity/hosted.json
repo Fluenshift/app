@@ -3,6 +3,15 @@
   "lane": "platform",
   "rows": [
     {
+      "id": "grifando:characterization:src/app/api/me/me.characterization.test.ts::DELETE /api/me guards > expires the session cookie as HttpOnly, SameSite=Lax and site-wide, Secure in production only",
+      "source": "src/app/api/me/me.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "pending-decision",
+      "decision": "adr:0003",
+      "targets": []
+    },
+    {
       "id": "grifando:characterization:src/app/api/rateLimitFirst.characterization.test.ts::rate limit before the user > refuses every state-changing route at its rate limit before creating the visitor's user",
       "source": "src/app/api/rateLimitFirst.characterization.test.ts",
       "class": "C",

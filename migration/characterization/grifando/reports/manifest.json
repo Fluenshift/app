@@ -3,7 +3,7 @@
   "repository": "Fluenshift/grifando",
   "tag": "parity-baseline",
   "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
-  "ranAt": "2026-11-14T16:25:10.400Z",
+  "ranAt": "2026-11-14T16:26:32.436Z",
   "tools": [
     {
       "name": "node",
@@ -27,7 +27,14 @@
     "--frozen-lockfile"
   ],
   "files": [
+    "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+    "src/app/api/exercises/exercises.characterization.test.ts",
+    "src/app/api/interview/interview.characterization.test.ts",
+    "src/app/api/me/me.characterization.test.ts",
     "src/app/api/rateLimitFirst.characterization.test.ts",
+    "src/app/api/vocabulary/vocabulary.characterization.test.ts",
+    "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+    "src/app/pages.characterization.test.ts",
     "src/lib/answerDiff.characterization.test.ts",
     "src/lib/responseError.characterization.test.ts",
     "src/server/ai/aiErrorResponse.characterization.test.ts",
@@ -54,7 +61,14 @@
         "exec",
         "vitest",
         "run",
+        "src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts",
+        "src/app/api/exercises/exercises.characterization.test.ts",
+        "src/app/api/interview/interview.characterization.test.ts",
+        "src/app/api/me/me.characterization.test.ts",
         "src/app/api/rateLimitFirst.characterization.test.ts",
+        "src/app/api/vocabulary/vocabulary.characterization.test.ts",
+        "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+        "src/app/pages.characterization.test.ts",
         "src/lib/answerDiff.characterization.test.ts",
         "src/lib/responseError.characterization.test.ts",
         "src/server/ai/aiErrorResponse.characterization.test.ts",
