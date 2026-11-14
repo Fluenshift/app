@@ -30,6 +30,8 @@ Node 26.13.0 and pnpm 12.18.0. Where they are not on `PATH`, prefix commands wit
 | `pnpm test:postgres` | The `Database` service against a Postgres 17 server; `DEPLOY_PROFILE=hosted` and `DATABASE_URL` name it. |
 | `pnpm test:e2e` | Build the server and the web app, then run the Playwright journeys against the one process that serves both. |
 | `pnpm build` | Server bundle and SPA build. |
+| `pnpm docker:smoke` | Gate G6: build the image of the local profile, start it with Compose as the invoking user, and check its boundary, its data directory and what it serves. Needs Docker. |
+| `pnpm docker:up` / `pnpm docker:down` | Start the local profile in Docker on `127.0.0.1:3001`, with its data in `./.data`, or remove the container. |
 | `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, CI and test setting is at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
 
 Migration scripts run on plain Node, with no dependencies:
@@ -48,6 +50,7 @@ Migration scripts run on plain Node, with no dependencies:
 | `packages/ui` | Shared UI components. |
 | `packages/config` | Shared TypeScript configuration, including the Effect diagnostic severities. |
 | `e2e` | Playwright journeys against the built process. |
+| `smoke` | The Docker smoke (G6): a Vitest suite against the image of the local profile. |
 | `docs/migration`, `migration/` | Baselines, inventory, ledger, characterization tests. |
 
 ## Work units

@@ -1,0 +1,39 @@
+# The local profile (docs/adr/0003): one container on the learner's machine, published on IPv4
+# loopback only and run as the invoking user, with its data in a directory of the host.
+# `pnpm docker:up` starts it with the data in ./.data.
+name: fluenshift
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    init: true
+    user: "${FLUENSHIFT_UID:-1000}:${FLUENSHIFT_GID:-1000}"
+    ports:
+      - "127.0.0.1:3001:3000"
+    environment:
+      DATA_DIRECTORY: /data/pglite
+      DATA_DISPLAY_PATH: ${FLUENSHIFT_DATA_DIR:-./.data}/pglite
+      NODE_ENV: production
+      SERVER_HOST: 0.0.0.0
+      WEB_DIST_PATH: ../web/dist
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - type: bind
+        source: ${FLUENSHIFT_DATA_DIR:-./.data}
+        target: /data
+        bind:
+          create_host_path: false
+    restart: unless-stopped

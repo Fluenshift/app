@@ -97,7 +97,8 @@ jobs:
         run: pnpm test:postgres
 
   e2e:
-    name: G5 (end to end)
+    # G4 too: the journeys start the one built process that serves /api/health and the SPA.
+    name: G4 and G5 (the built process, end to end)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -119,10 +120,31 @@ jobs:
       - name: G5 journeys against the built process
         run: pnpm test:e2e
 
+  docker-smoke:
+    name: G6 (docker smoke)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: G6 the image of the local profile, published on loopback and run as the caller
+        run: pnpm docker:smoke
+
   parity:
     name: G9 (parity)
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # The test reports include the Docker smoke, which builds the image.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -147,7 +169,8 @@ jobs:
     # A merge group holds no new unit commits; its skipped run counts as a pass.
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # A Docker smoke target builds the image at its first commit and at the head.
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -172,7 +195,8 @@ jobs:
   gate-selftest:
     name: Gate self-tests
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    # The self-tests start from full test reports, the Docker smoke included.
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

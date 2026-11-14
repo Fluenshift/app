@@ -1,0 +1,249 @@
+// Gate G6 for the local profile: builds the image, starts it with Docker Compose as the invoking
+// user, and checks its boundary, its data directory and what it serves. Ported from PE
+// `scripts/docker-smoke.ts`. The checks that need Evaluations and the setup status join with
+// the routes that answer them (Phases 4d and 4f).
+import { randomInt } from "node:crypto";
+import { existsSync, statSync } from "node:fs";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+
+import {
+  composeOf,
+  fetchResponse,
+  hostileHostStatus,
+  leakedSentinels,
+  plant,
+  probeNonLoopback,
+  REPOSITORY_ROOT,
+  reserveLoopbackPort,
+  runCommand,
+  waitForHealth,
+} from "./docker";
+import { createScratch, removeScratch } from "./scratch";
+
+const COMPOSE_FILE = path.join(REPOSITORY_ROOT, "docker-compose.yml");
+const HOST_USER_ID = process.getuid?.() ?? 1000;
+const HOST_GROUP_ID = process.getgid?.() ?? 1000;
+
+const randomLetters = (length: number) =>
+  Array.from({ length }, () => String.fromCodePoint(97 + randomInt(26))).join(
+    ""
+  );
+
+const secretSentinel = plant("secret", `sk-smoke-${randomLetters(24)}`);
+const sampleSentinel = plant("sample", `smokesample${randomLetters(20)}`);
+const writingSample = `${sampleSentinel} Command fail.`;
+
+interface ComposeConfig {
+  readonly services?: {
+    readonly app?: { readonly ports?: unknown; readonly user?: unknown };
+  };
+}
+
+// The state of one run, built before the first check. The checks run in order and share it.
+let scratch = "";
+let dataDirectory = "";
+let hostPort = 0;
+let baseUrl = "";
+let releaseCompose: ReturnType<typeof composeOf> | undefined;
+let compose: ReturnType<typeof composeOf> | undefined;
+
+const running = () => {
+  if (compose === undefined) {
+    throw new Error("the smoke did not set up its Compose project");
+  }
+  return compose;
+};
+
+const listBrowserAssets = async () => {
+  const listing = await running()([
+    "exec",
+    "-T",
+    "app",
+    "node",
+    "-e",
+    "const fs = require('node:fs'); for (const file of fs.readdirSync('../web/dist/assets', { recursive: true })) if (fs.statSync('../web/dist/assets/' + file).isFile()) process.stdout.write(file + '\\n');",
+  ]);
+  return listing.stdout
+    .split("\n")
+    .map((file) => file.trim())
+    .filter(Boolean);
+};
+
+beforeAll(async () => {
+  scratch = await createScratch();
+  dataDirectory = path.join(scratch, "data");
+  await mkdir(dataDirectory);
+  hostPort = await reserveLoopbackPort();
+  baseUrl = `http://127.0.0.1:${hostPort}`;
+
+  const envFile = path.join(scratch, "compose.env");
+  const safeEnvironment = path.join(scratch, "safe-environment.yml");
+  const runtime = path.join(scratch, "runtime.yml");
+  const environment = `    environment:\n      OPENROUTER_API_KEY: "${secretSentinel}"\n      SERVER_PORT: "3000"\n`;
+  await writeFile(
+    envFile,
+    `FLUENSHIFT_DATA_DIR=${dataDirectory}\nFLUENSHIFT_GID=${HOST_GROUP_ID}\nFLUENSHIFT_UID=${HOST_USER_ID}\n`
+  );
+  await writeFile(safeEnvironment, `services:\n  app:\n${environment}`);
+  await writeFile(
+    runtime,
+    `services:\n  app:\n${environment}    ports: !override\n      - "127.0.0.1:${hostPort}:3000"\n`
+  );
+
+  const name = `fluenshift-smoke-${process.pid}-${randomLetters(6)}`;
+  releaseCompose = composeOf({
+    envFile,
+    files: [COMPOSE_FILE, safeEnvironment],
+    name,
+  });
+  compose = composeOf({ envFile, files: [COMPOSE_FILE, runtime], name });
+});
+
+afterAll(async () => {
+  try {
+    await compose?.([
+      "down",
+      "--volumes",
+      "--remove-orphans",
+      "--rmi",
+      "local",
+    ]);
+  } finally {
+    if (scratch !== "") {
+      await removeScratch(scratch);
+    }
+  }
+});
+
+describe("Docker smoke", () => {
+  it("validates the release Compose boundary", async () => {
+    if (releaseCompose === undefined) {
+      throw new Error("the smoke did not set up its Compose project");
+    }
+    const config = await releaseCompose(["config", "--format", "json"]);
+    const parsed = JSON.parse(config.stdout) as ComposeConfig;
+
+    expect(parsed.services?.app?.ports).toStrictEqual([
+      {
+        host_ip: "127.0.0.1",
+        mode: "ingress",
+        protocol: "tcp",
+        published: "3001",
+        target: 3000,
+      },
+    ]);
+    expect(parsed.services?.app?.user).toBe(`${HOST_USER_ID}:${HOST_GROUP_ID}`);
+  });
+
+  it("builds and starts the isolated application", async () => {
+    const app = running();
+    await app(["build", "app"]);
+    await app(["up", "--detach", "--no-build", "app"]);
+    await waitForHealth(baseUrl);
+
+    const runtimeUser = await app([
+      "exec",
+      "-T",
+      "app",
+      "node",
+      "-e",
+      "process.stdout.write(String(process.getuid()) + ':' + String(process.getgid()))",
+    ]);
+    expect(runtimeUser.stdout.trim()).toBe(`${HOST_USER_ID}:${HOST_GROUP_ID}`);
+    const image = await app(["config", "--images", "app"]);
+    const imageUser = await runCommand("docker", [
+      "image",
+      "inspect",
+      "--format",
+      "{{.Config.User}}",
+      image.stdout.trim(),
+    ]);
+    expect(imageUser.stdout.trim()).toBe("node");
+    const toolFiles = await app([
+      "exec",
+      "-T",
+      "app",
+      "node",
+      "-e",
+      "const fs = require('node:fs'); process.stdout.write(JSON.stringify(['/app/.mcp.json', '/app/.codex', '/app/.scratch'].filter((file) => fs.existsSync(file))))",
+    ]);
+    expect(JSON.parse(toolFiles.stdout)).toStrictEqual([]);
+
+    const publishedPort = await app(["port", "app", "3000"]);
+    expect(publishedPort.stdout.trim()).toBe(`127.0.0.1:${hostPort}`);
+    const nonLoopback = await probeNonLoopback(hostPort);
+    expect(nonLoopback.addresses.length).toBeGreaterThan(0);
+    expect(nonLoopback.answered).toStrictEqual([]);
+    expect(await hostileHostStatus(hostPort)).toBe(403);
+    const hostileOrigin = await fetchResponse(`${baseUrl}/api/evaluations`, {
+      body: JSON.stringify({ writingSample }),
+      headers: {
+        "content-type": "application/json",
+        origin: "https://hostile.example",
+        "sec-fetch-site": "cross-site",
+      },
+      method: "POST",
+    });
+    expect(hostileOrigin.status).toBe(403);
+  });
+
+  it("replaces the container and reopens its data directory", async () => {
+    const app = running();
+    const firstContainer = await app(["ps", "--quiet", "app"]);
+    expect(firstContainer.stdout.trim()).not.toBe("");
+    const cluster = path.join(dataDirectory, "pglite", "PG_VERSION");
+    expect(existsSync(cluster)).toBe(true);
+    const clusterBefore = statSync(cluster).ino;
+
+    await app([
+      "up",
+      "--detach",
+      "--force-recreate",
+      "--no-build",
+      "--no-deps",
+      "app",
+    ]);
+    await waitForHealth(baseUrl);
+
+    const replacementContainer = await app(["ps", "--quiet", "app"]);
+    expect(replacementContainer.stdout.trim()).not.toBe(
+      firstContainer.stdout.trim()
+    );
+    expect(statSync(cluster).ino).toBe(clusterBefore);
+  });
+
+  it("scans browser assets and logs", async () => {
+    const app = running();
+    const index = await fetchResponse(baseUrl);
+    expect(index.status).toBe(200);
+    expect(
+      leakedSentinels(new Uint8Array(await index.arrayBuffer()))
+    ).toStrictEqual([]);
+
+    const assets = await listBrowserAssets();
+    expect(assets.length).toBeGreaterThan(0);
+    const served = await Promise.all(
+      assets.map(async (asset) => {
+        const assetPath = asset
+          .split("/")
+          .map((part) => encodeURIComponent(part))
+          .join("/");
+        const response = await fetchResponse(`${baseUrl}/assets/${assetPath}`);
+        return {
+          asset,
+          leaked: leakedSentinels(new Uint8Array(await response.arrayBuffer())),
+          status: response.status,
+        };
+      })
+    );
+    expect(served).toStrictEqual(
+      assets.map((asset) => ({ asset, leaked: [], status: 200 }))
+    );
+
+    const logs = await app(["logs", "--no-color", "app"]);
+    expect(leakedSentinels(`${logs.stdout}${logs.stderr}`)).toStrictEqual([]);
+  });
+});
