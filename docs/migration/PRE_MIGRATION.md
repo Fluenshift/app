@@ -55,34 +55,36 @@ Still open: deploy model (public hosted, self-host Docker, or data in the browse
 provider (OpenRouter vs Gemini BYOK — the Gemini free tier may train on submitted text);
 analytics (Grifando uses Vercel Analytics, PE forbids remote telemetry); whether a mistake
 reappearing in real text demotes mastery; Academy state across Rubric Versions; practice
-offered vs imposed (Grifando SPEC §3); the product name; PE's license; what Grifando may
-change before the cutover (`HANDOFF.md` step 3). The product license is chosen during setup,
-before the product repo exists. The repo layout is decided: one organization holds both
-source repos and the product repo (`HANDOFF.md` § Topology). None of these changes the
-stack, only configuration. Live calibration is deferred until after parity (see
-`MIGRATION_PROTOCOL.md`).
+offered vs imposed (Grifando SPEC §3); the product name; what Grifando may change before the
+cutover (`HANDOFF.md` step 3). Decided at setup: the product and PE are both MIT, and one
+organization holds both source repos and the product repo (`HANDOFF.md` § Topology). None of
+these changes the stack, only configuration. Live calibration is deferred until after parity
+(see `MIGRATION_PROTOCOL.md`).
 
 ## Approved stack
 
-Pin exact versions; versions verified on npm on 2026-11-09.
+Pin exact versions; versions verified on npm on 2026-11-09, and pinned to exact patch
+versions on 2026-11-13. Phase 2 puts every package, including the four AI SDK providers, in
+the pnpm catalog at the exact version below, commits the lockfile, and pins the container
+image by patch version and digest.
 
 | Layer | Choice | Version |
 | --- | --- | --- |
 | Runtime | Node LTS (fallback: Node 24 LTS) | 26.13.0 |
 | Package manager | pnpm with workspaces, catalog, `allowBuilds`, `packageManager` pinned | 12.18.0 |
-| Monorepo | Turborepo | 2.11.x |
+| Monorepo | Turborepo | 2.11.11 |
 | Language | TypeScript native + `@effect/tsgo` (tsc patch and diagnostics in CI, severities raised to error) | 7.0.2 / 0.67.5 |
 | Lint and format | oxlint (type-aware, Effect preset) + oxlint-tsgolint + oxfmt. No ESLint: typescript-eslint requires TS < 6.1 | 1.92.0 / 7.0.2006 / 0.78.0 |
-| Backend | Hono + `@hono/node-server`; one process serves API and static SPA | 4.13.x / 2.1.x |
+| Backend | Hono + `@hono/node-server`; one process serves API and static SPA | 4.13.18 / 2.1.8 |
 | Server logic | Effect (services, Layer, Config, Redacted, tagged errors) + `@effect/platform-node` | 4.1.2 |
 | Validation and contract | Effect Schema everywhere, in a shared contract package; `@hono/standard-validator` at the edge. No Zod in code (it may remain as an AI SDK peer) | effect 4.1.2 / 0.4.1 |
-| Front-end | SPA: Vite + React + TanStack Router; Hono `hc` client in one API module; landing and OG image static at build | 8.3 / 19.3 / 1.170 |
-| UI | Tailwind + shadcn (Base UI) + lucide | 4.3 / 4.23 / 1.9 |
-| Persistence | Postgres + Drizzle ORM + drizzle-kit (`node-postgres`, pg) inside an Effect service; PGlite for tests and local mode | 0.45.4 / 0.31.11 / 8.23 / 0.5.16 |
-| AI | AI SDK (`ai`, `@ai-sdk/google`, `@ai-sdk/anthropic`, `@ai-sdk/openai`, `@openrouter/ai-sdk-provider`) inside Effect services `Judge` and `Trainer` | 7.0.x |
-| Tests | Vitest + `@effect/vitest`; Playwright for E2E | 5.1 / 4.1.2 / 1.65 |
-| Container | `node:26-slim`, single process, non-root. Docker mandatory; mise optional | — |
-| Git hooks | husky | 9.1 |
+| Front-end | SPA: Vite + React + TanStack Router; Hono `hc` client in one API module; landing and OG image static at build | 8.3.8 / 19.3.1 / 1.170.46 |
+| UI | Tailwind + shadcn + Base UI (`@base-ui/react`) + lucide (`lucide-react`) | 4.3.5 / 4.23.0 / 1.9.0 / 1.72.0 |
+| Persistence | Postgres + Drizzle ORM + drizzle-kit (`node-postgres`, pg) inside an Effect service; PGlite for tests and local mode | 0.45.4 / 0.31.11 / 8.23.1 / 0.5.16 |
+| AI | AI SDK (`ai`, `@ai-sdk/google`, `@ai-sdk/anthropic`, `@ai-sdk/openai`, `@openrouter/ai-sdk-provider`) inside Effect services `Judge` and `Trainer` | 7.0.172 / 4.0.120 / 4.0.104 / 4.0.117 / 3.1.0 |
+| Tests | Vitest + `@effect/vitest`; Playwright for E2E | 5.1.0 / 4.1.2 / 1.65.0 |
+| Container | `node:26.13.0-slim`, pinned by digest, single process, non-root. Docker mandatory; mise optional | 26.13.0 |
+| Git hooks | husky | 9.1.7 |
 
 ## Alternatives considered
 
