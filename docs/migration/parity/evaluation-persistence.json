@@ -252,7 +252,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/history/learning-history.test.ts::Learning History > deletes one whole Evaluation while preserving other evidence"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > reopens complete retained evidence after the database service is replaced",
@@ -261,7 +263,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/history/learning-history.test.ts::Learning History > reopens complete retained evidence after the database service is replaced"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > retains immutable complete Evaluations newest first",
@@ -270,7 +274,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/history/learning-history.test.ts::Learning History > retains immutable complete Evaluations newest first"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/history/learning-history.test.ts::Learning History > rolls back the parent row when a child insert fails",
@@ -279,7 +285,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/history/learning-history.test.ts::Learning History > rolls back the parent row when a child insert fails"
+      ]
     },
     {
       "id": "pe:test:apps/server/src/progress/progress-insights.test.ts::Progress Insights > recomputes every aggregate from retained rows after deletion",
