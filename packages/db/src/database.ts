@@ -1,9 +1,10 @@
 import { PGlite } from "@electric-sql/pglite";
 import { ServerConfig } from "@fluenshift/env";
+import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import { drizzle as drizzlePglite } from "drizzle-orm/pglite";
-import { Context, Effect, Layer, Schema } from "effect";
-import type { Redacted } from "effect";
+import { Context, Effect, Layer, Redacted, Schema } from "effect";
+import { Pool } from "pg";
 
 /** What a raw query answers on either driver: its rows. */
 export interface Rows<Row> {
@@ -63,16 +64,35 @@ export class Database extends Context.Service<
       })
     );
 
-  // Typed stubs for the red commit: both open an in-memory PGlite database, whatever the
-  // deploy profile names.
-  static readonly postgres = (_options: {
+  /** A pool of connections to a Postgres server. */
+  static readonly postgres = (options: {
     readonly url: Redacted.Redacted<string>;
-  }) => Database.pglite();
+  }) =>
+    Layer.effect(
+      Database,
+      Effect.gen(function* () {
+        const pool = yield* Effect.acquireRelease(
+          Effect.sync(
+            () => new Pool({ connectionString: Redacted.value(options.url) })
+          ),
+          (open) => Effect.promise(() => open.end())
+        );
+        // A pool connects on its first query: ask now, so a wrong address fails at startup.
+        yield* Effect.tryPromise({
+          try: () => pool.query("select 1"),
+          catch: (cause) => new DatabaseError({ cause }),
+        });
+        return Database.of(serviceOf(drizzlePostgres({ client: pool })));
+      })
+    );
 
+  /** The database of the deploy profile, as `ServerConfig` names it. */
   static readonly layer = Layer.unwrap(
     Effect.gen(function* () {
-      yield* ServerConfig;
-      return Database.pglite();
+      const { database } = yield* ServerConfig;
+      return database.kind === "postgres"
+        ? Database.postgres({ url: database.url })
+        : Database.pglite({ dataDir: database.dataDirectory });
     })
   );
 }
