@@ -1,23 +1,30 @@
+import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 
 import type { HealthResponse, SetupStatus } from "@fluenshift/contract";
+import {
+  EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
+  EVALUATION_MAX_OUTPUT_TOKENS,
+  EVALUATION_REQUEST_TIMEOUT_MILLISECONDS,
+} from "@fluenshift/core/evaluation-request-policy";
 import type { DatabaseError } from "@fluenshift/db";
 import type { DeployProfile, InputLimits } from "@fluenshift/env";
 import { getRequestListener } from "@hono/node-server";
-import type { Effect, ManagedRuntime } from "effect";
+import { Effect, Option, Schema } from "effect";
 import { Hono } from "hono";
-import type { Handler, MiddlewareHandler } from "hono";
+import type { Context as HonoContext, Handler, MiddlewareHandler } from "hono";
+import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getMimeType } from "hono/utils/mime";
 
-import { INTERNAL_ERROR } from "./edge";
-import type { EdgeFailure } from "./edge";
+import { INTERNAL_ERROR, makeEdge } from "./edge";
+import type { EdgeFailure, EdgeRuntime } from "./edge";
 import type {
   EvaluationEndpointResult,
   EvaluationFailureCode,
 } from "./evaluation/evaluation-endpoint";
-import type { CurrentLearner, LearnerIdentity } from "./learner-identity";
+import { CurrentLearner, LearnerIdentity } from "./learner-identity";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -33,7 +40,11 @@ export interface EvaluationLogEvent {
   readonly requestTimeoutMilliseconds: number;
 }
 
-// Typed stub for the red commit: the boundaries are accepted and ignored.
+/**
+ * What the routes need from the rest of the server, as PE's `createApp` took it. Each boundary is
+ * an Effect that runs for the Learner of the request; a route whose boundary is missing answers
+ * 503, as PE's did.
+ */
 export interface AppBoundaries<R = never> {
   readonly deleteEvaluation?: (
     evaluationId: string
@@ -57,7 +68,8 @@ export interface AppOptions<R = never> extends AppBoundaries<R> {
   /** The input caps of the deploy profile (docs/adr/0006). */
   readonly limits: InputLimits;
   readonly profile: DeployProfile;
-  readonly runtime?: ManagedRuntime.ManagedRuntime<R | LearnerIdentity, never>;
+  /** Runs the boundaries; it provides what they need besides the Learner of the request. */
+  readonly runtime: EdgeRuntime<R | LearnerIdentity>;
   /** Whether this process also serves the web build, as it does in production. */
   readonly serveWeb: boolean;
   readonly webDistPath: string;
@@ -163,15 +175,202 @@ const webFallback = (webDistPath: string): Handler => {
   };
 };
 
+const INVALID_REQUEST = {
+  code: "invalid-request",
+  error: "Request could not be completed",
+};
+
+const notReady = (error: string) => ({ code: "not-ready", error });
+
+const FAILURE_STATUS = {
+  "configuration-missing": 503,
+  "invalid-assessment": 502,
+  "invalid-writing-sample": 400,
+  "persistence-failure": 500,
+  "provider-credits-exhausted": 503,
+  "provider-output-incomplete": 502,
+  "provider-rate-limited": 429,
+  "provider-rejected": 502,
+  "provider-timeout": 504,
+  "provider-unavailable": 503,
+} as const satisfies Record<EvaluationFailureCode, ContentfulStatusCode>;
+
+const resultCode = (
+  result: EvaluationEndpointResult
+): EvaluationLogEvent["code"] =>
+  result.kind === "failure" ? result.code : result.kind;
+
+const resultStatus = (
+  result: EvaluationEndpointResult
+): ContentfulStatusCode => {
+  if (result.kind === "created") {
+    return 201;
+  }
+  return result.kind === "no-english" ? 422 : FAILURE_STATUS[result.code];
+};
+
+const safelyLogEvaluation = (
+  logEvaluation: AppBoundaries["logEvaluation"],
+  event: EvaluationLogEvent
+) => {
+  try {
+    logEvaluation?.(event);
+  } catch {
+    // Observability must never change the Evaluation outcome.
+  }
+};
+
+const WritingSampleRequest = Schema.Struct({ writingSample: Schema.String });
+
+/** The idle time a connection keeps while the Judge answers, beyond its own deadline. */
+export const HTTP_IDLE_TIMEOUT_MILLISECONDS =
+  EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS * 1000;
+
 /**
  * The HTTP application: the API and, in production, the web build, from one process. Routes
  * answer from Effects through the edge helper (`./edge`).
  */
 export const createApp = <R = never>(options: AppOptions<R>) => {
+  const edge = makeEdge(options.runtime);
+  // Every boundary acts for the Learner that LearnerIdentity names for the request.
+  const forLearner = <A, E>(
+    request: Request,
+    effect: Effect.Effect<A, E, R | CurrentLearner>
+  ) =>
+    effect.pipe(
+      Effect.provideServiceEffect(
+        CurrentLearner,
+        Effect.gen(function* () {
+          const identity = yield* LearnerIdentity;
+          const id = yield* identity.identify(request);
+          return CurrentLearner.of({ id });
+        })
+      )
+    );
+  const failedHistory = { DatabaseError: () => INTERNAL_ERROR };
+
+  // PE's route checked the body before its handler ran, so a malformed request is a 400 even
+  // when Evaluation is not configured; every answer of the handler names its correlation ID.
+  const evaluate = (
+    context: HonoContext,
+    writingSample: string
+  ): Response | Promise<Response> => {
+    const correlationId = randomUUID();
+    const startedAt = performance.now();
+    const withCorrelation = (response: Response) => {
+      response.headers.set("x-correlation-id", correlationId);
+      return response;
+    };
+    const { evaluateWriting } = options;
+    if (evaluateWriting === undefined) {
+      return withCorrelation(
+        context.json({ error: "Evaluation is not configured" }, 503)
+      );
+    }
+    const log = (code: EvaluationLogEvent["code"]) => {
+      safelyLogEvaluation(options.logEvaluation, {
+        code,
+        correlationId,
+        durationMilliseconds: Math.round(performance.now() - startedAt),
+        maxOutputTokens: EVALUATION_MAX_OUTPUT_TOKENS,
+        model: options.setup?.model ?? "unconfigured",
+        provider: options.setup?.provider ?? "unconfigured",
+        requestTimeoutMilliseconds: EVALUATION_REQUEST_TIMEOUT_MILLISECONDS,
+      });
+    };
+    return edge(
+      forLearner(context.req.raw, evaluateWriting(writingSample)).pipe(
+        Effect.tapDefect(() =>
+          Effect.sync(() => {
+            log("internal-error");
+          })
+        )
+      ),
+      {
+        errors: {},
+        success: (result) => {
+          log(resultCode(result));
+          return context.json(result, resultStatus(result));
+        },
+      }
+    ).then(withCorrelation);
+  };
+
   const app = new Hono()
     .use(guard(options))
     .get("/api/health", (context) =>
       context.json({ status: "ok" } satisfies HealthResponse)
+    )
+    .post("/api/evaluations", (context): Promise<Response> =>
+      context.req.json<unknown>().then(
+        (body) => {
+          const request =
+            Schema.decodeUnknownOption(WritingSampleRequest)(body);
+          return Option.isNone(request)
+            ? context.json(INVALID_REQUEST, 400)
+            : evaluate(context, request.value.writingSample);
+        },
+        () => context.json(INVALID_REQUEST, 400)
+      )
+    )
+    .get("/api/evaluations", (context): Response | Promise<Response> => {
+      const { listEvaluations } = options;
+      if (listEvaluations === undefined) {
+        return context.json(notReady("History is not available"), 503);
+      }
+      return edge(forLearner(context.req.raw, listEvaluations()), {
+        errors: failedHistory,
+        success: (evaluations) => Response.json(evaluations),
+      });
+    })
+    .get(
+      "/api/evaluations/:evaluationId",
+      (context): Response | Promise<Response> => {
+        const { getEvaluation } = options;
+        if (getEvaluation === undefined) {
+          return context.json(notReady("History is not available"), 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            getEvaluation(context.req.param("evaluationId"))
+          ),
+          {
+            errors: failedHistory,
+            success: (evaluation) =>
+              evaluation === null
+                ? context.json(
+                    { code: "not-found", error: "Evaluation not found" },
+                    404
+                  )
+                : Response.json(evaluation),
+          }
+        );
+      }
+    )
+    .delete(
+      "/api/evaluations/:evaluationId",
+      (context): Response | Promise<Response> => {
+        const { deleteEvaluation } = options;
+        if (deleteEvaluation === undefined) {
+          return context.json(notReady("History is not available"), 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            deleteEvaluation(context.req.param("evaluationId"))
+          ),
+          {
+            errors: failedHistory,
+            success: () => context.body(null, 204),
+          }
+        );
+      }
+    )
+    .get("/api/setup", (context) =>
+      options.setup === undefined
+        ? context.json(notReady("Setup status is not available"), 503)
+        : context.json(options.setup)
     )
     .notFound((context) =>
       context.json({ code: "not-found", error: "Not Found" }, 404)
@@ -188,12 +387,14 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
 
 export type AppType = ReturnType<typeof createApp<never>>;
 
-// Typed stub for the red commit: the server keeps Node's default idle timeout.
+/**
+ * Listens with the app on an HTTP server whose connections stay open while the Judge answers:
+ * PE kept them for 120 seconds, beyond the provider's 90-second deadline.
+ */
 export const serveApp = (
   app: { readonly fetch: (request: Request) => Response | Promise<Response> },
   address: { readonly hostname: string; readonly port: number }
 ) =>
-  createServer(getRequestListener(app.fetch)).listen(
-    address.port,
-    address.hostname
-  );
+  createServer(getRequestListener(app.fetch))
+    .setTimeout(HTTP_IDLE_TIMEOUT_MILLISECONDS)
+    .listen(address.port, address.hostname);

@@ -5,12 +5,13 @@ import path from "node:path";
 
 import type { SetupStatus } from "@fluenshift/contract";
 import { ServerConfig } from "@fluenshift/env";
-import { ConfigProvider, Effect, Layer } from "effect";
+import { ConfigProvider, Effect, Layer, ManagedRuntime } from "effect";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createApp, serveApp } from "./app";
 import type { AppBoundaries } from "./app";
 import type { EvaluationEndpointResult } from "./evaluation/evaluation-endpoint";
+import { LearnerIdentity } from "./learner-identity";
 
 let webDistPath = "";
 let emptyWebDistPath = "";
@@ -57,11 +58,24 @@ interface WebOptions {
   readonly webDistPath: string;
 }
 
+// The boundaries of these tests need nothing but the Learner of the request.
+const runtime = ManagedRuntime.make(LearnerIdentity.local);
+
 const localApp = (options: WebOptions & AppBoundaries) =>
-  createApp({ limits: local.limits, profile: local.profile, ...options });
+  createApp({
+    limits: local.limits,
+    profile: local.profile,
+    runtime,
+    ...options,
+  });
 
 const hostedApp = (options: WebOptions) =>
-  createApp({ limits: hosted.limits, profile: hosted.profile, ...options });
+  createApp({
+    limits: hosted.limits,
+    profile: hosted.profile,
+    runtime,
+    ...options,
+  });
 
 const appWith = (boundaries: AppBoundaries = {}) =>
   localApp({ serveWeb: false, webDistPath, ...boundaries });

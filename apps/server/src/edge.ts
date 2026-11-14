@@ -1,5 +1,5 @@
 import { Cause, Exit, Option } from "effect";
-import type { Effect, ManagedRuntime } from "effect";
+import type { Effect } from "effect";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import type { JSONValue } from "hono/utils/types";
 
@@ -22,6 +22,16 @@ export type EdgeErrors<E extends Tagged> = {
     error: Extract<E, { readonly _tag: Tag }>
   ) => EdgeFailure;
 };
+
+/**
+ * What runs a route's Effect to its exit: the application's `ManagedRuntime`, or the services of
+ * the running server through `Effect.runPromiseExitWith`.
+ */
+export interface EdgeRuntime<R> {
+  readonly runPromiseExit: <A, E>(
+    effect: Effect.Effect<A, E, R>
+  ) => Promise<Exit.Exit<A, unknown>>;
+}
 
 /** The answer to anything unexpected: a defect, an interruption, a failed layer. */
 export const INTERNAL_ERROR: EdgeFailure = {
@@ -55,7 +65,7 @@ const failureOf = <E extends Tagged>(
  * anything else with `INTERNAL_ERROR`, which carries no cause.
  */
 export const makeEdge =
-  <R, ER>(runtime: ManagedRuntime.ManagedRuntime<R, ER>) =>
+  <R>(runtime: EdgeRuntime<R>) =>
   <A, E extends Tagged>(
     effect: Effect.Effect<A, E, R>,
     handlers: {
