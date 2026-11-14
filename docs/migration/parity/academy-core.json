@@ -9,7 +9,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::evaluateExerciseAnswer guards > grades rewrite and translation answers against their acceptable answers"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > never reads a blank or non-numeric multiple-choice answer as option 0",
@@ -18,7 +20,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::evaluateExerciseAnswer guards > never reads a blank or non-numeric multiple-choice answer as option 0"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > reads a multiple-choice answer as its leading decimal integer",
@@ -27,7 +31,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::evaluateExerciseAnswer guards > reads a multiple-choice answer as its leading decimal integer"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > collapses every inner whitespace run to one space",
@@ -36,7 +42,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isTextAnswerAcceptable guards > collapses every inner whitespace run to one space"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > strips any trailing run of periods, exclamation marks and question marks",
@@ -45,7 +53,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isTextAnswerAcceptable guards > strips any trailing run of periods, exclamation marks and question marks"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > trims before it strips trailing punctuation",
@@ -54,7 +64,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isTextAnswerAcceptable guards > trims before it strips trailing punctuation"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/publicView.characterization.test.ts::toPublicExercise guards > keeps exactly the visible content of the other exercise types",
@@ -63,7 +75,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/public-view.test.ts::toPublicExercise guards > keeps exactly the visible content of the other exercise types"
+      ]
     },
     {
       "id": "grifando:test:src/lib/answerDiff.test.ts::diffWords > handles an empty answer",
@@ -126,7 +140,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::evaluateExerciseAnswer > dispatches fill-blank by text match"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::evaluateExerciseAnswer > dispatches multiple choice by numeric index",
@@ -135,7 +151,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::evaluateExerciseAnswer > dispatches multiple choice by numeric index"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isMultipleChoiceCorrect > matches the exact correct index",
@@ -144,7 +162,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isMultipleChoiceCorrect > matches the exact correct index"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isMultipleChoiceCorrect > rejects a different index",
@@ -153,7 +173,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isMultipleChoiceCorrect > rejects a different index"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > ignores leading/trailing whitespace and trailing punctuation",
@@ -162,7 +184,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isTextAnswerAcceptable > ignores leading/trailing whitespace and trailing punctuation"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > is case-insensitive",
@@ -171,7 +195,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isTextAnswerAcceptable > is case-insensitive"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > matches an exact acceptable answer",
@@ -180,7 +206,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isTextAnswerAcceptable > matches an exact acceptable answer"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > matches any of several acceptable answers",
@@ -189,7 +217,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isTextAnswerAcceptable > matches any of several acceptable answers"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/answerChecking.test.ts::isTextAnswerAcceptable > rejects an answer that matches none of the acceptable answers",
@@ -198,7 +228,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/answer-checking.test.ts::isTextAnswerAcceptable > rejects an answer that matches none of the acceptable answers"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::expectedSuccess > is 50% when ability matches difficulty and rises as ability exceeds it",
@@ -288,7 +320,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/public-view.test.ts::toPublicExercise > never includes acceptableAnswers for fill-blank/rewrite/translation"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/publicView.test.ts::toPublicExercise > never includes correctOptionIndex for multiple choice",
@@ -297,7 +331,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/public-view.test.ts::toPublicExercise > never includes correctOptionIndex for multiple choice"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/publicView.test.ts::toPublicExercise > preserves the visible prompt content",
@@ -306,7 +342,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/public-view.test.ts::toPublicExercise > preserves the visible prompt content"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > breaks ties by occurrence count, most frequent first",
