@@ -246,6 +246,60 @@
       "targets": []
     },
     {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/ > feeds the dashboard's streak, progress, weak areas and recent lists",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0005",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > shows each pattern once with its mastery, the category breakdown and the due count",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "pending-decision",
+      "decision": "adr:0005",
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/today > hands TodaySession today's challenge, biased toward the visitor's active categories",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/vocabulary > lists the visitor's items newest first and prefills the form from the query",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/write > takes its challenge and heading from the query",
+      "source": "src/app/pages.characterization.test.ts",
+      "class": "C",
+      "slice": "academy-http",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "grifando:test:src/app/api/exercises/route.test.ts::POST /api/exercises > answers 401 AI_KEY_REQUIRED without credentials",
       "source": "src/app/api/exercises/route.test.ts",
       "class": "C",

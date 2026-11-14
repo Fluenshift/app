@@ -228,6 +228,54 @@
       "baseline": "green"
     },
     {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/ > feeds the dashboard's streak, progress, weak areas and recent lists",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/ > feeds the dashboard's streak, progress, weak areas and recent lists",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > shows each pattern once with its mastery, the category breakdown and the due count",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/mistakes > shows each pattern once with its mastery, the category breakdown and the due count",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/today > hands TodaySession today's challenge, biased toward the visitor's active categories",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/today > hands TodaySession today's challenge, biased toward the visitor's active categories",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/vocabulary > lists the visitor's items newest first and prefills the form from the query",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/vocabulary > lists the visitor's items newest first and prefills the form from the query",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/app/pages.characterization.test.ts::/write > takes its challenge and heading from the query",
+      "kind": "characterization",
+      "source": "src/app/pages.characterization.test.ts",
+      "title": "/write > takes its challenge and heading from the query",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:claude-md:architecture-rules:01",
       "kind": "doc-bullet",
       "source": "CLAUDE.md",
