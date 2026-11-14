@@ -7,8 +7,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -16,8 +16,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -25,8 +25,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -34,8 +34,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -43,8 +43,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -52,8 +52,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -61,8 +61,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -70,8 +70,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -79,8 +79,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -88,8 +88,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -97,8 +97,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -106,8 +106,8 @@
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
       "slice": "evaluation-judge",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     }
   ]

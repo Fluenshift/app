@@ -16,7 +16,7 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0012",
       "targets": []
     },
@@ -25,8 +25,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -34,8 +34,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "pending-decision",
-      "decision": "adr:0013",
+      "disposition": "port",
+      "decision": null,
       "targets": []
     },
     {
@@ -61,7 +61,7 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0012",
       "targets": []
     },
@@ -70,7 +70,7 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0017",
       "targets": []
     },
@@ -97,7 +97,7 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0003",
       "targets": []
     },
@@ -106,7 +106,7 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0003",
       "targets": []
     },
@@ -295,7 +295,7 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0003",
       "targets": []
     },

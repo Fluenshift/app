@@ -178,8 +178,8 @@
       "source": "scripts/docker-smoke.ts",
       "class": null,
       "slice": "evaluation-e2e",
-      "disposition": "pending-decision",
-      "decision": "adr:0012",
+      "disposition": "port-changed",
+      "decision": "adr:0017",
       "targets": []
     },
     {

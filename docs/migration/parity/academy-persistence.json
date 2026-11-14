@@ -7,7 +7,7 @@
       "source": "src/server/domain/interview/interviewService.characterization.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -106,7 +106,7 @@
       "source": "src/server/domain/interview/interviewService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -115,7 +115,7 @@
       "source": "src/server/domain/interview/interviewService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -124,7 +124,7 @@
       "source": "src/server/domain/interview/interviewService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -133,7 +133,7 @@
       "source": "src/server/domain/interview/interviewService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -142,7 +142,7 @@
       "source": "src/server/domain/interview/interviewService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -214,7 +214,7 @@
       "source": "src/server/domain/writing/writingCoachService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -223,7 +223,7 @@
       "source": "src/server/domain/writing/writingCoachService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -232,7 +232,7 @@
       "source": "src/server/domain/writing/writingCoachService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -241,7 +241,7 @@
       "source": "src/server/domain/writing/writingCoachService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -250,7 +250,7 @@
       "source": "src/server/domain/writing/writingCoachService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -259,7 +259,7 @@
       "source": "src/server/domain/writing/writingCoachService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -268,7 +268,7 @@
       "source": "src/server/domain/writing/writingCoachService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -277,7 +277,7 @@
       "source": "src/server/domain/writing/writingCoachService.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -286,7 +286,7 @@
       "source": "src/server/domain/writing/writingSession.repository.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -295,7 +295,7 @@
       "source": "src/server/domain/writing/writingSession.repository.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -304,7 +304,7 @@
       "source": "src/server/domain/writing/writingSession.repository.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -313,7 +313,7 @@
       "source": "src/server/domain/writing/writingSession.repository.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -322,7 +322,7 @@
       "source": "src/server/domain/writing/writingSession.repository.test.ts",
       "class": "B",
       "slice": "academy-persistence",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     }

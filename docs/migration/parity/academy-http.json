@@ -115,7 +115,7 @@
       "source": "src/app/api/interview/interview.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -124,7 +124,7 @@
       "source": "src/app/api/interview/interview.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -133,7 +133,7 @@
       "source": "src/app/api/interview/interview.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -142,7 +142,7 @@
       "source": "src/app/api/interview/interview.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -151,7 +151,7 @@
       "source": "src/app/api/interview/interview.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -160,7 +160,7 @@
       "source": "src/app/api/interview/interview.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0010",
       "targets": []
     },
@@ -196,7 +196,7 @@
       "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -205,7 +205,7 @@
       "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -214,7 +214,7 @@
       "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -223,7 +223,7 @@
       "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -232,7 +232,7 @@
       "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -241,7 +241,7 @@
       "source": "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -250,7 +250,7 @@
       "source": "src/app/pages.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": []
     },
@@ -259,7 +259,7 @@
       "source": "src/app/pages.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0005",
       "targets": []
     },
@@ -268,7 +268,7 @@
       "source": "src/app/pages.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "port-changed",
       "decision": "adr:0005",
       "targets": []
     },
@@ -304,7 +304,7 @@
       "source": "src/server/ai/aiErrorResponse.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -331,7 +331,7 @@
       "source": "src/app/api/writing-sessions/route.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     },
@@ -340,7 +340,7 @@
       "source": "src/app/api/writing-sessions/route.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0004",
       "targets": []
     }

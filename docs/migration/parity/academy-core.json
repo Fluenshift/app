@@ -920,7 +920,7 @@
       "source": "src/server/domain/progress/progress.test.ts",
       "class": "A",
       "slice": "academy-core",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0002",
       "targets": []
     },
@@ -929,7 +929,7 @@
       "source": "src/server/domain/progress/progress.test.ts",
       "class": "A",
       "slice": "academy-core",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0002",
       "targets": []
     },
@@ -938,7 +938,7 @@
       "source": "src/server/domain/progress/progress.test.ts",
       "class": "A",
       "slice": "academy-core",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0002",
       "targets": []
     },
@@ -947,7 +947,7 @@
       "source": "src/server/domain/progress/progress.test.ts",
       "class": "A",
       "slice": "academy-core",
-      "disposition": "pending-decision",
+      "disposition": "superseded",
       "decision": "adr:0002",
       "targets": []
     },
