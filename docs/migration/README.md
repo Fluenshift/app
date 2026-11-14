@@ -115,9 +115,25 @@ Dispositions:
 - `pending-decision`: blocked by the open decision named in `decision`; nobody implements
   either side until it is settled (agent rule 7). Only these rows may have skipped tests.
 
-The ledger stores no status. From Phase 2 on, `parity-check.ts` derives it from the
-dispositions, the ADR index and the Vitest and Playwright reports: a `port` or
-`port-changed` row is `verified` once all its targets pass on `main`.
+The ledger stores no status. `scripts/migration/parity-check.ts` (gate G9) derives it from the
+dispositions, the ADR index and the Vitest and Playwright reports:
+
+| Status | Rows |
+| --- | --- |
+| `verified` | `port` and `port-changed` rows whose targets all pass |
+| `open` | `port` and `port-changed` rows with no target yet |
+| `blocked` | `pending-decision` rows |
+| `terminal` | `superseded`, `drop` and `informative` rows |
+
+```bash
+mise exec node@26.13.0 pnpm@12.18.0 -- pnpm parity   # run every suite with JSON reports, then check
+```
+
+It fails when an inventory row is missing from the ledger or present twice, when a row is
+malformed or not in the inventory, when a `port-changed`, `superseded` or `drop` row lacks an
+accepted ADR, when a target is missing, failing, or skipped outside `pending-decision`, and
+when a `port` target does not keep its source title. Without `--reports` it checks the
+ledger's structure only.
 
 Slices map to the protocol's phases and lanes:
 
