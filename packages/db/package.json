@@ -9,18 +9,22 @@
   "scripts": {
     "check-types": "tsc --noEmit -p tsconfig.json",
     "check:effect": "effect-tsgo diagnostics --project tsconfig.json --format pretty --strict",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "test:postgres": "vitest run --config vitest.postgres.config.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "catalog:",
+    "@fluenshift/env": "workspace:*",
     "drizzle-orm": "catalog:",
-    "effect": "catalog:"
+    "effect": "catalog:",
+    "pg": "catalog:"
   },
   "devDependencies": {
     "@effect/tsgo": "catalog:",
     "@effect/vitest": "catalog:",
     "@fluenshift/config": "workspace:*",
     "@types/node": "catalog:",
+    "@types/pg": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
