@@ -532,6 +532,14 @@
       "baseline": "green"
     },
     {
+      "id": "pe:characterization:apps/web/src/features/evaluations/http-evaluation-client.characterization.test.ts::HTTP Evaluation client failures > keeps a failure's code and retries one without a flag only from status 500",
+      "kind": "characterization",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.characterization.test.ts",
+      "title": "HTTP Evaluation client failures > keeps a failure's code and retries one without a flag only from status 500",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
       "id": "pe:data-policy:deletion:01",
       "kind": "doc-rule",
       "source": "docs/product/DATA-POLICY.md",

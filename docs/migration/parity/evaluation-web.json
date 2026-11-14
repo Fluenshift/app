@@ -3,6 +3,15 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/web/src/features/evaluations/http-evaluation-client.characterization.test.ts::HTTP Evaluation client failures > keeps a failure's code and retries one without a flag only from status 500",
+      "source": "apps/web/src/features/evaluations/http-evaluation-client.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:test:apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation",
       "source": "apps/web/src/components/-loader.test.tsx",
       "class": "A",
