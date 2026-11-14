@@ -24,4 +24,5 @@ export {
   TechnicalCategory,
   TechnicalCategorySchema,
 } from "./academy";
+export type { GeneratedExercise } from "./exercise-generation";
 export { HealthResponse } from "./health";

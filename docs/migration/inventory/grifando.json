@@ -20,6 +20,118 @@
       "baseline": "green"
     },
     {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > accepts one to ten exercises",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > accepts one to ten exercises",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds fill-blank templates to 1-300 characters and answers to 1-5 of 1-100",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > bounds fill-blank templates to 1-300 characters and answers to 1-5 of 1-100",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds multiple choice to 2-5 options of 1-300 characters and a non-negative integer index",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > bounds multiple choice to 2-5 options of 1-300 characters and a non-negative integer index",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds rewrite and translation texts to 1-500 characters and answers to 1-3 of 1-500",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > bounds rewrite and translation texts to 1-500 characters and answers to 1-3 of 1-500",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds the instruction to 1-300 characters and the explanation to 1-1000",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > bounds the instruction to 1-300 characters and the explanation to 1-1000",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > drops properties the schema does not declare",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "exerciseGenerationResultSchema bounds > drops properties the schema does not declare",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::validateExerciseGenerationResult guards > accepts the last option as the correct one and rejects the index past it",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "validateExerciseGenerationResult guards > accepts the last option as the correct one and rejects the index past it",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::validateExerciseGenerationResult guards > explains each rejection",
+      "kind": "characterization",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "title": "validateExerciseGenerationResult guards > explains each rejection",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > grades rewrite and translation answers against their acceptable answers",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "evaluateExerciseAnswer guards > grades rewrite and translation answers against their acceptable answers",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > never reads a blank or non-numeric multiple-choice answer as option 0",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "evaluateExerciseAnswer guards > never reads a blank or non-numeric multiple-choice answer as option 0",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > reads a multiple-choice answer as its leading decimal integer",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "evaluateExerciseAnswer guards > reads a multiple-choice answer as its leading decimal integer",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > collapses every inner whitespace run to one space",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "isTextAnswerAcceptable guards > collapses every inner whitespace run to one space",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > strips any trailing run of periods, exclamation marks and question marks",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "isTextAnswerAcceptable guards > strips any trailing run of periods, exclamation marks and question marks",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::isTextAnswerAcceptable guards > trims before it strips trailing punctuation",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
+      "title": "isTextAnswerAcceptable guards > trims before it strips trailing punctuation",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > gives 10-to-1 odds at a 400-point lead",
       "kind": "characterization",
       "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
@@ -56,6 +168,14 @@
       "kind": "characterization",
       "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
       "title": "difficulty scale > starts every ability at 1000",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/exercises/publicView.characterization.test.ts::toPublicExercise guards > keeps exactly the visible content of the other exercise types",
+      "kind": "characterization",
+      "source": "src/server/domain/exercises/publicView.characterization.test.ts",
+      "title": "toPublicExercise guards > keeps exactly the visible content of the other exercise types",
       "suite": "vitest",
       "baseline": "green"
     },
