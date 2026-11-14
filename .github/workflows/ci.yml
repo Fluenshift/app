@@ -127,6 +127,9 @@ jobs:
       - name: The inventory reproduces byte for byte
         run: node scripts/migration/inventory.ts --check
 
+      - name: G10 ported tests keep their source's strength
+        run: node scripts/migration/parity-audit.ts
+
   supply-chain:
     name: G7 (secrets and dependencies)
     runs-on: ubuntu-24.04
