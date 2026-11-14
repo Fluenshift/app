@@ -31,6 +31,7 @@ import {
   addWorktree,
   BaselineError,
   defaultRoot,
+  git,
   pinFor,
   readPins,
   removeWorktree,
@@ -39,7 +40,7 @@ import {
   worktreePath,
 } from "./baselines.ts";
 
-type Runner = "bun-junit" | "vitest-json" | "playwright-json";
+export type Runner = "bun-junit" | "vitest-json" | "playwright-json";
 
 interface Tool {
   readonly name: string;
@@ -47,7 +48,7 @@ interface Tool {
   readonly binDir: string;
 }
 
-interface Suite {
+export interface Suite {
   readonly id: string;
   readonly cwd: string;
   readonly runner: Runner;
@@ -55,6 +56,10 @@ interface Suite {
   // "{report}" is replaced by the absolute path of the raw report.
   readonly command: readonly string[];
   readonly env?: Readonly<Record<string, string>>;
+  // Characterization tests under `filesRoot` (relative to the baseline root) run with
+  // `filesCommand`, where "{files}" expands to their paths relative to `cwd`.
+  readonly filesRoot?: string;
+  readonly filesCommand?: readonly string[];
 }
 
 interface Postgres {
@@ -66,7 +71,7 @@ interface Postgres {
   readonly prepare: readonly string[];
 }
 
-interface Plan {
+export interface Plan {
   readonly tools: readonly Tool[];
   readonly pins: readonly (readonly [file: string, expected: RegExp])[];
   readonly install: readonly string[];
@@ -74,7 +79,7 @@ interface Plan {
   readonly suites: readonly Suite[];
 }
 
-const PLANS: Readonly<Record<string, Plan>> = {
+export const PLANS: Readonly<Record<string, Plan>> = {
   pe: {
     tools: [
       { name: "bun", version: "1.4.0", binDir: "bin" },
@@ -100,6 +105,14 @@ const PLANS: Readonly<Record<string, Plan>> = {
           "--reporter=junit",
           "--reporter-outfile={report}",
         ],
+        filesRoot: "apps/server/",
+        filesCommand: [
+          "bun",
+          "test",
+          "{files}",
+          "--reporter=junit",
+          "--reporter-outfile={report}",
+        ],
       },
       {
         id: "db",
@@ -110,6 +123,14 @@ const PLANS: Readonly<Record<string, Plan>> = {
           "bun",
           "run",
           "test",
+          "--reporter=junit",
+          "--reporter-outfile={report}",
+        ],
+        filesRoot: "packages/db/",
+        filesCommand: [
+          "bun",
+          "test",
+          "{files}",
           "--reporter=junit",
           "--reporter-outfile={report}",
         ],
@@ -127,6 +148,16 @@ const PLANS: Readonly<Record<string, Plan>> = {
           "--reporter=json",
           "--outputFile.json={report}",
         ],
+        filesRoot: "packages/env/",
+        filesCommand: [
+          "bun",
+          "run",
+          "test",
+          "{files}",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json={report}",
+        ],
       },
       {
         id: "web",
@@ -137,6 +168,16 @@ const PLANS: Readonly<Record<string, Plan>> = {
           "bun",
           "run",
           "test",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json={report}",
+        ],
+        filesRoot: "apps/web/",
+        filesCommand: [
+          "bun",
+          "run",
+          "test",
+          "{files}",
           "--reporter=default",
           "--reporter=json",
           "--outputFile.json={report}",
@@ -183,6 +224,17 @@ const PLANS: Readonly<Record<string, Plan>> = {
           "exec",
           "vitest",
           "run",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json={report}",
+        ],
+        filesRoot: "src/",
+        filesCommand: [
+          "pnpm",
+          "exec",
+          "vitest",
+          "run",
+          "{files}",
           "--reporter=default",
           "--reporter=json",
           "--outputFile.json={report}",
@@ -362,28 +414,44 @@ export function normalizeReport(
   return normalized.endsWith("\n") ? normalized : `${normalized}\n`;
 }
 
-function main(argv: readonly string[]): number {
-  const { values, positionals } = parseArgs({
-    args: [...argv],
-    allowPositionals: true,
-    options: { root: { type: "string" } },
-  });
-  const [system, ...extra] = positionals;
-  if (system === undefined || extra.length > 0)
-    throw new BaselineError("usage: baseline-run.ts <system> [--root <dir>]");
+export interface RunRequest {
+  readonly system: string;
+  readonly root: string;
+  // The disposable worktree is <root>/worktrees/<system>-<worktreeName>.
+  readonly worktreeName: string;
+  // Where the normalized reports and manifest.json go; replaced on every run.
+  readonly outDir: string;
+  // Called after the install: may add files to the worktree and chooses the suites to run.
+  readonly plan: (plan: Plan, worktree: string) => RunSelection;
+}
+
+export interface RunSelection {
+  readonly suites: readonly Suite[];
+  // Baseline-relative paths of files added to the worktree, recorded in the manifest.
+  readonly files: readonly string[];
+}
+
+export function planFor(system: string): Plan {
   const plan = PLANS[system];
   if (plan === undefined)
     throw new BaselineError(
       `no run plan for "${system}"; known: ${Object.keys(PLANS).join(", ")}`
     );
-  const root =
-    values.root === undefined ? defaultRoot : path.resolve(values.root);
+  return plan;
+}
+
+// Runs suites of one baseline in a fresh disposable worktree under the scrubbed
+// environment, stores normalized reports and a manifest, and returns 0 when every suite
+// passed, 1 otherwise.
+export function executeRun(request: RunRequest): number {
+  const { system, root } = request;
+  const plan = planFor(system);
   const pin = pinFor(readPins(), system);
 
   syncClone(system, pin, root);
-  if (existsSync(worktreePath(system, "run", root)))
-    removeWorktree(system, "run", root);
-  const worktree = addWorktree(system, pin, "run", root);
+  if (existsSync(worktreePath(system, request.worktreeName, root)))
+    removeWorktree(system, request.worktreeName, root);
+  const worktree = addWorktree(system, pin, request.worktreeName, root);
   checkPins(plan, worktree);
 
   const home = os.homedir();
@@ -424,6 +492,7 @@ function main(argv: readonly string[]): number {
   if (run(plan.install, worktree, baseEnv, log) !== 0)
     throw new BaselineError(`${system}: install failed; see ${log}`);
 
+  const selection = request.plan(plan, worktree);
   const service =
     plan.postgres === undefined ? undefined : startPostgres(plan.postgres);
   const results: { suite: Suite; exitCode: number }[] = [];
@@ -437,7 +506,7 @@ function main(argv: readonly string[]): number {
         `${system}: database preparation failed; see ${log}`
       );
     }
-    for (const suite of plan.suites) {
+    for (const suite of selection.suites) {
       const raw = path.join(rawDir, suite.report);
       const suiteEnv = {
         ...env,
@@ -465,19 +534,18 @@ function main(argv: readonly string[]): number {
     service?.stop();
   }
 
-  const outDir = path.join(
-    repoRoot,
-    "docs",
-    "migration",
-    "baseline-runs",
-    system
-  );
-  rmSync(outDir, { recursive: true, force: true });
-  mkdirSync(outDir, { recursive: true });
+  // Baseline code is never edited: after the run, no tracked file may differ from the pin.
+  if (git(["status", "--porcelain", "--untracked-files=no"], worktree) !== "")
+    throw new BaselineError(
+      `${system}: the run changed tracked baseline files in ${worktree}`
+    );
+
+  rmSync(request.outDir, { recursive: true, force: true });
+  mkdirSync(request.outDir, { recursive: true });
   for (const { suite } of results) {
     const text = readFileSync(path.join(rawDir, suite.report), "utf8");
     writeFileSync(
-      path.join(outDir, suite.report),
+      path.join(request.outDir, suite.report),
       normalizeReport(text, worktree, [runHome, home], suite.runner)
     );
   }
@@ -490,6 +558,7 @@ function main(argv: readonly string[]): number {
     tools: plan.tools.map(({ name, version }) => ({ name, version })),
     services: service === undefined ? [] : [service.record],
     install: plan.install,
+    ...(selection.files.length > 0 ? { files: selection.files } : {}),
     suites: results.map(({ suite, exitCode }) => ({
       id: suite.id,
       cwd: suite.cwd,
@@ -508,12 +577,32 @@ function main(argv: readonly string[]): number {
     })),
   };
   writeFileSync(
-    path.join(outDir, "manifest.json"),
+    path.join(request.outDir, "manifest.json"),
     `${JSON.stringify(manifest, null, 2)}\n`
   );
   rmSync(rawDir, { recursive: true, force: true });
-  console.error(`${system}: reports in ${path.relative(repoRoot, outDir)}`);
+  console.error(
+    `${system}: reports in ${path.relative(repoRoot, request.outDir)}`
+  );
   return results.every(({ exitCode }) => exitCode === 0) ? 0 : 1;
+}
+
+function main(argv: readonly string[]): number {
+  const { values, positionals } = parseArgs({
+    args: [...argv],
+    allowPositionals: true,
+    options: { root: { type: "string" } },
+  });
+  const [system, ...extra] = positionals;
+  if (system === undefined || extra.length > 0)
+    throw new BaselineError("usage: baseline-run.ts <system> [--root <dir>]");
+  return executeRun({
+    system,
+    root: values.root === undefined ? defaultRoot : path.resolve(values.root),
+    worktreeName: "run",
+    outDir: path.join(repoRoot, "docs", "migration", "baseline-runs", system),
+    plan: (plan) => ({ suites: plan.suites, files: [] }),
+  });
 }
 
 if (import.meta.main) {
