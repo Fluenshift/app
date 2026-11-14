@@ -27,6 +27,7 @@ Node 26.13.0 and pnpm 12.18.0. Where they are not on `PATH`, prefix commands wit
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
 | `pnpm test` | Vitest in every workspace. |
+| `pnpm test:postgres` | The `Database` service against a Postgres 17 server; `DEPLOY_PROFILE=hosted` and `DATABASE_URL` name it. |
 | `pnpm test:e2e` | Build the server and the web app, then run the Playwright journeys against the one process that serves both. |
 | `pnpm build` | Server bundle and SPA build. |
 | `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, CI and test setting is at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
@@ -42,7 +43,7 @@ Migration scripts run on plain Node, with no dependencies:
 | `apps/web` | Vite, React, TanStack Router. `src/api.ts` is the only module that calls the server. |
 | `packages/contract` | Effect Schema for every API request and response. Isomorphic. |
 | `packages/core` | The pure domain. Isomorphic: no Node built-ins, no `Buffer`. |
-| `packages/db` | Drizzle inside the Effect `Database` service; PGlite for tests and local mode. |
+| `packages/db` | Drizzle inside the Effect `Database` service: PGlite locally and in tests, Postgres when hosted. |
 | `packages/env` | Effect `Config`. The only place that may read the environment. |
 | `packages/ui` | Shared UI components. |
 | `packages/config` | Shared TypeScript configuration, including the Effect diagnostic severities. |
