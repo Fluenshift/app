@@ -2,7 +2,7 @@
 // user, and checks its boundary, its data directory and what it serves. Ported from PE
 // `scripts/docker-smoke.ts`. The checks that need Evaluations and the setup status join with
 // the routes that answer them (Phases 4d and 4f).
-import { randomBytes } from "node:crypto";
+import { randomInt } from "node:crypto";
 import { existsSync, statSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -28,9 +28,9 @@ const HOST_USER_ID = process.getuid?.() ?? 1000;
 const HOST_GROUP_ID = process.getgid?.() ?? 1000;
 
 const randomLetters = (length: number) =>
-  [...randomBytes(length)]
-    .map((value) => String.fromCodePoint(97 + (value % 26)))
-    .join("");
+  Array.from({ length }, () => String.fromCodePoint(97 + randomInt(26))).join(
+    ""
+  );
 
 const secretSentinel = plant("secret", `sk-smoke-${randomLetters(24)}`);
 const sampleSentinel = plant("sample", `smokesample${randomLetters(20)}`);
