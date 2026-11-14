@@ -10,6 +10,7 @@ import {
   PROFICIENCY_BANDS,
   PROGRESS_PERIODS,
   ProgressEvidence,
+  ProgressEvidenceRequest,
   ProgressSummary,
   SetupStatus,
   WRITING_SAMPLE_ORIGINS,
@@ -245,5 +246,32 @@ describe("Evaluation contract", () => {
     expect(() =>
       Schema.decodeUnknownSync(WritingSampleOrigin)("draft")
     ).toThrow('Expected "work" | "practice"');
+  });
+
+  it("carries a Progress evidence selection in a request body, whole or not at all", () => {
+    const request = {
+      period: "all",
+      selection: {
+        correction: "an apple",
+        kind: "correction",
+        originalText: "a apple",
+      },
+    };
+    const refused = [
+      {
+        period: "all",
+        selection: { kind: "correction", originalText: "a apple" },
+      },
+      { period: "all", selection: { category: "Style", kind: "category" } },
+      { period: "year", selection: { kind: "finding-rate" } },
+      { period: "all" },
+    ];
+
+    expect(
+      Schema.decodeUnknownSync(ProgressEvidenceRequest)(request)
+    ).toStrictEqual(request);
+    expect(
+      refused.map((body) => Schema.is(ProgressEvidenceRequest)(body))
+    ).toStrictEqual([false, false, false, false]);
   });
 });
