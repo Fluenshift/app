@@ -27,7 +27,7 @@ Node 26.13.0 and pnpm 12.18.0. Where they are not on `PATH`, prefix commands wit
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
 | `pnpm test` | Vitest in every workspace. |
-| `pnpm test:e2e` | Build the server, then run the Playwright journeys against it. |
+| `pnpm test:e2e` | Build the server and the web app, then run the Playwright journeys against the one process that serves both. |
 | `pnpm build` | Server bundle and SPA build. |
 | `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, CI and test setting is at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
 

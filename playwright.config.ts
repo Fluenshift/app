@@ -11,8 +11,10 @@ export default defineConfig({
     command: "node apps/server/dist/index.mjs",
     env: {
       DATA_DIRECTORY: ".data/e2e",
+      NODE_ENV: "production",
       SERVER_HOST: "127.0.0.1",
       SERVER_PORT: "4173",
+      WEB_DIST_PATH: "apps/web/dist",
     },
     reuseExistingServer: false,
     url: "http://127.0.0.1:4173/api/health",
