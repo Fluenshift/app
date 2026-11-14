@@ -8,6 +8,7 @@
     "check:docs": "node scripts/check-doc-commands.ts",
     "check:effect": "turbo run check:effect",
     "check:gates": "node scripts/check-gates.ts",
+    "db:generate": "pnpm --filter @fluenshift/db run db:generate",
     "dev": "turbo run dev",
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs --follow",

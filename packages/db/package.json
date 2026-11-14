@@ -9,11 +9,13 @@
   "scripts": {
     "check-types": "tsc --noEmit -p tsconfig.json",
     "check:effect": "effect-tsgo diagnostics --project tsconfig.json --format pretty --strict",
+    "db:generate": "drizzle-kit generate",
     "test": "vitest run --passWithNoTests",
     "test:postgres": "vitest run --config vitest.postgres.config.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "catalog:",
+    "@fluenshift/contract": "workspace:*",
     "@fluenshift/env": "workspace:*",
     "drizzle-orm": "catalog:",
     "effect": "catalog:",
@@ -25,6 +27,7 @@
     "@fluenshift/config": "workspace:*",
     "@types/node": "catalog:",
     "@types/pg": "catalog:",
+    "drizzle-kit": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

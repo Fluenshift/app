@@ -27,6 +27,7 @@ Node 26.13.0 and pnpm 12.18.0. Where they are not on `PATH`, prefix commands wit
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
 | `pnpm test` | Vitest in every workspace. |
+| `pnpm db:generate` | Write the next migration of `packages/db` from `packages/db/src/schema.ts` with drizzle-kit. Only the coordinator runs it, one migration in flight at a time. |
 | `pnpm test:postgres` | The `Database` service against a Postgres 17 server; `DEPLOY_PROFILE=hosted` and `DATABASE_URL` name it. |
 | `pnpm test:e2e` | Build the server and the web app, then run the Playwright journeys against the one process that serves both. |
 | `pnpm build` | Server bundle and SPA build. |
@@ -45,7 +46,7 @@ Migration scripts run on plain Node, with no dependencies:
 | `apps/web` | Vite, React, TanStack Router. `src/api.ts` is the only module that calls the server. |
 | `packages/contract` | Effect Schema for every API request and response. Isomorphic. |
 | `packages/core` | The pure domain. Isomorphic: no Node built-ins, no `Buffer`. |
-| `packages/db` | Drizzle inside the Effect `Database` service: PGlite locally and in tests, Postgres when hosted. |
+| `packages/db` | Drizzle inside the Effect `Database` service: PGlite locally and in tests, Postgres when hosted. The schema scopes every row by Learner; both layers apply the migrations when they open. |
 | `packages/env` | Effect `Config`. The only place that may read the environment. |
 | `packages/ui` | Shared UI components. |
 | `packages/config` | Shared TypeScript configuration, including the Effect diagnostic severities. |

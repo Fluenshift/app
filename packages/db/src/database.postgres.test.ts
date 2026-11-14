@@ -27,6 +27,25 @@ describe("Database on Postgres", () => {
     ]);
   });
 
+  it("migrates the product tables on Postgres 17", async () => {
+    const tables = await Effect.runPromise(
+      Database.use((database) =>
+        database.run((client) =>
+          client.execute(
+            sql`select table_name from information_schema.tables where table_schema = 'public' and table_name in ('evaluations', 'findings', 'learners', 'suggestions') order by table_name`
+          )
+        )
+      ).pipe(Effect.provide(hosted))
+    );
+
+    expect(tables.rows).toStrictEqual([
+      { table_name: "evaluations" },
+      { table_name: "findings" },
+      { table_name: "learners" },
+      { table_name: "suggestions" },
+    ]);
+  });
+
   it("reports a rejected query as DatabaseError", async () => {
     const outcome = await Effect.runPromiseExit(
       Database.use((database) =>
