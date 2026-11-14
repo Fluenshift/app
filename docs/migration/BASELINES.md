@@ -146,6 +146,24 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | System | File | Pins | Cases |
 | --- | --- | --- | ---: |
 | `pe` | `apps/server/src/evaluation/utf8.characterization.test.ts` | `utf8.ts`, which has no test, and the UTF-8 edge cases of `applyCorrections`: a leading BOM, lone surrogates, code-point boundaries, the two rejection reasons. A port to `TextEncoder` and `TextDecoder` must keep a leading BOM, which a default `TextDecoder` drops. | 13 |
+| `pe` | `apps/server/src/evaluation/protected-content.characterization.test.ts` | Two gaps of `protected-content.test.ts`: lines of JSON that only the JSON block pass protects, because they are not YAML, and the byte offsets of each span, which its cases never compare. | 2 |
+| `pe` | `apps/server/src/app.characterization.test.ts` | Every HTTP behavior of `app.ts` that `app.test.ts` leaves out; see the table below. | 27 |
+| `grifando` | `src/server/domain/exercises/difficulty.characterization.test.ts` | The scale constants of `difficulty.ts`: the starting ability, the level ratings, the 400-point Elo scale, the K-factor and the 70% success target. The baseline tests only compare results with each other. | 5 |
+| `grifando` | `src/server/domain/exercises/selection.characterization.test.ts` | How `selectReviewSet` splits an odd count: today's mistakes take the larger half. The baseline tests use even counts. | 1 |
+| `grifando` | `src/server/domain/mistakes/mastery.characterization.test.ts` | `isFading` never flags an IMPROVING pattern. The baseline test checks an ACTIVE one. | 1 |
+| `grifando` | `src/server/domain/mistakes/recall.characterization.test.ts` | `isDueForReview`, which no baseline test calls: its 0.5 threshold, and that a recall of exactly 0.5 is not due. | 1 |
+| `grifando` | `src/lib/answerDiff.characterization.test.ts` | The punctuation `diffWords` ignores, and that it splits words on any whitespace. The baseline tests use single spaces and strip only periods and exclamation marks. | 2 |
+| `grifando` | `src/server/domain/progress/streak.characterization.test.ts` | That a streak's week starts on Monday, and the 100 and 365 day milestones. The baseline tests never rest on a Sunday and reach 7 and 30 only. | 2 |
+| `grifando` | `src/server/domain/writing/dailyPrompt.characterization.test.ts` | Which prompt fixed days get, which pins the day hash, and the prompt bank's copy. The baseline tests check only that a pick is stable and varies. | 2 |
+| `grifando` | `src/server/domain/writing/technicalPrompts.characterization.test.ts` | The technical prompt bank's copy. The baseline tests check its shape only. | 1 |
+| `grifando` | `src/server/ai/schemas/exerciseGeneration.characterization.test.ts` | Every bound of the exercise generation schema, at its limit and one past it; that undeclared properties are dropped; the out-of-range check at the last option; both error messages of `validateExerciseGenerationResult`. The baseline tests pin three bounds. | 8 |
+| `grifando` | `src/server/domain/exercises/answerChecking.characterization.test.ts` | How a multiple-choice answer is read (`Number.parseInt` semantics, so a blank answer is never option 0); which trailing punctuation is stripped; whitespace collapsing; trimming before stripping; grading of rewrite and translation answers. | 6 |
+| `grifando` | `src/server/domain/exercises/publicView.characterization.test.ts` | The whole public view of multiple-choice, rewrite and translation exercises. The baseline test pins fill-blank only. | 1 |
+| `grifando` | `src/app/api/rateLimitFirst.characterization.test.ts` | Fix `9ba8040`: every state-changing route consults its rate limit before it creates the visitor's user, and which limit each route uses. | 1 |
+| `grifando` | `src/lib/responseError.characterization.test.ts` | Fix `032c115`: `failedSessionIdFrom` reads the FAILED session id from a clone of the response. | 2 |
+| `grifando` | `src/server/ai/aiErrorResponse.characterization.test.ts` | Fix `032c115`: a typed AI error's response carries its FAILED session id, and only when there is one. | 1 |
+| `grifando` | `src/server/ai/client.characterization.test.ts` | Fix `80957b6`: the default model of each provider, the light fallback models, and that a key test runs on the fallback. | 3 |
+| `grifando` | `src/server/domain/interview/interviewService.characterization.test.ts` | Fix `218b7b7` on the interview path: a failed answer returns its FAILED writing session, and a retry re-analyzes that session. | 1 |
 | `grifando` | `src/app/api/exercises/exercises.characterization.test.ts` | `GET` and `POST /api/exercises` beyond the AI error cases of `route.test.ts`; see the table below. | 6 |
 | `grifando` | `src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts` | Grading and explaining an attempt; neither route has a test. | 6 |
 | `grifando` | `src/app/api/interview/interview.characterization.test.ts` | The four interview routes; none has a test. | 6 |
@@ -153,6 +171,40 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | `grifando` | `src/app/api/vocabulary/vocabulary.characterization.test.ts` | Saving and deleting a vocabulary item; neither route has a test. | 3 |
 | `grifando` | `src/app/pages.characterization.test.ts` | The data the five Server Component pages read and render; see the tables below. | 6 |
 | `grifando` | `src/app/api/writing-sessions/writingSessions.characterization.test.ts` | Submitting, listing and reading writing sessions beyond the missing-key cases of `route.test.ts`. | 6 |
+
+PE's HTTP endpoints, by the test that pins each behavior (#21):
+
+| Endpoint | `app.test.ts` | `app.characterization.test.ts` |
+| --- | --- | --- |
+| Every `/api/` response | `cache-control: no-store` on History and on every Evaluation failure | `no-store` on 403, 413, an unknown route and the setup status |
+| Request guards | 403 for a remote host and a foreign Origin; 413 for a declared body over 256 KiB | the three loopback host names; 403 for a foreign Host header and a cross-site fetch; a same-origin fetch; the 403 and 413 bodies; a body of exactly 256 KiB passes |
+| Unknown `/api/` route | 404 with a JSON content type under the browser fallback | the not-found body, with and without the browser fallback |
+| `GET /api/health` | 200 and `{ status: "ok" }` | nothing more |
+| `POST /api/evaluations` | 201 and the created Evaluation; the status of every failure code; no private text in failures; the log event without the sample; 400 for a mistyped field | 503 when Evaluation is not configured; the whole created, no-english and failure bodies; the invalid-request body for a body that is not JSON and for a missing field; a throwing evaluation (500 and an `internal-error` log); a throwing logger; the configured model in the log |
+| `GET /api/evaluations` | 200 and the list; the safe 500 | 503 not-ready |
+| `GET /api/evaluations/:evaluationId` | 200 and 404 | 503 not-ready; the not-found body |
+| `DELETE /api/evaluations/:evaluationId` | 204 | 503 not-ready; the empty body |
+| `GET /api/progress` | 200 for `7-days` | 503 not-ready; `30-days` and `all`; 400 invalid-period |
+| `GET /api/progress/evidence` | 200 for `average-score` | 503 not-ready; `finding-rate`, category and correction selections; 400 invalid-selection |
+| `GET /api/setup` | 200, part of the status | 503 not-ready; the whole status |
+| `GET /*` browser fallback | immutable assets; uncached `index.html` | the bare not-found body for `/api/`; a missing asset; no file outside `assets/`; 404 for a request that is not a GET |
+| HTTP idle timeout | 120 seconds | nothing more |
+
+Grifando's fix commits, by the test that pins each at the baseline (#23). A baseline test counts only if it fails once the fix is undone in a disposable worktree at the pin; every characterization above was checked the same way.
+
+| Commit | Behavior | Pinned by |
+| --- | --- | --- |
+| `0083c7f` | Gemini schemas drop array bounds and `$schema`. | `src/server/ai/providers/gemini.test.ts` › toGeminiSchema › drops array bounds and $schema that Gemini rejects, keeping the rest |
+| `032c115` | A typed AI error keeps the FAILED session id, its response carries it, the client reads it, and `POST /api/exercises` maps typed AI errors. | `src/app/api/exercises/route.test.ts` › POST /api/exercises › maps a typed AI error from generation to its coded response; `src/server/domain/writing/writingCoachService.test.ts` › writingCoachService.submitWriting › leaves one FAILED session, exposes its id on a typed access error, and reuses it on retry; the `aiErrorResponse` and `responseError` characterizations. The screens that resubmit wait for the journeys of ADR 0001. |
+| `218b7b7` | A retry re-analyzes the FAILED session instead of creating another. | `src/server/domain/writing/writingCoachService.test.ts` › writingCoachService.submitWriting › re-analyzes the failed session on retry instead of creating a duplicate, › leaves one FAILED session, exposes its id on a typed access error, and reuses it on retry, and › creates a new session when the retry id isn't a FAILED session of this user; the `interviewService` characterization. The screens wait for the journeys. |
+| `2a86084` | `aiFetch` refuses absolute and protocol-relative URLs; saving a key reports blocked storage. | `src/lib/aiKeyStore.test.ts` › aiFetch › refuses absolute and protocol-relative URLs without calling fetch, and › saveAIKey reports false when storage throws. The settings form's message waits for the journeys. |
+| `8b80767` | Exercise, interview and writing lookups are scoped to the session user. | `src/server/domain/exercises/exerciseService.test.ts` › exerciseAttemptService ownership › rejects another user's exercise and leaves the owner's data untouched; `src/server/domain/interview/interviewService.test.ts` › interview ownership › hides, refuses to answer and refuses to end another user's session; `src/server/domain/writing/writingSession.repository.test.ts` › writingSessionRepository.findByIdForUser › returns the owner's session and null for another user. Each fails once the lookups drop the owner. The routes' 404 for another user's id is in the scope of #22. |
+| `9ba8040` | An `/api` request without a session gets 401 and mints no cookie, cron routes pass, and every state-changing route checks its rate limit before creating the user. | `src/proxy.test.ts` › proxy › answers 401 SESSION_REQUIRED to an /api request without a valid cookie and mints nothing, and › lets /api/cron requests through without a session or a new cookie; the `rateLimitFirst` characterization. The check of production secrets in `scripts/vercel-build.mjs` belongs to the Vercel build, which ADR 0003 replaces, and has no test. |
+| `80957b6` | Gemini answers with `gemini-3.5-flash`, and a key test runs on the light fallback model. | the `client` characterization |
+| `9f5e47e`, `397b0b4` | Spacing roles of `Field`, `Stack` and `Actions`; tall blocks revealed and `CountUp` without flicker. | UI only; they wait for ADR 0009 and the journeys. |
+| `02f4ffd`, `8dc1a06`, `9e86e94`, `22b6067`, `648cf5d`, `cf0c6b6` | Tests, build and tooling only. | Nothing to pin. |
+
+The `fix-commit` rows keep empty targets: a target is a test of this repository, and these tests run only at the baseline. The unit that ports each fix's behavior points its row at the ported tests.
 
 Grifando's API routes, by the test that pins each behavior (#22). The characterizations run the
 handlers against the throwaway Postgres, with the session, the rate limit and the AI provider
