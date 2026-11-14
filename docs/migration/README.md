@@ -189,7 +189,19 @@ Head: <full head SHA>
 The first line is `G12 PASS` or `G12 BLOCK`. `Verifier` names the verifying vendor (`claude`
 or `codex`) and must differ from the PR's `implementer:` label. Reasons follow, and are
 required for BLOCK. A verdict covers only that head SHA; any new commit needs a new verdict.
-Until Phase 2 builds CI, the coordinator checks verdicts by hand.
+
+`scripts/migration/verdict-check.ts` computes the gate. The `G12 verdict` workflow runs it from
+the default branch whenever a PR or its comments change, and sets the `G12` commit status on
+the PR head: it passes only when the newest verdict for that head is `G12 PASS`, comes from an
+organization member, and names a verifier other than the PR's `implementer:` label. The merge
+queue admits only PRs whose `G12` status passed, so the workflow passes its merge group commit
+as it is. To read a PR's verdict locally, without setting any status:
+
+```bash
+mise exec node@26.13.0 -- node scripts/migration/verdict-check.ts --repo Fluenshift/app --pr <number>
+```
+
+Until the workflow is on `main`, the coordinator checks verdicts by hand.
 
 ## Mechanical mapping
 
