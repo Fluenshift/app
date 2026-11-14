@@ -32,8 +32,17 @@ export class BaselineError extends Error {
 }
 
 export const repoRoot = path.resolve(import.meta.dirname, "..", "..");
-export const pinsFile = path.join(repoRoot, "docs", "migration", "baselines.json");
-export const defaultRoot = path.resolve(repoRoot, "..", `${path.basename(repoRoot)}-baselines`);
+export const pinsFile = path.join(
+  repoRoot,
+  "docs",
+  "migration",
+  "baselines.json"
+);
+export const defaultRoot = path.resolve(
+  repoRoot,
+  "..",
+  `${path.basename(repoRoot)}-baselines`
+);
 
 const SYSTEM = /^[a-z][a-z0-9-]*$/;
 const REPOSITORY = /^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/;
@@ -45,7 +54,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function field(entry: Record<string, unknown>, key: string, pattern: RegExp, where: string): string {
+function field(
+  entry: Record<string, unknown>,
+  key: string,
+  pattern: RegExp,
+  where: string
+): string {
   const value = entry[key];
   if (typeof value !== "string" || !pattern.test(value)) {
     throw new BaselineError(`${where}.${key} must match ${pattern}`);
@@ -55,15 +69,20 @@ function field(entry: Record<string, unknown>, key: string, pattern: RegExp, whe
 
 export function parsePins(text: string, source = pinsFile): Pins {
   const data: unknown = JSON.parse(text);
-  if (!isRecord(data)) throw new BaselineError(`${source}: expected an object of pins`);
+  if (!isRecord(data))
+    throw new BaselineError(`${source}: expected an object of pins`);
   const pins = new Map<string, Pin>();
   for (const [system, entry] of Object.entries(data)) {
     const where = `${source}: ${system}`;
-    if (!SYSTEM.test(system)) throw new BaselineError(`${where}: system name must match ${SYSTEM}`);
-    if (!isRecord(entry)) throw new BaselineError(`${where}: expected an object`);
-    const keys = Object.keys(entry).sort().join(",");
+    if (!SYSTEM.test(system))
+      throw new BaselineError(`${where}: system name must match ${SYSTEM}`);
+    if (!isRecord(entry))
+      throw new BaselineError(`${where}: expected an object`);
+    const keys = Object.keys(entry).toSorted().join(",");
     if (keys !== "commit,repository,tag") {
-      throw new BaselineError(`${where}: expected exactly the keys commit, repository, tag`);
+      throw new BaselineError(
+        `${where}: expected exactly the keys commit, repository, tag`
+      );
     }
     pins.set(system, {
       repository: field(entry, "repository", REPOSITORY, where),
@@ -82,7 +101,9 @@ export function readPins(file = pinsFile): Pins {
 export function pinFor(pins: Pins, system: string): Pin {
   const pin = pins.get(system);
   if (pin === undefined) {
-    throw new BaselineError(`unknown system "${system}"; known: ${[...pins.keys()].join(", ")}`);
+    throw new BaselineError(
+      `unknown system "${system}"; known: ${[...pins.keys()].join(", ")}`
+    );
   }
   return pin;
 }
@@ -95,8 +116,13 @@ export function clonePath(system: string, root = defaultRoot): string {
   return path.join(root, system);
 }
 
-export function worktreePath(system: string, name: string, root = defaultRoot): string {
-  if (!WORKTREE_NAME.test(name)) throw new BaselineError(`worktree name must match ${WORKTREE_NAME}`);
+export function worktreePath(
+  system: string,
+  name: string,
+  root = defaultRoot
+): string {
+  if (!WORKTREE_NAME.test(name))
+    throw new BaselineError(`worktree name must match ${WORKTREE_NAME}`);
   return path.join(root, "worktrees", `${system}-${name}`);
 }
 
@@ -109,8 +135,13 @@ export function git(args: readonly string[], cwd?: string): string {
       maxBuffer: 256 * 1024 * 1024,
     }).trimEnd();
   } catch (error) {
-    const stderr = isRecord(error) && typeof error["stderr"] === "string" ? error["stderr"].trim() : "";
-    throw new BaselineError(`git ${args.join(" ")} failed${stderr === "" ? "" : `: ${stderr}`}`);
+    const stderr =
+      isRecord(error) && typeof error["stderr"] === "string"
+        ? error["stderr"].trim()
+        : "";
+    throw new BaselineError(
+      `git ${args.join(" ")} failed${stderr === "" ? "" : `: ${stderr}`}`
+    );
   }
 }
 
@@ -125,7 +156,10 @@ export function resolveRemoteTag(pin: Pin): string {
     if (sha !== undefined && name !== undefined) refs.set(name, sha);
   }
   const commit = refs.get(`${ref}^{}`) ?? refs.get(ref);
-  if (commit === undefined) throw new BaselineError(`${pin.repository}: tag ${pin.tag} not found on the remote`);
+  if (commit === undefined)
+    throw new BaselineError(
+      `${pin.repository}: tag ${pin.tag} not found on the remote`
+    );
   return commit;
 }
 
@@ -133,7 +167,7 @@ export function verifyRemote(system: string, pin: Pin): void {
   const commit = resolveRemoteTag(pin);
   if (commit !== pin.commit) {
     throw new BaselineError(
-      `${system}: ${pin.repository} tag ${pin.tag} resolves to ${commit}, but the pin is ${pin.commit}`,
+      `${system}: ${pin.repository} tag ${pin.tag} resolves to ${commit}, but the pin is ${pin.commit}`
     );
   }
 }
@@ -143,22 +177,31 @@ export function verifyRemote(system: string, pin: Pin): void {
 function assertCleanClone(dir: string, pin: Pin): void {
   const origin = git(["remote", "get-url", "origin"], dir);
   if (origin !== remoteUrl(pin)) {
-    throw new BaselineError(`${dir}: origin is ${origin}, expected ${remoteUrl(pin)}`);
+    throw new BaselineError(
+      `${dir}: origin is ${origin}, expected ${remoteUrl(pin)}`
+    );
   }
   const status = git(["status", "--porcelain"], dir);
   if (status !== "") {
-    throw new BaselineError(`${dir}: working tree is not clean; baselines are never edited`);
+    throw new BaselineError(
+      `${dir}: working tree is not clean; baselines are never edited`
+    );
   }
 }
 
 function assertPinnedCheckout(dir: string, pin: Pin): void {
   const head = git(["rev-parse", "HEAD"], dir);
-  if (head !== pin.commit) throw new BaselineError(`${dir}: HEAD is ${head}, expected ${pin.commit}`);
+  if (head !== pin.commit)
+    throw new BaselineError(`${dir}: HEAD is ${head}, expected ${pin.commit}`);
 }
 
 // Clones the repository if needed, then checks out the pinned commit, detached. Refuses a
 // clone whose origin differs from the pin or whose working tree is not clean.
-export function syncClone(system: string, pin: Pin, root = defaultRoot): string {
+export function syncClone(
+  system: string,
+  pin: Pin,
+  root = defaultRoot
+): string {
   verifyRemote(system, pin);
   const dir = clonePath(system, root);
   if (existsSync(dir)) {
@@ -167,28 +210,52 @@ export function syncClone(system: string, pin: Pin, root = defaultRoot): string 
   } else {
     git(["clone", "--quiet", "--no-checkout", remoteUrl(pin), dir]);
   }
-  git(["-c", "advice.detachedHead=false", "checkout", "--quiet", "--detach", pin.commit], dir);
+  git(
+    [
+      "-c",
+      "advice.detachedHead=false",
+      "checkout",
+      "--quiet",
+      "--detach",
+      pin.commit,
+    ],
+    dir
+  );
   assertPinnedCheckout(dir, pin);
   return dir;
 }
 
 // A disposable worktree at the pinned commit, for installs, suite runs and characterization
 // tests. The clone itself stays pristine.
-export function addWorktree(system: string, pin: Pin, name: string, root = defaultRoot): string {
+export function addWorktree(
+  system: string,
+  pin: Pin,
+  name: string,
+  root = defaultRoot
+): string {
   const clone = clonePath(system, root);
-  if (!existsSync(clone)) throw new BaselineError(`${clone} is missing; run sync first`);
+  if (!existsSync(clone))
+    throw new BaselineError(`${clone} is missing; run sync first`);
   assertCleanClone(clone, pin);
   assertPinnedCheckout(clone, pin);
   const dir = worktreePath(system, name, root);
-  if (existsSync(dir)) throw new BaselineError(`${dir} already exists; remove it first`);
+  if (existsSync(dir))
+    throw new BaselineError(`${dir} already exists; remove it first`);
   git(["worktree", "add", "--quiet", "--detach", dir, pin.commit], clone);
   assertPinnedCheckout(dir, pin);
   return dir;
 }
 
-export function removeWorktree(system: string, name: string, root = defaultRoot): void {
+export function removeWorktree(
+  system: string,
+  name: string,
+  root = defaultRoot
+): void {
   const clone = clonePath(system, root);
-  git(["worktree", "remove", "--force", worktreePath(system, name, root)], clone);
+  git(
+    ["worktree", "remove", "--force", worktreePath(system, name, root)],
+    clone
+  );
   git(["worktree", "prune"], clone);
 }
 
@@ -204,7 +271,8 @@ function main(argv: readonly string[]): void {
     allowPositionals: true,
     options: { root: { type: "string" } },
   });
-  const root = values.root === undefined ? defaultRoot : path.resolve(values.root);
+  const root =
+    values.root === undefined ? defaultRoot : path.resolve(values.root);
   const [command, ...rest] = positionals;
   const pins = readPins();
 
@@ -212,7 +280,9 @@ function main(argv: readonly string[]): void {
     case "verify":
       for (const system of selectSystems(pins, rest)) {
         verifyRemote(system, pinFor(pins, system));
-        console.error(`${system}: ${pinFor(pins, system).tag} resolves to the pin`);
+        console.error(
+          `${system}: ${pinFor(pins, system).tag} resolves to the pin`
+        );
       }
       return;
     case "sync":
@@ -222,7 +292,8 @@ function main(argv: readonly string[]): void {
       return;
     case "path": {
       const [system] = rest;
-      if (system === undefined || rest.length !== 1) throw new BaselineError("usage: path <system>");
+      if (system === undefined || rest.length !== 1)
+        throw new BaselineError("usage: path <system>");
       pinFor(pins, system);
       console.log(clonePath(system, root));
       return;
@@ -248,7 +319,7 @@ function main(argv: readonly string[]): void {
     }
     default:
       throw new BaselineError(
-        "usage: baselines.ts <verify|sync|path|add-worktree|remove-worktree> [args] [--root <dir>]",
+        "usage: baselines.ts <verify|sync|path|add-worktree|remove-worktree> [args] [--root <dir>]"
       );
   }
 }

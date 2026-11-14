@@ -1,0 +1,4 @@
+{
+  "extends": "@fluenshift/config/tsconfig.base.json",
+  "include": ["src", "tsdown.config.ts"]
+}
