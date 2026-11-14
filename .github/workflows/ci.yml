@@ -110,6 +110,33 @@ jobs:
       - name: G9 every ledger row valid, every target passing
         run: node scripts/migration/parity-check.ts --reports reports
 
+  red-green:
+    name: G8 (red-green)
+    # A merge group holds no new unit commits; its skipped run counts as a pass.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: G8 every target red at its first commit, green at the head
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/migration/red-green.ts --base "$BASE_SHA" --head "$HEAD_SHA"
+
   migration:
     name: Migration records (pins and inventory)
     runs-on: ubuntu-24.04
@@ -129,6 +156,9 @@ jobs:
 
       - name: The inventory reproduces byte for byte
         run: node scripts/migration/inventory.ts --check
+
+      - name: G10 ported tests keep their source's strength
+        run: node scripts/migration/parity-audit.ts
 
   supply-chain:
     name: G7 (secrets and dependencies)

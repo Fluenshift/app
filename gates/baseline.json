@@ -1782,13 +1782,15 @@
   },
   "workflows": {
     ".github/workflows/ci.yml": {
-      "conditions": [],
+      "conditions": ["if: github.event_name == 'pull_request'"],
       "run": [
         "docker run --rm --volume \"$PWD:/repo:ro\" ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f git /repo --no-banner --redact",
         "node scripts/migration/baselines.ts sync",
         "node scripts/migration/baselines.ts verify",
         "node scripts/migration/inventory.ts --check",
+        "node scripts/migration/parity-audit.ts",
         "node scripts/migration/parity-check.ts --reports reports",
+        "node scripts/migration/red-green.ts --base \"$BASE_SHA\" --head \"$HEAD_SHA\"",
         "node scripts/migration/test-reports.ts reports",
         "pnpm audit --prod --audit-level high",
         "pnpm build",
@@ -1805,6 +1807,23 @@
         "pnpm test:e2e"
       ],
       "triggers": ["branches: [main]", "merge_group:", "pull_request:", "push:"]
+    },
+    ".github/workflows/verdict.yml": {
+      "conditions": [
+        "if: github.event_name == 'merge_group'",
+        "if: github.event_name == 'pull_request_target' || (github.event_name == 'issue_comment' && github.event.issue.pull_request)"
+      ],
+      "run": [
+        "gh api --method POST \"repos/$GITHUB_REPOSITORY/statuses/$HEAD_SHA\" -f state=success -f context=G12 -f description=\"Checked on each pull request before it entered the queue\"",
+        "node scripts/migration/verdict-check.ts --repo \"$GITHUB_REPOSITORY\" --pr \"$PR_NUMBER\" --set-status"
+      ],
+      "triggers": [
+        "issue_comment:",
+        "merge_group:",
+        "pull_request_target:",
+        "types: [created, edited, deleted]",
+        "types: [opened, synchronize, reopened, labeled, unlabeled]"
+      ]
     }
   }
 }
