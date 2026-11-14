@@ -342,7 +342,9 @@
       "slice": "evaluation-persistence",
       "disposition": "port-changed",
       "decision": "adr:0017",
-      "targets": []
+      "targets": [
+        "packages/db/src/database.test.ts::Database > migrates product tables and enforces their foreign keys and constraints"
+      ]
     },
     {
       "id": "pe:test:packages/db/src/index.test.ts::Database > reports connection startup failures as DatabaseError",
