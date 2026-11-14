@@ -9,7 +9,11 @@ export default defineConfig({
   use: { baseURL: "http://127.0.0.1:4173" },
   webServer: {
     command: "node apps/server/dist/index.mjs",
-    env: { SERVER_HOST: "127.0.0.1", SERVER_PORT: "4173" },
+    env: {
+      DATA_DIRECTORY: ".data/e2e",
+      SERVER_HOST: "127.0.0.1",
+      SERVER_PORT: "4173",
+    },
     reuseExistingServer: false,
     url: "http://127.0.0.1:4173/api/health",
   },

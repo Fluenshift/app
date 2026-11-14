@@ -45,8 +45,11 @@
       "});"
     ],
     "playwright.config.ts": [
+      "DATA_DIRECTORY: \".data/e2e\",",
+      "SERVER_HOST: \"127.0.0.1\",",
+      "SERVER_PORT: \"4173\",",
       "command: \"node apps/server/dist/index.mjs\",",
-      "env: { SERVER_HOST: \"127.0.0.1\", SERVER_PORT: \"4173\" },",
+      "env: {",
       "export default defineConfig({",
       "forbidOnly: true,",
       "fullyParallel: false,",
@@ -1785,6 +1788,7 @@
       "conditions": ["if: github.event_name == 'pull_request'"],
       "run": [
         "docker run --rm --volume \"$PWD:/repo:ro\" ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f git /repo --no-banner --redact",
+        "node scripts/gate-selftest.ts",
         "node scripts/migration/baselines.ts sync",
         "node scripts/migration/baselines.ts verify",
         "node scripts/migration/inventory.ts --check",
