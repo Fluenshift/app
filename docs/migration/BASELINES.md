@@ -150,3 +150,7 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | `grifando` | `src/server/domain/exercises/selection.characterization.test.ts` | How `selectReviewSet` splits an odd count: today's mistakes take the larger half. The baseline tests use even counts. | 1 |
 | `grifando` | `src/server/domain/mistakes/mastery.characterization.test.ts` | `isFading` never flags an IMPROVING pattern. The baseline test checks an ACTIVE one. | 1 |
 | `grifando` | `src/server/domain/mistakes/recall.characterization.test.ts` | `isDueForReview`, which no baseline test calls: its 0.5 threshold, and that a recall of exactly 0.5 is not due. | 1 |
+| `grifando` | `src/lib/answerDiff.characterization.test.ts` | The punctuation `diffWords` ignores, and that it splits words on any whitespace. The baseline tests use single spaces and strip only periods and exclamation marks. | 2 |
+| `grifando` | `src/server/domain/progress/streak.characterization.test.ts` | That a streak's week starts on Monday, and the 100 and 365 day milestones. The baseline tests never rest on a Sunday and reach 7 and 30 only. | 2 |
+| `grifando` | `src/server/domain/writing/dailyPrompt.characterization.test.ts` | Which prompt fixed days get, which pins the day hash, and the prompt bank's copy. The baseline tests check only that a pick is stable and varies. | 2 |
+| `grifando` | `src/server/domain/writing/technicalPrompts.characterization.test.ts` | The technical prompt bank's copy. The baseline tests check its shape only. | 1 |

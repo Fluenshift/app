@@ -4,6 +4,22 @@
   "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
   "rows": [
     {
+      "id": "grifando:characterization:src/lib/answerDiff.characterization.test.ts::diffWords guards > ignores periods, commas, question and exclamation marks, semicolons, colons and double quotes only",
+      "kind": "characterization",
+      "source": "src/lib/answerDiff.characterization.test.ts",
+      "title": "diffWords guards > ignores periods, commas, question and exclamation marks, semicolons, colons and double quotes only",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/lib/answerDiff.characterization.test.ts::diffWords guards > splits words on any run of whitespace",
+      "kind": "characterization",
+      "source": "src/lib/answerDiff.characterization.test.ts",
+      "title": "diffWords guards > splits words on any run of whitespace",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > gives 10-to-1 odds at a 400-point lead",
       "kind": "characterization",
       "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
@@ -64,6 +80,46 @@
       "kind": "characterization",
       "source": "src/server/domain/mistakes/recall.characterization.test.ts",
       "title": "isDueForReview > is due only once recall falls below 0.5",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/progress/streak.characterization.test.ts::streak guards > counts a Sunday rest day in the week that began on Monday",
+      "kind": "characterization",
+      "source": "src/server/domain/progress/streak.characterization.test.ts",
+      "title": "streak guards > counts a Sunday rest day in the week that began on Monday",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/progress/streak.characterization.test.ts::streak guards > names 7, 30, 100 and 365 days as milestones",
+      "kind": "characterization",
+      "source": "src/server/domain/progress/streak.characterization.test.ts",
+      "title": "streak guards > names 7, 30, 100 and 365 days as milestones",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/dailyPrompt.characterization.test.ts::daily prompt guards > keeps the prompt bank as written",
+      "kind": "characterization",
+      "source": "src/server/domain/writing/dailyPrompt.characterization.test.ts",
+      "title": "daily prompt guards > keeps the prompt bank as written",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/dailyPrompt.characterization.test.ts::daily prompt guards > picks the same prompt as the baseline on fixed days",
+      "kind": "characterization",
+      "source": "src/server/domain/writing/dailyPrompt.characterization.test.ts",
+      "title": "daily prompt guards > picks the same prompt as the baseline on fixed days",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/technicalPrompts.characterization.test.ts::technical prompt guards > keeps the technical prompt bank as written",
+      "kind": "characterization",
+      "source": "src/server/domain/writing/technicalPrompts.characterization.test.ts",
+      "title": "technical prompt guards > keeps the technical prompt bank as written",
       "suite": "vitest",
       "baseline": "green"
     },

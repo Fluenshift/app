@@ -3,6 +3,24 @@
   "lane": "academy",
   "rows": [
     {
+      "id": "grifando:characterization:src/lib/answerDiff.characterization.test.ts::diffWords guards > ignores periods, commas, question and exclamation marks, semicolons, colons and double quotes only",
+      "source": "src/lib/answerDiff.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/lib/answerDiff.characterization.test.ts::diffWords guards > splits words on any run of whitespace",
+      "source": "src/lib/answerDiff.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > gives 10-to-1 odds at a 400-point lead",
       "source": "src/server/domain/exercises/difficulty.characterization.test.ts",
       "class": "A",
@@ -89,6 +107,51 @@
       "targets": [
         "packages/core/src/recall.test.ts::isDueForReview > is due only once recall falls below 0.5"
       ]
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/progress/streak.characterization.test.ts::streak guards > counts a Sunday rest day in the week that began on Monday",
+      "source": "src/server/domain/progress/streak.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/progress/streak.characterization.test.ts::streak guards > names 7, 30, 100 and 365 days as milestones",
+      "source": "src/server/domain/progress/streak.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/dailyPrompt.characterization.test.ts::daily prompt guards > keeps the prompt bank as written",
+      "source": "src/server/domain/writing/dailyPrompt.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/dailyPrompt.characterization.test.ts::daily prompt guards > picks the same prompt as the baseline on fixed days",
+      "source": "src/server/domain/writing/dailyPrompt.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/domain/writing/technicalPrompts.characterization.test.ts::technical prompt guards > keeps the technical prompt bank as written",
+      "source": "src/server/domain/writing/technicalPrompts.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
     },
     {
       "id": "grifando:test:src/lib/answerDiff.test.ts::diffWords > handles an empty answer",
