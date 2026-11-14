@@ -327,6 +327,32 @@ describe("Database", () => {
     ]);
   });
 
+  it("orders the Evaluations of one moment by their insertion", async () => {
+    const order = await Effect.runPromise(
+      Effect.gen(function* () {
+        const database = yield* Database;
+        yield* verdict([
+          learner("learner-1"),
+          evaluation("first", "learner-1"),
+          evaluation("second", "learner-1"),
+          sql`update evaluations set evaluated_at = '2026-09-07T12:00:00.000Z'`,
+        ]);
+        return yield* database
+          .run((client) =>
+            client.execute(
+              sql`select id from evaluations order by evaluated_at desc, insertion_order desc`
+            )
+          )
+          .pipe(
+            Effect.map((result) => result.rows),
+            Effect.orElseSucceed(() => [])
+          );
+      }).pipe(Effect.provide(migrated()))
+    );
+
+    expect(order).toStrictEqual([{ id: "second" }, { id: "first" }]);
+  });
+
   it("reopens a migrated data directory without migrating it again", async () => {
     const directory = path.join(scratch, "migrated");
     const open = Database.pglite({
