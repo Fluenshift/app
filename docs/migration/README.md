@@ -199,6 +199,7 @@ and the assertions stay as they are.
 | Source | Target |
 | --- | --- |
 | `bun:test` | `vitest` |
+| `bun:test` matchers missing from Vitest: `toBeTrue()`, `toBeFalse()` | `toBe(true)`, `toBe(false)` (the same strict check) |
 | `spyOn` | `vi.spyOn` |
 | `import.meta.dir` | `import.meta.dirname` |
 | `Bun.env` | Effect Config |
@@ -206,3 +207,6 @@ and the assertions stay as they are.
 | Elysia `app.handle`, Next.js route handlers | Hono `app.request` |
 | Prisma enums | literals from `packages/contract` |
 | SDK fakes (openai, Anthropic, Gemini) | AI SDK mock models |
+| `Buffer` byte inputs in tests of `packages/core` and `packages/contract` | the same bytes as `Uint8Array` (`new TextEncoder().encode(...)`) |
+| A sequential `await` in a test loop, which lint rejects | `Promise.all` over the same cases, followed by the same assertions |
+| Zod `schema.safeParse(input)`, read through `.success` and `.data` | a test helper `safeParse(schema, input)` over `Schema.decodeUnknownOption`, returning the same two fields |
