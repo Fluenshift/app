@@ -3,6 +3,15 @@
   "lane": "academy",
   "rows": [
     {
+      "id": "grifando:characterization:src/server/domain/interview/interviewService.characterization.test.ts::interviewService.answerTurn retry > returns the FAILED writing session of a failed answer and re-analyzes that session on retry",
+      "source": "src/server/domain/interview/interviewService.characterization.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "pending-decision",
+      "decision": "adr:0004",
+      "targets": []
+    },
+    {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::attemptExplanationService.explainAttempt > explains a graded attempt without changing it",
       "source": "src/server/domain/exercises/exerciseService.test.ts",
       "class": "B",
