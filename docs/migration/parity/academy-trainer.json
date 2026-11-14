@@ -30,6 +30,94 @@
       "targets": []
     },
     {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > accepts one to ten exercises",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > accepts one to ten exercises"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds fill-blank templates to 1-300 characters and answers to 1-5 of 1-100",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > bounds fill-blank templates to 1-300 characters and answers to 1-5 of 1-100"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds multiple choice to 2-5 options of 1-300 characters and a non-negative integer index",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > bounds multiple choice to 2-5 options of 1-300 characters and a non-negative integer index"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds rewrite and translation texts to 1-500 characters and answers to 1-3 of 1-500",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > bounds rewrite and translation texts to 1-500 characters and answers to 1-3 of 1-500"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > bounds the instruction to 1-300 characters and the explanation to 1-1000",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > bounds the instruction to 1-300 characters and the explanation to 1-1000"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::exerciseGenerationResultSchema bounds > drops properties the schema does not declare",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema bounds > drops properties the schema does not declare"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::validateExerciseGenerationResult guards > accepts the last option as the correct one and rejects the index past it",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult guards > accepts the last option as the correct one and rejects the index past it"
+      ]
+    },
+    {
+      "id": "grifando:characterization:src/server/ai/schemas/exerciseGeneration.characterization.test.ts::validateExerciseGenerationResult guards > explains each rejection",
+      "source": "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+      "class": "A",
+      "slice": "academy-trainer",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult guards > explains each rejection"
+      ]
+    },
+    {
       "id": "grifando:test:src/server/ai/noKeyInLogs.test.ts::the visitor's AI key never reaches the logs > when building the provider throws a generic error that reaches the route's log",
       "source": "src/server/ai/noKeyInLogs.test.ts",
       "class": "C",
@@ -477,7 +565,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > accepts one well-formed exercise of each type"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > rejects a fill-blank exercise with no acceptable answers",
@@ -486,7 +576,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > rejects a fill-blank exercise with no acceptable answers"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > rejects a multiple-choice exercise with fewer than two options",
@@ -495,7 +587,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > rejects a multiple-choice exercise with fewer than two options"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > rejects an empty exercises array",
@@ -504,7 +598,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > rejects an empty exercises array"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > rejects an unknown exercise type",
@@ -513,7 +609,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::exerciseGenerationResultSchema > rejects an unknown exercise type"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::validateExerciseGenerationResult > returns the exercises when the count matches and every MC index is in range",
@@ -522,7 +620,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult > returns the exercises when the count matches and every MC index is in range"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::validateExerciseGenerationResult > throws when a multiple-choice correctOptionIndex is out of range",
@@ -531,7 +631,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult > throws when a multiple-choice correctOptionIndex is out of range"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::validateExerciseGenerationResult > throws when the exercise count doesn't match the requested target count",
@@ -540,7 +642,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/contract/src/exercise-generation.test.ts::validateExerciseGenerationResult > throws when the exercise count doesn't match the requested target count"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/writingAnalysis.test.ts::writingAnalysisResultSchema > accepts a response with an empty mistakes array",

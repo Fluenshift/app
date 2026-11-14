@@ -458,133 +458,142 @@ export function executeRun(request: RunRequest): number {
   const scratch = mkdtempSync(
     path.join(os.tmpdir(), `baseline-run-${system}-`)
   );
-  const rawDir = path.join(scratch, "reports");
-  mkdirSync(rawDir);
-  // Baseline code never sees the real home directory, so no credential file (.npmrc, tool
-  // configs) is reachable. Only content-addressed package caches and the Playwright browsers
-  // are shared; they hold no credentials, and they keep installs fast and reproducible.
-  const runHome = path.join(scratch, "home");
-  mkdirSync(runHome);
-  const log = path.join(scratch, "run.log");
-  const pnpmStore = path.join(home, ".local", "share", "pnpm", "store");
-  const baseEnv: NodeJS.ProcessEnv = {
-    HOME: runHome,
-    PLAYWRIGHT_BROWSERS_PATH: path.join(home, ".cache", "ms-playwright"),
-    BUN_INSTALL_CACHE_DIR: path.join(home, ".bun", "install", "cache"),
-    npm_config_store_dir: pnpmStore,
-    pnpm_config_store_dir: pnpmStore,
-    LANG: "C.UTF-8",
-    TERM: "dumb",
-    PATH: [
-      ...resolveTools(plan.tools),
-      "/usr/local/bin",
-      "/usr/bin",
-      "/bin",
-    ].join(path.delimiter),
-    HUSKY: "0",
-    DO_NOT_TRACK: "1",
-    TURBO_TELEMETRY_DISABLED: "1",
-    NEXT_TELEMETRY_DISABLED: "1",
-  };
-  const ranAt = new Date().toISOString();
-  console.error(`${system}: worktree ${worktree}; log ${log}`);
-
-  if (run(plan.install, worktree, baseEnv, log) !== 0)
-    throw new BaselineError(`${system}: install failed; see ${log}`);
-
-  const selection = request.plan(plan, worktree);
-  const service =
-    plan.postgres === undefined ? undefined : startPostgres(plan.postgres);
-  const results: { suite: Suite; exitCode: number }[] = [];
+  // The run home holds the install's caches (hundreds of megabytes for Grifando), and /tmp is
+  // often memory-backed: only the log stays, and only when the run threw or a suite failed.
+  let keepLog = true;
   try {
-    const env = { ...baseEnv, ...service?.env };
-    if (
-      plan.postgres !== undefined &&
-      run(plan.postgres.prepare, worktree, env, log) !== 0
-    ) {
+    const rawDir = path.join(scratch, "reports");
+    mkdirSync(rawDir);
+    // Baseline code never sees the real home directory, so no credential file (.npmrc, tool
+    // configs) is reachable. Only content-addressed package caches and the Playwright browsers
+    // are shared; they hold no credentials, and they keep installs fast and reproducible.
+    const runHome = path.join(scratch, "home");
+    mkdirSync(runHome);
+    const log = path.join(scratch, "run.log");
+    const pnpmStore = path.join(home, ".local", "share", "pnpm", "store");
+    const baseEnv: NodeJS.ProcessEnv = {
+      HOME: runHome,
+      PLAYWRIGHT_BROWSERS_PATH: path.join(home, ".cache", "ms-playwright"),
+      BUN_INSTALL_CACHE_DIR: path.join(home, ".bun", "install", "cache"),
+      npm_config_store_dir: pnpmStore,
+      pnpm_config_store_dir: pnpmStore,
+      LANG: "C.UTF-8",
+      TERM: "dumb",
+      PATH: [
+        ...resolveTools(plan.tools),
+        "/usr/local/bin",
+        "/usr/bin",
+        "/bin",
+      ].join(path.delimiter),
+      HUSKY: "0",
+      DO_NOT_TRACK: "1",
+      TURBO_TELEMETRY_DISABLED: "1",
+      NEXT_TELEMETRY_DISABLED: "1",
+    };
+    const ranAt = new Date().toISOString();
+    console.error(`${system}: worktree ${worktree}; log ${log}`);
+
+    if (run(plan.install, worktree, baseEnv, log) !== 0)
+      throw new BaselineError(`${system}: install failed; see ${log}`);
+
+    const selection = request.plan(plan, worktree);
+    const service =
+      plan.postgres === undefined ? undefined : startPostgres(plan.postgres);
+    const results: { suite: Suite; exitCode: number }[] = [];
+    try {
+      const env = { ...baseEnv, ...service?.env };
+      if (
+        plan.postgres !== undefined &&
+        run(plan.postgres.prepare, worktree, env, log) !== 0
+      ) {
+        throw new BaselineError(
+          `${system}: database preparation failed; see ${log}`
+        );
+      }
+      for (const suite of selection.suites) {
+        const raw = path.join(rawDir, suite.report);
+        const suiteEnv = {
+          ...env,
+          ...Object.fromEntries(
+            Object.entries(suite.env ?? {}).map(([k, v]) => [
+              k,
+              v.replaceAll("{report}", raw),
+            ])
+          ),
+        };
+        const exitCode = run(
+          substitute(suite.command, raw),
+          path.join(worktree, suite.cwd),
+          suiteEnv,
+          log
+        );
+        if (!existsSync(raw))
+          throw new BaselineError(
+            `${system}/${suite.id}: no report written (exit ${exitCode}); see ${log}`
+          );
+        results.push({ suite, exitCode });
+        console.error(`${system}/${suite.id}: exit ${exitCode}`);
+      }
+    } finally {
+      service?.stop();
+    }
+
+    // Baseline code is never edited: after the run, no tracked file may differ from the pin.
+    if (git(["status", "--porcelain", "--untracked-files=no"], worktree) !== "")
       throw new BaselineError(
-        `${system}: database preparation failed; see ${log}`
+        `${system}: the run changed tracked baseline files in ${worktree}`
+      );
+
+    rmSync(request.outDir, { recursive: true, force: true });
+    mkdirSync(request.outDir, { recursive: true });
+    for (const { suite } of results) {
+      const text = readFileSync(path.join(rawDir, suite.report), "utf8");
+      writeFileSync(
+        path.join(request.outDir, suite.report),
+        normalizeReport(text, worktree, [runHome, home], suite.runner)
       );
     }
-    for (const suite of selection.suites) {
-      const raw = path.join(rawDir, suite.report);
-      const suiteEnv = {
-        ...env,
-        ...Object.fromEntries(
+    const manifest = {
+      system,
+      repository: pin.repository,
+      tag: pin.tag,
+      commit: pin.commit,
+      ranAt,
+      tools: plan.tools.map(({ name, version }) => ({ name, version })),
+      services: service === undefined ? [] : [service.record],
+      install: plan.install,
+      ...(selection.files.length > 0 ? { files: selection.files } : {}),
+      suites: results.map(({ suite, exitCode }) => ({
+        id: suite.id,
+        cwd: suite.cwd,
+        runner: suite.runner,
+        command: suite.command.map((part) =>
+          part.replaceAll("{report}", suite.report)
+        ),
+        env: Object.fromEntries(
           Object.entries(suite.env ?? {}).map(([k, v]) => [
             k,
-            v.replaceAll("{report}", raw),
+            v.replaceAll("{report}", suite.report),
           ])
         ),
-      };
-      const exitCode = run(
-        substitute(suite.command, raw),
-        path.join(worktree, suite.cwd),
-        suiteEnv,
-        log
-      );
-      if (!existsSync(raw))
-        throw new BaselineError(
-          `${system}/${suite.id}: no report written (exit ${exitCode}); see ${log}`
-        );
-      results.push({ suite, exitCode });
-      console.error(`${system}/${suite.id}: exit ${exitCode}`);
-    }
-  } finally {
-    service?.stop();
-  }
-
-  // Baseline code is never edited: after the run, no tracked file may differ from the pin.
-  if (git(["status", "--porcelain", "--untracked-files=no"], worktree) !== "")
-    throw new BaselineError(
-      `${system}: the run changed tracked baseline files in ${worktree}`
-    );
-
-  rmSync(request.outDir, { recursive: true, force: true });
-  mkdirSync(request.outDir, { recursive: true });
-  for (const { suite } of results) {
-    const text = readFileSync(path.join(rawDir, suite.report), "utf8");
+        report: suite.report,
+        exitCode,
+      })),
+    };
     writeFileSync(
-      path.join(request.outDir, suite.report),
-      normalizeReport(text, worktree, [runHome, home], suite.runner)
+      path.join(request.outDir, "manifest.json"),
+      `${JSON.stringify(manifest, null, 2)}\n`
     );
+    console.error(
+      `${system}: reports in ${path.relative(repoRoot, request.outDir)}`
+    );
+    keepLog = !results.every(({ exitCode }) => exitCode === 0);
+    return keepLog ? 1 : 0;
+  } finally {
+    rmSync(path.join(scratch, "home"), { recursive: true, force: true });
+    rmSync(path.join(scratch, "reports"), { recursive: true, force: true });
+    if (!keepLog) rmSync(scratch, { recursive: true, force: true });
   }
-  const manifest = {
-    system,
-    repository: pin.repository,
-    tag: pin.tag,
-    commit: pin.commit,
-    ranAt,
-    tools: plan.tools.map(({ name, version }) => ({ name, version })),
-    services: service === undefined ? [] : [service.record],
-    install: plan.install,
-    ...(selection.files.length > 0 ? { files: selection.files } : {}),
-    suites: results.map(({ suite, exitCode }) => ({
-      id: suite.id,
-      cwd: suite.cwd,
-      runner: suite.runner,
-      command: suite.command.map((part) =>
-        part.replaceAll("{report}", suite.report)
-      ),
-      env: Object.fromEntries(
-        Object.entries(suite.env ?? {}).map(([k, v]) => [
-          k,
-          v.replaceAll("{report}", suite.report),
-        ])
-      ),
-      report: suite.report,
-      exitCode,
-    })),
-  };
-  writeFileSync(
-    path.join(request.outDir, "manifest.json"),
-    `${JSON.stringify(manifest, null, 2)}\n`
-  );
-  rmSync(rawDir, { recursive: true, force: true });
-  console.error(
-    `${system}: reports in ${path.relative(repoRoot, request.outDir)}`
-  );
-  return results.every(({ exitCode }) => exitCode === 0) ? 0 : 1;
 }
 
 function main(argv: readonly string[]): number {
