@@ -25,5 +25,32 @@ export {
   TechnicalCategorySchema,
 } from "./academy";
 export type { GeneratedExercise } from "./exercise-generation";
+export {
+  CategoryDistribution,
+  CategoryRecurrence,
+  ERROR_CATEGORIES,
+  ErrorCategory,
+  Evaluation,
+  EvaluationFinding,
+  EvaluationSubmissionResult,
+  EvaluationSuggestion,
+  EvaluationSummary,
+  FINDING_SEVERITIES,
+  FindingSeverity,
+  PROFICIENCY_BANDS,
+  PROGRESS_PERIODS,
+  ProficiencyBand,
+  ProgressEvidence,
+  ProgressEvidenceEvaluation,
+  ProgressEvidenceFinding,
+  ProgressEvidenceSelection,
+  ProgressPeriod,
+  ProgressSegment,
+  ProgressSummary,
+  RecurringCorrection,
+  SetupStatus,
+  WRITING_SAMPLE_ORIGINS,
+  WritingSampleOrigin,
+} from "./evaluation";
 export { HealthResponse } from "./health";
 export { LearnerId } from "./learner";
