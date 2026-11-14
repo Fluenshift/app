@@ -47,6 +47,96 @@
       ]
     },
     {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureAssessment guards > checks context suggestions: their count, alternative, original text and explanation",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureAssessment guards > counts the Findings and compares each expected one at its position",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureAssessment guards > names a changed severity, original text and correction of a Finding",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureAssessment guards > names a non-English span whose bytes differ from the declared one",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureAssessment guards > refuses feedback on Protected Technical Content, overlapping Findings, Findings on non-English text and no-op corrections",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureSet guards > derives score and band from English words only, outside non-English and protected text",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureSet guards > names a score and band that the rubric does not derive",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureSet guards > names duplicate, unstable and blank fixtures, a consistency fixture without exactly one Finding and a non-English span that is not unique",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureSet guards > names every category, repeated consistency case, severity and requirement the set misses",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/live-calibration.characterization.test.ts::validateFixtureSet guards > throws when an evaluated fixture declares a non-English span that is not unique",
+      "source": "apps/server/src/evaluation/live-calibration.characterization.test.ts",
+      "class": "A",
+      "slice": "evaluation-core",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample",
       "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",
       "class": "A",
