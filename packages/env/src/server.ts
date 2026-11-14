@@ -1,26 +1,52 @@
-import { Config, Context, Effect, Layer } from "effect";
+// Typed stub for the red commit: the fields exist and hold values no test expects.
+import { Context, Layer, Option, Redacted } from "effect";
 
-/**
- * Server configuration, read once through Effect `Config` when the layer is built. The
- * deploy-profile settings join it in Phase 2 step 3 (docs/adr/0003).
- */
+export type DeployProfile = "local" | "hosted";
+
+export type DatabaseConfig =
+  | { readonly kind: "pglite"; readonly dataDirectory: string }
+  | { readonly kind: "postgres"; readonly url: Redacted.Redacted<string> };
+
+export interface InputLimits {
+  readonly bodyMaxBytes: number;
+  readonly codeMaxCharacters: Option.Option<number>;
+  readonly promptMaxCharacters: Option.Option<number>;
+  readonly sampleMaxBytes: number;
+  readonly sampleMaxCharacters: Option.Option<number>;
+}
+
 export class ServerConfig extends Context.Service<
   ServerConfig,
   {
+    readonly database: DatabaseConfig;
+    readonly dataDisplayPath: Option.Option<string>;
     readonly host: string;
+    readonly limits: InputLimits;
+    readonly migrationsPath: string;
+    readonly nodeEnv: "development" | "production" | "test";
     readonly port: number;
+    readonly profile: DeployProfile;
+    readonly webDistPath: string;
   }
 >()("@fluenshift/env/ServerConfig") {
-  static readonly layer = Layer.effect(
+  static readonly layer = Layer.succeed(
     ServerConfig,
-    Effect.gen(function* () {
-      const [host, port] = yield* Config.all([
-        Config.NonEmptyString("SERVER_HOST").pipe(
-          Config.withDefault("127.0.0.1")
-        ),
-        Config.Port("SERVER_PORT").pipe(Config.withDefault(3000)),
-      ]);
-      return ServerConfig.of({ host, port });
+    ServerConfig.of({
+      dataDisplayPath: Option.some(""),
+      database: { kind: "postgres", url: Redacted.make("") },
+      host: "",
+      limits: {
+        bodyMaxBytes: Number.NaN,
+        codeMaxCharacters: Option.some(Number.NaN),
+        promptMaxCharacters: Option.some(Number.NaN),
+        sampleMaxBytes: Number.NaN,
+        sampleMaxCharacters: Option.some(Number.NaN),
+      },
+      migrationsPath: "",
+      nodeEnv: "test",
+      port: Number.NaN,
+      profile: "hosted",
+      webDistPath: "",
     })
   );
 }

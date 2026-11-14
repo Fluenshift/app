@@ -26,3 +26,4 @@ export {
 } from "./academy";
 export type { GeneratedExercise } from "./exercise-generation";
 export { HealthResponse } from "./health";
+export { LearnerId } from "./learner";
