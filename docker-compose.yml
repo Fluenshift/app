@@ -1,0 +1,11 @@
+# Typed stub for the red commit: the release boundary is missing.
+name: fluenshift
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    init: true
+    ports:
+      - "3001:3000"

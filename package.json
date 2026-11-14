@@ -9,6 +9,7 @@
     "check:effect": "turbo run check:effect",
     "check:gates": "node scripts/check-gates.ts",
     "dev": "turbo run dev",
+    "docker:smoke": "pnpm --filter smoke run smoke",
     "format": "oxfmt --check .",
     "format:fix": "oxfmt .",
     "lint": "oxlint --deny-warnings",

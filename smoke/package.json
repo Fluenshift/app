@@ -1,0 +1,16 @@
+{
+  "name": "smoke",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check-types": "tsc --noEmit -p tsconfig.json",
+    "smoke": "vitest run"
+  },
+  "devDependencies": {
+    "@fluenshift/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
