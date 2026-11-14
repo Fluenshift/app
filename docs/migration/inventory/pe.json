@@ -452,6 +452,38 @@
       "baseline": "green"
     },
     {
+      "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > answers a missing model configuration as configuration-missing, not retryable",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
+      "title": "Writing Evaluation guards > answers a missing model configuration as configuration-missing, not retryable",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses a Finding inside model-identified non-English text",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
+      "title": "Writing Evaluation guards > refuses a Finding inside model-identified non-English text",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses a whitespace-only Writing Sample before calling the model",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
+      "title": "Writing Evaluation guards > refuses a whitespace-only Writing Sample before calling the model",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/writing-evaluation.characterization.test.ts::Writing Evaluation guards > refuses an assessment with a property the schema does not declare",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
+      "title": "Writing Evaluation guards > refuses an assessment with a property the schema does not declare",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
       "id": "pe:characterization:apps/server/src/progress/progress-insights.characterization.test.ts::Progress Insights guards > evidences Finding Rate and the average score with every retained Evaluation, even one without Findings",
       "kind": "characterization",
       "source": "apps/server/src/progress/progress-insights.characterization.test.ts",

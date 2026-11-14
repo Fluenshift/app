@@ -6,6 +6,14 @@
       "xargs -0 -r pnpm exec oxfmt --check --no-error-on-unmatched-pattern",
       "xargs -0 -r pnpm exec oxlint --no-error-on-unmatched-pattern"
     ],
+    "apps/server/vitest.config.ts": [
+      "export default defineConfig({",
+      "import { defineConfig } from \"vitest/config\";",
+      "test: {",
+      "testTimeout: 60_000,",
+      "});",
+      "},"
+    ],
     "apps/web/vite.config.ts": [
       "],",
       "environment: \"jsdom\",",
