@@ -20,7 +20,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/spell-checker.placement.test.ts::SpellChecker mark placement > keeps a span for its Finding when a Suggestion names the same text"
+      ]
     },
     {
       "id": "pe:characterization:apps/web/src/features/evaluations/spell-checker.characterization.test.ts::SpellChecker mark placement > places a mark at UTF-8 byte offsets that hold its text, otherwise at an occurrence of the text",
@@ -29,7 +31,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/spell-checker.placement.test.ts::SpellChecker mark placement > places a mark at UTF-8 byte offsets that hold its text, otherwise at an occurrence of the text"
+      ]
     },
     {
       "id": "pe:characterization:apps/web/src/features/evaluations/spell-checker.characterization.test.ts::SpellChecker mark placement > searches from the start when no occurrence follows the previous mark",
@@ -38,7 +42,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/spell-checker.placement.test.ts::SpellChecker mark placement > searches from the start when no occurrence follows the previous mark"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation",
@@ -179,7 +185,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > clicking a finding opens the Grammarly-style popover card"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > navigates through issues using toolbar stepper",
@@ -188,7 +196,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > navigates through issues using toolbar stepper"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > renders the original text with inline wavy marks for findings and suggestions",
@@ -197,7 +207,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/spell-checker.test.tsx::SpellChecker > renders the original text with inline wavy marks for findings and suggestions"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > SpellChecker renders findings directly on original text with Grammarly popover and 1-click accept",
