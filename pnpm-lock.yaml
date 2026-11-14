@@ -316,21 +316,33 @@ importers:
       '@effect/platform-node':
         specifier: 'catalog:'
         version: 4.1.2(effect@4.1.2)(redis@6.3.1)
+      '@electric-sql/pglite':
+        specifier: 'catalog:'
+        version: 0.5.16
       '@fluenshift/contract':
         specifier: workspace:*
         version: link:../../packages/contract
+      '@fluenshift/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@fluenshift/env':
         specifier: workspace:*
         version: link:../../packages/env
       '@hono/node-server':
         specifier: 'catalog:'
         version: 2.1.8(hono@4.13.18)
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.4(@electric-sql/pglite@0.5.16)(@types/pg@8.23.1)(pg@8.23.1)
       effect:
         specifier: 'catalog:'
         version: 4.1.2
       hono:
         specifier: 'catalog:'
         version: 4.13.18
+      pg:
+        specifier: 'catalog:'
+        version: 8.23.1
     devDependencies:
       '@effect/tsgo':
         specifier: 'catalog:'
