@@ -10,14 +10,15 @@ import { afterAll, beforeAll } from "vitest";
 
 import { Database, DatabaseError } from "./database";
 
-let dataDirectory = "";
+// Every data directory of this file lives under one scratch directory.
+let scratch = "";
 
 beforeAll(async () => {
-  dataDirectory = await mkdtemp(path.join(tmpdir(), "fluenshift-db-"));
+  scratch = await mkdtemp(path.join(tmpdir(), "fluenshift-db-"));
 });
 
 afterAll(async () => {
-  await rm(dataDirectory, { force: true, recursive: true });
+  await rm(scratch, { force: true, recursive: true });
 });
 
 // The database of a deploy profile, from the environment the server would read.
@@ -71,7 +72,7 @@ describe("Database", () => {
   });
 
   it("keeps the data of the local profile in its data directory", async () => {
-    const local = databaseOf({ DATA_DIRECTORY: dataDirectory });
+    const local = databaseOf({ DATA_DIRECTORY: path.join(scratch, "kept") });
     await Effect.runPromise(
       Database.use((database) =>
         database.run((client) =>
@@ -88,6 +89,17 @@ describe("Database", () => {
     );
 
     expect(reopened.rows).toStrictEqual([{ value: "still here" }]);
+  });
+
+  it("creates the data directory of the local profile with its missing parents", async () => {
+    const nested = path.join(scratch, "not", "yet", "there");
+    const result = await Effect.runPromise(
+      Database.use((database) =>
+        database.run((client) => client.execute(sql`select 1 + 1 as two`))
+      ).pipe(Effect.provide(databaseOf({ DATA_DIRECTORY: nested })))
+    );
+
+    expect(result.rows).toStrictEqual([{ two: 2 }]);
   });
 
   it("rolls a failed transaction back and keeps a completed one", async () => {

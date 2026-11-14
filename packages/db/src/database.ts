@@ -1,3 +1,6 @@
+import { mkdir } from "node:fs/promises";
+import path from "node:path";
+
 import { PGlite } from "@electric-sql/pglite";
 import { ServerConfig } from "@fluenshift/env";
 import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
@@ -24,6 +27,18 @@ export class DatabaseError extends Schema.TaggedError<
 >()("DatabaseError", {
   cause: Schema.Defect(),
 }) {}
+
+// PGlite creates its data directory but none of the directories above it. The resolved path
+// also keeps a value such as `memory://` a directory: local data never lands in memory.
+const openPglite = (dataDir: string | undefined) => {
+  if (dataDir === undefined) {
+    return PGlite.create();
+  }
+  const directory = path.resolve(dataDir);
+  return mkdir(directory, { recursive: true }).then(() =>
+    PGlite.create(directory)
+  );
+};
 
 const serviceOf = (client: DrizzleClient) => ({
   run: Effect.fn("Database.run")(
@@ -55,7 +70,7 @@ export class Database extends Context.Service<
       Effect.gen(function* () {
         const connection = yield* Effect.acquireRelease(
           Effect.tryPromise({
-            try: () => PGlite.create(options.dataDir),
+            try: () => openPglite(options.dataDir),
             catch: (cause) => new DatabaseError({ cause }),
           }),
           (open) => Effect.promise(() => open.close())
