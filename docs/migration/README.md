@@ -163,6 +163,17 @@ Rows for inventory rows added later, such as new characterization cases, are add
 `scripts/migration/ledger-add.ts`: it appends `port` rows to one slice and never touches an
 existing row.
 
+`scripts/migration/red-green.ts` (gate G8) proves that a unit's tests came first. A unit's
+targets are the ledger targets its PR adds. Each must be red at the first commit of the PR that
+holds it: its workspace typechecks, its test file loads, and the test fails on a check, not on a
+missing binding. Then each must pass in the checked-out tree. A target that fails on something
+other than an assertion, such as an Effect that succeeds where the test expects a failure, is
+still red; the script lists it so the verifier can look.
+
+```bash
+mise exec node@26.13.0 pnpm@12.18.0 -- node scripts/migration/red-green.ts --base <base ref> --head <head ref>
+```
+
 ## Issue labels
 
 Work units and decision requests are GitHub Issues in this repository. State lives in labels,
