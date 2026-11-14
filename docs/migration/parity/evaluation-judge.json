@@ -3,6 +3,24 @@
   "lane": "evaluation",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts::OpenRouter Evaluation Model guards > classifies an assessment with an undeclared property as a retryable invalid assessment",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts::OpenRouter Evaluation Model guards > drops a null alternative from a Suggestion",
+      "source": "apps/server/src/evaluation/openai-evaluation-model.characterization.test.ts",
+      "class": "C",
+      "slice": "evaluation-judge",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:test:apps/server/src/evaluation/openai-evaluation-model.test.ts::OpenRouter Evaluation Model > allows a provider response beyond 30 seconds without restarting the paid request",
       "source": "apps/server/src/evaluation/openai-evaluation-model.test.ts",
       "class": "C",
