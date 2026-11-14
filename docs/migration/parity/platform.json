@@ -26,7 +26,7 @@
       ]
     },
     {
-      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > reads explicit values for the hosted profile",
+      "id": "pe:test:packages/env/src/server.test.ts::ServerConfig > reads explicit values",
       "source": "packages/env/src/server.test.ts",
       "class": "A",
       "slice": "platform",
