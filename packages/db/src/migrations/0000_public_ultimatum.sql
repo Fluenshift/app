@@ -6,6 +6,7 @@ CREATE TABLE "evaluations" (
 	"evaluated_english_word_count" integer NOT NULL,
 	"id" text PRIMARY KEY NOT NULL,
 	"input_tokens" integer,
+	"insertion_order" integer GENERATED ALWAYS AS IDENTITY (sequence name "evaluations_insertion_order_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"latency_milliseconds" integer,
 	"learner_id" text NOT NULL,
 	"model" text NOT NULL,
@@ -64,7 +65,7 @@ CREATE TABLE "suggestions" (
 ALTER TABLE "evaluations" ADD CONSTRAINT "evaluations_learner_fk" FOREIGN KEY ("learner_id") REFERENCES "public"."learners"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "findings" ADD CONSTRAINT "findings_evaluation_fk" FOREIGN KEY ("learner_id","evaluation_id") REFERENCES "public"."evaluations"("learner_id","id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "suggestions" ADD CONSTRAINT "suggestions_evaluation_fk" FOREIGN KEY ("learner_id","evaluation_id") REFERENCES "public"."evaluations"("learner_id","id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "evaluations_learner_evaluated_at_idx" ON "evaluations" USING btree ("learner_id","evaluated_at");--> statement-breakpoint
+CREATE INDEX "evaluations_learner_evaluated_at_idx" ON "evaluations" USING btree ("learner_id","evaluated_at","insertion_order");--> statement-breakpoint
 CREATE INDEX "evaluations_learner_rubric_evaluated_at_idx" ON "evaluations" USING btree ("learner_id","rubric_version","evaluated_at");--> statement-breakpoint
 CREATE INDEX "findings_learner_category_idx" ON "findings" USING btree ("learner_id","category");--> statement-breakpoint
 CREATE INDEX "findings_learner_correction_idx" ON "findings" USING btree ("learner_id","original_text","correction");

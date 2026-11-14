@@ -1,5 +1,5 @@
 {
-  "id": "16a87257-4156-4287-82a7-c2255434ef35",
+  "id": "8d63fc43-491a-4161-bc06-3fcc8793f449",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -49,6 +49,23 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "insertion_order": {
+          "name": "insertion_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "evaluations_insertion_order_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
         },
         "latency_milliseconds": {
           "name": "latency_milliseconds",
@@ -129,6 +146,12 @@
             },
             {
               "expression": "evaluated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "insertion_order",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

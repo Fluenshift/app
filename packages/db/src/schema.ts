@@ -46,6 +46,9 @@ export const evaluations = pgTable(
     ).notNull(),
     id: text("id").primaryKey(),
     inputTokens: integer("input_tokens"),
+    // Breaks ties between Evaluations of one moment, newest insertion first, as SQLite's rowid
+    // did in PE.
+    insertionOrder: integer("insertion_order").generatedAlwaysAsIdentity(),
     latencyMilliseconds: integer("latency_milliseconds"),
     learnerId: text("learner_id").notNull(),
     model: text("model").notNull(),
@@ -81,7 +84,8 @@ export const evaluations = pgTable(
     ),
     index("evaluations_learner_evaluated_at_idx").on(
       table.learnerId,
-      table.evaluatedAt
+      table.evaluatedAt,
+      table.insertionOrder
     ),
     index("evaluations_learner_rubric_evaluated_at_idx").on(
       table.learnerId,
