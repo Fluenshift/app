@@ -275,3 +275,23 @@ describe("HTTP Evaluation client failures", () => {
     ]);
   });
 });
+
+describe("HTTP Evaluation client decoding", () => {
+  test("refuses an answer the Evaluation contract does not describe", async () => {
+    const client = createHttpEvaluationClient({
+      fetch: () =>
+        Promise.resolve(Response.json({ id: "retained-evaluation" })),
+    });
+
+    const failure = await client
+      .getEvaluation("retained-evaluation")
+      .catch((error: unknown) => error);
+
+    expect(failure).toBeInstanceOf(EvaluationRequestError);
+    expect(failure).toMatchObject({
+      code: "request-failed",
+      retryable: false,
+      status: 200,
+    });
+  });
+});
