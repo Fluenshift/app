@@ -11,6 +11,7 @@ export default defineConfig({
     command: "node apps/server/dist/index.mjs",
     env: {
       DATA_DIRECTORY: ".data/e2e",
+      MIGRATIONS_PATH: "packages/db/src/migrations",
       NODE_ENV: "production",
       SERVER_HOST: "127.0.0.1",
       SERVER_PORT: "4173",

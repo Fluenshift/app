@@ -4,8 +4,10 @@ import path from "node:path";
 import { PGlite } from "@electric-sql/pglite";
 import { ServerConfig } from "@fluenshift/env";
 import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
+import { migrate as migratePostgres } from "drizzle-orm/node-postgres/migrator";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import { drizzle as drizzlePglite } from "drizzle-orm/pglite";
+import { migrate as migratePglite } from "drizzle-orm/pglite/migrator";
 import { Context, Effect, Layer, Redacted, Schema } from "effect";
 import { Pool } from "pg";
 
@@ -40,6 +42,19 @@ const openPglite = (dataDir: string | undefined) => {
   );
 };
 
+// Applies the migrations of a folder that a database has not applied yet. A folder it cannot
+// read, or a migration that fails, stops the layer: the server never runs on an unknown schema.
+const migrateWith = (
+  migrationsFolder: string | undefined,
+  migrate: (config: { readonly migrationsFolder: string }) => Promise<void>
+) =>
+  migrationsFolder === undefined
+    ? Effect.void
+    : Effect.tryPromise({
+        try: () => migrate({ migrationsFolder }),
+        catch: (cause) => new DatabaseError({ cause }),
+      });
+
 const serviceOf = (client: DrizzleClient) => ({
   run: Effect.fn("Database.run")(
     <A>(query: (client: DrizzleClient) => Promise<A>) =>
@@ -63,11 +78,13 @@ export class Database extends Context.Service<
     ): Effect.Effect<A, DatabaseError>;
   }
 >()("@fluenshift/db/Database") {
-  /** An embedded PGlite database: in memory without `dataDir`, on disk with it. */
+  /**
+   * An embedded PGlite database: in memory without `dataDir`, on disk with it, migrated from
+   * `migrationsFolder` when one is given.
+   */
   static readonly pglite = (
     options: {
       readonly dataDir?: string;
-      // Typed stub for the red commit: the migrations are not run yet.
       readonly migrationsFolder?: string;
     } = {}
   ) =>
@@ -81,13 +98,16 @@ export class Database extends Context.Service<
           }),
           (open) => Effect.promise(() => open.close())
         );
-        return Database.of(serviceOf(drizzlePglite({ client: connection })));
+        const client = drizzlePglite({ client: connection });
+        yield* migrateWith(options.migrationsFolder, (config) =>
+          migratePglite(client, config)
+        );
+        return Database.of(serviceOf(client));
       })
     );
 
-  /** A pool of connections to a Postgres server. */
+  /** A pool of connections to a Postgres server, migrated from `migrationsFolder`. */
   static readonly postgres = (options: {
-    // Typed stub for the red commit: the migrations are not run yet.
     readonly migrationsFolder?: string;
     readonly url: Redacted.Redacted<string>;
   }) =>
@@ -105,17 +125,30 @@ export class Database extends Context.Service<
           try: () => pool.query("select 1"),
           catch: (cause) => new DatabaseError({ cause }),
         });
-        return Database.of(serviceOf(drizzlePostgres({ client: pool })));
+        const client = drizzlePostgres({ client: pool });
+        yield* migrateWith(options.migrationsFolder, (config) =>
+          migratePostgres(client, config)
+        );
+        return Database.of(serviceOf(client));
       })
     );
 
-  /** The database of the deploy profile, as `ServerConfig` names it. */
+  /**
+   * The database of the deploy profile, as `ServerConfig` names it, with the migrations of
+   * `MIGRATIONS_PATH` applied.
+   */
   static readonly layer = Layer.unwrap(
     Effect.gen(function* () {
-      const { database } = yield* ServerConfig;
+      const { database, migrationsPath } = yield* ServerConfig;
       return database.kind === "postgres"
-        ? Database.postgres({ url: database.url })
-        : Database.pglite({ dataDir: database.dataDirectory });
+        ? Database.postgres({
+            migrationsFolder: migrationsPath,
+            url: database.url,
+          })
+        : Database.pglite({
+            dataDir: database.dataDirectory,
+            migrationsFolder: migrationsPath,
+          });
     })
   );
 }

@@ -19,6 +19,7 @@ COPY --from=builder /deploy/server/package.json ./package.json
 COPY --from=builder /deploy/server/node_modules ./node_modules
 COPY --from=builder /app/apps/server/dist ./dist
 COPY --from=builder /app/apps/web/dist /app/apps/web/dist
+COPY --from=builder /app/packages/db/src/migrations /app/packages/db/src/migrations
 USER node
 EXPOSE 3000
 CMD ["node", "dist/index.mjs"]

@@ -34,6 +34,7 @@
       "\"apps/web/src/routeTree.gen.ts\",",
       "\"docs/**\",",
       "\"migration/**\",",
+      "\"packages/db/src/migrations/**\",",
       "\"pnpm-lock.yaml\",",
       "...ultracite,",
       "...ultracite.ignorePatterns,",
@@ -53,6 +54,7 @@
       "},"
     ],
     "packages/db/vitest.postgres.config.ts": [
+      "env: { MIGRATIONS_PATH: \"src/migrations\" },",
       "export default defineConfig({",
       "import { defineConfig } from \"vitest/config\";",
       "include: [\"src/**/*.postgres.test.ts\"],",
@@ -62,6 +64,7 @@
     ],
     "playwright.config.ts": [
       "DATA_DIRECTORY: \".data/e2e\",",
+      "MIGRATIONS_PATH: \"packages/db/src/migrations\",",
       "NODE_ENV: \"production\",",
       "SERVER_HOST: \"127.0.0.1\",",
       "SERVER_PORT: \"4173\",",
