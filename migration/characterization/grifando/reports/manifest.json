@@ -3,7 +3,7 @@
   "repository": "Fluenshift/grifando",
   "tag": "parity-baseline",
   "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
-  "ranAt": "2026-11-14T15:59:13.212Z",
+  "ranAt": "2026-11-14T16:03:33.773Z",
   "tools": [
     {
       "name": "node",
@@ -32,7 +32,8 @@
     "src/app/api/interview/interview.characterization.test.ts",
     "src/app/api/me/me.characterization.test.ts",
     "src/app/api/vocabulary/vocabulary.characterization.test.ts",
-    "src/app/api/writing-sessions/writingSessions.characterization.test.ts"
+    "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+    "src/app/pages.characterization.test.ts"
   ],
   "suites": [
     {
@@ -50,6 +51,7 @@
         "src/app/api/me/me.characterization.test.ts",
         "src/app/api/vocabulary/vocabulary.characterization.test.ts",
         "src/app/api/writing-sessions/writingSessions.characterization.test.ts",
+        "src/app/pages.characterization.test.ts",
         "--reporter=default",
         "--reporter=json",
         "--outputFile.json=vitest.json"
