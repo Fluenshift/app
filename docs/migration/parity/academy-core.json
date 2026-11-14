@@ -9,7 +9,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::difficulty scale > gives 10-to-1 odds at a 400-point lead"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > moves the ability 16 points on an even-odds result",
@@ -18,7 +20,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::difficulty scale > moves the ability 16 points on an even-odds result"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > picks the level nearest the rating with 70% expected success",
@@ -27,7 +31,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::difficulty scale > picks the level nearest the rating with 70% expected success"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > rates level 1 at 800 and each further level 100 higher",
@@ -36,7 +42,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::difficulty scale > rates level 1 at 800 and each further level 100 higher"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/difficulty.characterization.test.ts::difficulty scale > starts every ability at 1000",
@@ -45,7 +53,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::difficulty scale > starts every ability at 1000"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/exercises/selection.characterization.test.ts::selectReviewSet guards > gives today's mistakes the larger half of an odd count",
@@ -54,7 +64,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectReviewSet guards > gives today's mistakes the larger half of an odd count"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/mistakes/mastery.characterization.test.ts::isFading guards > never flags an IMPROVING pattern, however long unpracticed",
@@ -63,7 +75,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::isFading guards > never flags an IMPROVING pattern, however long unpracticed"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/domain/mistakes/recall.characterization.test.ts::isDueForReview > is due only once recall falls below 0.5",
@@ -72,7 +86,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/recall.test.ts::isDueForReview > is due only once recall falls below 0.5"
+      ]
     },
     {
       "id": "grifando:test:src/lib/answerDiff.test.ts::diffWords > handles an empty answer",
@@ -216,7 +232,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::expectedSuccess > is 50% when ability matches difficulty and rises as ability exceeds it"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::targetLevel > aims at about 70% expected success",
@@ -225,7 +243,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::targetLevel > aims at about 70% expected success"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::targetLevel > gets harder as ability grows and stays within 1-5",
@@ -234,7 +254,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::targetLevel > gets harder as ability grows and stays within 1-5"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::updateAbility > moves more on a surprising result than on an expected one",
@@ -243,7 +265,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::updateAbility > moves more on a surprising result than on an expected one"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/difficulty.test.ts::updateAbility > rises on success and falls on failure",
@@ -252,7 +276,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/difficulty.test.ts::updateAbility > rises on success and falls on failure"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseType.test.ts::assignExerciseType > cycles through all four types in order",
@@ -324,7 +350,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectPatternsForPractice > breaks ties by occurrence count, most frequent first"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > caps the result, does not mutate the input, and handles an empty list",
@@ -333,7 +361,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectPatternsForPractice > caps the result, does not mutate the input, and handles an empty list"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > changes the pick as a pattern ages",
@@ -342,7 +372,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectPatternsForPractice > changes the pick as a pattern ages"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > lets a well-practiced pattern wait longer than a weak one with the same gap",
@@ -351,7 +383,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectPatternsForPractice > lets a well-practiced pattern wait longer than a weak one with the same gap"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectPatternsForPractice > puts the pattern most likely forgotten first",
@@ -360,7 +394,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectPatternsForPractice > puts the pattern most likely forgotten first"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectReviewSet > falls back to due patterns when the session had no mistakes",
@@ -369,7 +405,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectReviewSet > falls back to due patterns when the session had no mistakes"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectReviewSet > ignores fresh ids that aren't among the patterns",
@@ -378,7 +416,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectReviewSet > ignores fresh ids that aren't among the patterns"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectReviewSet > interleaves today's mistakes with the most due patterns, half each",
@@ -387,7 +427,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectReviewSet > interleaves today's mistakes with the most due patterns, half each"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/selection.test.ts::selectReviewSet > lets fresh mistakes fill the slots when few patterns are due",
@@ -396,7 +438,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/selection.test.ts::selectReviewSet > lets fresh mistakes fill the slots when few patterns are due"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/analytics.test.ts::computeCategoryBreakdown > computes percentages relative to the total count",
@@ -441,7 +485,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::applyExerciseResult > drops IMPROVING back to ACTIVE on an incorrect attempt"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > keeps ACTIVE after a single correct attempt",
@@ -450,7 +496,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::applyExerciseResult > keeps ACTIVE after a single correct attempt"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > keeps IMPROVING waiting for the mastery check after a scaffolded correct answer",
@@ -459,7 +507,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::applyExerciseResult > keeps IMPROVING waiting for the mastery check after a scaffolded correct answer"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > keeps MASTERED on a correct attempt and drops it to IMPROVING on a failure",
@@ -468,7 +518,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::applyExerciseResult > keeps MASTERED on a correct attempt and drops it to IMPROVING on a failure"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > only asks for the mastery check one step from MASTERED",
@@ -477,7 +529,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::applyExerciseResult > only asks for the mastery check one step from MASTERED"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > promotes ACTIVE to IMPROVING after two consecutive correct attempts",
@@ -486,7 +540,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::applyExerciseResult > promotes ACTIVE to IMPROVING after two consecutive correct attempts"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > promotes IMPROVING to MASTERED when the second correct answer is unscaffolded",
@@ -495,7 +551,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::applyExerciseResult > promotes IMPROVING to MASTERED when the second correct answer is unscaffolded"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::applyExerciseResult > resets the streak on an incorrect attempt from ACTIVE",
@@ -504,7 +562,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::applyExerciseResult > resets the streak on an incorrect attempt from ACTIVE"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::isFading > flags a MASTERED pattern once its recall drops below the review threshold",
@@ -513,7 +573,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::isFading > flags a MASTERED pattern once its recall drops below the review threshold"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mastery.test.ts::isFading > never flags patterns that aren't MASTERED",
@@ -522,7 +584,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/mastery.test.ts::isFading > never flags patterns that aren't MASTERED"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/patternKey.test.ts::normalizePatternKey > caps length at 64 characters without a trailing dash",
@@ -585,7 +649,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/recall.test.ts::estimateHalfLifeDays > doubles with each correct recall and shrinks with each failure"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::estimateHalfLifeDays > is clamped to a sane range",
@@ -594,7 +660,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/recall.test.ts::estimateHalfLifeDays > is clamped to a sane range"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::recallProbability > decays faster for a pattern with more failures",
@@ -603,7 +671,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/recall.test.ts::recallProbability > decays faster for a pattern with more failures"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::recallProbability > is 1 right after practice and 0.5 one half-life later",
@@ -612,7 +682,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/recall.test.ts::recallProbability > is 1 right after practice and 0.5 one half-life later"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/recall.test.ts::recallProbability > treats a future lastPracticedAt as just practiced",
@@ -621,7 +693,9 @@
       "slice": "academy-core",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/core/src/recall.test.ts::recallProbability > treats a future lastPracticedAt as just practiced"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/progress/progress.test.ts::computeAverageScores > averages each dimension independently across sessions",
