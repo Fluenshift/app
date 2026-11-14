@@ -64,7 +64,13 @@ export class Database extends Context.Service<
   }
 >()("@fluenshift/db/Database") {
   /** An embedded PGlite database: in memory without `dataDir`, on disk with it. */
-  static readonly pglite = (options: { readonly dataDir?: string } = {}) =>
+  static readonly pglite = (
+    options: {
+      readonly dataDir?: string;
+      // Typed stub for the red commit: the migrations are not run yet.
+      readonly migrationsFolder?: string;
+    } = {}
+  ) =>
     Layer.effect(
       Database,
       Effect.gen(function* () {
@@ -81,6 +87,8 @@ export class Database extends Context.Service<
 
   /** A pool of connections to a Postgres server. */
   static readonly postgres = (options: {
+    // Typed stub for the red commit: the migrations are not run yet.
+    readonly migrationsFolder?: string;
     readonly url: Redacted.Redacted<string>;
   }) =>
     Layer.effect(
