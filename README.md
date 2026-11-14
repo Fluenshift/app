@@ -18,6 +18,17 @@ pnpm test:e2e                    # Playwright journeys against the built server 
 pnpm test:postgres               # the Database service against a Postgres 17 server
 pnpm dev                         # server and web in watch mode
 pnpm build                       # server bundle and SPA build
+pnpm docker:smoke                # build and check the image of the local profile (gate G6)
+```
+
+## Local profile in Docker
+
+The image runs one non-root process that serves the API and the web app. Compose publishes it on `127.0.0.1:3001` only, runs it as the invoking user and keeps its data in `./.data`.
+
+```bash
+pnpm docker:up                   # build and start it
+pnpm docker:logs                 # follow its logs
+pnpm docker:down                 # stop and remove the container; the data stays in ./.data
 ```
 
 ## License
