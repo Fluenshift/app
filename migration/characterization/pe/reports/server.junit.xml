@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="bun test" tests="13" assertions="35" failures="0" skipped="0" time="0.151392995">
-  <testsuite name="src/evaluation/utf8.characterization.test.ts" file="src/evaluation/utf8.characterization.test.ts" tests="13" assertions="35" failures="0" skipped="0" time="0.145889866">
+<testsuites name="bun test" tests="15" assertions="41" failures="0" skipped="0" time="0.099917753">
+  <testsuite name="src/evaluation/utf8.characterization.test.ts" file="src/evaluation/utf8.characterization.test.ts" tests="13" assertions="35" failures="0" skipped="0" time="0.090800126">
     <testsuite name="UTF-8 helpers" file="src/evaluation/utf8.characterization.test.ts" line="21" tests="5" assertions="16" failures="0" skipped="0" time="0">
-      <testcase name="accepts every well-formed string, including a BOM and U+FFFD" classname="UTF-8 helpers" time="0.000779" file="src/evaluation/utf8.characterization.test.ts" line="22" assertions="6" />
-      <testcase name="rejects lone surrogates" classname="UTF-8 helpers" time="0.000041" file="src/evaluation/utf8.characterization.test.ts" line="31" assertions="4" />
-      <testcase name="treats the start, the end and every lead byte as a boundary" classname="UTF-8 helpers" time="0.000092" file="src/evaluation/utf8.characterization.test.ts" line="38" assertions="2" />
-      <testcase name="treats the only offset of an empty buffer as a boundary" classname="UTF-8 helpers" time="0.000017" file="src/evaluation/utf8.characterization.test.ts" line="50" assertions="1" />
-      <testcase name="treats offsets outside the buffer or between bytes as no boundary" classname="UTF-8 helpers" time="0.000117" file="src/evaluation/utf8.characterization.test.ts" line="54" assertions="3" />
+      <testcase name="accepts every well-formed string, including a BOM and U+FFFD" classname="UTF-8 helpers" time="0.000411" file="src/evaluation/utf8.characterization.test.ts" line="22" assertions="6" />
+      <testcase name="rejects lone surrogates" classname="UTF-8 helpers" time="0.000025" file="src/evaluation/utf8.characterization.test.ts" line="31" assertions="4" />
+      <testcase name="treats the start, the end and every lead byte as a boundary" classname="UTF-8 helpers" time="0.000054" file="src/evaluation/utf8.characterization.test.ts" line="38" assertions="2" />
+      <testcase name="treats the only offset of an empty buffer as a boundary" classname="UTF-8 helpers" time="0.000009" file="src/evaluation/utf8.characterization.test.ts" line="50" assertions="1" />
+      <testcase name="treats offsets outside the buffer or between bytes as no boundary" classname="UTF-8 helpers" time="0.000055" file="src/evaluation/utf8.characterization.test.ts" line="54" assertions="3" />
     </testsuite>
-    <testsuite name="applyCorrections UTF-8 edge cases" file="src/evaluation/utf8.characterization.test.ts" line="63" tests="8" assertions="19" failures="0" skipped="0" time="0.003">
-      <testcase name="returns the sample unchanged without corrections" classname="applyCorrections UTF-8 edge cases" time="0.001185" file="src/evaluation/utf8.characterization.test.ts" line="64" assertions="1" />
-      <testcase name="keeps a leading BOM when a later span is corrected" classname="applyCorrections UTF-8 edge cases" time="0.000199" file="src/evaluation/utf8.characterization.test.ts" line="72" assertions="1" />
-      <testcase name="matches a span whose original text starts with a BOM" classname="applyCorrections UTF-8 edge cases" time="0.000139" file="src/evaluation/utf8.characterization.test.ts" line="82" assertions="1" />
-      <testcase name="applies several corrections whatever their order" classname="applyCorrections UTF-8 edge cases" time="0.000125" file="src/evaluation/utf8.characterization.test.ts" line="97" assertions="1" />
-      <testcase name="allows adjacent spans" classname="applyCorrections UTF-8 edge cases" time="0.000088" file="src/evaluation/utf8.characterization.test.ts" line="108" assertions="1" />
-      <testcase name="gives one reason for spans outside the sample, empty, overlapping or split" classname="applyCorrections UTF-8 edge cases" time="0.002656" file="src/evaluation/utf8.characterization.test.ts" line="119" assertions="11" />
-      <testcase name="gives the same reason for an ill-formed correction" classname="applyCorrections UTF-8 edge cases" time="0.000238" file="src/evaluation/utf8.characterization.test.ts" line="145" assertions="1" />
-      <testcase name="gives another reason when the span&apos;s bytes differ from its original text" classname="applyCorrections UTF-8 edge cases" time="0.000151" file="src/evaluation/utf8.characterization.test.ts" line="153" assertions="2" />
+    <testsuite name="applyCorrections UTF-8 edge cases" file="src/evaluation/utf8.characterization.test.ts" line="63" tests="8" assertions="19" failures="0" skipped="0" time="0.001">
+      <testcase name="returns the sample unchanged without corrections" classname="applyCorrections UTF-8 edge cases" time="0.000664" file="src/evaluation/utf8.characterization.test.ts" line="64" assertions="1" />
+      <testcase name="keeps a leading BOM when a later span is corrected" classname="applyCorrections UTF-8 edge cases" time="0.000107" file="src/evaluation/utf8.characterization.test.ts" line="72" assertions="1" />
+      <testcase name="matches a span whose original text starts with a BOM" classname="applyCorrections UTF-8 edge cases" time="0.000076" file="src/evaluation/utf8.characterization.test.ts" line="82" assertions="1" />
+      <testcase name="applies several corrections whatever their order" classname="applyCorrections UTF-8 edge cases" time="0.000071" file="src/evaluation/utf8.characterization.test.ts" line="97" assertions="1" />
+      <testcase name="allows adjacent spans" classname="applyCorrections UTF-8 edge cases" time="0.000056" file="src/evaluation/utf8.characterization.test.ts" line="108" assertions="1" />
+      <testcase name="gives one reason for spans outside the sample, empty, overlapping or split" classname="applyCorrections UTF-8 edge cases" time="0.001347" file="src/evaluation/utf8.characterization.test.ts" line="119" assertions="11" />
+      <testcase name="gives the same reason for an ill-formed correction" classname="applyCorrections UTF-8 edge cases" time="0.000096" file="src/evaluation/utf8.characterization.test.ts" line="145" assertions="1" />
+      <testcase name="gives another reason when the span&apos;s bytes differ from its original text" classname="applyCorrections UTF-8 edge cases" time="0.00008" file="src/evaluation/utf8.characterization.test.ts" line="153" assertions="2" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="src/evaluation/protected-content.characterization.test.ts" file="src/evaluation/protected-content.characterization.test.ts" tests="2" assertions="6" failures="0" skipped="0" time="0.004973061">
+    <testsuite name="Protected Technical Content guards" file="src/evaluation/protected-content.characterization.test.ts" line="12" tests="2" assertions="6" failures="0" skipped="0" time="0.001">
+      <testcase name="protects lines of JSON that are not YAML" classname="Protected Technical Content guards" time="0.001987" file="src/evaluation/protected-content.characterization.test.ts" line="13" assertions="3" />
+      <testcase name="measures each span in UTF-8 bytes of the whole Writing Sample" classname="Protected Technical Content guards" time="0.000694" file="src/evaluation/protected-content.characterization.test.ts" line="19" assertions="3" />
     </testsuite>
   </testsuite>
 </testsuites>
