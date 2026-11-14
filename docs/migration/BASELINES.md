@@ -151,6 +151,7 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | `grifando` | `src/app/api/interview/interview.characterization.test.ts` | The four interview routes; none has a test. | 6 |
 | `grifando` | `src/app/api/me/me.characterization.test.ts` | The attributes the session cookie is expired with. | 1 |
 | `grifando` | `src/app/api/vocabulary/vocabulary.characterization.test.ts` | Saving and deleting a vocabulary item; neither route has a test. | 3 |
+| `grifando` | `src/app/pages.characterization.test.ts` | The data the five Server Component pages read and render; see the tables below. | 6 |
 | `grifando` | `src/app/api/writing-sessions/writingSessions.characterization.test.ts` | Submitting, listing and reading writing sessions beyond the missing-key cases of `route.test.ts`. | 6 |
 
 Grifando's API routes, by the test that pins each behavior (#22). The characterizations run the
@@ -177,5 +178,16 @@ faked as the existing route tests fake them; the rate-limit refusals are in
 | `GET /api/writing-sessions` | none | newest first, at most 20, only the visitor's, without analyses |
 | `GET /api/writing-sessions/[id]` | none | the session with its analysis, 404 for unknown and foreign sessions |
 
-The five pages that read repositories in Server Components (`/`, `mistakes`, `vocabulary`,
-`today`, `write`) are not characterized yet; #22 stays open for them.
+The five pages that read repositories in Server Components are pinned by
+`src/app/pages.characterization.test.ts` (6 cases). Each page runs as a function against the
+throwaway Postgres with a fixed clock, and the cases read the element tree it returns: the props
+it hands to each client component and the text it renders itself, the data the read endpoints
+of Phase 5e must supply.
+
+| Page | Pinned |
+| --- | --- |
+| `/` | the streak, progress (sessions, attempts, accuracy, average scores), weak areas and recent lists handed to the dashboard components; the due count, the recommendation and today's challenge |
+| `/mistakes` | each pattern once, with its category, mastery or fading badge and count; the category breakdown; the due count; the 30-day window and the from-Portuguese filter |
+| `/today` | the challenge handed to `TodaySession`, biased toward the visitor's active categories |
+| `/vocabulary` | the visitor's items, newest first, and the form prefilled from the query |
+| `/write` | the challenge and heading chosen from `promptId` and `mode` |
