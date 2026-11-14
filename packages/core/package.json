@@ -12,6 +12,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@fluenshift/contract": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {

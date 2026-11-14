@@ -4,6 +4,38 @@
   "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
   "rows": [
     {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > coalesces an adjacent duplicate only for an Other finding",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "title": "assessment localization guards > coalesces an adjacent duplicate only for an Other finding",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > does not coalesce a word that occurs a third time",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "title": "assessment localization guards > does not coalesce a word that occurs a third time",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > keeps the start of an edit that begins right after a word",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "title": "assessment localization guards > keeps the start of an edit that begins right after a word",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/server/src/evaluation/assessment-localization.characterization.test.ts::assessment localization guards > treats overlapping occurrences of the original text as ambiguous",
+      "kind": "characterization",
+      "source": "apps/server/src/evaluation/assessment-localization.characterization.test.ts",
+      "title": "assessment localization guards > treats overlapping occurrences of the original text as ambiguous",
+      "suite": "server",
+      "baseline": "green"
+    },
+    {
       "id": "pe:characterization:apps/server/src/evaluation/protected-content.characterization.test.ts::Protected Technical Content guards > measures each span in UTF-8 bytes of the whole Writing Sample",
       "kind": "characterization",
       "source": "apps/server/src/evaluation/protected-content.characterization.test.ts",
