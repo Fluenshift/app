@@ -1,0 +1,35 @@
+# The image builds from the workspace sources only: no installed dependencies, build output,
+# local data, credentials, tool settings or migration records.
+**/node_modules
+**/dist
+**/.turbo
+**/*.log
+**/*.tsbuildinfo
+.git
+.github
+.husky
+.data
+**/.env
+**/.env.*
+!**/.env.example
+**/*.key
+**/*.pem
+**/.npmrc
+.claude
+.codex
+.mcp.json
+.scratch
+SESSION_HANDOFF.md
+AGENTS.md
+CLAUDE.md
+docs
+migration
+e2e
+gates
+scripts
+reports
+playwright-report
+test-results
+coverage
+**/Dockerfile
+docker-compose.yml
