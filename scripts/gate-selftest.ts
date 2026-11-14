@@ -202,6 +202,36 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
       acceptedBy: [["lint", lint("packages/core/src/selftest.ts")]],
     },
     {
+      gate: "G1",
+      name: "an unmapped tagged error at the edge",
+      apply: (tree) =>
+        write(
+          tree,
+          "apps/server/src/selftest.ts",
+          [
+            'import { Effect, Layer, ManagedRuntime, Schema } from "effect";',
+            "",
+            'import { makeEdge } from "./edge";',
+            "",
+            "class Unmapped extends Schema.TaggedError<",
+            "  Unmapped,",
+            "  { readonly brand: unique symbol }",
+            '>()("Unmapped", {}) {}',
+            "",
+            "const edge = makeEdge(ManagedRuntime.make(Layer.empty));",
+            "",
+            "export const answer = (): Promise<Response> =>",
+            "  edge(Effect.fail(new Unmapped()), {",
+            "    errors: {},",
+            '    success: () => Response.json({ status: "ok" }),',
+            "  });",
+            "",
+          ].join("\n")
+        ),
+      rejectedBy: [["types", types("apps/server")]],
+      acceptedBy: [["lint", lint("apps/server/src/selftest.ts")]],
+    },
+    {
       gate: "G11",
       name: "a lowered oxlint severity",
       apply: (tree) =>

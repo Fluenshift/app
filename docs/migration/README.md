@@ -194,9 +194,9 @@ intended gate rejects it while a control gate still accepts it: a focused, a ski
 a lowered Effect diagnostic severity (G11); a ledger row pointing at a missing test and a `port`
 target with a changed title (G9); a weakened matcher (G10); a first commit whose tests already
 pass (G8); a verdict for an older head and one from the implementing vendor (G12). CI runs it
-in its own job. Two cases wait for the code they test: user text in a query string (G7) and an
-unmapped tagged error at the edge (G11) arrive with the Hono routes and the edge helper of
-Phase 4d.
+in its own job. A tagged error with no entry at the edge is a type error, so its case is
+rejected by G1. One case waits for the code it tests: user text in a query string (G7) arrives
+with the Hono routes of Phase 4d.
 
 ```bash
 mise exec node@26.13.0 pnpm@12.18.0 -- node scripts/gate-selftest.ts --root ../app-baselines
