@@ -242,29 +242,30 @@ function runTargets(
     (file) => workspaceIn(root, file)
   );
   for (const [workspace, files] of byWorkspace) {
-    const report = path.join(
-      mkdtempSync(path.join(tmpdir(), "red-green-")),
-      "report.json"
-    );
-    const cwd = path.join(root, workspace);
-    run(
-      "pnpm",
-      [
-        "exec",
-        "vitest",
-        "run",
-        ...new Set(files.map((file) => path.posix.relative(workspace, file))),
-        "--reporter=json",
-        `--outputFile.json=${report}`,
-      ],
-      cwd
-    );
-    if (!existsSync(report)) continue;
-    for (const [key, value] of readVitestResults(
-      JSON.parse(readFileSync(report, "utf8")),
-      root
-    ))
-      results.set(key, value);
+    const scratch = mkdtempSync(path.join(tmpdir(), "red-green-"));
+    const report = path.join(scratch, "report.json");
+    try {
+      run(
+        "pnpm",
+        [
+          "exec",
+          "vitest",
+          "run",
+          ...new Set(files.map((file) => path.posix.relative(workspace, file))),
+          "--reporter=json",
+          `--outputFile.json=${report}`,
+        ],
+        path.join(root, workspace)
+      );
+      if (existsSync(report))
+        for (const [key, value] of readVitestResults(
+          JSON.parse(readFileSync(report, "utf8")),
+          root
+        ))
+          results.set(key, value);
+    } finally {
+      rmSync(scratch, { recursive: true, force: true });
+    }
   }
   return results;
 }
