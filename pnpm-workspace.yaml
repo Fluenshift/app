@@ -52,7 +52,10 @@ catalog:
   "@vitejs/plugin-react": 6.3.0
   "vitest": 5.1.0
 
-allowBuilds: {}
+# No dependency runs an install script. esbuild, which drizzle-kit brings, finds its binary
+# through its platform package without one.
+allowBuilds:
+  esbuild: false
 
 minimumReleaseAgeExclude:
   - "@hono/node-server@2.1.8"

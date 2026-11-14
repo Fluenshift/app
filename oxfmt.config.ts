@@ -11,6 +11,8 @@ export default defineConfig({
     "apps/web/src/routeTree.gen.ts",
     "docs/**",
     "migration/**",
+    // Written by drizzle-kit (`pnpm db:generate`), never by hand.
+    "packages/db/src/migrations/**",
     "pnpm-lock.yaml",
   ],
 });
