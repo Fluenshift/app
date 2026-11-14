@@ -1,9 +1,21 @@
-import { Outlet, createRootRoute } from "@tanstack/react-router";
+// The application shell: the primary navigation above the current screen. Ported from PE
+// apps/web/src/routes/__root.tsx (5e831bb).
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
-export const Route = createRootRoute({
-  component: () => (
-    <main className="mx-auto max-w-3xl p-6">
-      <Outlet />
-    </main>
-  ),
+import Header from "../components/header";
+import type { EvaluationClient } from "../features/evaluations/evaluation-client";
+
+export interface RouterAppContext {
+  readonly evaluationClient: EvaluationClient;
+}
+
+const RootComponent = () => (
+  <div className="grid min-h-svh grid-rows-[auto_1fr]">
+    <Header />
+    <Outlet />
+  </div>
+);
+
+export const Route = createRootRouteWithContext<RouterAppContext>()({
+  component: RootComponent,
 });

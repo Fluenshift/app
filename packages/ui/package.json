@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./globals.css": "./src/styles/globals.css",
     "./*": "./src/*.ts"
   },
   "scripts": {
