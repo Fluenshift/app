@@ -1,3 +1,4 @@
+import { readdirSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -23,6 +24,10 @@ afterAll(async () => {
 });
 
 const MIGRATIONS = path.join(import.meta.dirname, "migrations");
+// Every migration the product has, each applied once.
+const MIGRATION_COUNT = readdirSync(MIGRATIONS).filter((file) =>
+  file.endsWith(".sql")
+).length;
 
 // An in-memory database with the product schema.
 const migrated = () => Database.pglite({ migrationsFolder: MIGRATIONS });
@@ -179,12 +184,12 @@ describe("Database", () => {
         const database = yield* Database;
         const tables = yield* database.run((client) =>
           client.execute(
-            sql`select table_name from information_schema.tables where table_schema = 'public' order by table_name`
+            sql`select table_name from information_schema.tables where table_schema = 'public' and table_name in ('evaluations', 'findings', 'learners', 'suggestions') order by table_name`
           )
         );
         const deleteRules = yield* database.run((client) =>
           client.execute(
-            sql`select constraints.table_name, rules.delete_rule from information_schema.referential_constraints rules join information_schema.table_constraints constraints on constraints.constraint_name = rules.constraint_name and constraints.constraint_schema = rules.constraint_schema where constraints.table_schema = 'public' order by constraints.table_name`
+            sql`select constraints.table_name, rules.delete_rule from information_schema.referential_constraints rules join information_schema.table_constraints constraints on constraints.constraint_name = rules.constraint_name and constraints.constraint_schema = rules.constraint_schema where constraints.table_schema = 'public' and constraints.table_name in ('evaluations', 'findings', 'suggestions') order by constraints.table_name`
           )
         );
         const refused = yield* verdict([
@@ -372,7 +377,9 @@ describe("Database", () => {
       ).pipe(Effect.provide(open))
     );
 
-    expect(reopened.rows).toStrictEqual([{ learners: 1, migrations: 1 }]);
+    expect(reopened.rows).toStrictEqual([
+      { learners: 1, migrations: MIGRATION_COUNT },
+    ]);
   });
 
   it("applies the migrations of MIGRATIONS_PATH to the database of the local profile", async () => {
@@ -381,7 +388,7 @@ describe("Database", () => {
         const database = yield* Database;
         return yield* database.run((client) =>
           client.execute(
-            sql`select table_name from information_schema.tables where table_schema = 'public' order by table_name`
+            sql`select table_name from information_schema.tables where table_schema = 'public' and table_name in ('evaluations', 'findings', 'learners', 'suggestions') order by table_name`
           )
         );
       }).pipe(

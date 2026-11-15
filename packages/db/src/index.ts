@@ -1,3 +1,14 @@
 export { Database, DatabaseError } from "./database";
 export type { DrizzleClient } from "./database";
-export { evaluations, findings, learners, suggestions } from "./schema";
+export {
+  categoryAbilities,
+  evaluations,
+  exerciseAttempts,
+  exercises,
+  findings,
+  learners,
+  mistakePatterns,
+  occurrences,
+  suggestions,
+  vocabularyItems,
+} from "./schema";
