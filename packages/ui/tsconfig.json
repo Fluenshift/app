@@ -1,4 +1,7 @@
 {
   "extends": "@fluenshift/config/tsconfig.isomorphic.json",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
   "include": ["src"]
 }
