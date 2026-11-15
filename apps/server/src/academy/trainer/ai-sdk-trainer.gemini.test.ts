@@ -1,17 +1,22 @@
 // Ported from Grifando src/server/ai/providers/gemini.test.ts (74dbb9f). Grifando faked the
 // Gemini SDK's generateContent; on the AI SDK one Trainer serves every provider, so each case gives
-// it a mock Gemini model that answers the JSON text. The analyzeWriting cases are superseded
-// (docs/adr/0004).
+// it a mock Gemini model that answers the JSON text, and the key check reads the call that
+// reached the model. The analyzeWriting cases are superseded (docs/adr/0004).
 import { AIResponseValidationError } from "@fluenshift/contract";
 import { Effect, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
-import { createAiSdkTrainer, toGeminiSchema } from "./ai-sdk-trainer";
+import { createAiSdkTrainer, testKey, toGeminiSchema } from "./ai-sdk-trainer";
+import {
+  TrainerKeyRejectedError,
+  TrainerQuotaExceededError,
+} from "./trainer-errors";
 import {
   answering,
   explainInput,
   fakeMultipleChoiceExercise,
   oneTarget,
+  refusing,
 } from "./trainer-test-models";
 
 const geminiAnswering = (json: unknown) =>
@@ -73,6 +78,29 @@ describe("createGeminiProvider.explainAttempt", () => {
     await expect(
       Effect.runPromise(provider.explainAttempt(explainInput))
     ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+});
+
+describe("testKey", () => {
+  it("makes one 1-token request and resolves when the key works", async () => {
+    const model = answering("google.generative-ai", "test-model", "");
+
+    await expect(Effect.runPromise(testKey(model))).resolves.toBeUndefined();
+    expect(model.doGenerateCalls).toHaveLength(1);
+    expect(model.doGenerateCalls[0]).toEqual(
+      expect.objectContaining({ maxOutputTokens: 1 })
+    );
+  });
+
+  it("maps an invalid-key 400 to AIKeyRejectedError and a 429 to AIQuotaExceededError", async () => {
+    await expect(
+      Effect.runPromise(
+        testKey(refusing("google.generative-ai", 400, "API key not valid"))
+      )
+    ).rejects.toBeInstanceOf(TrainerKeyRejectedError);
+    await expect(
+      Effect.runPromise(testKey(refusing("google.generative-ai", 429, "quota")))
+    ).rejects.toBeInstanceOf(TrainerQuotaExceededError);
   });
 });
 
