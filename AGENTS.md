@@ -6,11 +6,13 @@ practice. The migration is in progress and no human reviews code: the gates are 
 
 Read these before any work, in this order:
 
-1. `docs/migration/HANDOFF.md`: repositories and setup.
-2. `docs/migration/PRE_MIGRATION.md`: approved stack and product direction.
-3. `docs/migration/MIGRATION_PROTOCOL.md`: phases, the work unit cycle, gates.
-4. `docs/migration/README.md`: the inventory, the ledger, labels, the G12 verdict format.
-5. `docs/adr/`: seam decisions. A **Proposed** ADR decides nothing yet.
+1. `SESSION_HANDOFF.md`: where the last session stopped, the owners' standing instructions and
+   the next units.
+2. `docs/migration/HANDOFF.md`: repositories and setup.
+3. `docs/migration/PRE_MIGRATION.md`: approved stack and product direction.
+4. `docs/migration/MIGRATION_PROTOCOL.md`: phases, the work unit cycle, gates.
+5. `docs/migration/README.md`: the inventory, the ledger, labels, the G12 verdict format.
+6. `docs/adr/`: seam decisions. A **Proposed** ADR decides nothing yet.
 
 This file is the short form of their rules. When they disagree with it, they win.
 
