@@ -13,6 +13,12 @@
     "check-types": {},
     "check:effect": {},
     "test": {},
+    "server#test": {
+      "dependsOn": ["@fluenshift/db#test"]
+    },
+    "web#test": {
+      "dependsOn": ["@fluenshift/db#test"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

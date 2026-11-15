@@ -26,7 +26,7 @@ Node 26.13.0 and pnpm 12.18.0. Where they are not on `PATH`, prefix commands wit
 | `pnpm format` / `pnpm format:fix` | Check or apply oxfmt. |
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
-| `pnpm test` | Vitest in every workspace. |
+| `pnpm test` | Vitest in every workspace. The database cases run first, beside the small suites only, because PGlite's cold start times out next to the web and server suites (#72). |
 | `pnpm db:generate` | Write the next migration of `packages/db` from `packages/db/src/schema.ts` with drizzle-kit. Only the coordinator runs it, one migration in flight at a time. |
 | `pnpm test:postgres` | The `Database` service against a Postgres 17 server; `DEPLOY_PROFILE=hosted` and `DATABASE_URL` name it. |
 | `pnpm test:e2e` | Build the server and the web app, then run the Playwright journeys against the one process that serves both. |
