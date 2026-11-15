@@ -3,7 +3,7 @@
   "repository": "Fluenshift/prompt-evolution",
   "tag": "parity-baseline",
   "commit": "5e831bb6f2af1ae0f52c2ff1af1c28c605a25486",
-  "ranAt": "2026-11-14T21:29:12.464Z",
+  "ranAt": "2026-11-15T00:33:21.078Z",
   "tools": [
     {
       "name": "bun",
@@ -30,7 +30,8 @@
     "apps/server/src/evaluation/writing-evaluation.characterization.test.ts",
     "apps/server/src/progress/progress-insights.characterization.test.ts",
     "apps/web/src/features/evaluations/http-evaluation-client.characterization.test.ts",
-    "apps/web/src/features/evaluations/spell-checker.characterization.test.ts"
+    "apps/web/src/features/evaluations/spell-checker.characterization.test.ts",
+    "apps/web/src/routes/-evaluations.detail.characterization.test.tsx"
   ],
   "suites": [
     {
@@ -65,6 +66,7 @@
         "test",
         "src/features/evaluations/http-evaluation-client.characterization.test.ts",
         "src/features/evaluations/spell-checker.characterization.test.ts",
+        "src/routes/-evaluations.detail.characterization.test.tsx",
         "--reporter=default",
         "--reporter=json",
         "--outputFile.json=web.vitest.json"
