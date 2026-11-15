@@ -564,10 +564,58 @@
       "baseline": "green"
     },
     {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > a second submission in the same moment sends nothing",
+      "kind": "characterization",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "title": "Writing Desk details > a second submission in the same moment sends nothing",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > accepting a Correction after the draft changed replaces the first occurrence of its text",
+      "kind": "characterization",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "title": "Writing Desk details > accepting a Correction after the draft changed replaces the first occurrence of its text",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > counts only the last 30 days in its finding rate",
+      "kind": "characterization",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "title": "Writing Desk details > counts only the last 30 days in its finding rate",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > lists the three newest Evaluations as recent",
+      "kind": "characterization",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "title": "Writing Desk details > lists the three newest Evaluations as recent",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > shows a finding rate below 0.1 as <0.1",
+      "kind": "characterization",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "title": "Writing Desk details > shows a finding rate below 0.1 as <0.1",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
       "id": "pe:characterization:apps/web/src/routes/-evaluations.detail.characterization.test.tsx::the Nearby evaluations rail leaves out the open Evaluation and keeps the five newest others",
       "kind": "characterization",
       "source": "apps/web/src/routes/-evaluations.detail.characterization.test.tsx",
       "title": "the Nearby evaluations rail leaves out the open Evaluation and keeps the five newest others",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-progress.characterization.test.tsx::Progress shows a finding rate below 0.1 as <0.1",
+      "kind": "characterization",
+      "source": "apps/web/src/routes/-progress.characterization.test.tsx",
+      "title": "Progress shows a finding rate below 0.1 as <0.1",
       "suite": "web",
       "baseline": "green"
     },

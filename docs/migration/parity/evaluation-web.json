@@ -47,6 +47,61 @@
       ]
     },
     {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > a second submission in the same moment sends nothing",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/web/src/routes/-writing-desk.details.test.tsx::Writing Desk details > a second submission in the same moment sends nothing"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > accepting a Correction after the draft changed replaces the first occurrence of its text",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/web/src/routes/-writing-desk.details.test.tsx::Writing Desk details > accepting a Correction after the draft changed replaces the first occurrence of its text"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > counts only the last 30 days in its finding rate",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/web/src/routes/-writing-desk.details.test.tsx::Writing Desk details > counts only the last 30 days in its finding rate"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > lists the three newest Evaluations as recent",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/web/src/routes/-writing-desk.details.test.tsx::Writing Desk details > lists the three newest Evaluations as recent"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-dashboard.characterization.test.tsx::Writing Desk details > shows a finding rate below 0.1 as <0.1",
+      "source": "apps/web/src/routes/-dashboard.characterization.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/web/src/routes/-writing-desk.details.test.tsx::Writing Desk details > shows a finding rate below 0.1 as <0.1"
+      ]
+    },
+    {
       "id": "pe:characterization:apps/web/src/routes/-evaluations.detail.characterization.test.tsx::the Nearby evaluations rail leaves out the open Evaluation and keeps the five newest others",
       "source": "apps/web/src/routes/-evaluations.detail.characterization.test.tsx",
       "class": "A",
@@ -55,6 +110,17 @@
       "decision": null,
       "targets": [
         "apps/web/src/routes/-evaluations.nearby.test.tsx::the Nearby evaluations rail leaves out the open Evaluation and keeps the five newest others"
+      ]
+    },
+    {
+      "id": "pe:characterization:apps/web/src/routes/-progress.characterization.test.tsx::Progress shows a finding rate below 0.1 as <0.1",
+      "source": "apps/web/src/routes/-progress.characterization.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/web/src/routes/-progress.details.test.tsx::Progress shows a finding rate below 0.1 as <0.1"
       ]
     },
     {
@@ -229,7 +295,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-dashboard.test.tsx::Writing Desk > SpellChecker renders findings directly on original text with Grammarly popover and 1-click accept"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > a later provider failure preserves the changed draft and previous saved evidence",
@@ -238,7 +306,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-dashboard.test.tsx::Writing Desk > a later provider failure preserves the changed draft and previous saved evidence"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > editing after success marks stale evidence without automatic evaluation",
@@ -247,7 +317,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-dashboard.test.tsx::Writing Desk > editing after success marks stale evidence without automatic evaluation"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > is the production root even when an old prototype query remains",
@@ -256,7 +328,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-dashboard.test.tsx::Writing Desk > is the production root even when an old prototype query remains"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keeps a completed Evaluation inline with complete evidence",
@@ -265,7 +339,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keeps a completed Evaluation inline with complete evidence"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keeps long unbroken Finding and Suggestion evidence reachable",
@@ -274,7 +350,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keeps long unbroken Finding and Suggestion evidence reachable"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keyboard submission and repeat submission both remain explicit",
@@ -283,7 +361,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-dashboard.test.tsx::Writing Desk > keyboard submission and repeat submission both remain explicit"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-dashboard.test.tsx::Writing Desk > pending work preserves exact writing and prevents duplicate submission",
@@ -292,7 +372,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-dashboard.test.tsx::Writing Desk > pending work preserves exact writing and prevents duplicate submission"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > a failed deletion keeps the record and offers a safe retry",
@@ -455,7 +537,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a network failure gives connection guidance without showing private causes"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a no-English outcome keeps the exact sample and explains what is required",
@@ -464,7 +548,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a no-English outcome keeps the exact sample and explains what is required"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a provider timeout explains the delay without discarding the draft",
@@ -473,7 +559,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a provider timeout explains the delay without discarding the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a retryable failure preserves exact writing and can succeed",
@@ -482,7 +570,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > a retryable failure preserves exact writing and can succeed"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > configuration-missing failures show actionable feedback while preserving the draft",
@@ -491,7 +581,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > configuration-missing failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > forbidden failures show actionable feedback while preserving the draft",
@@ -500,7 +592,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > forbidden failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > invalid-assessment failures show actionable feedback while preserving the draft",
@@ -509,7 +603,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > invalid-assessment failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > keeps evaluation disabled until the provider is configured",
@@ -518,7 +614,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > keeps evaluation disabled until the provider is configured"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > persistence-failure failures show actionable feedback while preserving the draft",
@@ -527,7 +625,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > persistence-failure failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-credits-exhausted failures show actionable feedback while preserving the draft",
@@ -536,7 +636,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-credits-exhausted failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-output-incomplete failures show actionable feedback while preserving the draft",
@@ -545,7 +647,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-output-incomplete failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-rate-limited failures show actionable feedback while preserving the draft",
@@ -554,7 +658,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-rate-limited failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-rejected failures show actionable feedback while preserving the draft",
@@ -563,7 +669,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-rejected failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-unavailable failures show actionable feedback while preserving the draft",
@@ -572,7 +680,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.validation.test.tsx::Writing Desk validation > provider-unavailable failures show actionable feedback while preserving the draft"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > an Error Category selection reveals its exact source Findings",
@@ -581,7 +691,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > an Error Category selection reveals its exact source Findings"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > deletion recomputes Progress even after an intent preload",
@@ -590,7 +702,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > deletion recomputes Progress even after an intent preload"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > each period window contains exactly its retained Evaluations",
@@ -599,7 +713,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > each period window contains exactly its retained Evaluations"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > incompatible Rubric Versions stay separate and labeled",
@@ -608,7 +724,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > incompatible Rubric Versions stay separate and labeled"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > keeps long unbroken source explanations reachable",
@@ -617,7 +735,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > keeps long unbroken source explanations reachable"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > no compatible evidence shows an honest empty state",
@@ -626,7 +746,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > no compatible evidence shows an honest empty state"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > one Evaluation counts once per category but reveals every Finding",
@@ -635,7 +757,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > one Evaluation counts once per category but reveals every Finding"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > primary rate, secondary score, and descriptive measures",
@@ -644,7 +768,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > primary rate, secondary score, and descriptive measures"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > recurring Correction and summary selections reveal their evidence",
@@ -653,7 +779,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > recurring Correction and summary selections reveal their evidence"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > repeated Writing Samples remain separate observations",
@@ -662,7 +790,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > repeated Writing Samples remain separate observations"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-progress.test.tsx::Progress > sparse evidence stays descriptive",
@@ -671,7 +801,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-progress.test.tsx::Progress > sparse evidence stays descriptive"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-root.light-theme.test.tsx::light-only application shell > does not read or write a stored theme",
@@ -680,7 +812,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-root.light-theme.test.tsx::light-only application shell > does not read or write a stored theme"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-setup.test.tsx::Setup & privacy > keeps setup to essential provider, privacy, data, and access facts",
