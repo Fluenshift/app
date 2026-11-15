@@ -514,7 +514,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/resilience.test.ts::isOverloaded > recognises overload shapes and rejects the rest"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > does not retry on a rejected key or exhausted quota",
@@ -523,7 +525,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/resilience.test.ts::withResilience > does not retry on a rejected key or exhausted quota"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > passes a non-overload error from the fallback through untouched",
@@ -532,7 +536,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/resilience.test.ts::withResilience > passes a non-overload error from the fallback through untouched"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > retries once on the fallback when the primary is overloaded",
@@ -541,7 +547,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/resilience.test.ts::withResilience > retries once on the fallback when the primary is overloaded"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > throws AIProviderUnavailableError when both are overloaded",
@@ -550,7 +558,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/resilience.test.ts::withResilience > throws AIProviderUnavailableError when both are overloaded"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > throws AIProviderUnavailableError, not the timeout error, when both time out",
@@ -559,7 +569,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/resilience.test.ts::withResilience > throws AIProviderUnavailableError, not the timeout error, when both time out"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/resilient.test.ts::withResilience > times out a hanging call and then uses the fallback",
@@ -568,7 +580,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/resilience.test.ts::withResilience > times out a hanging call and then uses the fallback"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/schemas/exerciseGeneration.test.ts::exerciseGenerationResultSchema > accepts one well-formed exercise of each type",
