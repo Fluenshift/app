@@ -153,7 +153,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/mistake-pattern-repository.test.ts::mistakePatternRepository.upsertPattern > collapses repeated occurrences of the same concept into one growing pattern"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mistakePattern.repository.test.ts::mistakePatternRepository.upsertPattern > creates a new pattern on the first occurrence",
@@ -162,7 +164,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/mistake-pattern-repository.test.ts::mistakePatternRepository.upsertPattern > creates a new pattern on the first occurrence"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mistakePattern.repository.test.ts::mistakePatternRepository.upsertPattern > keeps distinct categories as separate patterns even with the same raw key",
@@ -171,7 +175,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/mistake-pattern-repository.test.ts::mistakePatternRepository.upsertPattern > keeps distinct categories as separate patterns even with the same raw key"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mistakePattern.repository.test.ts::mistakePatternRepository.upsertPattern > orders patterns by occurrence count, most frequent first",
@@ -180,7 +186,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/mistake-pattern-repository.test.ts::mistakePatternRepository.upsertPattern > orders patterns by occurrence count, most frequent first"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/vocabulary/vocabulary.repository.test.ts::vocabularyRepository > creates, lists newest first, and deletes the user's items",
@@ -189,7 +197,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/vocabulary-repository.test.ts::vocabularyRepository > creates, lists newest first, and deletes the user's items"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/vocabulary/vocabulary.repository.test.ts::vocabularyRepository > keeps a source session only when it belongs to the user",
@@ -198,7 +208,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/vocabulary-repository.test.ts::vocabularyRepository > keeps a source session only when it belongs to the user"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/vocabulary/vocabulary.repository.test.ts::vocabularyRepository > refuses to delete another user's item",
@@ -207,7 +219,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/vocabulary-repository.test.ts::vocabularyRepository > refuses to delete another user's item"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > creates a new session when the retry id isn't a FAILED session of this user",
