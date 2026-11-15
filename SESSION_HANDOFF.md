@@ -118,6 +118,8 @@ Each worktree runs its own `pnpm install --frozen-lockfile`; the pnpm store make
 
 While the E2E pause holds, skip the `evaluation-e2e` rows and the `dev-proxy.test.ts` rows.
 
+Dependabot reports two open alerts on `main`, both from development tools: esbuild 0.18.20 (medium, alert 2), which drizzle-kit 0.31.11 pulls in through the deprecated `@esbuild-kit/esm-loader` and which matters only to esbuild's development server; and deepmerge 4.3.1 (low, alert 1, no fixed release yet), through ultracite. A fix changes dependencies, so it belongs in a dedicated unit.
+
 ## The Trainer, as 5b and 5d find it
 
 - `TrainerConfig` (`packages/env/src/trainer.ts`) holds the model pins: `claude-sonnet-5` and `gemini-3.5-flash` answer unless `ANTHROPIC_MODEL` or `GEMINI_MODEL` names another model; the fallbacks are `claude-haiku-5-5` and `gemini-3.5-flash-lite`, which the environment never changes.
