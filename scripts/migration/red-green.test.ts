@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 
 import {
   failureKind,
+  holdsTitle,
   judgeGreen,
   judgeRed,
   newTargets,
@@ -41,6 +42,26 @@ describe("newTargets", () => {
       file: "packages/core/src/a.test.ts",
       title: "a > adds",
     });
+  });
+});
+
+describe("holdsTitle", () => {
+  it("holds a title written in the file or produced by a table", () => {
+    const text = [
+      'test("adds", () => {});',
+      'test.each([["provider-timeout"]])("%s failures keep the draft", () => {});',
+    ].join("\n");
+
+    assert.equal(holdsTitle(text, "adds"), true);
+    assert.equal(
+      holdsTitle(text, "provider-timeout failures keep the draft"),
+      true
+    );
+    assert.equal(
+      holdsTitle(text, "provider-timeout failures drop the draft"),
+      false
+    );
+    assert.equal(holdsTitle(text, "subtracts"), false);
   });
 });
 
