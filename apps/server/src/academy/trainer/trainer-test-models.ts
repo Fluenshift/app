@@ -1,5 +1,6 @@
 // AI SDK mock models for the Trainer's tests: each answers one text, as a provider's structured
-// output arrives once the AI SDK has read the provider's response.
+// output arrives once the AI SDK has read the provider's response, or refuses the call.
+import { APICallError } from "ai";
 import { MockLanguageModelV4 } from "ai/test";
 
 export const answering = (
@@ -24,6 +25,26 @@ export const answering = (
       warnings: [],
     },
     modelId,
+    provider,
+  });
+
+// A model whose provider refuses the call with an API error of that status.
+export const refusing = (
+  provider: string,
+  statusCode: number,
+  message = "The provider refused the call"
+): MockLanguageModelV4 =>
+  new MockLanguageModelV4({
+    doGenerate: () =>
+      Promise.reject(
+        new APICallError({
+          message,
+          requestBodyValues: {},
+          statusCode,
+          url: "https://provider.test",
+        })
+      ),
+    modelId: "m",
     provider,
   });
 

@@ -1,17 +1,23 @@
 // Ported from Grifando src/server/ai/providers/anthropic.test.ts (74dbb9f). Grifando faked the
 // Anthropic SDK's messages client; on the AI SDK one Trainer serves every provider, so each case
 // gives it a mock Anthropic model that answers what the tool_use block carried, or no object at
-// all. The analyzeWriting cases are superseded (docs/adr/0004).
+// all, and the key check reads the call that reached the model. The analyzeWriting cases are
+// superseded (docs/adr/0004).
 import { AIResponseValidationError } from "@fluenshift/contract";
 import { Effect } from "effect";
 import { describe, expect, it } from "vitest";
 
-import { createAiSdkTrainer } from "./ai-sdk-trainer";
+import { createAiSdkTrainer, testKey } from "./ai-sdk-trainer";
+import {
+  TrainerKeyRejectedError,
+  TrainerUnavailableError,
+} from "./trainer-errors";
 import {
   answering,
   explainInput,
   fakeMultipleChoiceExercise,
   oneTarget,
+  refusing,
 } from "./trainer-test-models";
 
 const anthropicAnswering = (answer: unknown) =>
@@ -104,5 +110,26 @@ describe("createAnthropicProvider.explainAttempt", () => {
     await expect(
       Effect.runPromise(provider.explainAttempt(explainInput))
     ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+});
+
+describe("testKey", () => {
+  it("makes one 1-token request and resolves when the key works", async () => {
+    const model = answering("anthropic.messages", "test-model", "Hi");
+
+    await expect(Effect.runPromise(testKey(model))).resolves.toBeUndefined();
+    expect(model.doGenerateCalls).toHaveLength(1);
+    expect(model.doGenerateCalls[0]).toEqual(
+      expect.objectContaining({ maxOutputTokens: 1 })
+    );
+  });
+
+  it("maps a 401 to AIKeyRejectedError and a 529 to AIProviderUnavailableError", async () => {
+    await expect(
+      Effect.runPromise(testKey(refusing("anthropic.messages", 401)))
+    ).rejects.toBeInstanceOf(TrainerKeyRejectedError);
+    await expect(
+      Effect.runPromise(testKey(refusing("anthropic.messages", 529)))
+    ).rejects.toBeInstanceOf(TrainerUnavailableError);
   });
 });

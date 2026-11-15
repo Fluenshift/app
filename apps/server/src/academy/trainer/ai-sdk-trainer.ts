@@ -164,6 +164,10 @@ const answerOf = <A>(
   });
 };
 
+export const testKey = (
+  _model: LanguageModel
+): Effect.Effect<void, TrainerError> => Effect.void;
+
 export const createAiSdkTrainer = (model: LanguageModel): TrainerMethods => {
   const ask = <A>(request: {
     readonly maxOutputTokens: number;
