@@ -14,6 +14,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "catalog:",
+    "@ai-sdk/google": "catalog:",
     "@effect/platform-node": "catalog:",
     "@electric-sql/pglite": "catalog:",
     "@fluenshift/contract": "workspace:*",

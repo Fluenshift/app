@@ -164,9 +164,29 @@ const answerOf = <A>(
   });
 };
 
-export const testKey = (
-  _model: LanguageModel
-): Effect.Effect<void, TrainerError> => Effect.void;
+// One AI SDK call as the Trainer reports it; a failure no rule names stays a defect.
+const calling = <A>(call: (signal: AbortSignal) => PromiseLike<A>) =>
+  Effect.tryPromise({ catch: trainerFailure, try: call }).pipe(
+    Effect.catchTag("UnmappedTrainerFailure", (failure) =>
+      Effect.die(failure.cause)
+    )
+  );
+
+// Key check: the smallest real request, one output token. Not a Trainer call: it succeeds when
+// the key works, and fails as a Trainer call does otherwise.
+export const testKey = Effect.fn("Trainer.testKey")(function* (
+  model: LanguageModel
+) {
+  yield* calling((signal) =>
+    generateText({
+      abortSignal: signal,
+      maxOutputTokens: 1,
+      maxRetries: 0,
+      model,
+      prompt: "Hi",
+    })
+  );
+});
 
 export const createAiSdkTrainer = (model: LanguageModel): TrainerMethods => {
   const ask = <A>(request: {
@@ -176,22 +196,17 @@ export const createAiSdkTrainer = (model: LanguageModel): TrainerMethods => {
     readonly schema: Schema.Codec<A, unknown>;
     readonly system: string;
   }) =>
-    Effect.tryPromise({
-      catch: trainerFailure,
-      try: (signal) =>
-        generateText({
-          abortSignal: signal,
-          maxOutputTokens: request.maxOutputTokens,
-          maxRetries: 0,
-          model,
-          output: answerOf(request.name, request.schema, model),
-          prompt: request.prompt,
-          system: request.system,
-        }),
-    }).pipe(
-      Effect.catchTag("UnmappedTrainerFailure", (failure) =>
-        Effect.die(failure.cause)
-      ),
+    calling((signal) =>
+      generateText({
+        abortSignal: signal,
+        maxOutputTokens: request.maxOutputTokens,
+        maxRetries: 0,
+        model,
+        output: answerOf(request.name, request.schema, model),
+        prompt: request.prompt,
+        system: request.system,
+      })
+    ).pipe(
       Effect.map((response) => ({
         answer: response.output,
         model: response.response.modelId,
