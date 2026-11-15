@@ -142,7 +142,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/prompts/answer-explanation.test.ts::buildAnswerExplanationUserMessage > includes the learner's answer and the accepted answers for free-text exercises"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/prompts/answerExplanation.test.ts::buildAnswerExplanationUserMessage > resolves the chosen and correct options for multiple choice",
@@ -151,7 +153,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/prompts/answer-explanation.test.ts::buildAnswerExplanationUserMessage > resolves the chosen and correct options for multiple choice"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/prompts/exerciseGeneration.test.ts::buildExerciseGenerationUserMessage > includes every target's type, category, and example",
@@ -160,7 +164,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/prompts/exercise-generation.test.ts::buildExerciseGenerationUserMessage > includes every target's type, category, and example"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/prompts/exerciseGeneration.test.ts::buildExerciseGenerationUserMessage > numbers targets in order",
@@ -169,7 +175,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/prompts/exercise-generation.test.ts::buildExerciseGenerationUserMessage > numbers targets in order"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/prompts/interview.test.ts::buildInterviewUserMessage > asks for an opening question when there is no history",
@@ -178,7 +186,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/prompts/interview.test.ts::buildInterviewUserMessage > asks for an opening question when there is no history"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/prompts/interview.test.ts::buildInterviewUserMessage > includes every prior question and answer in order",
@@ -187,7 +197,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/prompts/interview.test.ts::buildInterviewUserMessage > includes every prior question and answer in order"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/prompts/writingAnalysis.test.ts::buildWritingAnalysisSystemPrompt > instructs the model not to evaluate code correctness for EXPLAIN_CODE",
