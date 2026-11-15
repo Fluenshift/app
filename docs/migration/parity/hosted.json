@@ -495,7 +495,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::testKey > makes one 1-token request and resolves when the key works"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::testKey > maps a 401 to AIKeyRejectedError and a 529 to AIProviderUnavailableError",
@@ -504,7 +506,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::testKey > maps a 401 to AIKeyRejectedError and a 529 to AIProviderUnavailableError"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/gemini.test.ts::testKey > makes one 1-token request and resolves when the key works",
@@ -513,7 +517,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::testKey > makes one 1-token request and resolves when the key works"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/gemini.test.ts::testKey > maps an invalid-key 400 to AIKeyRejectedError and a 429 to AIQuotaExceededError",
@@ -522,7 +528,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::testKey > maps an invalid-key 400 to AIKeyRejectedError and a 429 to AIQuotaExceededError"
+      ]
     },
     {
       "id": "grifando:test:src/server/clientIp.test.ts::hashedClientIp > differs per IP and falls back to a stable value when missing",
