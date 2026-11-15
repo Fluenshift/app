@@ -47,6 +47,15 @@
       ]
     },
     {
+      "id": "pe:characterization:apps/web/src/routes/-evaluations.detail.characterization.test.tsx::the Nearby evaluations rail leaves out the open Evaluation and keeps the five newest others",
+      "source": "apps/web/src/routes/-evaluations.detail.characterization.test.tsx",
+      "class": "A",
+      "slice": "evaluation-web",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "pe:test:apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation",
       "source": "apps/web/src/components/-loader.test.tsx",
       "class": "A",

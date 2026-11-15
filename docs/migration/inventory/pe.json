@@ -564,6 +564,14 @@
       "baseline": "green"
     },
     {
+      "id": "pe:characterization:apps/web/src/routes/-evaluations.detail.characterization.test.tsx::the Nearby evaluations rail leaves out the open Evaluation and keeps the five newest others",
+      "kind": "characterization",
+      "source": "apps/web/src/routes/-evaluations.detail.characterization.test.tsx",
+      "title": "the Nearby evaluations rail leaves out the open Evaluation and keeps the five newest others",
+      "suite": "web",
+      "baseline": "green"
+    },
+    {
       "id": "pe:data-policy:deletion:01",
       "kind": "doc-rule",
       "source": "docs/product/DATA-POLICY.md",
