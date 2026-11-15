@@ -59,6 +59,31 @@ describe("reading test source", () => {
     );
   });
 
+  it("locates a test that a table generates by the title it produces", () => {
+    const table = [
+      "test.each([",
+      '  ["provider-timeout", 504],',
+      '  ["provider-unavailable", 503],',
+      '])("%s failures keep the draft at %d", (code, status) => {',
+      "  expect(code).toBe(status);",
+      "});",
+      'it.each([{ band: "Clear" }])("bands $band samples at 100%%", ({ band }) => {',
+      '  expect(band).toBe("Clear");',
+      "});",
+    ].join("\n");
+
+    const [generated] = testBodies(
+      table,
+      "provider-unavailable failures keep the draft at 503"
+    );
+    assert.ok(generated?.includes("toBe(status)"));
+    assert.equal(testBodies(table, "bands Clear samples at 100%").length, 1);
+    assert.deepEqual(
+      testBodies(table, "provider-unavailable failures drop the draft at 503"),
+      []
+    );
+  });
+
   it("counts assertions, matchers and expected literals", () => {
     const [body = ""] = testBodies(source, "scores a sample");
 
