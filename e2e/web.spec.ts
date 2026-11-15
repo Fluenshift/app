@@ -5,7 +5,7 @@ test("the built server serves the web application", async ({ page }) => {
 
   expect(response?.headers()["cache-control"]).toBe("no-cache");
   await expect(
-    page.getByRole("heading", { level: 1, name: "Fluenshift" })
+    page.getByRole("heading", { level: 1, name: "Writing Desk" })
   ).toBeVisible();
 });
 
