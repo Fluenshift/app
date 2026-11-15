@@ -9,12 +9,21 @@ import type { ExerciseTarget } from "../prompts/exercise-generation";
 import type { InterviewHistoryItem } from "../prompts/interview";
 import type { TrainerError } from "./trainer-errors";
 
+// Every result names the model that answered, the fallback's when the fallback did (Grifando
+// #77).
+export interface GeneratedExercises {
+  readonly exercises: readonly GeneratedExercise[];
+  readonly model: string;
+}
+
 export interface InterviewQuestion {
+  readonly model: string;
   readonly question: string;
 }
 
 export interface AnswerExplanation {
   readonly explanation: string;
+  readonly model: string;
 }
 
 export interface TrainerMethods {
@@ -26,5 +35,5 @@ export interface TrainerMethods {
   ) => Effect.Effect<AnswerExplanation, TrainerError>;
   readonly generateExercises: (
     targets: readonly ExerciseTarget[]
-  ) => Effect.Effect<readonly GeneratedExercise[], TrainerError>;
+  ) => Effect.Effect<GeneratedExercises, TrainerError>;
 }

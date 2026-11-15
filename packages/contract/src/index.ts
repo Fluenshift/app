@@ -24,7 +24,15 @@ export {
   TechnicalCategory,
   TechnicalCategorySchema,
 } from "./academy";
-export type { GeneratedExercise } from "./exercise-generation";
+export {
+  AIResponseValidationError,
+  exerciseGenerationResultSchema,
+  validateExerciseGenerationResult,
+} from "./exercise-generation";
+export type {
+  ExerciseGenerationResult,
+  GeneratedExercise,
+} from "./exercise-generation";
 export {
   CategoryDistribution,
   CategoryRecurrence,

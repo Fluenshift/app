@@ -1,5 +1,6 @@
 // The Trainer's access errors, which the Learner can act on. Ported from Grifando
 // src/server/ai/errors.ts (74dbb9f).
+import type { AIResponseValidationError } from "@fluenshift/contract";
 import { Schema } from "effect";
 
 // The provider rejected the key.
@@ -20,7 +21,10 @@ export class TrainerUnavailableError extends Schema.TaggedError<
   { readonly brand: unique symbol }
 >()("TrainerUnavailableError", {}) {}
 
+// A failure of one Trainer call; an answer that its schema refuses is an
+// AIResponseValidationError.
 export type TrainerError =
+  | AIResponseValidationError
   | TrainerKeyRejectedError
   | TrainerQuotaExceededError
   | TrainerUnavailableError;

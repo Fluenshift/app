@@ -13,7 +13,11 @@ import {
   TrainerQuotaExceededError,
   TrainerUnavailableError,
 } from "./trainer-errors";
-import type { AnswerExplanation, TrainerMethods } from "./trainer-model";
+import type {
+  AnswerExplanation,
+  GeneratedExercises,
+  TrainerMethods,
+} from "./trainer-model";
 
 type FakeProvider = { [K in keyof TrainerMethods]: Mock<TrainerMethods[K]> };
 
@@ -74,12 +78,15 @@ describe("withResilience", () => {
     const primary = fakeProvider();
     const fallback = fakeProvider();
     primary.generateExercises.mockReturnValue(Effect.fail(overloaded()));
-    fallback.generateExercises.mockReturnValue(Effect.succeed([]));
+    fallback.generateExercises.mockReturnValue(
+      Effect.succeed({ exercises: [], model: "fallback-model" })
+    );
     const wrapped = withResilience(primary, fallback, { timeout: 1000 });
 
+    // The answer names the fallback model that gave it (Grifando #77).
     await expect(
       Effect.runPromise(wrapped.generateExercises([]))
-    ).resolves.toEqual([]);
+    ).resolves.toEqual({ exercises: [], model: "fallback-model" });
     expect(primary.generateExercises).toHaveBeenCalledTimes(1);
     expect(fallback.generateExercises).toHaveBeenCalledTimes(1);
   });
@@ -111,6 +118,7 @@ describe("withResilience", () => {
   it("times out a hanging call and then uses the fallback", async () => {
     const fromFallback: AnswerExplanation = {
       explanation: "From the fallback.",
+      model: "fallback-model",
     };
     const primary = fakeProvider();
     const fallback = fakeProvider();
@@ -150,8 +158,8 @@ describe("withResilience", () => {
   it("throws AIProviderUnavailableError, not the timeout error, when both time out", async () => {
     const primary = fakeProvider();
     const fallback = fakeProvider();
-    const primaryCall = hanging<readonly never[]>();
-    const fallbackCall = hanging<readonly never[]>();
+    const primaryCall = hanging<GeneratedExercises>();
+    const fallbackCall = hanging<GeneratedExercises>();
     primary.generateExercises.mockReturnValue(primaryCall.call);
     fallback.generateExercises.mockReturnValue(fallbackCall.call);
     const wrapped = withResilience(primary, fallback, { timeout: 100 });
