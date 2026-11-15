@@ -53,7 +53,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.nearby.test.tsx::the Nearby evaluations rail leaves out the open Evaluation and keeps the five newest others"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/components/-loader.test.tsx::Loader > announces pending navigation",
@@ -299,7 +301,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > a failed deletion keeps the record and offers a safe retry"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > confirmation removes only that complete record and returns to History",
@@ -308,7 +312,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > confirmation removes only that complete record and returns to History"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > the safe cancel path explains deletion and keeps the Evaluation",
@@ -317,7 +323,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.deletion.test.tsx::Evaluation deletion > the safe cancel path explains deletion and keeps the Evaluation"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Evaluation Detail uses accessible work, evidence, and history regions",
@@ -326,7 +334,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.detail.test.tsx::Evaluation Detail uses accessible work, evidence, and history regions"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Evidence Lens shows every Finding, Correction, and Suggestion",
@@ -335,7 +345,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.detail.test.tsx::Evidence Lens shows every Finding, Correction, and Suggestion"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::Original section displays interactive SpellChecker with findings on original text",
@@ -344,7 +356,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.detail.test.tsx::Original section displays interactive SpellChecker with findings on original text"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::finding exposes its original text and Correction as labeled definitions",
@@ -353,7 +367,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.detail.test.tsx::finding exposes its original text and Correction as labeled definitions"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.detail.test.tsx::learner can inspect a non-error Suggestion",
@@ -362,7 +378,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.detail.test.tsx::learner can inspect a non-error Suggestion"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > empty history points the Learner to their first Evaluation",
@@ -371,7 +389,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.history.test.tsx::History > empty history points the Learner to their first Evaluation"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > populated history shows every Evaluation newest first",
@@ -380,7 +400,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.history.test.tsx::History > populated history shows every Evaluation newest first"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > repeated Writing Samples remain distinct newest-first observations",
@@ -389,7 +411,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.history.test.tsx::History > repeated Writing Samples remain distinct newest-first observations"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.history.test.tsx::History > selecting a History row reopens its complete Evaluation",
@@ -398,7 +422,9 @@
       "slice": "evaluation-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-evaluations.history.test.tsx::History > selecting a History row reopens its complete Evaluation"
+      ]
     },
     {
       "id": "pe:test:apps/web/src/routes/-evaluations.new.test.tsx::New Evaluation compatibility route > primary navigation exposes permanent product surfaces only",
