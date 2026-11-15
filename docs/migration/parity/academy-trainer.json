@@ -334,7 +334,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::createAnthropicProvider.continueInterview > returns the validated next question"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.continueInterview > throws AIResponseValidationError when the tool input fails schema validation",
@@ -343,7 +345,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::createAnthropicProvider.continueInterview > throws AIResponseValidationError when the tool input fails schema validation"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.explainAttempt > returns the validated explanation",
@@ -352,7 +356,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::createAnthropicProvider.explainAttempt > returns the validated explanation"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.explainAttempt > throws AIResponseValidationError on an invalid tool input",
@@ -361,7 +367,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::createAnthropicProvider.explainAttempt > throws AIResponseValidationError on an invalid tool input"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.generateExercises > returns the validated exercises when the model returns a well-formed tool_use block",
@@ -370,7 +378,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::createAnthropicProvider.generateExercises > returns the validated exercises when the model returns a well-formed tool_use block"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when a multiple-choice correctOptionIndex is out of range",
@@ -379,7 +389,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when a multiple-choice correctOptionIndex is out of range"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when no tool_use block is returned",
@@ -388,7 +400,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when no tool_use block is returned"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when the exercise count doesn't match the target count",
@@ -397,7 +411,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.anthropic.test.ts::createAnthropicProvider.generateExercises > throws AIResponseValidationError when the exercise count doesn't match the target count"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.analyzeWriting > never touches the network — a broken client rejects instead of hanging",
@@ -460,7 +476,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::createGeminiProvider.continueInterview > returns the validated next question"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.explainAttempt > returns the validated explanation",
@@ -469,7 +487,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::createGeminiProvider.explainAttempt > returns the validated explanation"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.explainAttempt > throws AIResponseValidationError on an invalid response",
@@ -478,7 +498,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::createGeminiProvider.explainAttempt > throws AIResponseValidationError on an invalid response"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.generateExercises > returns the validated exercises for well-formed JSON",
@@ -487,7 +509,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::createGeminiProvider.generateExercises > returns the validated exercises for well-formed JSON"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/gemini.test.ts::createGeminiProvider.generateExercises > throws AIResponseValidationError when the exercise count doesn't match",
@@ -496,7 +520,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::createGeminiProvider.generateExercises > throws AIResponseValidationError when the exercise count doesn't match"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/gemini.test.ts::toGeminiSchema > drops array bounds and $schema that Gemini rejects, keeping the rest",
@@ -505,7 +531,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::toGeminiSchema > drops array bounds and $schema that Gemini rejects, keeping the rest"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/resilient.test.ts::isOverloaded > recognises overload shapes and rejects the rest",
