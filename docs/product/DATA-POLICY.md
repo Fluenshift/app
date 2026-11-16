@@ -19,6 +19,21 @@ and band; Findings (category, severity, original text, Correction, explanation);
 token usage and latency when the provider reports them. Every row belongs to the one implicit
 Learner.
 
+When the Learner uses the Academy, it also stores:
+
+- Mistake Patterns: Pattern Key, Mistake Category, Mastery Level, the occurrence, correct and
+  incorrect counts, one example with its Correction, and when the pattern was first seen, last
+  seen and last practiced;
+- an Occurrence for each Finding folded into a pattern: the Finding's original and corrected
+  span, category, severity, explanation, an example, the L1 Transfer flag and the Rubric
+  Version;
+- for each enriched Evaluation, the model that enriched it;
+- Exercises (type, difficulty, the generated prompt and the model that wrote it) and their
+  Attempts (the Learner's answer, whether it was correct, and the feedback);
+- a Category Ability rating for each Mistake Category;
+- vocabulary items: term, meaning in Portuguese, example sentence and the Evaluation it came
+  from.
+
 ### Never stored
 
 API keys or other credentials, hidden model reasoning, raw HTTP request or response bodies,
@@ -34,8 +49,16 @@ Writing Sample text and provider bodies, and no URL carries text the Learner wro
 Evaluating sends the full current Writing Sample to OpenRouter, through the AI SDK provider,
 routed to the one model pinned for the Rubric Version with `store: false`, no tools, and no
 conversation state (ADR 0012). The provider receives only that sample, the rubric
-instructions, and structural annotations. The Academy's Trainer, when the Learner uses it,
-receives the Findings it enriches and the Learner's practice answers.
+instructions, and structural annotations.
+
+When the Learner uses the Academy, the Trainer's provider (Anthropic or Gemini today; ADR 0012
+also allows OpenRouter) receives:
+
+- to enrich an Evaluation: the whole Writing Sample, of either origin, its Findings, and any
+  Explain Code snippet;
+- to write Exercises: the Mistake Categories and examples of the patterns they practice;
+- to explain an Attempt: the Exercise and the Learner's answer;
+- for the interview: its questions and the Learner's answers so far.
 
 OpenRouter says prompt retention is opt-in and off by default, but the routed model provider
 has its own logging and retention policy. **This is not a fully local evaluation, and the
@@ -53,7 +76,10 @@ CORS is off.
 ### Deletion
 
 Deleting an Evaluation removes its Writing Sample, Findings, Suggestions, and metadata, and
-Progress recalculates without that evidence. The local profile runs no cleanup: data stays
+Progress recalculates without that evidence. It also removes the Occurrences and the
+Enrichment record made from it, and unlinks vocabulary items that came from it. A Mistake
+Pattern still keeps its counts and its example; removing that derived state too is a seam
+invariant of migration Phase 5f. The local profile runs no cleanup: data stays
 until the Learner deletes it (ADR 0011). There are no application-managed backups, so
 deletion cannot be undone through the product. Introducing backups later requires a new
 explicit policy.
@@ -67,7 +93,8 @@ and this section records what the accepted ADRs decided for it.
 
 Each Learner is one signed anonymous session cookie: there is no sign-up, login, email or
 profile. Every row belongs to that Learner, in PostgreSQL (ADR 0003, ADR 0017). The same
-fields as in the local profile are stored, under the hosted input caps (ADR 0006).
+fields as in the local profile are stored, under the hosted input caps (ADR 0006), plus the
+rate-limit windows below, kept per Learner and per hashed IP for 2 days (ADR 0011).
 
 ### Keys
 
