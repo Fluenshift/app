@@ -1,7 +1,6 @@
 # Architecture decision records
 
-Each ADR decides one seam or open question of the merge (`docs/migration/MIGRATION_PROTOCOL.md`
-Phase 1). An ADR is **Proposed** until an owner accepts it on its decision issue ([#5](https://github.com/Fluenshift/app/issues/5) for 0001 to 0018, [#109](https://github.com/Fluenshift/app/issues/109) for 0019); its
+Each ADR decides one seam or open question of the merge. An ADR is **Proposed** until an owner accepts it on its decision issue ([#5](https://github.com/Fluenshift/app/issues/5) for 0001 to 0018, [#109](https://github.com/Fluenshift/app/issues/109) for 0019); its
 status line then links to the acceptance comment. Only an accepted ADR can make a ledger row
 `port-changed`, `superseded` or `drop`, and such a row names it as `"decision": "adr:NNNN"`.
 
@@ -11,6 +10,7 @@ by a new ADR, and its rows are reworked.
 
 | ADR | Decision | Status |
 | --- | --- | --- |
+| [0000](./0000-approved-stack.md) | The approved stack, the alternatives and when to revisit them | Recorded from `PRE_MIGRATION.md` |
 | [0001](./0001-amend-the-migration-protocol.md) | Amend the protocol: informative rows, characterization scope, code reuse, roles, batched acceptance, ruleset, gate self-tests | Accepted |
 | [0002](./0002-score-evaluations-locally.md) | One locally derived score; no model-supplied scores | Accepted |
 | [0003](./0003-tenancy-and-deploy-profiles.md) | Learner on every table; `local` profile first, `hosted` profile in Phase 6 | Accepted |
