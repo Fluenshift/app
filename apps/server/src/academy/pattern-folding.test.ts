@@ -17,7 +17,7 @@ import {
   occurrences,
 } from "@fluenshift/db";
 import type { DrizzleClient } from "@fluenshift/db";
-import { Effect } from "effect";
+import { Effect, Exit } from "effect";
 import type { Layer } from "effect";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -440,6 +440,27 @@ describe("PatternFolding.foldEvaluation", () => {
 
     expect(result).toBeNull();
     expect(trainer.enrichFindings).not.toHaveBeenCalled();
+  });
+
+  it("refuses to fold an Evaluation twice, leaving its patterns as the first fold left them", async () => {
+    const evaluation = await storeEvaluation(
+      "I depend of it.",
+      "I depend on it.",
+      [dependOf]
+    );
+    const trainer = trainerAnswering([dependOn()]);
+    await run(foldEvaluation(trainer, { evaluationId: evaluation.id }));
+
+    const second = await Effect.runPromiseExit(
+      foldEvaluation(trainer, { evaluationId: evaluation.id }).pipe(
+        Effect.provide(database.layer)
+      )
+    );
+
+    expect(Exit.isFailure(second)).toBe(true);
+    const [pattern] = await run(listPatterns());
+    expect(pattern?.occurrenceCount).toBe(1);
+    expect(await storedOccurrences()).toHaveLength(1);
   });
 
   it("deletes the Enrichment and its Occurrences with their Evaluation", async () => {
