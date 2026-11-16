@@ -1,0 +1,1401 @@
+{
+  "id": "417ccec3-8bd3-43e0-814a-b4c678d45914",
+  "prevId": "80438803-6fe0-4166-a08b-e5d89044cedf",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.category_abilities": {
+      "name": "category_abilities",
+      "schema": "",
+      "columns": {
+        "attempt_count": {
+          "name": "attempt_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rating": {
+          "name": "rating",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1000
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "category_abilities_learner_fk": {
+          "name": "category_abilities_learner_fk",
+          "tableFrom": "category_abilities",
+          "tableTo": "learners",
+          "columnsFrom": [
+            "learner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "category_abilities_learner_category_unique": {
+          "name": "category_abilities_learner_category_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "learner_id",
+            "category"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "category_abilities_category_check": {
+          "name": "category_abilities_category_check",
+          "value": "\"category_abilities\".\"category\" in ('ARTICLES', 'PREPOSITIONS', 'VERB_TENSE', 'SUBJECT_VERB_AGREEMENT', 'VOCABULARY', 'WORD_ORDER', 'SPELLING', 'PUNCTUATION', 'UNNATURAL_PHRASING', 'LITERAL_TRANSLATION', 'COLLOCATION', 'PRONOUNS', 'COUNTABLE_UNCOUNTABLE')"
+        },
+        "category_abilities_attempt_count_check": {
+          "name": "category_abilities_attempt_count_check",
+          "value": "\"category_abilities\".\"attempt_count\" >= 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.enrichments": {
+      "name": "enrichments",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "evaluation_id": {
+          "name": "evaluation_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "model": {
+          "name": "model",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "enrichments_evaluation_fk": {
+          "name": "enrichments_evaluation_fk",
+          "tableFrom": "enrichments",
+          "tableTo": "evaluations",
+          "columnsFrom": [
+            "learner_id",
+            "evaluation_id"
+          ],
+          "columnsTo": [
+            "learner_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.evaluations": {
+      "name": "evaluations",
+      "schema": "",
+      "columns": {
+        "band": {
+          "name": "band",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_hash": {
+          "name": "content_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "corrected_text": {
+          "name": "corrected_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "evaluated_at": {
+          "name": "evaluated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "evaluated_english_word_count": {
+          "name": "evaluated_english_word_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "input_tokens": {
+          "name": "input_tokens",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "insertion_order": {
+          "name": "insertion_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "evaluations_insertion_order_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "latency_milliseconds": {
+          "name": "latency_milliseconds",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "model": {
+          "name": "model",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "origin": {
+          "name": "origin",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "original_text": {
+          "name": "original_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "output_tokens": {
+          "name": "output_tokens",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rubric_version": {
+          "name": "rubric_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "score": {
+          "name": "score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "submitted_at": {
+          "name": "submitted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "evaluations_learner_evaluated_at_idx": {
+          "name": "evaluations_learner_evaluated_at_idx",
+          "columns": [
+            {
+              "expression": "learner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "evaluated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "insertion_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "evaluations_learner_rubric_evaluated_at_idx": {
+          "name": "evaluations_learner_rubric_evaluated_at_idx",
+          "columns": [
+            {
+              "expression": "learner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "rubric_version",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "evaluated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "evaluations_learner_fk": {
+          "name": "evaluations_learner_fk",
+          "tableFrom": "evaluations",
+          "tableTo": "learners",
+          "columnsFrom": [
+            "learner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "evaluations_learner_id_unique": {
+          "name": "evaluations_learner_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "learner_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "evaluations_band_check": {
+          "name": "evaluations_band_check",
+          "value": "\"evaluations\".\"band\" in ('Needs revision', 'Understandable', 'Clear', 'Natural')"
+        },
+        "evaluations_origin_check": {
+          "name": "evaluations_origin_check",
+          "value": "\"evaluations\".\"origin\" in ('work', 'practice')"
+        },
+        "evaluations_score_check": {
+          "name": "evaluations_score_check",
+          "value": "\"evaluations\".\"score\" between 0 and 100"
+        },
+        "evaluations_word_count_check": {
+          "name": "evaluations_word_count_check",
+          "value": "\"evaluations\".\"evaluated_english_word_count\" >= 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.exercise_attempts": {
+      "name": "exercise_attempts",
+      "schema": "",
+      "columns": {
+        "attempted_at": {
+          "name": "attempted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "exercise_id": {
+          "name": "exercise_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feedback": {
+          "name": "feedback",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "is_correct": {
+          "name": "is_correct",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "learner_answer": {
+          "name": "learner_answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "exercise_attempts_exercise_idx": {
+          "name": "exercise_attempts_exercise_idx",
+          "columns": [
+            {
+              "expression": "exercise_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "exercise_attempts_exercise_fk": {
+          "name": "exercise_attempts_exercise_fk",
+          "tableFrom": "exercise_attempts",
+          "tableTo": "exercises",
+          "columnsFrom": [
+            "learner_id",
+            "exercise_id"
+          ],
+          "columnsTo": [
+            "learner_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.exercises": {
+      "name": "exercises",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prompt_data": {
+          "name": "prompt_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_pattern_id": {
+          "name": "source_pattern_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "exercises_learner_created_at_idx": {
+          "name": "exercises_learner_created_at_idx",
+          "columns": [
+            {
+              "expression": "learner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "exercises_learner_fk": {
+          "name": "exercises_learner_fk",
+          "tableFrom": "exercises",
+          "tableTo": "learners",
+          "columnsFrom": [
+            "learner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "exercises_source_pattern_fk": {
+          "name": "exercises_source_pattern_fk",
+          "tableFrom": "exercises",
+          "tableTo": "mistake_patterns",
+          "columnsFrom": [
+            "source_pattern_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "exercises_learner_id_unique": {
+          "name": "exercises_learner_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "learner_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "exercises_type_check": {
+          "name": "exercises_type_check",
+          "value": "\"exercises\".\"type\" in ('MULTIPLE_CHOICE', 'FILL_BLANK', 'REWRITE', 'TRANSLATION')"
+        },
+        "exercises_difficulty_check": {
+          "name": "exercises_difficulty_check",
+          "value": "\"exercises\".\"difficulty\" is null or \"exercises\".\"difficulty\" between 1 and 5"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.findings": {
+      "name": "findings",
+      "schema": "",
+      "columns": {
+        "byte_end": {
+          "name": "byte_end",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "byte_start": {
+          "name": "byte_start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "correction": {
+          "name": "correction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "evaluation_id": {
+          "name": "evaluation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "explanation": {
+          "name": "explanation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "findings_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "original_text": {
+          "name": "original_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "severity": {
+          "name": "severity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "findings_learner_category_idx": {
+          "name": "findings_learner_category_idx",
+          "columns": [
+            {
+              "expression": "learner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "category",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "findings_learner_correction_idx": {
+          "name": "findings_learner_correction_idx",
+          "columns": [
+            {
+              "expression": "learner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "original_text",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "correction",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "findings_evaluation_fk": {
+          "name": "findings_evaluation_fk",
+          "tableFrom": "findings",
+          "tableTo": "evaluations",
+          "columnsFrom": [
+            "learner_id",
+            "evaluation_id"
+          ],
+          "columnsTo": [
+            "learner_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "findings_evaluation_position_unique": {
+          "name": "findings_evaluation_position_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "evaluation_id",
+            "position"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "findings_category_check": {
+          "name": "findings_category_check",
+          "value": "\"findings\".\"category\" in ('Spelling', 'Article', 'Verb form/tense', 'Preposition', 'Word choice', 'Grammar/syntax', 'Punctuation/capitalization', 'Clarity', 'Other')"
+        },
+        "findings_severity_check": {
+          "name": "findings_severity_check",
+          "value": "\"findings\".\"severity\" in ('Minor', 'Moderate', 'Major')"
+        },
+        "findings_byte_span_check": {
+          "name": "findings_byte_span_check",
+          "value": "\"findings\".\"byte_start\" >= 0 and \"findings\".\"byte_end\" > \"findings\".\"byte_start\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.learners": {
+      "name": "learners",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.mistake_patterns": {
+      "name": "mistake_patterns",
+      "schema": "",
+      "columns": {
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "consecutive_correct_count": {
+          "name": "consecutive_correct_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "correct_count": {
+          "name": "correct_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "example_correction": {
+          "name": "example_correction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "example_original": {
+          "name": "example_original",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "first_seen_at": {
+          "name": "first_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "incorrect_count": {
+          "name": "incorrect_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "last_practiced_at": {
+          "name": "last_practiced_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "last_seen_at": {
+          "name": "last_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mastery_level": {
+          "name": "mastery_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ACTIVE'"
+        },
+        "occurrence_count": {
+          "name": "occurrence_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "pattern_key": {
+          "name": "pattern_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "mistake_patterns_learner_mastery_idx": {
+          "name": "mistake_patterns_learner_mastery_idx",
+          "columns": [
+            {
+              "expression": "learner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "mastery_level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "mistake_patterns_learner_fk": {
+          "name": "mistake_patterns_learner_fk",
+          "tableFrom": "mistake_patterns",
+          "tableTo": "learners",
+          "columnsFrom": [
+            "learner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "mistake_patterns_learner_id_unique": {
+          "name": "mistake_patterns_learner_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "learner_id",
+            "id"
+          ]
+        },
+        "mistake_patterns_learner_category_key_unique": {
+          "name": "mistake_patterns_learner_category_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "learner_id",
+            "category",
+            "pattern_key"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "mistake_patterns_category_check": {
+          "name": "mistake_patterns_category_check",
+          "value": "\"mistake_patterns\".\"category\" in ('ARTICLES', 'PREPOSITIONS', 'VERB_TENSE', 'SUBJECT_VERB_AGREEMENT', 'VOCABULARY', 'WORD_ORDER', 'SPELLING', 'PUNCTUATION', 'UNNATURAL_PHRASING', 'LITERAL_TRANSLATION', 'COLLOCATION', 'PRONOUNS', 'COUNTABLE_UNCOUNTABLE')"
+        },
+        "mistake_patterns_mastery_check": {
+          "name": "mistake_patterns_mastery_check",
+          "value": "\"mistake_patterns\".\"mastery_level\" in ('ACTIVE', 'IMPROVING', 'MASTERED')"
+        },
+        "mistake_patterns_counts_check": {
+          "name": "mistake_patterns_counts_check",
+          "value": "\"mistake_patterns\".\"occurrence_count\" >= 0 and \"mistake_patterns\".\"correct_count\" >= 0 and \"mistake_patterns\".\"incorrect_count\" >= 0 and \"mistake_patterns\".\"consecutive_correct_count\" >= 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.occurrences": {
+      "name": "occurrences",
+      "schema": "",
+      "columns": {
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "corrected_span": {
+          "name": "corrected_span",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "evaluation_id": {
+          "name": "evaluation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "example": {
+          "name": "example",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "explanation": {
+          "name": "explanation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "finding_position": {
+          "name": "finding_position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "l1_transfer": {
+          "name": "l1_transfer",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "original_span": {
+          "name": "original_span",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pattern_id": {
+          "name": "pattern_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rubric_version": {
+          "name": "rubric_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "severity": {
+          "name": "severity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "occurrences_learner_pattern_idx": {
+          "name": "occurrences_learner_pattern_idx",
+          "columns": [
+            {
+              "expression": "learner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "pattern_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "occurrences_evaluation_idx": {
+          "name": "occurrences_evaluation_idx",
+          "columns": [
+            {
+              "expression": "evaluation_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "occurrences_evaluation_fk": {
+          "name": "occurrences_evaluation_fk",
+          "tableFrom": "occurrences",
+          "tableTo": "evaluations",
+          "columnsFrom": [
+            "learner_id",
+            "evaluation_id"
+          ],
+          "columnsTo": [
+            "learner_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "occurrences_finding_fk": {
+          "name": "occurrences_finding_fk",
+          "tableFrom": "occurrences",
+          "tableTo": "findings",
+          "columnsFrom": [
+            "evaluation_id",
+            "finding_position"
+          ],
+          "columnsTo": [
+            "evaluation_id",
+            "position"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "occurrences_pattern_fk": {
+          "name": "occurrences_pattern_fk",
+          "tableFrom": "occurrences",
+          "tableTo": "mistake_patterns",
+          "columnsFrom": [
+            "learner_id",
+            "pattern_id"
+          ],
+          "columnsTo": [
+            "learner_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "occurrences_category_check": {
+          "name": "occurrences_category_check",
+          "value": "\"occurrences\".\"category\" in ('ARTICLES', 'PREPOSITIONS', 'VERB_TENSE', 'SUBJECT_VERB_AGREEMENT', 'VOCABULARY', 'WORD_ORDER', 'SPELLING', 'PUNCTUATION', 'UNNATURAL_PHRASING', 'LITERAL_TRANSLATION', 'COLLOCATION', 'PRONOUNS', 'COUNTABLE_UNCOUNTABLE')"
+        },
+        "occurrences_severity_check": {
+          "name": "occurrences_severity_check",
+          "value": "\"occurrences\".\"severity\" in ('ERROR', 'UNNATURAL')"
+        },
+        "occurrences_finding_check": {
+          "name": "occurrences_finding_check",
+          "value": "(\"occurrences\".\"severity\" = 'ERROR') = (\"occurrences\".\"finding_position\" is not null)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.suggestions": {
+      "name": "suggestions",
+      "schema": "",
+      "columns": {
+        "alternative": {
+          "name": "alternative",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "byte_end": {
+          "name": "byte_end",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "byte_start": {
+          "name": "byte_start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "evaluation_id": {
+          "name": "evaluation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "explanation": {
+          "name": "explanation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "suggestions_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "original_text": {
+          "name": "original_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "suggestions_evaluation_fk": {
+          "name": "suggestions_evaluation_fk",
+          "tableFrom": "suggestions",
+          "tableTo": "evaluations",
+          "columnsFrom": [
+            "learner_id",
+            "evaluation_id"
+          ],
+          "columnsTo": [
+            "learner_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "suggestions_evaluation_position_unique": {
+          "name": "suggestions_evaluation_position_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "evaluation_id",
+            "position"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "suggestions_byte_span_check": {
+          "name": "suggestions_byte_span_check",
+          "value": "\"suggestions\".\"byte_start\" >= 0 and \"suggestions\".\"byte_end\" > \"suggestions\".\"byte_start\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.vocabulary_items": {
+      "name": "vocabulary_items",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "example_sentence": {
+          "name": "example_sentence",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "insertion_order": {
+          "name": "insertion_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "vocabulary_items_insertion_order_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "meaning_pt": {
+          "name": "meaning_pt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_evaluation_id": {
+          "name": "source_evaluation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "term": {
+          "name": "term",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "vocabulary_items_learner_created_at_idx": {
+          "name": "vocabulary_items_learner_created_at_idx",
+          "columns": [
+            {
+              "expression": "learner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "vocabulary_items_learner_fk": {
+          "name": "vocabulary_items_learner_fk",
+          "tableFrom": "vocabulary_items",
+          "tableTo": "learners",
+          "columnsFrom": [
+            "learner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "vocabulary_items_source_evaluation_fk": {
+          "name": "vocabulary_items_source_evaluation_fk",
+          "tableFrom": "vocabulary_items",
+          "tableTo": "evaluations",
+          "columnsFrom": [
+            "source_evaluation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
