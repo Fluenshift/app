@@ -1,6 +1,6 @@
 # 0019. Lighter gates and shorter documents for one harness
 
-- Status: Proposed on [#117](https://github.com/Fluenshift/app/issues/117).
+- Status: Accepted by Jhefferson on 2026-11-16, in a Claude Code session, where he asked sessions to merge without waiting for owner acceptance (#117).
 - Amends ADR 0001 (decisions 4, 6 and 7) and `MIGRATION_PROTOCOL.md`. No ledger row changes.
 
 ## Context

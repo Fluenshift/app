@@ -32,4 +32,4 @@ ADR 0019 deleted; commit `39fbb46` holds them.
 | [0016](./0016-practice-is-offered.md) | Practice is offered, never imposed | Accepted |
 | [0017](./0017-postgres-and-pglite.md) | Postgres when hosted, PGlite locally and in tests | Accepted |
 | [0018](./0018-data-at-cutover.md) | Grifando starts fresh with notice; PE history is imported | Accepted |
-| [0019](./0019-lighter-gates-and-shorter-documents.md) | G12 retired; each suite once per CI run; rules once in `AGENTS.md`; documents cut to the work ahead | Proposed |
+| [0019](./0019-lighter-gates-and-shorter-documents.md) | G12 retired; each suite once per CI run; rules once in `AGENTS.md`; documents cut to the work ahead | Accepted |
