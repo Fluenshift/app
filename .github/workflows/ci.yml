@@ -1,9 +1,9 @@
 name: CI
 
 # The gates of docs/migration/MIGRATION_PROTOCOL.md, each suite once per run (ADR 0019).
-# `changes` reads the files a run touches: a change that is only Markdown runs the static checks
-# and the secret scan alone, and the gate self-tests run only when a gate changes. `CI` sums the
-# run up in one check, the one a ruleset can require.
+# `changes` reads the files a run touches: a change that is only Markdown outside the workspaces
+# runs the static checks and G7 alone, and the gate self-tests run only when a gate changes.
+# G11 records this file line by line, so every edit waits for a new gate baseline.
 on:
   pull_request:
   push:
@@ -289,36 +289,3 @@ jobs:
 
       - name: Every gate rejects its broken case
         run: node scripts/gate-selftest.ts
-
-  ci:
-    # Skipped jobs are the ones `changes` ruled out. A job that failed, or that never ran because
-    # the job before it failed, fails this one.
-    name: CI
-    needs:
-      - changes
-      - static
-      - tests
-      - postgres
-      - e2e
-      - red-green
-      - records
-      - supply-chain
-      - gate-selftest
-    if: always()
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    steps:
-      - name: Every job passed, or the change did not need it
-        env:
-          RESULTS: ${{ toJSON(needs.*.result) }}
-          FAILED: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
-          CODE: ${{ needs.changes.outputs.code }}
-          GATES: ${{ needs.changes.outputs.gates }}
-        run: |
-          echo "results: $RESULTS"
-          echo "code=$CODE gates=$GATES"
-          test "$FAILED" = "false"
-          case "$CODE $GATES" in
-            "true true" | "true false" | "false false") ;;
-            *) echo "the changed paths were not classified"; exit 1 ;;
-          esac

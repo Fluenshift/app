@@ -16,6 +16,7 @@ import {
   REFERENCE_TSCONFIG,
   ruleSetting,
   significantLines,
+  workflowLines,
   typeScriptSnapshot,
   workflowSnapshot,
 } from "./check-gates.ts";
@@ -395,5 +396,46 @@ describe("compare", () => {
       "packages/new/tsconfig.json: compiler option noUnusedLocals is weaker",
       "packages/new/vitest.config.ts: a new configuration the baseline does not hold",
     ]);
+  });
+});
+
+describe("workflowLines", () => {
+  const jobs = [
+    "on:",
+    "  pull_request:",
+    "jobs:",
+    "  tests:",
+    "    if: needs.changes.outputs.code == 'true'",
+    "    runs-on: ubuntu-24.04",
+    "  e2e:",
+    "    if: needs.changes.outputs.code == 'true'",
+    "    runs-on: ubuntu-24.04",
+    "  gate-selftest:",
+    "    if: needs.changes.outputs.gates == 'true'",
+    "",
+  ].join("\n");
+
+  it("names each line of a job after the job", () => {
+    assert.ok(
+      workflowLines(jobs).includes(
+        "tests: if: needs.changes.outputs.code == 'true'"
+      )
+    );
+    assert.ok(workflowLines(jobs).includes("pull_request:"));
+  });
+
+  it("notices a condition moved from one job to another", () => {
+    const moved = jobs.replace(
+      "  tests:\n    if: needs.changes.outputs.code == 'true'",
+      "  tests:\n    if: needs.changes.outputs.gates == 'true'"
+    );
+    assert.notEqual(moved, jobs);
+    assert.deepEqual(
+      compareLines("ci.yml", workflowLines(jobs), workflowLines(moved)),
+      [
+        `ci.yml: line "tests: if: needs.changes.outputs.code == 'true'" was removed or changed`,
+        `ci.yml: line "tests: if: needs.changes.outputs.gates == 'true'" was added`,
+      ]
+    );
   });
 });
