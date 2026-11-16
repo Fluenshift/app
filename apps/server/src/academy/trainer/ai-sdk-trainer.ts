@@ -5,7 +5,9 @@
 // abort is unavailable. Every result names the model that answered (Grifando #77).
 import {
   AIResponseValidationError,
+  errorCategoryOf,
   exerciseGenerationResultSchema,
+  MISTAKE_CATEGORIES,
   validateExerciseGenerationResult,
 } from "@fluenshift/contract";
 import {
@@ -16,12 +18,17 @@ import {
   Output,
 } from "ai";
 import type { LanguageModel } from "ai";
-import { Effect, Option, Schema } from "effect";
+import { Effect, Option, pipe, Schema } from "effect";
 
 import {
   buildAnswerExplanationSystemPrompt,
   buildAnswerExplanationUserMessage,
 } from "../prompts/answer-explanation";
+import {
+  buildEnrichmentSystemPrompt,
+  buildEnrichmentUserMessage,
+} from "../prompts/enrichment";
+import type { EnrichmentFinding } from "../prompts/enrichment";
 import {
   buildExerciseGenerationSystemPrompt,
   buildExerciseGenerationUserMessage,
@@ -36,8 +43,10 @@ import {
   TrainerUnavailableError,
 } from "./trainer-errors";
 import type { TrainerError } from "./trainer-errors";
-import type { TrainerMethods } from "./trainer-model";
+import type { FindingEnrichment, TrainerMethods } from "./trainer-model";
 
+// Grifando's limit for the writing analysis, which the Enrichment replaces.
+const ENRICHMENT_MAX_TOKENS = 4096;
 const EXERCISE_GENERATION_MAX_TOKENS = 4096;
 const INTERVIEW_QUESTION_MAX_TOKENS = 1024;
 const ANSWER_EXPLANATION_MAX_TOKENS = 1024;
@@ -52,6 +61,67 @@ export const answerExplanationResultSchema = Schema.Struct({
     Schema.isMaxLength(1500)
   ),
 });
+
+// The Mistake Categories a Finding may take: those that roll up to an Error Category
+// (docs/adr/0005).
+const FINDING_MISTAKE_CATEGORIES = MISTAKE_CATEGORIES.filter(
+  (category) => errorCategoryOf(category) !== undefined
+);
+
+// The Academy fields of Grifando's mistake schema (src/server/ai/schemas/writingAnalysis.ts,
+// 74dbb9f), with their bounds, for the numbered Finding each entry enriches.
+export const enrichmentResultSchema = Schema.Struct({
+  findings: Schema.Array(
+    Schema.Struct({
+      category: Schema.Literals(FINDING_MISTAKE_CATEGORIES),
+      example: Schema.String.check(
+        Schema.isMinLength(1),
+        Schema.isMaxLength(500)
+      ),
+      finding: Schema.Int.check(Schema.isGreaterThanOrEqualTo(1)),
+      // Optional, as in Grifando: an answer without it reads as no transfer.
+      l1Transfer: Schema.optionalKey(Schema.Boolean),
+      patternKey: Schema.String.check(
+        Schema.isMinLength(1),
+        Schema.isMaxLength(80)
+      ),
+    })
+  ),
+});
+
+type EnrichmentEntry = (typeof enrichmentResultSchema.Type)["findings"][number];
+
+const refused = (message: string) =>
+  new AIResponseValidationError({ issues: [], message });
+
+// The enrichment of the Finding numbered `number`: exactly one entry names it, and its Mistake
+// Category rolls up to the Finding's Error Category (docs/adr/0005).
+const enrichmentOf = (
+  entries: readonly EnrichmentEntry[],
+  finding: EnrichmentFinding,
+  number: number
+): Effect.Effect<FindingEnrichment, AIResponseValidationError> => {
+  const named = entries.filter((entry) => entry.finding === number);
+  const [entry] = named;
+  if (entry === undefined || named.length > 1) {
+    return Effect.fail(
+      refused(`Finding ${number} needs exactly one enrichment`)
+    );
+  }
+  if (errorCategoryOf(entry.category) !== finding.category) {
+    return Effect.fail(
+      refused(
+        `${entry.category} is not a Mistake Category of ${finding.category}`
+      )
+    );
+  }
+  return Effect.succeed({
+    category: entry.category,
+    example: entry.example,
+    l1Transfer: entry.l1Transfer ?? false,
+    patternKey: entry.patternKey,
+  });
+};
 
 const UNAVAILABLE_STATUSES = new Set([500, 502, 503, 504, 529]);
 const INVALID_KEY_MESSAGE = /api key not valid|api_key_invalid/iu;
@@ -226,7 +296,27 @@ export const createAiSdkTrainer = (model: LanguageModel): TrainerMethods => {
         return { model: answeredBy, question: answer.question };
       }
     ),
-    enrichFindings: () => Effect.succeed({ findings: [], model: "" }),
+    enrichFindings: Effect.fn("Trainer.enrichFindings")(function* (input) {
+      const { answer, model: answeredBy } = yield* ask({
+        maxOutputTokens: ENRICHMENT_MAX_TOKENS,
+        name: "submit_enrichment",
+        prompt: buildEnrichmentUserMessage(input),
+        schema: enrichmentResultSchema,
+        system: buildEnrichmentSystemPrompt(),
+      });
+      if (answer.findings.length !== input.findings.length) {
+        return yield* refused(
+          `Expected ${input.findings.length} enrichments, got ${answer.findings.length}`
+        );
+      }
+      const findings = yield* pipe(
+        input.findings,
+        Effect.forEach((finding, index) =>
+          enrichmentOf(answer.findings, finding, index + 1)
+        )
+      );
+      return { findings, model: answeredBy };
+    }),
     explainAttempt: Effect.fn("Trainer.explainAttempt")(function* (input) {
       const { answer, model: answeredBy } = yield* ask({
         maxOutputTokens: ANSWER_EXPLANATION_MAX_TOKENS,

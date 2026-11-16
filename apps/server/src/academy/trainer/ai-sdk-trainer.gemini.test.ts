@@ -101,6 +101,26 @@ describe("createGeminiProvider.enrichFindings", () => {
     expect(result.model).toBe("test-model");
   });
 
+  it("offers the model only the Mistake Categories a Finding can take", async () => {
+    const model = answering(
+      "google.generative-ai",
+      "test-model",
+      JSON.stringify({
+        findings: [fakeFindingEnrichment(), fakeArticleEnrichment()],
+      })
+    );
+
+    await Effect.runPromise(
+      createAiSdkTrainer(model).enrichFindings(enrichmentInput)
+    );
+
+    const sent = JSON.stringify(model.doGenerateCalls[0]?.responseFormat);
+    expect(sent).toContain('"COUNTABLE_UNCOUNTABLE"');
+    expect(sent).not.toContain("UNNATURAL_PHRASING");
+    expect(sent).not.toContain("LITERAL_TRANSLATION");
+    expect(sent).not.toMatch(/maxItems|minItems|\$schema/u);
+  });
+
   it("throws AIResponseValidationError when two entries name the same Finding", async () => {
     const provider = geminiAnswering({
       findings: [
