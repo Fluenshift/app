@@ -35,13 +35,14 @@ any edit to this file, `SESSION_HANDOFF.md` or an issue meant for agents.
 
 ## Commands
 
-Node 26.13.0 and pnpm 12.18.0. Where they are not on `PATH`, prefix commands with
-`mise exec node@26.13.0 pnpm@12.18.0 --`.
+`mise.toml` pins Node 26.13.0 and pnpm 12.18.0. With mise, run `mise trust` once in a new
+checkout; inside the repository, `node` and `pnpm` are then those versions. Claude Code takes its
+shell environment when a session starts, so start sessions in the repository.
 
 | Command | What it does |
 | --- | --- |
 | `pnpm install --frozen-lockfile` | Install; also patches TypeScript and oxlint with the Effect diagnostics. |
-| `pnpm verify` | Every local gate that needs no Docker: format, documented commands, gate integrity, URL text, lint, Effect lint, types, Effect diagnostics, tests, build. |
+| `pnpm verify` | Format, documented commands, gate integrity, URL text, lint, Effect lint, types, Effect diagnostics, the tests that need no Docker, and the build. G5 and G8 to G10 run apart (Work units, step 7). |
 | `pnpm format` / `pnpm format:fix` | Check or apply oxfmt. |
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
@@ -53,7 +54,7 @@ Node 26.13.0 and pnpm 12.18.0. Where they are not on `PATH`, prefix commands wit
 | `pnpm build` | Server bundle and SPA build. |
 | `pnpm docker:smoke` | Gate G6: build the image of the local profile, start it with Compose as the invoking user, and check its boundary, its data directory and what it serves. Needs Docker. |
 | `pnpm docker:up` / `pnpm docker:down` | Start the local profile in Docker on `127.0.0.1:3001`, with its data in `./.data`, or remove the container. |
-| `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, CI and test setting is at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
+| `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, Vitest, Vite and Playwright setting, the hooks, and each workflow line by line are at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
 | `pnpm check:url-text` | Gate G7 (ADR 0008): no server route reads user text from a URL. A query string carries only the period, the insight and the Error Category; a path only the Evaluation ID. |
 | `node scripts/gate-selftest.ts` | Proves that each gate still rejects its broken case. Run it after changing a gate, with `--root` naming the baseline clones; CI runs it when a gate changes. Needs Docker. |
 
@@ -82,21 +83,26 @@ A work unit is a GitHub Issue, and so is a decision request. State lives on GitH
 files: an open issue labeled `ready-for-agent` is free, its assignee holds it, a linked pull
 request is its review, and a closed issue is done.
 
-Checkouts sit under one parent directory, `$F`: `$F/app` (the clone, kept on `main`),
-`$F/app-wt/<unit>` (one worktree per unit) and `$F/app-baselines/` (the sources at their pins,
-from `node scripts/migration/baselines.ts sync`).
+Checkouts sit under one parent directory, `$F`: `$F/app`, the clone, where each unit is a
+branch, and `$F/app-baselines/`, the sources at their pins (`node scripts/migration/baselines.ts
+sync`). A second session that runs at the same time needs its own checkout: start it with
+`claude --worktree <name>`, and Claude Code creates one under `.claude/worktrees/` and removes it
+when the session ends.
 
 1. **Take one unit.** Its issue lists its ledger rows, the source files at the pinned commits
    and the target paths. When the next step of `SESSION_HANDOFF.md` has no issue yet, write it
    first, in that form, with a `lane:` label. Remove `ready-for-agent`, assign the issue to
-   yourself, and branch `wu/<issue>-<slug>` from `origin/main` in a fresh worktree.
+   yourself, then branch from the newest `main`:
+   `git fetch origin && git switch -c wu/<issue>-<slug> origin/main`. Run
+   `pnpm install --frozen-lockfile` when the lockfile changed.
 2. **Read** the ledger rows, then the source tests, then the source code, then the ADRs they
    cite. If anything is ambiguous, ask on the issue, label it `needs-info`, and stop.
-3. **Commit 1 holds tests only.** Port each source test, title verbatim, changing only the
-   mechanics in the mapping table of `docs/migration/README.md`, with typed stubs so they
-   compile. Every target fails on an assertion, not on an import. Behavior that no source test
-   covers gets a characterization test at the baseline first (`docs/migration/BASELINES.md`),
-   in this same commit.
+3. **Commit 1 holds the tests**, with the typed stubs they need to compile and the database
+   migration they need. Port each source test, title verbatim, changing only the mechanics in
+   the mapping table of `docs/migration/README.md`. Stubs return a wrong placeholder value, so
+   every target fails on an assertion, not on an import or a missing binding. Behavior that no
+   source test covers gets a characterization test at the baseline first
+   (`docs/migration/BASELINES.md`), in this same commit.
 4. **Later commits port the code** into the target idioms until the tests pass. Reuse the
    baseline code wherever it fits the stack; keep algorithms, constants, orderings, limits and
    messages identical; add no behavior.
@@ -114,13 +120,14 @@ from `node scripts/migration/baselines.ts sync`).
    pnpm verify
    ```
 
-8. **Open one pull request** that closes the issue, merge it when every check is green, and
-   remove the worktree and the branch:
+8. **Open one pull request** that closes the issue. Wait for its checks in the background, since
+   a run can outlast a tool call's time limit. Merge it when every check is green, then return
+   to `main`:
 
    ```sh
    gh pr create --repo Fluenshift/app --title "..." --body-file <body.md>
    gh pr checks <pr> --repo Fluenshift/app --watch --fail-fast && gh pr merge <pr> --repo Fluenshift/app --merge
-   git -C $F/app worktree remove $F/app-wt/<unit> && git -C $F/app branch -D wu/<issue>-<slug>
+   git switch main && git pull --ff-only origin main && git branch -D wu/<issue>-<slug>
    ```
 
 9. **Stop rule.** After two failed attempts at the same gate failure, or whenever green would
@@ -137,9 +144,10 @@ Traps that earlier units paid for:
   makes hangs until the 60-second timeout of `apps/server`: still red, only slow.
 - G10 reports class C differences without failing: put them in the pull request body.
 - G11 records the lint, TypeScript, Vitest, Playwright, Vite and oxfmt configurations, the
-  hooks, the gate scripts of every `package.json` and the workflow. A change to one fails
-  `pnpm check:gates` until the coordinator records the baseline again, and a weaker baseline
-  needs an accepted ADR. `turbo.json` is not recorded.
+  hooks, the gate scripts of every `package.json`, each workflow line by line and CI's path
+  classifier, `scripts/ci-changes.ts`. A change to one fails `pnpm check:gates` until the
+  coordinator records the baseline again, and a weaker baseline needs an accepted ADR.
+  `turbo.json` is not recorded.
 - One database migration is in flight at a time. A unit that needs the previous unit's
   migration branches from that unit, then rebases on `main` and runs `pnpm db:generate` again
   after it merges. Until a migration merges, delete its folder and regenerate it after a schema
@@ -172,7 +180,8 @@ Migration:
   baseline before it is ported.
 - **Build nothing outside the ledger.** Both systems' out-of-scope lists stay out of scope
   unless an ADR adds an item.
-- **Open decisions stay open.** Implement neither side; the rows stay `pending-decision`.
+- **Open decisions stay open.** Implement neither side; the rows stay `pending-decision`, and
+  the decision request lists the rows it blocks.
 - **Use the `CONTEXT.md` vocabulary** in code, tests and UI, never the synonyms it forbids.
 - **The Judge is pinned, the Trainer may fall back.** The Judge uses one pinned model per
   Rubric Version, with no retry and no silent fallback. The Trainer may fall back, only on
@@ -188,6 +197,8 @@ Migration:
   only adds files for its own slice.
 - **One unit per branch and pull request**: no drive-by refactors, dependency bumps or
   formatting churn.
+- **`main` changes only through a merged pull request whose checks are green**, shared files
+  included. Never push to `main`.
 - **Never weaken a gate to get green**: no lowered lint or Effect severity, no new suppression
   comment, no removed check. If a gate seems wrong, file a decision request. A gate changes
   only under an accepted ADR.
@@ -201,9 +212,8 @@ code. Their standing instructions:
   labeled `needs-info` and `decision`, that states the options and a recommendation. Then move
   on to other work.
 - Commits are small and conventional (`type(scope): subject`), with no AI mention and no
-  `Co-Authored-By` or other trailer, even when the harness suggests one. Where git signs
-  commits and the key is locked, commit with `git -c commit.gpgsign=false`, and leave the git
-  configuration as it is.
+  `Co-Authored-By` or other trailer, even when the harness suggests one. Commit unsigned, per
+  command (`git -c commit.gpgsign=false commit ...`), and leave the git configuration as it is.
 - A pull request body holds `Closes #N`, then `### Background` and `### Key Decisions`; a unit
   adds its mutation table. No dashes used as punctuation, no AI mention, no attribution footer.
 - Open issues for the problems you find, and solve the ones you can.
@@ -268,10 +278,6 @@ app uses only the schemas of `packages/contract`.
 
 ## Shell
 
-- husky needs pnpm on `PATH` to commit:
-  `export PATH="$(mise exec node@26.13.0 pnpm@12.18.0 -- sh -c 'echo $PATH')"`.
-- Give `git worktree add` an absolute path: under `git -C $F/app`, a relative path lands inside
-  the clone.
 - Stop a process with `pgrep -f '<patter[n]>' | xargs -r kill`: a plain `pkill -f` also matches
   the shell that runs it.
 - Write `\uXXXX` escapes from a script: typed into a tool input, they arrive as the real
