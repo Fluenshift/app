@@ -101,11 +101,28 @@ export const InterviewStatusSchema = Schema.Literals(INTERVIEW_STATUSES);
 // The Error Category a Mistake Category rolls up to (docs/adr/0005). UNNATURAL_PHRASING is the
 // "correct but unnatural" channel, not an error, and LITERAL_TRANSLATION becomes the L1 Transfer
 // flag on the category of the underlying error, so neither rolls up to one.
+const ROLL_UP: Readonly<Partial<Record<MistakeCategory, ErrorCategory>>> = {
+  ARTICLES: "Article",
+  COLLOCATION: "Word choice",
+  COUNTABLE_UNCOUNTABLE: "Grammar/syntax",
+  PREPOSITIONS: "Preposition",
+  PRONOUNS: "Grammar/syntax",
+  PUNCTUATION: "Punctuation/capitalization",
+  SPELLING: "Spelling",
+  SUBJECT_VERB_AGREEMENT: "Verb form/tense",
+  VERB_TENSE: "Verb form/tense",
+  VOCABULARY: "Word choice",
+  WORD_ORDER: "Grammar/syntax",
+};
+
 export const errorCategoryOf = (
-  _category: MistakeCategory
-): ErrorCategory | undefined => undefined;
+  category: MistakeCategory
+): ErrorCategory | undefined => ROLL_UP[category];
 
 // The Mistake Categories a Finding of one Error Category may take. Clarity and Other have none.
 export const mistakeCategoriesOf = (
-  _category: ErrorCategory
-): readonly MistakeCategory[] => [];
+  category: ErrorCategory
+): readonly MistakeCategory[] =>
+  MISTAKE_CATEGORIES.filter(
+    (mistakeCategory) => ROLL_UP[mistakeCategory] === category
+  );
