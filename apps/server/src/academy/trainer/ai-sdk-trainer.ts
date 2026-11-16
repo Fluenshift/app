@@ -94,19 +94,17 @@ type EnrichmentEntry = (typeof enrichmentResultSchema.Type)["findings"][number];
 const refused = (message: string) =>
   new AIResponseValidationError({ issues: [], message });
 
-// The enrichment of the Finding numbered `number`: exactly one entry names it, and its Mistake
-// Category rolls up to the Finding's Error Category (docs/adr/0005).
+// The enrichment of the Finding numbered `number`: an entry names it, and its Mistake Category
+// rolls up to the Finding's Error Category (docs/adr/0005). With as many entries as Findings, an
+// entry for every Finding leaves none named twice.
 const enrichmentOf = (
   entries: readonly EnrichmentEntry[],
   finding: EnrichmentFinding,
   number: number
 ): Effect.Effect<FindingEnrichment, AIResponseValidationError> => {
-  const named = entries.filter((entry) => entry.finding === number);
-  const [entry] = named;
-  if (entry === undefined || named.length > 1) {
-    return Effect.fail(
-      refused(`Finding ${number} needs exactly one enrichment`)
-    );
+  const entry = entries.find((candidate) => candidate.finding === number);
+  if (entry === undefined) {
+    return Effect.fail(refused(`Finding ${number} has no enrichment`));
   }
   if (errorCategoryOf(entry.category) !== finding.category) {
     return Effect.fail(
