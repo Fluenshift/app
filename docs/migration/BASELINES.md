@@ -31,7 +31,8 @@ mise exec node@26.13.0 -- node scripts/migration/baselines.ts remove-worktree pe
   working tree is not clean; `add-worktree` also requires the clone to sit at the pinned
   commit. Installs, suite runs and characterization tests happen in worktrees; the clone
   stays pristine.
-- Source repositories are read-only for agents (agent rule 1). Nothing here pushes to them.
+- Source repositories are read-only for agents (`AGENTS.md`: baselines are read-only). Nothing
+  here pushes to them.
 
 ## Toolchains
 
@@ -112,8 +113,8 @@ owners decide, through the `needs-info` issue linked here.
 ## Characterization tests
 
 Behavior that no baseline test pins gets a characterization test before it is ported
-(agent rule 5). The tests are kept in this repository, written in the baseline's own idiom,
-and run at the pin:
+(`AGENTS.md`: characterize first). The tests are kept in this repository, written in the
+baseline's own idiom, and run at the pin:
 
 ```bash
 mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts pe
@@ -135,8 +136,7 @@ mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts grifand
 - `migration/**` is outside this repository's build, lint and format: the files are written
   for Bun, Elysia, Next.js and Prisma.
 
-After a run, regenerate the inventory, then give the new cases ledger rows (agent rule 13: the
-ledger belongs to the coordinator):
+After a run, regenerate the inventory, then give the new cases ledger rows:
 
 ```bash
 mise exec node@26.13.0 -- node scripts/migration/inventory.ts
