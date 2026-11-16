@@ -52,8 +52,8 @@ baseline-relative) for `playwright-json`.
 Generated, never edited by hand:
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/inventory.ts            # write both files
-mise exec node@26.13.0 -- node scripts/migration/inventory.ts --check    # exit 1 unless reproduced byte for byte
+node scripts/migration/inventory.ts            # write both files
+node scripts/migration/inventory.ts --check    # exit 1 unless reproduced byte for byte
 ```
 
 The script reads only the pinned commit (git objects in the clone that `baselines.ts sync`
@@ -130,7 +130,7 @@ dispositions, the ADR index and the Vitest and Playwright reports:
 | `terminal` | `superseded`, `drop` and `informative` rows |
 
 ```bash
-mise exec node@26.13.0 pnpm@12.18.0 -- pnpm parity   # run every suite with JSON reports, then check
+pnpm parity   # run every suite with JSON reports, then check
 ```
 
 Every suite means each workspace whose `test` or `smoke` script runs Vitest. The `smoke` workspace
@@ -179,7 +179,7 @@ other than an assertion, such as an Effect that succeeds where the test expects 
 still red; the script lists it, so check that it fails for the reason the test names.
 
 ```bash
-mise exec node@26.13.0 pnpm@12.18.0 -- node scripts/migration/red-green.ts --base <base ref> --head <head ref>
+node scripts/migration/red-green.ts --base <base ref> --head <head ref>
 ```
 
 `scripts/migration/parity-audit.ts` (gate G10) reads each class A and class B `port` row's
@@ -190,7 +190,7 @@ expects, or check with a weaker matcher (`toBe` and `toStrictEqual`, then `toEqu
 baseline clones (`baselines.ts sync`); from a worktree, point `--root` at them:
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/parity-audit.ts --root ../app-baselines
+node scripts/migration/parity-audit.ts --root ../app-baselines
 ```
 
 `scripts/check-url-text.ts` is the G7 check of ADR 0008: no server route reads user text from a
@@ -211,7 +211,7 @@ job when a gate changes: a script, a gate's configuration, the toolchain, or a f
 edits or runs (`scripts/ci-changes.ts`, ADR 0019). Run them yourself after changing a gate:
 
 ```bash
-mise exec node@26.13.0 pnpm@12.18.0 -- node scripts/gate-selftest.ts --root ../app-baselines
+node scripts/gate-selftest.ts --root ../app-baselines
 ```
 
 ## Issue labels
@@ -225,6 +225,8 @@ never in files; a closed issue is done.
 | `needs-info` | The issue waits for an answer: a unit that stopped on a question, or a decision request. |
 | `decision` | An owner decision request, including ADR acceptance. Titled "Human feedback needed: ...". |
 | `ready-for-human` | An owner action other than a decision. |
+| `needs-triage` | A problem found during other work, not yet written as a unit. |
+| `wontfix` | Closed without work, with the reason in a comment. |
 | `lane:evaluation`, `lane:academy`, `lane:platform` | The lane of a unit. |
 
 The assignee of an issue holds the unit, and the pull request that closes it is its review. The

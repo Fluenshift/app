@@ -6,7 +6,7 @@ The merge is in progress. The plan lives in [`docs/migration/`](./docs/migration
 
 ## Requirements
 
-Node 26.13.0 and pnpm 12.18.0. With [mise](https://mise.jdx.dev/), prefix the commands below with `mise exec node@26.13.0 pnpm@12.18.0 --`.
+Node 26.13.0 and pnpm 12.18.0, which `mise.toml` pins: with [mise](https://mise.jdx.dev/), run `mise trust` once in the clone.
 
 ## Commands
 

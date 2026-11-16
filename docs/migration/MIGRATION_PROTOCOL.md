@@ -76,8 +76,10 @@ Live calibration (G13) runs after parity, when the owners schedule it. Until it 
 
 ## Phases
 
-Phases 0 to 3, 4a to 4e and 5a to 5c are merged. `node scripts/migration/parity-check.ts`
-prints the rows still open in each slice, and `docs/migration/README.md` maps slices to phases.
+Phases 0 to 3, 4a to 4e and 5a to 5c are merged. The rows still open in each slice are the last
+lines of the parity step in CI's test job, or of `pnpm parity` locally (it needs Docker); without
+reports, `parity-check.ts` counts every row that has targets as open. `docs/migration/README.md`
+maps slices to phases.
 
 ### Phase 4: the Evaluation axis, what is left
 
@@ -120,10 +122,11 @@ Goal: port the remaining Grifando features and the hosted-deployment behavior.
    `DELETE /api/me`; 90-day idle cleanup run by the scheduler of ADR 0011; CSP for a static
    SPA; privacy page in EN and PT; landing page and OG image generated at build time; robots
    and sitemap.
-4. Automate the `docs/deploy.md` §5 checklist of Grifando as the hosted-profile Docker smoke.
+4. Automate the checks of Grifando's `docs/deploy.md` §5 that ADR 0011 keeps (cleanup has no
+   public endpoint) as the hosted-profile Docker smoke. Paused with the end-to-end tests.
 
 Exit: every remaining row `verified`, `superseded` or `drop` under an accepted ADR; hosted
-Docker smoke green.
+Docker smoke green once the pause on end-to-end tests ends.
 
 ### Phase 7: parity sign-off and cutover
 
@@ -157,12 +160,12 @@ Exit: every item in the definition of done holds.
 | Gate | What it enforces |
 | --- | --- |
 | G1 Types | tsgo typecheck with Effect diagnostics at error severity, in every workspace. |
-| G2 Lint and format | Type-aware oxlint with the Effect preset, oxlint-tsgolint, `oxfmt --check`. Bans focused and skipped tests, Node built-ins in `packages/core` and `packages/contract`, `zod` imports, Academy imports of Evaluation write services, and `process.env` outside `packages/env`. |
+| G2 Lint and format | Type-aware oxlint with the Effect preset, oxlint-tsgolint, `oxfmt --check`. Bans focused and skipped tests, Node built-ins in `packages/core` and `packages/contract`, `zod` imports, and `process.env` outside `packages/env`; from 5f, Academy imports of Evaluation write services. |
 | G3 Tests | Vitest with `@effect/vitest`, unit and integration, on PGlite databases; CI also runs the `Database` service against a Postgres 17 service container. |
 | G4 Build | Server bundle and SPA build; the single process starts and serves `/api/health` and the SPA. |
 | G5 E2E | Playwright journeys against the built process, from `e2e/mvp.spec.ts` and the Phase 0 characterizations. |
-| G6 Docker smoke | Local: loopback-only publication, refusal of non-loopback connections, hostile Host and Origin headers, migrations, data surviving container replacement, image secret scan. Hosted: session cookie, CSP header, cleanup endpoint refusing calls without its secret, robots and sitemap. |
-| G7 Privacy and supply chain | gitleaks over the whole history; `pnpm audit --prod --audit-level high`; the no-key-in-logs test; `scripts/check-url-text.ts`, which keeps user text out of URLs (ADR 0008); no remote telemetry (ADR 0013). |
+| G6 Docker smoke | Local: loopback-only publication, refusal of non-loopback connections, hostile Host and Origin headers, migrations, data surviving container replacement, image secret scan. Hosted (Phase 6, paused with the end-to-end tests): session cookie, CSP header, robots and sitemap. |
+| G7 Privacy and supply chain | gitleaks over the whole history; `pnpm audit --prod --audit-level high`; from Phase 6, the no-key-in-logs test; `scripts/check-url-text.ts`, which keeps user text out of URLs (ADR 0008); no remote telemetry (ADR 0013). |
 | G8 Red-green proof | The pull request's first commit fails the unit's target tests with assertion errors; the head passes them. |
 | G9 Parity check | Every inventory row present with a valid disposition, its status derived from the reports (the ledger stores none); every `port-changed`, `superseded` or `drop` row cites an accepted ADR; every target exists in the test reports and passes; `port` targets keep their source titles; only `pending-decision` rows may have skipped tests. |
 | G10 Parity audit | For class A and class B `port` rows, the target matches or exceeds the source in assertion count, expected literals and matcher strength (no `toEqual` turned into `toMatchObject`). Report-only for class C: the unit lists those differences in its pull request. |
@@ -176,10 +179,9 @@ CI (`.github/workflows/ci.yml`) runs each suite once per run. One job holds the 
 G1, G2, G4, G11 and the ledger's structure. One job runs every Vitest suite with a report, the
 Docker smoke included, then G9 on those reports. The others run Postgres, the end-to-end
 journeys, G8, the migration records with G10, and G7. Two rules skip work that cannot fail
-(`scripts/ci-changes.ts`): a change that is only Markdown runs the static checks and G7 alone,
-and the gate self-tests (`scripts/gate-selftest.ts`), which prove that each gate rejects its
-broken case, run only when a gate changes. The `CI` job passes when every job passed or was
-skipped under those two rules: it is the one check for a ruleset to require.
+(`scripts/ci-changes.ts`): a change that is only Markdown outside the workspaces runs the static
+checks and G7 alone, and the gate self-tests (`scripts/gate-selftest.ts`), which prove that each
+gate rejects its broken case, run only when a gate changes; they run the suites a second time.
 
 ## Definition of done
 

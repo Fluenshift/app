@@ -13,14 +13,13 @@ source repository only keeps the commit reachable.
 ## Getting a baseline
 
 The scripts in `scripts/migration/` run on plain Node 26.13.0 (type stripping) with no
-dependencies. Node 26.13.0 is installed with mise but not activated globally, hence the
-`mise exec` prefix.
+dependencies; the repository's `mise.toml` selects Node 26.13.0.
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts verify                     # remote tags still resolve to the pins
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts sync                       # clone or update ../app-baselines/<system> at the pin
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts add-worktree pe my-task    # disposable worktree at the pin
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts remove-worktree pe my-task
+node scripts/migration/baselines.ts verify                     # remote tags still resolve to the pins
+node scripts/migration/baselines.ts sync                       # clone or update ../app-baselines/<system> at the pin
+node scripts/migration/baselines.ts add-worktree pe my-task    # disposable worktree at the pin
+node scripts/migration/baselines.ts remove-worktree pe my-task
 ```
 
 - Clones live outside this working tree, in `../app-baselines/<system>`; `--root <dir>`
@@ -50,8 +49,8 @@ Docker must be running for the Grifando suite.
 ## Running the suites
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/baseline-run.ts pe
-mise exec node@26.13.0 -- node scripts/migration/baseline-run.ts grifando
+node scripts/migration/baseline-run.ts pe
+node scripts/migration/baseline-run.ts grifando
 ```
 
 `baseline-run.ts` does the following:
@@ -117,8 +116,8 @@ Behavior that no baseline test pins gets a characterization test before it is po
 baseline's own idiom, and run at the pin:
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts pe
-mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts grifando
+node scripts/migration/characterization-run.ts pe
+node scripts/migration/characterization-run.ts grifando
 ```
 
 - Files live in `migration/characterization/<system>/files/<path>`, where `<path>` is their
@@ -139,8 +138,8 @@ mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts grifand
 After a run, regenerate the inventory, then give the new cases ledger rows:
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/inventory.ts
-mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> --class <A|B|C> <system>:characterization:<path>
+node scripts/migration/inventory.ts
+node scripts/migration/ledger-add.ts --slice <slice> --class <A|B|C> <system>:characterization:<path>
 ```
 
 | System | File | Pins | Cases |
