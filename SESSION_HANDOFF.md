@@ -1,147 +1,78 @@
 # Session handoff
 
-Where the Fluenshift migration stands and how to resume it. Written on 2026-11-15, at the end of the fourth agent session, for whoever resumes: Jhefferson after a break, or Levy with an agent session of his own.
-
-Live state lives in GitHub (issues, their labels, pull requests) and in the parity ledger. This file records what the repository does not: the owners' standing instructions, the next units with their design notes, and the lessons of past sessions. It replaces the untracked `SESSION_HANDOFF.md` and the `/tmp` handoffs of earlier sessions. Update it at the end of every session, through a pull request like any other change.
+Last updated 2026-11-16, at the end of the fifth agent session. This file holds only what the repository and GitHub do not: the work in flight, the owners' standing instructions, and the gotchas earlier sessions paid for. For everything else it points to the artifact that holds it. Rewrite it at the end of every session, through a pull request.
 
 ## Resume
 
-Open Claude Code or Codex in a checkout of this repository and say:
+Say: "Resume the migration from `SESSION_HANDOFF.md`." Then:
 
-> Resume the migration from `SESSION_HANDOFF.md`.
+1. Follow `AGENTS.md` (Claude Code loads it as `CLAUDE.md`; Codex reads it directly) and use the vocabulary of `CONTEXT.md`. Some passages of the long migration documents are stale: [Docs and tools that slow down or mislead agents](#docs-and-tools-that-slow-down-or-mislead-agents) lists them. Where they disagree with an accepted ADR or with this file, the ADR and this file are current.
+2. Run `gh issue list --repo Fluenshift/app --state open`. On each issue labeled `decision`, look for an owner's answer; act on it before planning other work.
+3. Take the first open item of [Next steps](#next-steps).
 
-The session then reads, in this order:
+Done when one issue is labeled `in-progress` for you and you are in its worktree.
 
-1. this file;
-2. `AGENTS.md` (`CLAUDE.md` links to it), the short form of the rules;
-3. `docs/migration/HANDOFF.md`, `PRE_MIGRATION.md`, `MIGRATION_PROTOCOL.md` and `README.md`;
-4. `docs/adr/`: 18 ADRs, all accepted by Jhefferson on 2026-11-14 (#5), Levy's acceptance pending;
-5. `CONTEXT.md`, the vocabulary of code, tests and UI;
-6. after `pnpm install`, Effect's own notes for the installed version: `apps/server/node_modules/effect/AGENTS.md` and its `ai-docs/`.
+## State on 2026-11-16
 
-Then it checks the open issues below for owner answers before planning any work.
-
-## Where things stand on 2026-11-15
-
-- `main` holds Phases 0 to 3, Phase 4 except the E2E journey of 4f (paused, see the owner instructions), Phase 5a (the Academy tables) and Phase 5c, the Trainer: prompts (#92), resilience (#94), providers (#96), model choice and key test (#98, closing #97).
-- No unit is in progress and no pull request is open.
-- Every open issue is a decision request waiting on the owners:
-
-| Issue | Asks | Blocks | Recommended answer |
-| --- | --- | --- | --- |
-| #5 | Levy's acceptance of the 18 ADRs. Jhefferson accepted all of them, and amended ADR 0001 to waive G12. | Nothing: the migration proceeds on Jhefferson's acceptance. An ADR Levy decides otherwise gets its rows reworked. | Levy answers with one comment naming the ADRs he accepts, or "all". |
-| #63 | How to treat a ported guard test whose behavior #47 built before the test existed, so that G8 can never see it fail first. | One `evaluation-http` row. | Option 3: `superseded` by the guard tests of #47, under a short ADR. |
-| #66 | May two Progress characterization rows that send a Correction in the query string become `port-changed` under ADR 0008? | Two `evaluation-http` rows. | Option 1. Then port both in a small unit, with the Correction in the body of `POST /api/progress/evidence` (`ProgressEvidenceRequest`). |
-| #72 | May the PGlite test cases get a 60-second timeout? | Nothing since #82 ordered turbo's tasks; a CI run whose only failures are those timeouts is rerun. | Option 1, under a short ADR (G11 records Vitest settings). |
-| #87 | How new Evaluations record the provisional Rubric Version: today `"1"`, which the PE importer of ADR 0018 must not merge with imported Evaluations. | Phase 7. | Option 1: a distinct version such as `"1-provisional"` until live calibration passes. |
-
-### Ledger snapshot
-
-From `docs/migration/parity/*.json` after #98: 869 rows, 425 with targets, 67 superseded, 49 informative and 328 open (`port` or `port-changed` rows without targets). No row is `pending-decision`. Six slices are complete: `academy-core`, `evaluation-core`, `evaluation-judge`, `evaluation-persistence`, `evaluation-web` and `platform`.
-
-| Slice | Open | Where the open rows come from |
+| Work | State | Details |
 | --- | --- | --- |
-| `academy-trainer` | 2 | `noKeyInLogs.test.ts`, which needs a route that calls the Trainer |
-| `academy-persistence` | 19 | `exerciseService.test.ts` 10, `interviewService.test.ts` 5, `writingCoachService.test.ts` 4 |
-| `academy-http` | 29 | exercises, attempts, interview, pages and vocabulary characterizations; `exercises/route.test.ts` |
-| `academy-web` | 42 | `musicLink.test.ts` 25, `specimenData.test.ts` 10, `savedPlaylists.test.ts` 7 |
-| `academy-spec` | 42 | Grifando `SPEC.md` 17, `CLAUDE.md` 16, fix commits 7, issues 2 |
-| `evaluation-http` | 7 | `dev-proxy.test.ts` 4 (E2E, paused), `app.characterization.test.ts` 3 (#63, #66) |
-| `evaluation-e2e` | 6 | `docker-smoke.ts` 5, `e2e/mvp.spec.ts` 1 (paused) |
-| `evaluation-policy` | 113 | PE `docs/product/RUBRIC.md` 64, `REQUIREMENTS.md` 40, `DATA-POLICY.md` 9 |
-| `hosted` | 68 | key store, credentials, the key test route, proxy, rate limits, client IP, privacy cleanup, `docs/deploy.md` |
+| 5b: Findings folded into Mistake Patterns through the Trainer's Enrichment | merged | PR #103, closes #102 |
+| 5d, first part: exercise generation, grading, explanation of an Attempt | merged | PR #105, closes #104 |
+| 5d, second part: the interview | in progress, paused | #106 and its [comment of 2026-11-16](https://github.com/Fluenshift/app/issues/106#issuecomment-6906562621); branch `wu/106-interview` |
+| This handoff | in review | #107, PR #108 |
+| Owner decisions | waiting | #5, #63, #66, #72, #87, #101; each issue states its options and a recommendation |
 
-`node scripts/migration/parity-check.ts` checks the ledger's structure. `pnpm parity` (it needs Docker) runs every suite and derives each row's status from the reports.
+Earlier work (Phases 0 to 4, 5a, 5c): `git log --first-parent --oneline main`. Ledger status: `node scripts/migration/parity-check.ts` prints the counts per slice from the ledger's structure; `pnpm parity` (needs Docker) derives each row's status from the test reports.
 
-## For Levy
+## Next steps
 
-Levy (`levyrodrigues23` on GitHub) wrote Grifando and is the other owner of this repository. Two kinds of work are open to him.
+1. Finish #106, following its comment of 2026-11-16. Jhefferson's machine still has the worktree `$F/app-wt/wu106`; elsewhere, `git -C $F/app worktree add $F/app-wt/wu106 wu/106-interview`.
+2. The Trainer's keys (Phase 6 step 2), needed before any route calls the Trainer. Rows: `hosted` (`credentials.test.ts`, `ai-key/test/route.test.ts`) and `academy-trainer` (`noKeyInLogs.test.ts`, with the first route that calls the Trainer). ADR 0012 and ADR 0003 decide where keys come from. `accessErrorForStatus > classifies provider statuses` passes before any code (PR #96 built it), so it cannot be a G8 target: add it to the question of #63.
+3. Once #101 is answered: the Naturalness Notes and the natural version in the Enrichment.
+4. In protocol order (`docs/migration/MIGRATION_PROTOCOL.md` § Phases): 5e (Academy routes and screens), 5f (seam invariants and the `academy-spec` rows), Phase 6, Phase 7.
+5. At any point, best before the next large unit: the cleanup in [Docs and tools that slow down or mislead agents](#docs-and-tools-that-slow-down-or-mislead-agents), as its own unit.
 
-As an owner, which only an owner can do, since agents never post decisions:
+For steps 2 to 5, create the unit's issue first (`ready-for-agent` and a lane label), naming its ledger rows, sources and targets, as #102, #104 and #106 do.
 
-- Accept or amend the ADRs on #5, with one comment naming the ADRs accepted, or "all". An ADR he decides otherwise gets its ledger rows reworked in a later unit.
-- Answer the decision requests above and any new issue titled "Human feedback needed".
-- With Jhefferson, settle step 3 of `docs/migration/HANDOFF.md`: what Grifando may change until the cutover (recommended: production and security fixes only, each ported through a baseline bump). Step 2 there, pointing his local Grifando clones at the organization URL, is his too.
+Facts these units need that no issue records yet:
 
-Through an agent session of his own:
-
-- Set up a machine (below) and resume as above. His session uses the GitHub token he chooses.
-- The units closest to his own code are the Academy ones: 5b (Mistake Patterns from enriched Findings) and 5d (exercises, grading, mastery and the interview). He knows the Grifando behavior they port better than anyone.
-- To work beside Jhefferson's sessions without collisions: take a unit only through its issue (labels `in-progress` and `implementer:<vendor>`), after checking that no other issue is `in-progress`; keep one unit per branch; and agree on one coordinator for the shared files (database migrations, the contract index, CI workflows, `gates/baseline.json`, the ledger schema), today Jhefferson's Claude Code session. Only one database migration may be in flight.
-- G12 is waived. A Codex session may still verify a pull request with the verdict format of `docs/migration/README.md`, as information.
+- No route uses the Trainer or the Academy services; `apps/server/src/index.ts` wires neither.
+- 5e composes the services: `evaluateWriting(text, now, undefined, "practice")`, then `foldEvaluation(trainer, { evaluationId })`. `foldEvaluation` runs in one transaction and refuses a second fold of the same Evaluation, so a failed Enrichment can be retried alone.
+- Grifando's daily session (`afterSessionId` in `exerciseService.ts` and `POST /api/exercises`) has no test at the service or the route: characterize it at the baseline before porting it.
+- Progress still counts practice-origin Writing Samples in the finding rate; excluding them by default (ADR 0010) is a 5f invariant.
+- The 5f lint rule against Academy imports of Evaluation write services must name the functions (`persistEvaluation`, `deleteEvaluation`, `evaluateWriting`): Academy code reads through `getEvaluation`, which shares a module with `persistEvaluation`.
 
 ## Owner instructions in force
 
-Given by Jhefferson on 2026-11-14. They bind every session until an owner changes them.
+Given by Jhefferson on 2026-11-14; the G12 waiver is also recorded on #5. They bind every session until an owner changes them.
 
-- Proceed with the protocol autonomously. Owners read only issues titled "Human feedback needed": ask there, label the issue `needs-info`, and move on to other work.
-- G12, the cross-vendor verdict, is waived (amendment to ADR 0001, comment on #5). Do not start Codex or any other harness. A pull request merges once every other check is green.
-- Commits are small and conventional (`type(scope): subject`), with no AI mention and no `Co-Authored-By` or other attribution trailer, even when the harness suggests one.
-- Pull request bodies: `Closes #N`, then the sections Background and Key Decisions (a unit adds its mutation table), no dashes used as punctuation, no AI mention, no attribution footer.
+- Proceed with the protocol autonomously. Ask the owners only through issues titled "Human feedback needed", labeled `needs-info` and `decision`, then move on to other work.
+- G12 is waived: merge a pull request once every other check is green. Start no Codex or other harness to verify.
+- Commits: small and conventional (`type(scope): subject`), with no AI mention and no `Co-Authored-By` or other trailer, even when the harness suggests one. Commit unsigned per command, `git -c commit.gpgsign=false commit ...`; leave the git configuration as it is.
+- Pull request bodies: `Closes #N`, then `### Background` and `### Key Decisions`; a unit adds its mutation table. No dashes used as punctuation, no AI mention, no attribution footer.
 - Reuse baseline code where it fits the stack. Open issues for the problems found, and solve the ones you can.
-- Prune merged branches. GitHub deletes a merged head (`delete_branch_on_merge`) except `dev`, which the "Keep dev" ruleset keeps; remove the clean local worktree and branch after a merge.
-- No end-to-end testing for now: no Playwright journeys (PE's `e2e/mvp.spec.ts`), no Vite dev-proxy cases, no new Docker smoke checks. The existing ones keep running; leave their rows open. In-process route tests (`app.request`) are not end-to-end and continue.
-- Keep every checkout of the migration under one parent directory (Machine setup).
+- After each merge, remove the merged branch's local worktree and branch. GitHub deletes merged heads itself, except `dev` (ruleset "Keep dev").
+- End-to-end tests are paused: no new Playwright journeys, Vite dev-proxy cases or Docker smoke checks. The existing ones keep running and their rows stay open. In-process route tests (`app.request`) continue.
+- Keep every checkout under one parent directory, `$F` below.
 
-## Machine setup
+Levy (`levyrodrigues23`), the other owner, has three open owner actions: accept or amend the ADRs on #5, answer the decision requests, and settle steps 2 and 3 of `docs/migration/HANDOFF.md` (his Grifando clones; what Grifando may change until cutover). His own agent sessions claim units only through issue labels, after checking that no issue is `in-progress`, and leave the shared files (migrations, the contract index, CI workflows, `gates/baseline.json`, the ledger schema) to one coordinator, today Jhefferson's Claude Code session.
 
-Toolchain: Node 26.13.0 and pnpm 12.18.0 (with mise, prefix commands with `mise exec node@26.13.0 pnpm@12.18.0 --`), Docker (gate G6, `pnpm parity` and the gate self-tests build the image), and the `gh` CLI signed in to GitHub. The baselines' own toolchains (Bun 1.4.0 for PE; Node 24, pnpm 12.3.4 and `postgres:17-alpine` for Grifando) are needed only to run characterization tests at the pins (`docs/migration/BASELINES.md`).
+## Working setup
 
-One parent directory holds every checkout; Jhefferson's is `/home/jheff/projects/personal/fluenshift/`.
+- `$F`, the parent directory (Jhefferson's: `/home/jheff/projects/personal/fluenshift`): `app` (the clone, on `main`), `app-wt/<unit>` (one worktree per unit), `app-wt/.pending/` (local tools, issue and pull request drafts), `app-baselines/{pe,grifando}` (the sources at their pins: `node scripts/migration/baselines.ts sync`).
+- Toolchain and commands: `AGENTS.md` § Commands. The baselines' toolchains: `docs/migration/BASELINES.md`.
+- Jhefferson's machine: Claude Code memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-app/memory/`; a session hook makes chat replies terse, while text written to the repository and GitHub stays plain English; the interactive `grep` is ugrep, so scripts call `/usr/bin/grep`; `$F/app-verify/protocol-review` is an old checkout outside the migration.
 
-| Path | Contents |
-| --- | --- |
-| `app` | Clone of `Fluenshift/app`, kept on `main`. |
-| `app-wt/<unit>` | One git worktree per work unit, on its `wu/<issue>-<slug>` branch. |
-| `app-wt/.pending/` | Local tools, issue and pull request bodies, logs (see Local tools). |
-| `app-baselines/{pe,grifando}` | Both source repositories at their pins, from `baselines.ts sync`; disposable run worktrees in `app-baselines/worktrees/`. |
-| `prompt-evolution`, `grifando` | Optional working clones of the source repositories, read-only for the migration. |
+A unit from issue to merge:
 
 ```sh
-mkdir -p fluenshift/app-wt && cd fluenshift
-git clone https://github.com/Fluenshift/app.git
-cd app
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts sync   # ../app-baselines/{pe,grifando}
-```
-
-Each worktree runs its own `pnpm install --frozen-lockfile`; the pnpm store makes it quick.
-
-## Next work, in order
-
-0. Read #5, #63, #66, #72 and #87 for owner answers, and act on any.
-1. **5b, Mistake Patterns from enriched Findings** (`academy-persistence`, `writingCoachService.test.ts`: 4 rows `port-changed` under ADR 0004). Every Learner text goes through the Judge's Evaluation. The Academy fields (Pattern Key, Mistake Category, L1 Transfer, a natural version and examples) and the Naturalness Notes come from a separate Trainer enrichment call over an Evaluation's Findings, which runs only when the Academy is in use; pattern folding takes Findings plus enrichment. Read ADR 0004, 0005 (category mapping), 0014 (a Finding in new writing costs mastery, whatever its origin), 0015 (Academy state across Rubric Versions) and 0016 (practice is offered). The enrichment call has no source test; ADR 0004 authorizes it. Derive its prompt and schema from Grifando's `src/server/ai/prompts/writingAnalysis.ts` and `schemas/writingAnalysis.ts` at the pin, keeping only the Academy fields; add it to `TrainerMethods` and `withResilience`; pin it with contract tests as #96 did. If its shape needs a product choice (for example how Naturalness Notes are stored), ask on a "Human feedback needed" issue and build the rest.
-2. **5d, exercises, grading, mastery and the interview** (`academy-persistence`: `exerciseService.test.ts` 10 rows, `interviewService.test.ts` 5). The services get a Trainer from `TrainerClient.trainerFor(credentials)` and store the `model` that each result names (Grifando #77).
-3. **The Trainer's keys** (Phase 6 step 2 in the protocol; needed before any route calls the Trainer). ADR 0012 and ADR 0003: the `local` profile reads the key from server configuration (Grifando's `AI_PROVIDER`, `GEMINI_API_KEY` and `ANTHROPIC_API_KEY`, through Effect `Config` in `packages/env`, as `JudgeConfig` does); the `hosted` profile takes it from the `x-ai-provider` and `x-ai-key` request headers only, never stored or logged. Rows in `hosted`: `credentials.test.ts` (`readAICredentials` 3, `resolveAICredentials` 3 `port-changed` under ADR 0012, `aiErrorResponse` 2) and the key test route `ai-key/test/route.test.ts` (8, over `TrainerClient.testKey`); then `noKeyInLogs.test.ts` (2, `academy-trainer`) with the first route that calls the Trainer. Trap: `accessErrorForStatus > classifies provider statuses` (`hosted`, class A) pins behavior that #96 already built in `ai-sdk-trainer.ts`, so its ported test passes before any code and cannot be a G8 target. Add it to the question of #63 instead of working around the gate.
-4. **5e**: the Academy routes (`academy-http`, 29) and screens (`academy-web`, 42), without browser journeys.
-5. **5f**: the seam invariants and the `academy-spec` rows.
-6. Phase 6 (`hosted`), the `evaluation-policy` rows, then Phase 7 (the PE importer of ADR 0018). Read the protocol to place each one before planning it.
-
-While the E2E pause holds, skip the `evaluation-e2e` rows and the `dev-proxy.test.ts` rows.
-
-Dependabot reports two open alerts on `main`, both from development tools: esbuild 0.18.20 (medium, alert 2), which drizzle-kit 0.31.11 pulls in through the deprecated `@esbuild-kit/esm-loader` and which matters only to esbuild's development server; and deepmerge 4.3.1 (low, alert 1, no fixed release yet), through ultracite. A fix changes dependencies, so it belongs in a dedicated unit.
-
-## The Trainer, as 5b and 5d find it
-
-- `TrainerConfig` (`packages/env/src/trainer.ts`) holds the model pins: `claude-sonnet-5` and `gemini-3.5-flash` answer unless `ANTHROPIC_MODEL` or `GEMINI_MODEL` names another model; the fallbacks are `claude-haiku-5-5` and `gemini-3.5-flash-lite`, which the environment never changes.
-- `TrainerClient` (`apps/server/src/academy/trainer/trainer-client.ts`): `trainerFor({ provider, apiKey })`, with the key as a `Redacted` value, builds a Trainer for that key. The primary model answers each call within 60 seconds; the fallback answers once when the primary is overloaded or times out. `testKey(credentials)` makes one 1-token call on the light fallback model and answers `works`, `invalid` or `busy` within 15 seconds.
-- `TrainerMethods` (`trainer-model.ts`): `generateExercises`, `explainAttempt` and `continueInterview`. Every result names the `model` that answered. Failures are `TrainerKeyRejectedError`, `TrainerQuotaExceededError`, `TrainerUnavailableError`, and `AIResponseValidationError` (from `@fluenshift/contract`) for an answer its schema refuses.
-- Nothing wires it into `apps/server/src/index.ts` yet, and no route uses it.
-- Its tests never call a provider: they use AI SDK mock models (`trainer-test-models.ts`), or the real providers over a fake `fetch` (`trainer-client.test.ts`).
-
-## How a unit runs
-
-```sh
-F=/home/jheff/projects/personal/fluenshift                                   # the parent directory
 export PATH="$(mise exec node@26.13.0 pnpm@12.18.0 -- sh -c 'echo $PATH')"   # husky needs pnpm
-gh issue create --repo Fluenshift/app --title "..." --body-file <body.md> \
-  --label ready-for-agent --label lane:<lane>
 gh issue edit <n> --repo Fluenshift/app --remove-label ready-for-agent \
   --add-label in-progress --add-label implementer:claude
 git -C $F/app fetch -q origin && git -C $F/app worktree add $F/app-wt/wu<n> -b wu/<n>-<slug> origin/main
 cd $F/app-wt/wu<n> && pnpm install --frozen-lockfile --prefer-offline
-# commit 1: the ported tests and typed stubs, every target red on an assertion
-git -c commit.gpgsign=false commit -m "test(<scope>): ..."
-# commits 2 to n: the port; then the mutation spot-check and the ledger targets
+# commit 1: ported tests, typed stubs, and the migration they need; every target red
+# commits 2 to n: the port, then the ledger targets
 node scripts/migration/red-green.ts --base origin/main --head HEAD    # G8
 node scripts/migration/parity-check.ts                                # G9, structure only
 node scripts/migration/parity-audit.ts --root $F/app-baselines        # G10
@@ -149,75 +80,128 @@ pnpm verify
 git push -u origin HEAD
 gh pr create --draft --title "..." --body-file <body.md> --label implementer:claude
 gh issue edit <n> --repo Fluenshift/app --remove-label in-progress --add-label in-review
-bash $F/app-wt/.pending/tools/merge-when-green.sh <pr>   # in the background; CI takes about 15 minutes
-gh issue edit <n> --repo Fluenshift/app --remove-label in-review   # once the merge closes the issue
+setsid nohup bash $F/app-wt/.pending/tools/merge-when-green.sh <pr> > <log> 2>&1 < /dev/null & disown
+gh issue edit <n> --repo Fluenshift/app --remove-label in-review      # after the merge closes it
 ```
 
-Jhefferson's git signs commits with GPG; his agent sessions commit unsigned with `git -c commit.gpgsign=false` per command, never by changing the configuration. Another implementer labels its units with its own `implementer:<vendor>`.
+Local tools, in `$F/app-wt/.pending/` on Jhefferson's machine only:
 
-## Local tools
+- `tools/merge-when-green.sh <pr>` ([appendix](#appendix-merge-when-greensh)): waits for the checks, ignoring `G12`; reruns a run whose only failures are the PGlite timeouts of #72, at most four times; then marks the pull request ready, merges it with a merge commit, and removes the clean local worktree and branch. Exits 1 when another check fails, 2 after 40 minutes.
+- `mutation-tools/mutate.mjs <workspace> <mutations.json>`: applies each `{ file, from, to, tests }` alone, runs Vitest on `tests`, lists the tests that caught it, and restores the file.
+- `mutation-tools/targets.mjs <repo> <slice> <report.json> <map.json>`: writes `targets` for rows whose verbatim titles passed in a Vitest JSON report.
+- `tools/ledger-union.ts <repo> <ledger file>...`: during a merge conflict in `docs/migration/parity/`, keeps the union of both sides' rows and targets.
 
-Small helpers kept outside the repository, in `app-wt/.pending/`. Another machine can rebuild them from these descriptions:
+## Gotchas
 
-- `tools/merge-when-green.sh <pr>` (appendix): waits for a pull request's checks, ignoring `G12`; reruns a run whose only failures are the PGlite timeouts of #72, at most four times; then marks the pull request ready, merges it with a merge commit, and removes the clean local worktree and the local branch. Exits 1 when another check fails, 2 after 40 minutes.
-- `mutation-tools/mutate.mjs <workspace> <mutations.json>`: for each `{ file, from, to, tests }`, replaces the one occurrence of `from`, runs `vitest run --reporter=json` on `tests` in the workspace, lists the failing tests, and restores the file.
-- `mutation-tools/targets.mjs <repo> <slice> <report.json> <map.json>`: for each row of the slice whose source file is in the map (`{ "<source>": "<target test file>" }`), sets `targets` to `<target>::<row title>` once that test has passed in the Vitest JSON report.
-- `tools/ledger-union.ts <repo> <ledger file>...`: during a merge conflict in `docs/migration/parity/`, keeps the union of both sides' rows by id, with the union of their targets, and refuses rows whose disposition or decision differ.
+Gates and process:
 
-## Lessons that still apply
-
-Process and gates:
-
-- Never delete a base branch while pull requests target it: GitHub closes them. Retarget dependents to `main` (`gh api -X PATCH repos/Fluenshift/app/pulls/N -f base=main`) right after each merge.
-- Sibling units conflict in generated files. Ledger files: unite the rows (`ledger-union.ts`). Reports and inventories: take theirs (`git checkout --theirs`), then rerun `characterization-run.ts` and `inventory.ts`. `BASELINES.md` tables: edit by hand.
-- `gh pr edit` fails on gh 2.46 (Projects classic); use `gh api -X PATCH repos/Fluenshift/app/pulls/N -F body=@file`.
-- G8 reads a target at the first commit of the pull request whose test file contains its title. If a test with that title already exists and passes there, G8 fails: give the new test a new title. A ported test whose behavior an earlier unit built passes before its code and cannot be a G8 target (#63).
-- G8 runs whole test files at the first commit. A test that waits for a call the stub never makes hangs until the 60-second timeout of `apps/server`: still red, only slow.
-- Never `sed` a title inside `docs/migration/parity/*.json`: the row `id` holds the same text. Edit `targets` with a script that leaves `id` alone.
-- A change to `playwright.config.ts`, `.husky/*`, a Vite or oxfmt configuration, a workflow or a gate script makes G11 fail until `node scripts/check-gates.ts --write` records `gates/baseline.json` again. G11 also records Vitest settings, `testTimeout` included; changing one needs an accepted ADR (protocol rule 15), not just a new record. `turbo.json` is not recorded.
-- G10 reports class C differences without failing; they go in the pull request body.
-- A mutation survivor in a port means untested baseline behavior: characterize it at the pin (`characterization-run.ts <pe|grifando> --root $F/app-baselines`; the default root clones the baselines again), regenerate the inventory, run `ledger-add.ts`, then fold the ported cases into the first commit (`git commit --fixup=<sha>`, then `GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash origin/main`). Class C survivors are reported in the pull request, not characterized.
-- CodeQL fails a pull request on `js/biased-cryptographic-random` (`randomBytes` with `%`): use `randomInt`.
-- A full CI run with the Docker jobs takes about 15 minutes.
-- A unit that needs a module from an unmerged unit can branch from that unit's branch, then `git rebase origin/main` once it merges.
+- G8 needs each target red at the pull request's first commit and green at its head. A target red on an error instead of an assertion passes with a note; stubs that return a wrong placeholder value fail on assertions. A ported test whose behavior already exists passes at the first commit and cannot be a target (#63); a new test that reuses an existing title fails G8.
+- One database migration is in flight at a time. A unit that needs the previous unit's migration branches from that unit and runs `pnpm db:generate` after its merge (#106 did so from #104). Before a migration merges, regenerate it after a schema change; after, add a new one.
+- Baseline behavior no test covers, including a mutation survivor, is characterized first: write the case in `migration/characterization/<system>/files/`, run `node scripts/migration/characterization-run.ts <system> --root $F/app-baselines`, then `inventory.ts --root $F/app-baselines` (confirm with `--check`), `ledger-add.ts --slice <slice> --class <A|B|C> <row id>`, and the table in `docs/migration/BASELINES.md` by hand. It goes in the unit's first commit.
+- Edit ledger targets with a script that writes only `targets`: each row's `id` contains the test title, so a text replacement of a title also rewrites the `id`.
+- G11 records lint, TypeScript, CI, Vitest, Playwright, Vite and oxfmt settings and the gate scripts. Only the coordinator records them again (`node scripts/check-gates.ts --write`), and a Vitest setting such as `testTimeout` needs an accepted ADR. `turbo.json` is not recorded.
+- Generated files conflict between sibling units: for the ledger, `ledger-union.ts`; for reports and inventories, take theirs and rerun the scripts; for `BASELINES.md`, edit by hand.
+- Retarget pull requests to `main` before deleting their base branch (`gh api -X PATCH repos/Fluenshift/app/pulls/N -f base=main`); GitHub closes them otherwise.
+- Edit a pull request body with `gh api -X PATCH repos/Fluenshift/app/pulls/N -F body=@file`; `gh pr edit` fails on gh 2.46.
+- A full CI run takes about 15 minutes. CodeQL rejects `randomBytes` with `%` (`js/biased-cryptographic-random`); use `randomInt`.
 
 Stack:
 
-- `ServerConfig` needs `DATA_DIRECTORY` (local) or `DATABASE_URL` (hosted): anything that starts the built server must set it.
-- The server bundle keeps npm packages external, so every npm package that bundled workspace code imports must also be a dependency of `apps/server`.
-- PGlite creates its data directory but not the parents; `Database.pglite` creates them. The server's persistence tests open a PGlite database per case; `apps/server/vitest.config.ts` sets a 60-second test timeout.
-- A schema change before its first migration merges: delete the generated folder and run `pnpm db:generate` again; after a merge, only new migrations. Tests name the tables they check and count migrations from the files.
-- pnpm 12 fails an install on a dependency build script nobody reviewed: list it in `allowBuilds` (`esbuild: false` keeps install scripts off). "Run pnpm approve" after an install is a notice, not a failure.
-- `createApp` takes optional boundaries (Effects) and a `runtime` (`EdgeRuntime`); tests pass `ManagedRuntime.make(LearnerIdentity.local)`.
-- The Judge's tests drive the real OpenRouter provider through a fake `fetch`. In-body provider errors arrive as `APICallError` with `statusCode` 200 and the error in `data`; unparseable or schema-violating output is `NoObjectGeneratedError`.
-- The Trainer's tests drive `@ai-sdk/anthropic` and `@ai-sdk/google` through a fake `fetch` too. Anthropic names the model in the request body and sends the key in `x-api-key`; Google names it in the path (`/models/<id>:generateContent`) and sends `x-goog-api-key`. A fake Google error must carry `error.status` (for example `INVALID_ARGUMENT`): without it the provider loses the error message, and a rejected key reads as an unmapped failure.
-- With the AI SDK on Effect's `TestClock`, wait until the fake `fetch` has been called before moving the clock; the request's `AbortSignal` shows whether a timeout interrupted it.
-- Web tests use Testing Library's 1-second `findBy*` default; under heavy local load two failed once and passed on rerun. If CI shows it, order `web#test` after `server#test` in `turbo.json`.
-- Web ports: no `@/` alias (G11 records `vite.config.ts`), so test imports are relative; `noUncheckedIndexedAccess` and the complexity limit (20) reshape loops and big render functions, never their output.
+- Starting the built server needs `DATA_DIRECTORY` (local profile) or `DATABASE_URL` (hosted).
+- The server bundle keeps npm packages external: every npm package that bundled workspace code imports must also be a dependency of `apps/server`.
+- pnpm 12 fails an install on a dependency build script nobody reviewed: list it in `allowBuilds`.
+- Provider fakes over `fetch`: Anthropic names the model in the body and sends `x-api-key`; Google names it in the path (`/models/<id>:generateContent`) and sends `x-goog-api-key`, and a fake Google error needs `error.status` to map; OpenRouter reports in-body errors as an `APICallError` with status 200.
+- With Effect's `TestClock`, move the clock only after the fake `fetch` has been called.
+- Web tests import relatively: the `@/` alias would change `vite.config.ts`, which G11 records.
 
 Effect 4.1.2 and lint:
 
-- `Config.NonEmptyString`, `Config.Port`, `ConfigProvider.fromEnvRecord`. An empty variable reads as missing, so `Config.withDefault` applies to it. A service class is itself an Effect (`yield* ServerConfig`).
-- `lint:effect` requires `Schema.TaggedError<X, { readonly brand: unique symbol }>`. `Effect.catch` is the catch-all, `Effect.catchIf` takes a refinement, `Effect.catchDefect` recovers defects and `Effect.match` turns a failure into a value. `Effect.timeout` fails with a `TimeoutError` (`Cause.isTimeoutError`). `TestClock.layer()` and `TestClock.adjust` come from `effect/testing`. The Effect diagnostics flag `unknownInEffectCatch`, `catchConditionalRefailToCatchIf` and `catchAllToMapError`.
-- `packages/core` exports by path (`@fluenshift/core/<module>`), with no barrel. `expect` takes one argument; no `await` inside loops; arrow constants (`func-style`); no `expect` inside `it.effect` (`no-standalone-expect`), so use plain `it` with `Effect.runPromise`. No `new Promise` (`promise/avoid-new`): use `Promise.withResolvers`. A helper that captures nothing moves to module scope (`unicorn/consistent-function-scoping`).
+- Tagged errors are `Schema.TaggedError<X, { readonly brand: unique symbol }>()`. Recover with `Effect.catch`, `Effect.catchIf`, `Effect.catchDefect` or `Effect.match`; a timeout fails with an error that `Cause.isTimeoutError` recognizes; `TestClock` comes from `effect/testing`.
+- `Effect.fn` keeps a generator's type parameters, so a service can take an Effect-returning capability, as the interview takes the Judge's evaluation.
+- Map Effects over an array with `pipe(array, Effect.forEach(f))`: oxlint flags `Effect.forEach(array, f)`, and the Effect diagnostics flag `Effect.all(array.map(f))`.
+- Lint shapes code: one argument per `expect`; sequential promise chains recurse instead of looping with `await` or using `reduce` (see `foldInOrder` in `apps/server/src/academy/pattern-folding.ts`); arrow constants; plain `it` with `Effect.runPromise`, since `expect` inside `it.effect` is refused; `Promise.withResolvers` instead of `new Promise`; helpers that capture nothing at module scope.
+- `packages/core` exports by path (`@fluenshift/core/<module>`).
 
 Shell:
 
-- `pkill -f <pattern>` inside a tool call kills the call's own shell when the pattern is in its command line: use `pgrep -f 'dist/index.mj[s]' | xargs -r kill`. Never edit a running bash script in place; write a copy and `mv` it over.
-- A `\uXXXX` sequence typed in a tool input reaches the file as the real character. Write escapes with a script (Python `"\\" + "uFEFF"`) and check for invisible characters.
-- `mise exec` prunes unused tool versions on its own when it starts; nothing in the repository asks for it.
-- Turbo shares its cache across worktrees (an untracked `.turbo/` in each checkout).
+- Give `git worktree add` an absolute path: under `git -C $F/app`, a relative path lands inside the main checkout.
+- Stop a process with `pgrep -f '<patter[n]>' | xargs -r kill`; a plain `pkill -f` matches the tool call's own shell.
+- Write `\uXXXX` escapes from a script: typed into a tool input, they arrive as the real character.
+- Start long waits detached (`setsid nohup ... & disown`) so they outlive the tool call.
 
-## Jhefferson's machine
+## Docs and tools that slow down or mislead agents
 
-- Claude Code keeps this project's memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-app/memory/`.
-- A session hook makes the agent reply in caveman style; everything written to the repository or to GitHub stays plain English.
-- The interactive shell aliases `grep` to ugrep; one-liners use `/usr/bin/grep`.
-- `app-verify/protocol-review` is an old verification checkout whose commit is not in `main`; keep it.
+Reviewed on 2026-11-16; every claim below was checked against the files. Items 1 to 4 change what every session reads, so do them first. All of them fit one docs unit with its own issue: they change no product behavior and no ledger row.
 
-## Appendix: `merge-when-green.sh`
+1. **Startup reading load.** `AGENTS.md` sends every session through this file, `docs/migration/HANDOFF.md`, `PRE_MIGRATION.md`, `MIGRATION_PROTOCOL.md`, `README.md` and `docs/adr/` before any work: about 1,700 lines plus 607 lines of ADRs, before `CONTEXT.md` and Effect's own notes. Most of it bears on no single unit. Fix: keep `AGENTS.md` as the always-read summary and turn the list into pointers that name when to read each document (for example, the ledger format before editing `docs/migration/parity/`; an ADR when a row cites it).
+2. **Stale passages that contradict the current state.** `AGENTS.md` line 18 says the long documents win when they disagree with it, so these passages override current text:
+   - `docs/migration/HANDOFF.md` lines 211 to 233 ("Next session") instruct an agent to verify the setup and start Phase 0; Phases 0 to 3 are done.
+   - `docs/migration/PRE_MIGRATION.md` line 54 lists as still open the deploy model, the Judge's provider, analytics, demotion on a repeated mistake, Academy state across Rubric Versions, and practice offered or imposed; ADRs 0003, 0012, 0013, 0014, 0015 and 0016 decided them on 2026-11-14.
+   - `docs/migration/MIGRATION_PROTOCOL.md` lines 32 and 513 require a cross-vendor G12 verdict on every change; the owners waived G12 (amendment to ADR 0001, #5).
 
-Set `FLUENSHIFT_APP` to the main checkout of `Fluenshift/app` when it is not Jhefferson's path.
+   Fix: rewrite or delete these passages, then state the precedence that matches reality: accepted ADRs, then `AGENTS.md`, then the long documents.
+
+3. **The same rules in four places.** The agent rules exist in `AGENTS.md` § Rules, `MIGRATION_PROTOCOL.md` § Agent rules (19 numbered rules), `PRE_MIGRATION.md` § Rules for the new repo's AGENTS.md, and the owner instructions above. Their numbering differs: the stop rule is step 8 of `AGENTS.md` § Work units, step 12 of the protocol's work unit cycle and the protocol's agent rule 16. Every edit must reach every copy, and a missed copy becomes a contradiction. Fix: keep the rules once, in `AGENTS.md`, move the owner instructions there, and replace the other copies with a pointer.
+4. **An MCP server the repository itself distrusts.** `.mcp.json` registers `effect-docs` (`effect-mcp@0.1.16`), while `AGENTS.md` § Effect warns that this server mixes Effect 3 and release-candidate pages. The installed `node_modules/effect/AGENTS.md` and `ai-docs/` match Effect 4.1.2. Fix: remove the server from `.mcp.json`.
+5. **Planning history inside the working protocol.** `MIGRATION_PROTOCOL.md` (822 lines) keeps material no unit uses: § Why — comparison (lines 85 to 141), the finished Phases 0 to 2 (176 to 373), § Evidence (711 to 788) and § Uncertainties (789 to 822). Fix: move them to an archive file or delete them (git keeps them), leaving the phases ahead, the work unit cycle, the gates and the definition of done.
+6. **Tools that exist on one machine.** The four local tools above live outside the repository; another machine rebuilds them from prose, and this file carries one as a 60-line appendix. Fix: commit them under `scripts/migration/` (first check what `scripts/check-gates.ts` records), then delete the appendix.
+7. **Conventions in the wrong file.** The Effect and lint gotchas above apply to every unit but live in a session file. Fix: move them into `AGENTS.md` § Effect, and keep only session state here.
+8. **Large generated JSON.** The inventory (408 KB), the ledger (376 KB), the baseline reports (188 KB) and the characterization reports (448 KB) are data for scripts. Query one row at a time (`parity-check.ts`, or `node -e` over the parsed file) instead of opening a file.
+9. **Claude Code memory on Jhefferson's machine.** A note claiming that `SESSION_HANDOFF.md` was untracked was corrected on 2026-11-16. After item 3, three of the five notes repeat instructions that `AGENTS.md` will hold; remove them then.
+
+## To do: skip the full CI for documentation-only changes
+
+Raised by Jhefferson on 2026-11-16, when a one-file Markdown pull request (#108) waited about 15 minutes for CI.
+
+- Today `.github/workflows/ci.yml` runs on every `pull_request`, `merge_group` and push to `main`, with no path filter: a Markdown change runs every gate, Docker jobs included, once on the pull request and again after the merge.
+- The `main` ruleset requires no status check (its rules are `deletion` and `non_fast_forward`), so a path filter cannot leave a pull request blocked on a check that never reports.
+- Proposal: a `changes` job (for example `dorny/paths-filter`) that lets a pull request touching only `**/*.md` run the format check and `pnpm check:docs`, and skip the other jobs. The ledger and inventory JSON under `docs/migration/` are data that G9 and G10 check: they keep the full run.
+- Constraints: G11 records the workflow, so the coordinator records `gates/baseline.json` again after the change (`node scripts/check-gates.ts --write`), and the gate self-tests must still pass. `merge-when-green.sh` waits until it sees a check other than G12: teach it that a documentation-only pull request may report only the documentation job.
+
+## To discuss: the checkout layout
+
+Raised by Jhefferson on 2026-11-16. Nothing changes until the owners decide; decide before cleanup item 6, since the local tools depend on the layout.
+
+Today `$F/app` is an ordinary clone kept on `main`, and each unit adds a git worktree of it, `git worktree add $F/app-wt/<unit>`. The worktrees share the clone's objects and refs (`git -C $F/app worktree list` shows them); each runs its own `pnpm install`, which takes seconds because the pnpm store is shared.
+
+Frictions so far:
+
+- The clone is special: it must stay on `main`, and `merge-when-green.sh` hard-codes its path.
+- Under `git -C $F/app`, a relative worktree path once put a worktree inside the clone.
+- Worktree directories (`wu106`) are named differently from their branches (`wu/106-interview`).
+
+Options:
+
+1. Keep the layout and fix the frictions: absolute paths, worktrees named after their branches, the tools moved into the repository.
+2. A bare repository with every branch, `main` included, as a sibling worktree: `git clone --bare https://github.com/Fluenshift/app.git $F/app/.bare`, a `$F/app/.git` file containing `gitdir: ./.bare`, then `git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'` (a bare clone does not set it, so `git fetch` would not update the other branches), then `git worktree add $F/app/main main` and one `git worktree add` per unit branch. No checkout is special.
+3. The harness's own worktrees: Claude Code creates and removes worktrees itself (the `EnterWorktree` tool, and `isolation: "worktree"` for subagents); check its current docs for where it puts them. Codex has its own mechanism, so the two harnesses would differ.
+
+Each option changes the pruning in `merge-when-green.sh`, the paths in this file, and Claude Code's memory note on the directory layout.
+
+## To discuss: both owners on Claude Code
+
+Raised by Jhefferson on 2026-11-16: Levy will probably run Claude Code too, not Codex. The process assumes two vendors in these places; decide each before Levy's first session:
+
+- **Who holds a unit.** The labels `implementer:claude` and `implementer:codex` tell sessions apart by vendor, so two Claude Code sessions would look alike. Options: assign the issue to the account the session runs as (`gh issue edit <n> --add-assignee @me`), or one label per owner.
+- **The coordinator.** Migrations, the contract index, CI workflows, `gates/baseline.json` and the ledger schema belong to one coordinator, today Jhefferson's Claude Code session. Agree who coordinates when both run, and how a unit announces a migration in flight.
+- **G12.** Cross-vendor verification (ADR 0001, `scripts/migration/verdict-check.ts`, the "G12 verdict" workflow, the verdict format in `docs/migration/README.md`) is already waived. With one vendor, either retire it through an amendment to ADR 0001 or keep it informative. Retiring it also removes the Codex passages from the documents (cleanup item 3).
+- **Per-machine context.** Claude Code memory and installed plugins are per machine: Levy's sessions see neither Jhefferson's memory notes nor, unless installed, the skills suggested below. Durable instructions belong in `AGENTS.md` (cleanup items 3 and 9).
+
+## Suggested skills
+
+For Claude Code sessions with the `mattpocock-skills` plugin installed; without it, skip this section.
+
+- `mattpocock-skills:tdd`: every unit is tests first (commit 1 red, then green).
+- `mattpocock-skills:code-review`: review the unit's diff against its issue before opening the pull request, since no human reviews code.
+- `mattpocock-skills:pr`: draft the pull request body, then apply the owners' format above.
+- `mattpocock-skills:writing-for-agents`: the docs cleanup, and any edit to `AGENTS.md`, this file or an issue meant for agents.
+- `mattpocock-skills:domain-modeling`: when a unit adds a term to `CONTEXT.md` or drafts an ADR.
+- `mattpocock-skills:diagnosing-bugs`: a gate or CI failure whose cause is unclear.
+- `handoff`: at the end of the session, rewrite this file in the repository.
+
+## Appendix: merge-when-green.sh
+
+Kept here until the tool moves into the repository (cleanup item 6). Set `FLUENSHIFT_APP` to the main checkout of `Fluenshift/app` when it is not Jhefferson's path.
 
 ```bash
 #!/usr/bin/env bash
