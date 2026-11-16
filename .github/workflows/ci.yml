@@ -1,12 +1,14 @@
 name: CI
 
-# Gates of docs/migration/MIGRATION_PROTOCOL.md. Every required check also runs on
-# merge_group, or the merge queue waits forever.
+# The gates of docs/migration/MIGRATION_PROTOCOL.md, each suite once per run (ADR 0019).
+# `changes` reads the files a run touches: a change that is only Markdown runs the static checks
+# and the secret scan alone, and the gate self-tests run only when a gate changes. `CI` sums the
+# run up in one check, the one a ruleset can require.
 on:
   pull_request:
-  merge_group:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,10 +22,34 @@ env:
   TURBO_TELEMETRY_DISABLED: "1"
 
 jobs:
-  verify:
-    name: G1 to G4 (types, lint, tests, build)
+  changes:
+    name: Changed paths
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.classify.outputs.code }}
+      gates: ${{ steps.classify.outputs.gates }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      # A manual run and a new branch have no base: the script then skips nothing.
+      - name: Which jobs this change needs
+        id: classify
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node scripts/ci-changes.ts --base "$BASE_SHA" --head "$HEAD_SHA" >> "$GITHUB_OUTPUT"
+
+  static:
+    name: Static checks (G1, G2, G4, G11)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -46,6 +72,11 @@ jobs:
       - name: G11 gate integrity
         run: pnpm check:gates
 
+      # Without reports: the rows, their dispositions and the ADRs they cite. An ADR is Markdown,
+      # so this is the part of G9 a change that skips the suites still needs.
+      - name: G9 the ledger's structure
+        run: node scripts/migration/parity-check.ts
+
       - name: G2 lint
         run: pnpm lint
 
@@ -58,14 +89,42 @@ jobs:
       - name: G1 Effect diagnostics
         run: pnpm check:effect
 
-      - name: G3 tests
-        run: pnpm test
-
       - name: G4 build
         run: pnpm build
 
+  tests:
+    name: Tests, Docker smoke and parity (G3, G6, G9)
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    # Every suite runs here, once. The Docker smoke builds the image.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: G3 the scripts' own tests
+        run: pnpm test:scripts
+
+      - name: G3 and G6 every suite, with a report
+        run: node scripts/migration/test-reports.ts reports
+
+      - name: G9 every ledger row valid, every target passing
+        run: node scripts/migration/parity-check.ts --reports reports
+
   postgres:
-    name: G3 (Postgres integration)
+    name: Postgres integration (G3)
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     services:
@@ -98,7 +157,9 @@ jobs:
 
   e2e:
     # G4 too: the journeys start the one built process that serves /api/health and the SPA.
-    name: G4 and G5 (the built process, end to end)
+    name: The built process, end to end (G4, G5)
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -120,54 +181,11 @@ jobs:
       - name: G5 journeys against the built process
         run: pnpm test:e2e
 
-  docker-smoke:
-    name: G6 (docker smoke)
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
-
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .node-version
-          cache: pnpm
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: G6 the image of the local profile, published on loopback and run as the caller
-        run: pnpm docker:smoke
-
-  parity:
-    name: G9 (parity)
-    runs-on: ubuntu-24.04
-    # The test reports include the Docker smoke, which builds the image.
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
-
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .node-version
-          cache: pnpm
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: Test reports
-        run: node scripts/migration/test-reports.ts reports
-
-      - name: G9 every ledger row valid, every target passing
-        run: node scripts/migration/parity-check.ts --reports reports
-
   red-green:
-    name: G8 (red-green)
-    # A merge group holds no new unit commits; its skipped run counts as a pass.
-    if: github.event_name == 'pull_request'
+    name: Red-green (G8)
+    needs: changes
+    # Only a pull request holds a unit's first commit.
+    if: github.event_name == 'pull_request' && needs.changes.outputs.code == 'true'
     runs-on: ubuntu-24.04
     # A Docker smoke target builds the image at its first commit and at the head.
     timeout-minutes: 40
@@ -192,8 +210,62 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: node scripts/migration/red-green.ts --base "$BASE_SHA" --head "$HEAD_SHA"
 
+  records:
+    name: Migration records (pins, inventory, G10)
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Baseline tags still resolve to the pins
+        run: node scripts/migration/baselines.ts verify
+
+      - name: Clone the baselines at their pins
+        run: node scripts/migration/baselines.ts sync
+
+      - name: The inventory reproduces byte for byte
+        run: node scripts/migration/inventory.ts --check
+
+      - name: G10 ported tests keep their source's strength
+        run: node scripts/migration/parity-audit.ts
+
+  supply-chain:
+    # Runs for every change: a secret can land in Markdown too.
+    name: Secrets and dependencies (G7)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # The gitleaks CLI needs no license key; the GitHub Action does in organization repos.
+      - name: Secret scan of the whole history
+        run: >-
+          docker run --rm --volume "$PWD:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f git /repo --no-banner --redact
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level high
+
+      - name: No route reads user text from a URL
+        run: node scripts/check-url-text.ts
+
   gate-selftest:
     name: Gate self-tests
+    needs: changes
+    if: needs.changes.outputs.gates == 'true'
     runs-on: ubuntu-24.04
     # The self-tests start from full test reports, the Docker smoke included.
     timeout-minutes: 40
@@ -218,51 +290,35 @@ jobs:
       - name: Every gate rejects its broken case
         run: node scripts/gate-selftest.ts
 
-  migration:
-    name: Migration records (pins and inventory)
+  ci:
+    # Skipped jobs are the ones `changes` ruled out. A job that failed, or that never ran because
+    # the job before it failed, fails this one.
+    name: CI
+    needs:
+      - changes
+      - static
+      - tests
+      - postgres
+      - e2e
+      - red-green
+      - records
+      - supply-chain
+      - gate-selftest
+    if: always()
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .node-version
-
-      - name: Baseline tags still resolve to the pins
-        run: node scripts/migration/baselines.ts verify
-
-      - name: Clone the baselines at their pins
-        run: node scripts/migration/baselines.ts sync
-
-      - name: The inventory reproduces byte for byte
-        run: node scripts/migration/inventory.ts --check
-
-      - name: G10 ported tests keep their source's strength
-        run: node scripts/migration/parity-audit.ts
-
-  supply-chain:
-    name: G7 (secrets and dependencies)
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-
-      # The gitleaks CLI needs no license key; the GitHub Action does in organization repos.
-      - name: Secret scan of the whole history
-        run: >-
-          docker run --rm --volume "$PWD:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f git /repo --no-banner --redact
-
-      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
-
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .node-version
-
-      - name: Audit production dependencies
-        run: pnpm audit --prod --audit-level high
-
-      - name: No route reads user text from a URL
-        run: node scripts/check-url-text.ts
+      - name: Every job passed, or the change did not need it
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+          FAILED: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+          CODE: ${{ needs.changes.outputs.code }}
+          GATES: ${{ needs.changes.outputs.gates }}
+        run: |
+          echo "results: $RESULTS"
+          echo "code=$CODE gates=$GATES"
+          test "$FAILED" = "false"
+          case "$CODE $GATES" in
+            "true true" | "true false" | "false false") ;;
+            *) echo "the changed paths were not classified"; exit 1 ;;
+          esac
