@@ -1226,6 +1226,37 @@ describe("Writing Evaluation guards", () => {
     expect(result.retained).toEqual([]);
   });
 
+  it("records a practice Writing Sample with its origin, and any other as work", async () => {
+    const layer = await assessmentLayer(emptyAssessment);
+
+    const stored = await Effect.runPromise(
+      Effect.gen(function* () {
+        yield* evaluateWriting("I wrote this at work.", new Date());
+        yield* evaluateWriting(
+          "I wrote this for practice.",
+          new Date(),
+          undefined,
+          "practice"
+        );
+        const database = yield* Database;
+        return yield* database.run((client) =>
+          client
+            .select({
+              origin: evaluations.origin,
+              originalText: evaluations.originalText,
+            })
+            .from(evaluations)
+            .orderBy(evaluations.originalText)
+        );
+      }).pipe(Effect.provide(layer))
+    );
+
+    expect(stored).toStrictEqual([
+      { origin: "work", originalText: "I wrote this at work." },
+      { origin: "practice", originalText: "I wrote this for practice." },
+    ]);
+  });
+
   it("answers a missing model configuration as configuration-missing, not retryable", async () => {
     const model = await withModel(() =>
       Effect.fail(

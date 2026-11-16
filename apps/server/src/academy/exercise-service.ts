@@ -12,9 +12,10 @@ import {
 import { assignExerciseTypeFor } from "@fluenshift/core/exercise-type";
 import { applyExerciseResult } from "@fluenshift/core/mastery";
 import { selectPatternsForPractice } from "@fluenshift/core/selection";
-import { Effect, Schema } from "effect";
+import { Effect } from "effect";
 
 import { getRatings, setRating } from "./category-ability-repository";
+import { NotFoundError } from "./errors";
 import {
   createAttempt,
   createExercises,
@@ -29,13 +30,7 @@ import {
 import type { TrainerMethods } from "./trainer/trainer-model";
 
 export type { Exercise } from "./exercise-repository";
-
-// A record that does not exist or belongs to another Learner: the two read alike, so ids cannot
-// be probed. Ported from Grifando src/server/domain/errors.ts.
-export class NotFoundError extends Schema.TaggedError<
-  NotFoundError,
-  { readonly brand: unique symbol }
->()("NotFoundError", { resource: Schema.String }) {}
+export { NotFoundError } from "./errors";
 
 export interface SubmitAttemptResult {
   readonly attemptId: string;

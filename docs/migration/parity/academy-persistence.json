@@ -3,6 +3,15 @@
   "lane": "academy",
   "rows": [
     {
+      "id": "grifando:characterization:src/server/domain/interview/interviewService.characterization.test.ts::interviewService.answerTurn history > asks each follow-up with every answered turn so far, in order",
+      "source": "src/server/domain/interview/interviewService.characterization.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "grifando:characterization:src/server/domain/interview/interviewService.characterization.test.ts::interviewService.answerTurn retry > returns the FAILED writing session of a failed answer and re-analyzes that session on retry",
       "source": "src/server/domain/interview/interviewService.characterization.test.ts",
       "class": "B",

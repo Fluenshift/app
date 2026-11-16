@@ -7,6 +7,8 @@ export {
   exerciseAttempts,
   exercises,
   findings,
+  interviewSessions,
+  interviewTurns,
   learners,
   mistakePatterns,
   occurrences,

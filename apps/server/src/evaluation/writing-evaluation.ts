@@ -4,6 +4,7 @@
 // profile (docs/adr/0006); the Evaluation is stored for the Learner of the request.
 import { createHash, randomUUID } from "node:crypto";
 
+import type { WritingSampleOrigin } from "@fluenshift/contract";
 import {
   InvalidAssessmentError,
   ModelAssessmentSchema,
@@ -92,7 +93,8 @@ export const evaluateWriting = Effect.fn("WritingEvaluation.evaluate")(
   function* (
     writingSample: string,
     submittedAt: Date,
-    now: () => Date = () => new Date()
+    now: () => Date = () => new Date(),
+    _origin: WritingSampleOrigin = "work"
   ) {
     if (
       writingSample.trim().length === 0 ||
