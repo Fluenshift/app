@@ -13,7 +13,10 @@ import {
 } from "./trainer-errors";
 import {
   answering,
+  enrichmentInput,
   explainInput,
+  fakeArticleEnrichment,
+  fakeFindingEnrichment,
   fakeMultipleChoiceExercise,
   oneTarget,
   refusing,
@@ -77,6 +80,57 @@ describe("createGeminiProvider.explainAttempt", () => {
 
     await expect(
       Effect.runPromise(provider.explainAttempt(explainInput))
+    ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+});
+
+describe("createGeminiProvider.enrichFindings", () => {
+  it("returns each Finding's enrichment for well-formed JSON", async () => {
+    const provider = geminiAnswering({
+      findings: [fakeFindingEnrichment(), fakeArticleEnrichment()],
+    });
+
+    const result = await Effect.runPromise(
+      provider.enrichFindings(enrichmentInput)
+    );
+
+    expect(result.findings.map((finding) => finding.category)).toStrictEqual([
+      "PREPOSITIONS",
+      "ARTICLES",
+    ]);
+    expect(result.model).toBe("test-model");
+  });
+
+  it("offers the model only the Mistake Categories a Finding can take", async () => {
+    const model = answering(
+      "google.generative-ai",
+      "test-model",
+      JSON.stringify({
+        findings: [fakeFindingEnrichment(), fakeArticleEnrichment()],
+      })
+    );
+
+    await Effect.runPromise(
+      createAiSdkTrainer(model).enrichFindings(enrichmentInput)
+    );
+
+    const sent = JSON.stringify(model.doGenerateCalls[0]?.responseFormat);
+    expect(sent).toContain('"COUNTABLE_UNCOUNTABLE"');
+    expect(sent).not.toContain("UNNATURAL_PHRASING");
+    expect(sent).not.toContain("LITERAL_TRANSLATION");
+    expect(sent).not.toMatch(/maxItems|minItems|\$schema/u);
+  });
+
+  it("throws AIResponseValidationError when two entries name the same Finding", async () => {
+    const provider = geminiAnswering({
+      findings: [
+        fakeFindingEnrichment(),
+        { ...fakeFindingEnrichment(), example: "We depend on you." },
+      ],
+    });
+
+    await expect(
+      Effect.runPromise(provider.enrichFindings(enrichmentInput))
     ).rejects.toBeInstanceOf(AIResponseValidationError);
   });
 });

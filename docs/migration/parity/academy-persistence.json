@@ -239,7 +239,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/pattern-folding.test.ts::PatternFolding.foldEvaluation > drops a MASTERED pattern to IMPROVING when the mistake reappears in writing"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > leaves one FAILED session, exposes its id on a typed access error, and reuses it on retry",
@@ -266,7 +268,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/pattern-folding.test.ts::PatternFolding.foldEvaluation > passes codeSnippet to the Trainer but never persists it"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > persists the analysis and folds repeated mistakes into one pattern",
@@ -275,7 +279,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/pattern-folding.test.ts::PatternFolding.foldEvaluation > persists the Enrichment and folds repeated Findings into one pattern"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/writing/writingCoachService.test.ts::writingCoachService.submitWriting > re-analyzes the failed session on retry instead of creating a duplicate",
@@ -293,7 +299,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/pattern-folding.test.ts::PatternFolding.foldEvaluation > stores the Portuguese-interference flag and filters patterns by it"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/writing/writingSession.repository.test.ts::writingAnalysisRepository.createForSession > moves the session to ANALYZED when an analysis is attached",

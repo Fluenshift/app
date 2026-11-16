@@ -14,7 +14,10 @@ import {
 } from "./trainer-errors";
 import {
   answering,
+  enrichmentInput,
   explainInput,
+  fakeArticleEnrichment,
+  fakeFindingEnrichment,
   fakeMultipleChoiceExercise,
   oneTarget,
   refusing,
@@ -109,6 +112,103 @@ describe("createAnthropicProvider.explainAttempt", () => {
 
     await expect(
       Effect.runPromise(provider.explainAttempt(explainInput))
+    ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+});
+
+describe("createAnthropicProvider.enrichFindings", () => {
+  it("returns each Finding's enrichment and the model that answered", async () => {
+    const provider = anthropicAnswering({
+      findings: [fakeFindingEnrichment(), fakeArticleEnrichment()],
+    });
+
+    const result = await Effect.runPromise(
+      provider.enrichFindings(enrichmentInput)
+    );
+
+    expect(result).toStrictEqual({
+      findings: [
+        {
+          category: "PREPOSITIONS",
+          example: "I depend on my team.",
+          l1Transfer: true,
+          patternKey: "depend-on",
+        },
+        {
+          category: "ARTICLES",
+          example: "It works.",
+          l1Transfer: false,
+          patternKey: "no-article-before-pronoun",
+        },
+      ],
+      model: "test-model",
+    });
+  });
+
+  it("orders the enrichments by Finding, whatever order the model answers in", async () => {
+    const provider = anthropicAnswering({
+      findings: [fakeArticleEnrichment(), fakeFindingEnrichment()],
+    });
+
+    const result = await Effect.runPromise(
+      provider.enrichFindings(enrichmentInput)
+    );
+
+    expect(result.findings.map((finding) => finding.patternKey)).toStrictEqual([
+      "depend-on",
+      "no-article-before-pronoun",
+    ]);
+  });
+
+  it("reads a missing L1 Transfer flag as false", async () => {
+    const { category, example, finding, patternKey } = fakeFindingEnrichment();
+    const provider = anthropicAnswering({
+      findings: [
+        { category, example, finding, patternKey },
+        fakeArticleEnrichment(),
+      ],
+    });
+
+    const result = await Effect.runPromise(
+      provider.enrichFindings(enrichmentInput)
+    );
+
+    expect(result.findings[0]?.l1Transfer).toBe(false);
+  });
+
+  it("throws AIResponseValidationError when a Finding gets no enrichment", async () => {
+    const provider = anthropicAnswering({
+      findings: [fakeFindingEnrichment()],
+    });
+
+    await expect(
+      Effect.runPromise(provider.enrichFindings(enrichmentInput))
+    ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+
+  it("throws AIResponseValidationError when a Mistake Category does not map onto its Finding's Error Category", async () => {
+    const provider = anthropicAnswering({
+      findings: [
+        { ...fakeFindingEnrichment(), category: "VOCABULARY" },
+        fakeArticleEnrichment(),
+      ],
+    });
+
+    await expect(
+      Effect.runPromise(provider.enrichFindings(enrichmentInput))
+    ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+
+  it("throws AIResponseValidationError for a Mistake Category no Finding can take", async () => {
+    const provider = anthropicAnswering({
+      findings: [
+        { ...fakeFindingEnrichment(), category: "LITERAL_TRANSLATION" },
+        fakeArticleEnrichment(),
+      ],
+    });
+
+    await expect(
+      Effect.runPromise(provider.enrichFindings(enrichmentInput))
     ).rejects.toBeInstanceOf(AIResponseValidationError);
   });
 });
