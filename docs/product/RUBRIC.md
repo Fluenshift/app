@@ -146,7 +146,8 @@ Writing Samples stay separate observations.
 
 - **Primary — Finding Rate:** `Findings / evaluated English words × 100`.
   Lower is better within one compatible version. Always shown with its
-  Evaluation, word, and Finding counts.
+  Evaluation, word, and Finding counts. Practice-origin Writing Samples stay
+  out of it by default (ADR 0010).
 - **Habit — Category Recurrence:** `samples containing the category /
   evaluated samples × 100`. Count each sample once per category.
 - **Secondary — average Overall Score.** Model variation makes it weaker
