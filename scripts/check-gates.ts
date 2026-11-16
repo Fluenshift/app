@@ -3,8 +3,9 @@
 //   node scripts/check-gates.ts            compare the tree with gates/baseline.json
 //   node scripts/check-gates.ts --write    record the tree as gates/baseline.json
 //
-// Only the coordinator records a baseline (agent rule 13), and recording a weaker one needs an
-// accepted ADR (agent rule 15). The comparison covers:
+// Only the coordinator records a baseline, and recording a weaker one needs an accepted ADR
+// (AGENTS.md: shared files belong to the coordinator; never weaken a gate). The comparison
+// covers:
 // - lint: what `oxlint --print-config` resolves for each lint configuration. No rule loses
 //   severity or changes its options, no override relaxes a rule, no plugin is dropped and no
 //   ignore pattern is added;
@@ -13,8 +14,10 @@
 // - scripts: the gate scripts of every package.json, verbatim;
 // - workflows: every trigger and `run` command stays, and no `if` or `continue-on-error` line
 //   is added;
-// - the pre-commit hooks and the formatter, Vite, Vitest and Playwright configurations: the
-//   same lines, none removed and none added;
+// - the pre-commit hooks, the workflows, the path classifier of CI (scripts/ci-changes.ts) and
+//   the formatter, Vite, Vitest and Playwright configurations: the same lines, none removed and
+//   none added. A workflow line can skip a job, so every edit there waits for a new record
+//   (ADR 0019);
 // - suppression comments: no file gains one.
 // Exits 1 when anything is weaker than the baseline.
 
@@ -518,6 +521,31 @@ export function significantLines(text: string): string[] {
   ].toSorted();
 }
 
+// The significant lines of a workflow, each named after the job it sits in, so that moving a
+// line such as an `if` from one job to another changes the record (ADR 0019).
+export function workflowLines(text: string): string[] {
+  let inJobs = false;
+  let job = "";
+  const lines = new Set<string>();
+  for (const line of text.split("\n")) {
+    const trimmed = line.trim();
+    if (trimmed === "" || trimmed.startsWith("#")) {
+      continue;
+    }
+    if (!line.startsWith(" ")) {
+      inJobs = trimmed === "jobs:";
+      job = "";
+    } else if (inJobs) {
+      const header = /^ {2}([\w-]+):\s*$/.exec(line);
+      if (header !== null) {
+        job = header[1] ?? "";
+      }
+    }
+    lines.add(job === "" ? trimmed : `${job}: ${trimmed}`);
+  }
+  return [...lines].toSorted();
+}
+
 export function compareLines(
   file: string,
   baseline: readonly string[],
@@ -636,6 +664,8 @@ const TSCONFIG = /(?:^|\/)tsconfig(?:\.[\w-]+)?\.json$/;
 const WORKFLOW = /^\.github\/workflows\/[^/]+\.ya?ml$/;
 const LINE_FILES = [
   /^\.husky\/[^/_][^/]*$/,
+  /^\.github\/workflows\/[^/]+\.ya?ml$/,
+  /^scripts\/ci-changes\.ts$/,
   /^oxfmt(?:\.[\w-]+)?\.config\.[cm]?[jt]s$/,
   /(?:^|\/)(?:vite|vitest|playwright)(?:\.[\w-]+)?\.config\.[cm]?[jt]s$/,
 ];
@@ -726,7 +756,12 @@ export function snapshotTree(root: string): Snapshot {
     lines: Object.fromEntries(
       files
         .filter((file) => LINE_FILES.some((pattern) => pattern.test(file)))
-        .map((file) => [file, significantLines(read(file))])
+        .map((file) => [
+          file,
+          WORKFLOW.test(file)
+            ? workflowLines(read(file))
+            : significantLines(read(file)),
+        ])
     ),
     suppressions: Object.fromEntries(
       ofKind(CODE).flatMap((file) => {

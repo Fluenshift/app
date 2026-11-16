@@ -1,7 +1,6 @@
 # Architecture decision records
 
-Each ADR decides one seam or open question of the merge (`docs/migration/MIGRATION_PROTOCOL.md`
-Phase 1). An ADR is **Proposed** until an owner accepts it on its decision issue ([#5](https://github.com/Fluenshift/app/issues/5) for 0001 to 0018); its
+Each ADR decides one seam or open question of the merge. An ADR is **Proposed** until an owner accepts it on its decision issue ([#5](https://github.com/Fluenshift/app/issues/5) for 0001 to 0018, [#117](https://github.com/Fluenshift/app/issues/117) for 0019); its
 status line then links to the acceptance comment. Only an accepted ADR can make a ledger row
 `port-changed`, `superseded` or `drop`, and such a row names it as `"decision": "adr:NNNN"`.
 
@@ -9,8 +8,12 @@ Jhefferson accepted 0001 to 0018 on 2026-11-14 ([comment](https://github.com/Flu
 pending, and the migration proceeds meanwhile: an ADR that Levy decides differently is replaced
 by a new ADR, and its rows are reworked.
 
+ADRs 0001 to 0018 cite `docs/migration/PRE_MIGRATION.md` and `docs/migration/HANDOFF.md`, which
+ADR 0019 deleted; commit `39fbb46` holds them.
+
 | ADR | Decision | Status |
 | --- | --- | --- |
+| [0000](./0000-approved-stack.md) | The approved stack, the alternatives and when to revisit them | Recorded from `PRE_MIGRATION.md` |
 | [0001](./0001-amend-the-migration-protocol.md) | Amend the protocol: informative rows, characterization scope, code reuse, roles, batched acceptance, ruleset, gate self-tests | Accepted |
 | [0002](./0002-score-evaluations-locally.md) | One locally derived score; no model-supplied scores | Accepted |
 | [0003](./0003-tenancy-and-deploy-profiles.md) | Learner on every table; `local` profile first, `hosted` profile in Phase 6 | Accepted |
@@ -29,3 +32,4 @@ by a new ADR, and its rows are reworked.
 | [0016](./0016-practice-is-offered.md) | Practice is offered, never imposed | Accepted |
 | [0017](./0017-postgres-and-pglite.md) | Postgres when hosted, PGlite locally and in tests | Accepted |
 | [0018](./0018-data-at-cutover.md) | Grifando starts fresh with notice; PE history is imported | Accepted |
+| [0019](./0019-lighter-gates-and-shorter-documents.md) | G12 retired; each suite once per CI run; rules once in `AGENTS.md`; documents cut to the work ahead | Accepted |

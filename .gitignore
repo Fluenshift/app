@@ -12,3 +12,6 @@ apps/web/src/routeTree.gen.ts
 *.log
 .DS_Store
 /reports/
+
+# Worktrees of `claude --worktree` (ADR 0019)
+.claude/worktrees/

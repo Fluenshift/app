@@ -1,8 +1,10 @@
 # Migration records
 
-Working records for the Prompt Evolution + Grifando merge. The process is defined in
-[`MIGRATION_PROTOCOL.md`](./MIGRATION_PROTOCOL.md); the setup is in [`HANDOFF.md`](./HANDOFF.md).
-Every JSON file in this directory is pure data. Prose about it lives here.
+Working records for the Prompt Evolution + Grifando merge: what each file holds, what each
+ledger field means, and how the gates read them. The process is in
+[`MIGRATION_PROTOCOL.md`](./MIGRATION_PROTOCOL.md), the rules and the work unit cycle in
+[`AGENTS.md`](../../AGENTS.md). Every JSON file in this directory is pure data. Prose about it
+lives here.
 
 | Path | Contents |
 | --- | --- |
@@ -50,8 +52,8 @@ baseline-relative) for `playwright-json`.
 Generated, never edited by hand:
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/inventory.ts            # write both files
-mise exec node@26.13.0 -- node scripts/migration/inventory.ts --check    # exit 1 unless reproduced byte for byte
+node scripts/migration/inventory.ts            # write both files
+node scripts/migration/inventory.ts --check    # exit 1 unless reproduced byte for byte
 ```
 
 The script reads only the pinned commit (git objects in the clone that `baselines.ts sync`
@@ -107,14 +109,15 @@ tests that carry it in this repository. Each file is one object: `slice`, `lane`
 Dispositions:
 
 - `port`: the behavior moves unchanged; for tests, the title stays verbatim and no assertion
-  weakens (agent rule 3).
+  weakens (`AGENTS.md`: tests come first).
 - `port-changed`: the behavior moves with the change an accepted ADR describes.
 - `superseded`: replaced by other rows under an accepted ADR.
 - `drop`: removed under an accepted ADR.
 - `informative`: a row with no behavior to port: a non-normative clause, or, under ADR 0001, an
   issue or a commit that changes only the build, tests or tooling.
 - `pending-decision`: blocked by the open decision named in `decision`; nobody implements
-  either side until it is settled (agent rule 7). Only these rows may have skipped tests.
+  either side until it is settled (`AGENTS.md`: open decisions stay open). Only these rows may
+  have skipped tests.
 
 The ledger stores no status. `scripts/migration/parity-check.ts` (gate G9) derives it from the
 dispositions, the ADR index and the Vitest and Playwright reports:
@@ -127,7 +130,7 @@ dispositions, the ADR index and the Vitest and Playwright reports:
 | `terminal` | `superseded`, `drop` and `informative` rows |
 
 ```bash
-mise exec node@26.13.0 pnpm@12.18.0 -- pnpm parity   # run every suite with JSON reports, then check
+pnpm parity   # run every suite with JSON reports, then check
 ```
 
 Every suite means each workspace whose `test` or `smoke` script runs Vitest. The `smoke` workspace
@@ -160,9 +163,9 @@ Slices map to the protocol's phases and lanes:
 | `academy-spec` | academy | 1 to 6 | Grifando SPEC sections, CLAUDE.md bullets, fix commits, issues |
 | `hosted` | platform | 6 | Sessions, rate limits, cleanup, BYOK, sitemap, deploy smoke |
 
-`scripts/migration/ledger-seed.ts` wrote the first version from rules that a verifier can
-review as a whole. It refuses to run once the ledger exists, because units then add targets;
-`--force` reseeds and discards them.
+`scripts/migration/ledger-seed.ts` wrote the first version from rules that can be reviewed as
+a whole. It refuses to run once the ledger exists, because units then add targets; `--force`
+reseeds and discards them.
 
 Rows for inventory rows added later, such as new characterization cases, are added with
 `scripts/migration/ledger-add.ts`: it appends `port` rows to one slice and never touches an
@@ -173,10 +176,10 @@ targets are the ledger targets its PR adds. Each must be red at the first commit
 holds it: its workspace typechecks, its test file loads, and the test fails on a check, not on a
 missing binding. Then each must pass in the checked-out tree. A target that fails on something
 other than an assertion, such as an Effect that succeeds where the test expects a failure, is
-still red; the script lists it so the verifier can look.
+still red; the script lists it, so check that it fails for the reason the test names.
 
 ```bash
-mise exec node@26.13.0 pnpm@12.18.0 -- node scripts/migration/red-green.ts --base <base ref> --head <head ref>
+node scripts/migration/red-green.ts --base <base ref> --head <head ref>
 ```
 
 `scripts/migration/parity-audit.ts` (gate G10) reads each class A and class B `port` row's
@@ -187,7 +190,7 @@ expects, or check with a weaker matcher (`toBe` and `toStrictEqual`, then `toEqu
 baseline clones (`baselines.ts sync`); from a worktree, point `--root` at them:
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/parity-audit.ts --root ../app-baselines
+node scripts/migration/parity-audit.ts --root ../app-baselines
 ```
 
 `scripts/check-url-text.ts` is the G7 check of ADR 0008: no server route reads user text from a
@@ -202,54 +205,33 @@ intended gate rejects it while a control gate still accepts it: a focused, a ski
 `packages/env` (G2, the built-in also G1); a floating Effect (G1); a lowered oxlint severity and
 a lowered Effect diagnostic severity (G11); a ledger row pointing at a missing test and a `port`
 target with a changed title (G9); a weakened matcher (G10); a first commit whose tests already
-pass (G8); a verdict for an older head and one from the implementing vendor (G12); a route that
-reads user text from a query string (G7). CI runs it in its own job. A tagged error with no
-entry at the edge is a type error, so its case is rejected by G1.
+pass (G8); a route that reads user text from a query string (G7). A tagged error with no entry
+at the edge is a type error, so its case is rejected by G1. CI runs the self-tests in their own
+job when a gate changes: a script, a gate's configuration, the toolchain, or a file that a case
+edits or runs (`scripts/ci-changes.ts`, ADR 0019). Run them yourself after changing a gate:
 
 ```bash
-mise exec node@26.13.0 pnpm@12.18.0 -- node scripts/gate-selftest.ts --root ../app-baselines
+node scripts/gate-selftest.ts --root ../app-baselines
 ```
 
 ## Issue labels
 
-Work units and decision requests are GitHub Issues in this repository. State lives in labels,
+Work units and decision requests are GitHub Issues in this repository. State lives on GitHub,
 never in files; a closed issue is done.
 
-| Group | Labels |
+| Label | Meaning |
 | --- | --- |
-| Status | `needs-triage`, `ready-for-agent`, `in-progress`, `in-review`, `needs-info`, `ready-for-human`, `wontfix` |
-| Lane | `lane:evaluation`, `lane:academy`, `lane:platform` |
-| Implementer | `implementer:claude`, `implementer:codex`, on the unit issue and its PR |
-| Decision | `decision`: an owner decision request, including ADR acceptance |
+| `ready-for-agent` | A unit that no session holds yet. The session that takes it removes the label and assigns the issue to itself. |
+| `needs-info` | The issue waits for an answer: a unit that stopped on a question, or a decision request. |
+| `decision` | An owner decision request, including ADR acceptance. Titled "Human feedback needed: ...". |
+| `ready-for-human` | An owner action other than a decision. |
+| `needs-triage` | A problem found during other work, not yet written as a unit. |
+| `wontfix` | Closed without work, with the reason in a comment. |
+| `lane:evaluation`, `lane:academy`, `lane:platform` | The lane of a unit. |
 
-## G12 verdict format
-
-The verifier comes from the vendor that did not implement the unit. It posts one PR comment
-that starts with exactly these three lines:
-
-```text
-G12 PASS
-Verifier: codex
-Head: <full head SHA>
-```
-
-The first line is `G12 PASS` or `G12 BLOCK`. `Verifier` names the verifying vendor (`claude`
-or `codex`) and must differ from the PR's `implementer:` label. Reasons follow, and are
-required for BLOCK. A verdict covers only that head SHA; any new commit needs a new verdict.
-
-`scripts/migration/verdict-check.ts` computes the gate. The `G12 verdict` workflow runs it from
-the default branch whenever a PR or its comments change, and sets the `G12` commit status on
-the PR head: it passes only when the newest verdict for that head is `G12 PASS`, comes from an
-organization member, and names a verifier other than the PR's `implementer:` label. The merge
-queue admits only PRs whose `G12` status passed, so the workflow passes its merge group commit
-as it is. To read a PR's verdict locally, without setting any status:
-
-```bash
-mise exec node@26.13.0 -- node scripts/migration/verdict-check.ts --repo Fluenshift/app --pr <number>
-```
-
-The owner's amendment to ADR 0001 of 2026-11-14 waives this gate: the status stays on PRs as
-information, and a PR merges once its CI gates are green.
+The assignee of an issue holds the unit, and the pull request that closes it is its review. The
+labels `in-progress`, `in-review` and `implementer:<vendor>` marked those states until ADR 0019
+and are no longer applied.
 
 ## Mechanical mapping
 

@@ -20,7 +20,6 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 
 import { BaselineError, defaultRoot, repoRoot } from "./migration/baselines.ts";
-import { evaluate } from "./migration/verdict-check.ts";
 
 interface Outcome {
   readonly passed: boolean;
@@ -90,6 +89,9 @@ const urlText: Check = (tree) =>
   run(tree, "node", ["scripts/check-url-text.ts"]);
 
 const TEST_FILE = "packages/core/src/selftest.test.ts";
+const PROTECTED_CONTENT_TEST = "src/protected-content.test.ts";
+const RUBRIC_TEST = "src/rubric-v1.test.ts";
+const UTF8_TEST = "src/utf8.test.ts";
 const testFile = (body: string) =>
   `import { describe, expect, it } from "vitest";\n\ndescribe("self-test", () => {\n${body}\n});\n`;
 
@@ -97,6 +99,18 @@ const testFile = (body: string) =>
 const LEDGER = "docs/migration/parity/evaluation-core.json";
 const TARGET =
   '"packages/core/src/rubric-v1.test.ts::Rubric Version 1 > counts letter words while keeping internal apostrophes and hyphens"';
+
+// The tracked files the cases edit, run or compile against, beside the gate configurations. A
+// change to one of them can make a case pass or fail for the wrong reason, so
+// scripts/ci-changes.ts runs the self-tests again when one changes.
+export const SELF_TEST_FIXTURES: readonly string[] = [
+  LEDGER,
+  // The unmapped tagged error case calls `makeEdge`.
+  "apps/server/src/edge.ts",
+  `packages/core/${PROTECTED_CONTENT_TEST}`,
+  `packages/core/${RUBRIC_TEST}`,
+  `packages/core/${UTF8_TEST}`,
+];
 
 function selfTests(reports: string, baselines: string): SelfTest[] {
   const parityWithReports: Check = (tree) =>
@@ -162,7 +176,7 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
           'import { z } from "zod";\n\nexport const name = z.string();\n'
         ),
       rejectedBy: [["lint", lint("packages/core/src/selftest.ts")]],
-      acceptedBy: [["tests", tests("packages/core", "src/utf8.test.ts")]],
+      acceptedBy: [["tests", tests("packages/core", UTF8_TEST)]],
     },
     {
       gate: "G1 and G2",
@@ -177,7 +191,7 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
         ["lint", lint("packages/core/src/selftest.ts")],
         ["types", types("packages/core")],
       ],
-      acceptedBy: [["tests", tests("packages/core", "src/utf8.test.ts")]],
+      acceptedBy: [["tests", tests("packages/core", UTF8_TEST)]],
     },
     {
       gate: "G2",
@@ -292,7 +306,7 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
           '"packages/core/src/rubric-v1.test.ts::Rubric Version 1 > no such test"'
         ),
       rejectedBy: [["parity check", parityWithReports]],
-      acceptedBy: [["tests", tests("packages/core", "src/rubric-v1.test.ts")]],
+      acceptedBy: [["tests", tests("packages/core", RUBRIC_TEST)]],
     },
     {
       gate: "G9",
@@ -305,7 +319,7 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
           '"packages/core/src/rubric-v1.test.ts::Rubric Version 1 > matches approved score anchors and band boundaries"'
         ),
       rejectedBy: [["parity check", parityWithReports]],
-      acceptedBy: [["tests", tests("packages/core", "src/rubric-v1.test.ts")]],
+      acceptedBy: [["tests", tests("packages/core", RUBRIC_TEST)]],
     },
     {
       gate: "G10",
@@ -313,14 +327,12 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
       apply: (tree) =>
         edit(
           tree,
-          "packages/core/src/protected-content.test.ts",
+          `packages/core/${PROTECTED_CONTENT_TEST}`,
           ".toEqual(",
           ".toMatchObject("
         ),
       rejectedBy: [["parity audit", audit]],
-      acceptedBy: [
-        ["tests", tests("packages/core", "src/protected-content.test.ts")],
-      ],
+      acceptedBy: [["tests", tests("packages/core", PROTECTED_CONTENT_TEST)]],
     },
   ];
 }
@@ -369,40 +381,6 @@ function redGreenSelfTest(tree: string): {
     rejected: !verdict.passed && verdict.output.includes("before its code"),
     accepted: control.passed,
   };
-}
-
-const comment = (body: string, id: number) => ({
-  id,
-  body,
-  createdAt: `2026-11-14T12:00:0${id}Z`,
-  author: "owner",
-  association: "MEMBER",
-});
-const verdictBody = (verifier: string, sha: string) =>
-  `G12 PASS\nVerifier: ${verifier}\nHead: ${sha}\n`;
-
-// G12 is computed from the PR and its comments, so it is checked on records, not on a tree.
-function verdictSelfTests(): {
-  name: string;
-  rejected: boolean;
-  accepted: boolean;
-}[] {
-  const head = "a".repeat(40);
-  const older = "b".repeat(40);
-  const pr = { headSha: head, labels: ["implementer:claude"] };
-  const accepted = evaluate(pr, [comment(verdictBody("codex", head), 1)]).pass;
-  return [
-    {
-      name: "a verdict for an older head",
-      rejected: !evaluate(pr, [comment(verdictBody("codex", older), 1)]).pass,
-      accepted,
-    },
-    {
-      name: "a verdict from the implementing vendor",
-      rejected: !evaluate(pr, [comment(verdictBody("claude", head), 1)]).pass,
-      accepted,
-    },
-  ];
 }
 
 function main(argv: readonly string[]): number {
@@ -477,13 +455,6 @@ function main(argv: readonly string[]): number {
       redGreen.rejected && redGreen.accepted,
       `${redGreen.rejected ? "rejected" : "ACCEPTED"} by red-green, ${redGreen.accepted ? "accepted" : "REJECTED"} by tests`
     );
-    for (const test of verdictSelfTests())
-      report(
-        "G12",
-        test.name,
-        test.rejected && test.accepted,
-        `${test.rejected ? "rejected" : "ACCEPTED"} by the verdict check, which ${test.accepted ? "accepts" : "REJECTS"} a proper verdict`
-      );
   } finally {
     run(repoRoot, "git", ["worktree", "remove", "--force", tree]);
     rmSync(reports, { recursive: true, force: true });

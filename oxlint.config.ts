@@ -3,7 +3,7 @@ import core from "ultracite/oxlint/core";
 import react from "ultracite/oxlint/react";
 import tanstack from "ultracite/oxlint/tanstack";
 
-// Gate G2. Lowering any rule here needs an accepted ADR (agent rule 15).
+// Gate G2. Lowering any rule here needs an accepted ADR (AGENTS.md: never weaken a gate).
 
 const effectSources = [
   "apps/server/**/*.ts",
@@ -116,8 +116,9 @@ export default defineConfig({
       },
     },
     {
-      // Test integrity (agent rule 3): no test may be focused, skipped, left as todo, commented
-      // out or defined conditionally, and titles stay unique because the ledger keys on them.
+      // Test integrity (AGENTS.md: tests come first): no test may be focused, skipped, left
+      // as todo, commented out or defined conditionally, and titles stay unique because the
+      // ledger keys on them.
       // Style presets for tests are left out on purpose: ported tests keep their source titles
       // and assertions verbatim, and matcher rewrites could weaken them.
       files: ["**/*.test.ts", "**/*.test.tsx", "e2e/**/*.ts"],

@@ -13,14 +13,13 @@ source repository only keeps the commit reachable.
 ## Getting a baseline
 
 The scripts in `scripts/migration/` run on plain Node 26.13.0 (type stripping) with no
-dependencies. Node 26.13.0 is installed with mise but not activated globally, hence the
-`mise exec` prefix.
+dependencies; the repository's `mise.toml` selects Node 26.13.0.
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts verify                     # remote tags still resolve to the pins
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts sync                       # clone or update ../app-baselines/<system> at the pin
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts add-worktree pe my-task    # disposable worktree at the pin
-mise exec node@26.13.0 -- node scripts/migration/baselines.ts remove-worktree pe my-task
+node scripts/migration/baselines.ts verify                     # remote tags still resolve to the pins
+node scripts/migration/baselines.ts sync                       # clone or update ../app-baselines/<system> at the pin
+node scripts/migration/baselines.ts add-worktree pe my-task    # disposable worktree at the pin
+node scripts/migration/baselines.ts remove-worktree pe my-task
 ```
 
 - Clones live outside this working tree, in `../app-baselines/<system>`; `--root <dir>`
@@ -31,7 +30,8 @@ mise exec node@26.13.0 -- node scripts/migration/baselines.ts remove-worktree pe
   working tree is not clean; `add-worktree` also requires the clone to sit at the pinned
   commit. Installs, suite runs and characterization tests happen in worktrees; the clone
   stays pristine.
-- Source repositories are read-only for agents (agent rule 1). Nothing here pushes to them.
+- Source repositories are read-only for agents (`AGENTS.md`: baselines are read-only). Nothing
+  here pushes to them.
 
 ## Toolchains
 
@@ -49,8 +49,8 @@ Docker must be running for the Grifando suite.
 ## Running the suites
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/baseline-run.ts pe
-mise exec node@26.13.0 -- node scripts/migration/baseline-run.ts grifando
+node scripts/migration/baseline-run.ts pe
+node scripts/migration/baseline-run.ts grifando
 ```
 
 `baseline-run.ts` does the following:
@@ -112,12 +112,12 @@ owners decide, through the `needs-info` issue linked here.
 ## Characterization tests
 
 Behavior that no baseline test pins gets a characterization test before it is ported
-(agent rule 5). The tests are kept in this repository, written in the baseline's own idiom,
-and run at the pin:
+(`AGENTS.md`: characterize first). The tests are kept in this repository, written in the
+baseline's own idiom, and run at the pin:
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts pe
-mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts grifando
+node scripts/migration/characterization-run.ts pe
+node scripts/migration/characterization-run.ts grifando
 ```
 
 - Files live in `migration/characterization/<system>/files/<path>`, where `<path>` is their
@@ -135,12 +135,11 @@ mise exec node@26.13.0 -- node scripts/migration/characterization-run.ts grifand
 - `migration/**` is outside this repository's build, lint and format: the files are written
   for Bun, Elysia, Next.js and Prisma.
 
-After a run, regenerate the inventory, then give the new cases ledger rows (agent rule 13: the
-ledger belongs to the coordinator):
+After a run, regenerate the inventory, then give the new cases ledger rows:
 
 ```bash
-mise exec node@26.13.0 -- node scripts/migration/inventory.ts
-mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> --class <A|B|C> <system>:characterization:<path>
+node scripts/migration/inventory.ts
+node scripts/migration/ledger-add.ts --slice <slice> --class <A|B|C> <system>:characterization:<path>
 ```
 
 | System | File | Pins | Cases |
