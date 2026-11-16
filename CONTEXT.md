@@ -46,9 +46,9 @@ _Not: target text, eligible region._
 
 **Evaluation**: an assessment of one Writing Sample's English Passages under one Rubric
 Version: Overall Score, Proficiency Band, corrected version, and zero or more Findings and
-Suggestions. Every Learner text goes through the Judge's Evaluation, including Academy
-practice (ADR 0004). Never judges prompt effectiveness, instruction quality, or likely model
-performance.
+Suggestions. Every Writing Sample goes through the Judge's Evaluation, including Academy
+practice (ADR 0004); an answer to an Exercise is an Attempt, graded deterministically instead.
+Never judges prompt effectiveness, instruction quality, or likely model performance.
 _Not: review, analysis, writing analysis, result._
 
 **Overall Score**: the 0 to 100 summary of English-writing quality under one Rubric Version,
@@ -93,7 +93,8 @@ _Not: writing, prose._
 **Progress Insight**: a normalized or descriptive observation derived from Evaluations over a
 period: Findings per 100 evaluated English words, category recurrence, average score,
 distribution, recurring Corrections. Practice-origin Writing Samples stay out of the finding
-rate by default (ADR 0010). Insights never cross a Rubric Version.
+rate by default (ADR 0010). Insights combine Rubric Versions only under an explicit
+compatibility declaration (`docs/product/RUBRIC.md`).
 _Not: statistic, metric, trend._
 
 **Rubric Version**: the identifiable evaluation policy that produced an Evaluation. Versions
@@ -129,9 +130,10 @@ as `preposition:depend`. Normalized on write: lowercased, trimmed, other charact
 to hyphens, and its length capped.
 _Not: tag, label, cluster._
 
-**Mistake Category**: the Academy's finer classification of a Finding, one of Grifando's 13
-categories, assigned by the Enrichment. It maps onto the Error Categories (ADR 0005); the
-Judge never sees it.
+**Mistake Category**: the Academy's finer classification of a Finding, one of the eleven
+Grifando categories that ADR 0005 maps onto seven Error Categories, assigned by the Enrichment.
+Grifando's literal-translation category becomes the L1 Transfer flag, and its
+unnatural-phrasing category a Naturalness Note. The Judge never sees it.
 _Not: Error Category, error type._
 
 **Naturalness Note**: the Enrichment's note that a span is correct but unnatural. It never
@@ -147,14 +149,14 @@ _Not: literal translation category._
 Mastered. Attempts on Exercises for the pattern move it: two consecutive correct Attempts move
 Active to Improving, two more move Improving to Mastered, and a wrong Attempt on an Improving
 pattern returns it to Active. Reaching Mastered needs an unscaffolded Exercise, a rewrite or a
-translation. Mastered is not final: the pattern returns to Improving when its Recall falls
-below the threshold, and a Finding in new writing that maps to the pattern counts as a failed
-recall, whatever the Writing Sample's origin (ADR 0014). Reading a Correction never changes
-it.
+translation. Mastered is not final: a Mastered pattern whose Recall falls below the threshold
+shows as fading, a state derived when the pattern is read and never stored, and a Finding in
+new writing that maps to the pattern counts as a failed recall, whatever the Writing Sample's
+origin (ADR 0014). Reading a Correction never changes it.
 _Not: level, progress, score._
 
 **Recall**: the estimated probability that the Learner still masters a Mistake Pattern, from
-a half-life set by the pattern's seen, correct and incorrect counts (simplified Half-Life
+a half-life set by the pattern's correct and incorrect counts (simplified Half-Life
 Regression). Practice reviews the patterns with the lowest Recall first.
 _Not: memory score, retention score._
 
@@ -192,7 +194,7 @@ _Not: mock interview score, fifth score._
 | Grifando's writing session and writing analysis | a practice-origin Writing Sample and its Evaluation (ADR 0004) |
 | "mistake" for one error in one text | Finding on the Evaluation axis; Occurrence in the Academy |
 | Grifando's mistake occurrence | Occurrence |
-| Grifando's 13 categories | Mistake Category, mapped onto the nine Error Categories (ADR 0005) |
+| Grifando's 13 categories | Mistake Category for eleven of them, mapped onto seven Error Categories; the L1 Transfer flag; the Naturalness Note (ADR 0005) |
 | Grifando's error and unnatural severities | an Occurrence of a Finding, and a Naturalness Note |
 | Grifando's model-supplied scores | none: the Overall Score is the only score (ADR 0002) |
 | "prompt" in Grifando's sense | Practice Prompt |

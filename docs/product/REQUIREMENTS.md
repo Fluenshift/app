@@ -71,7 +71,7 @@ Grifando's `SPEC.md` it comes from and the ADRs that changed it.
 | ID | Requirement | Source |
 | --- | --- | --- |
 | AR-01 | Practice is offered, never required: Evaluation, History and Progress work without the Academy, and the Academy calls no model until the Learner uses it. | §3; ADR 0016 |
-| AR-02 | Every text the Learner writes in the Academy is a practice-origin Writing Sample evaluated by the Judge, with the same Findings, score and band as any other. There is no other analysis and no other score. | §5.1; ADR 0002, ADR 0004 |
+| AR-02 | Every text the Learner writes in the Academy, except an answer to an Exercise, is a practice-origin Writing Sample evaluated by the Judge, with the same Findings, score and band as any other. There is no other analysis and no other score; an Attempt is graded deterministically (AR-09). | §5.1; ADR 0002, ADR 0004 |
 | AR-03 | The Enrichment adds a Pattern Key, a Mistake Category, the L1 Transfer flag, a natural version, examples and Naturalness Notes to an Evaluation's Findings. It never changes the score, the corrected text or the finding rate. | §5.1; ADR 0004, ADR 0005 |
 | AR-04 | Every enriched Finding and Naturalness Note becomes an immutable Occurrence under the Learner's Mistake Pattern for its Mistake Category and Pattern Key; the pattern counts its Occurrences, records the first and last, and keeps a canonical example. | §6 |
 | AR-05 | A Pattern Key is normalized on write: lowercased, trimmed, other characters collapsed to hyphens, its length capped. | §6 |
@@ -79,8 +79,8 @@ Grifando's `SPEC.md` it comes from and the ADRs that changed it.
 | AR-07 | Mistake analytics break Occurrences down by Mistake Category over all time and the last 30 days, as a bar list. | §5.3 |
 | AR-08 | Exercises come from the Learner's own Mistake Patterns, favoring frequent, unmastered and low-Recall patterns, in four types: multiple choice, fill in the blank, rewrite and translation. | §5.4, §6.1 |
 | AR-09 | An Exercise never shows its answer before an Attempt. An Attempt is graded deterministically against the closest acceptable answer; an optional explanation never changes the grade. | §5.4, §6.1 |
-| AR-10 | Mastery Level moves only as `CONTEXT.md` defines it: by Attempts, with an unscaffolded Exercise required for Mastered, by Recall falling below its threshold, and by a Finding in new writing that maps to the pattern, whatever the sample's origin. Reading a Correction never moves it. | §5.4, §6, §6.1; ADR 0014 |
-| AR-11 | Recall is estimated for each pattern by simplified Half-Life Regression from its seen, correct and incorrect counts only; practice reviews the lowest Recall first. | §6.1 |
+| AR-10 | Mastery Level moves only as `CONTEXT.md` defines it: by Attempts, with an unscaffolded Exercise required for Mastered, and by a Finding in new writing that maps to the pattern, whatever the sample's origin. Recall below its threshold shows a Mastered pattern as fading without moving it. Reading a Correction never moves it. | §5.4, §6, §6.1; ADR 0014 |
+| AR-11 | Recall is estimated for each pattern by simplified Half-Life Regression from its correct and incorrect counts only; practice reviews the lowest Recall first. | §6.1 |
 | AR-12 | Category Ability, an Elo-style estimate per Mistake Category, aims each Exercise at about 70% expected success. | §6.1 |
 | AR-13 | A Streak counts days with any practice activity, with limited rest days. No punishment, no leaderboard, no reminders. | §6.1 |
 | AR-14 | Daily Writing offers one challenge a day from a curated bank, biased toward the Learner's weak categories. | §5.5 |
@@ -88,7 +88,7 @@ Grifando's `SPEC.md` it comes from and the ADRs that changed it.
 | AR-16 | Interview Practice is text only and turn based: the Trainer asks a question and a follow-up, each answer is a practice-origin Writing Sample the Judge evaluates, and there is no separate interview score. | §5.8; ADR 0010 |
 | AR-17 | The Academy dashboard keeps a small, fixed set of cards: today's challenge, recent writing, weak categories, recent Occurrences, one practice recommendation, and one Finding-based trend. | §5.9; ADR 0002 |
 | AR-18 | Mistake Patterns, Mastery Level and Recall span Rubric Versions; each Occurrence records the Rubric Version of its Finding. | ADR 0015 |
-| AR-19 | The Trainer may fall back to another model only on overload, and records the model that answered. | §9; ADR 0012 |
+| AR-19 | The Trainer may fall back to another model only on overload, and records the model that answered. | §4; ADR 0012 |
 | AR-20 | Every Trainer answer is validated against its schema before anything is stored; an invalid answer stores nothing and keeps the Learner's text. | §9; QR-03 |
 
 ## Hosted profile
