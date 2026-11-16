@@ -3,9 +3,10 @@
 //   node scripts/ci-changes.ts --base <commit> --head <commit>
 //
 // Prints two GitHub Actions outputs, `code=<bool>` and `gates=<bool>`:
-// - `code` is false when every changed file is Markdown. No suite reads Markdown, so the
-//   workflow then runs the static checks and the secret scan alone. The static checks cover what
-//   does read it: the documented commands and the ADR status lines of the ledger check.
+// - `code` is false when every changed file is Markdown outside the workspaces. No suite reads
+//   such a file, so the workflow then runs the static checks and G7 alone. The static checks
+//   cover what does read it: the documented commands and the ADR status lines of the ledger
+//   check. Markdown inside a workspace counts as code, since a build may import it.
 // - `gates` is true when the change touches a gate: a script, a gate's configuration, the
 //   toolchain, or a file that a gate self-test edits or runs. Only then does the workflow run the
 //   gate self-tests.
@@ -25,15 +26,21 @@ export interface Changes {
 
 export const EVERYTHING: Changes = { code: true, gates: true };
 
-const MARKDOWN = /\.md$/;
+// Markdown no build or suite can read: outside the workspaces of pnpm-workspace.yaml.
+const INERT = /^(?!(?:apps|packages|smoke)\/).*\.md$/;
 
-// What the gates are made of. The lint, TypeScript, formatter, Vite, Vitest and Playwright
-// configurations and the hooks are the files scripts/check-gates.ts records.
+// What the gates are made of: the files scripts/check-gates.ts records (lint, TypeScript,
+// formatter, Vite, Vitest and Playwright configurations, hooks, workflows), the scripts, the
+// toolchain, and the records the self-tests read (the pins and the inventory).
 const GATE_PATHS: readonly RegExp[] = [
   /^\.github\/workflows\//,
   /^\.husky\//,
   /^\.node-version$/,
+  /^\.oxlintrc\.jsonc?$/,
+  /^docs\/migration\/baselines\.json$/,
+  /^docs\/migration\/inventory\//,
   /^gates\//,
+  /^mise\.toml$/,
   /^scripts\//,
   /^packages\/config\//,
   /^pnpm-(?:lock|workspace)\.yaml$/,
@@ -44,7 +51,7 @@ const GATE_PATHS: readonly RegExp[] = [
 ];
 
 export function classify(files: readonly string[]): Changes {
-  const code = files.filter((file) => !MARKDOWN.test(file));
+  const code = files.filter((file) => !INERT.test(file));
   return {
     code: code.length > 0,
     gates: code.some(

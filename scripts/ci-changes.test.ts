@@ -24,14 +24,11 @@ describe("ci-changes", () => {
     );
   });
 
-  it("treats the ledger and the inventory as code, since gates read them", () => {
-    assert.deepEqual(
-      classify([
-        "docs/migration/parity/academy-http.json",
-        "docs/migration/inventory/grifando.json",
-      ]),
-      { code: true, gates: false }
-    );
+  it("treats the ledger as code, since G9 reads it", () => {
+    assert.deepEqual(classify(["docs/migration/parity/academy-http.json"]), {
+      code: true,
+      gates: false,
+    });
   });
 
   it("runs the gate self-tests when a gate, its configuration or the toolchain changes", () => {
@@ -39,6 +36,10 @@ describe("ci-changes", () => {
       ".github/workflows/ci.yml",
       ".husky/pre-commit",
       ".node-version",
+      ".oxlintrc.json",
+      "docs/migration/baselines.json",
+      "docs/migration/inventory/pe.json",
+      "mise.toml",
       "apps/server/package.json",
       "apps/server/vitest.config.ts",
       "apps/web/vite.config.ts",
@@ -76,11 +77,20 @@ describe("ci-changes", () => {
     );
   });
 
-  it("leaves Markdown out of the gates, wherever it lives", () => {
+  it("leaves Markdown outside the workspaces out of the gates, wherever it lives", () => {
     assert.deepEqual(classify(["scripts/README.md", "gates/NOTES.md"]), {
       code: false,
       gates: false,
     });
+  });
+
+  it("counts Markdown inside a workspace as code, since a build may import it", () => {
+    for (const file of [
+      "apps/web/src/privacy.md",
+      "packages/core/README.md",
+      "smoke/NOTES.md",
+    ])
+      assert.deepEqual(classify([file]), { code: true, gates: false }, file);
   });
 
   it("needs nothing for an empty change", () => {
