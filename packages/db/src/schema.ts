@@ -324,6 +324,8 @@ export const exercises = pgTable(
     difficulty: integer("difficulty"),
     id: text("id").primaryKey(),
     learnerId: text("learner_id").notNull(),
+    // The Trainer model that generated the Exercise (docs/adr/0012).
+    model: text("model").notNull(),
     promptData: jsonb("prompt_data").notNull(),
     sourcePatternId: text("source_pattern_id"),
     type: text("type").notNull(),
