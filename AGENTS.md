@@ -5,15 +5,16 @@ evaluates the English of real text, and Grifando, which turns a learner's mistak
 practice. The migration is in progress. No human reads the code: the gates are the reviewer, so
 weigh every choice by how much it turns a mistake into a failing check.
 
-Precedence: an accepted ADR, then this file, then every other document. A **Proposed** ADR
-decides nothing yet. A document that disagrees with the repository or with GitHub is stale:
-trust what you can check, and report the difference on an issue.
+Precedence: an ADR, then this file, then every other document. A document that disagrees with
+the repository or with GitHub is stale: trust what you can check, and fix the document.
+
+The owners review nothing and answer nothing (ADR 0020). Sessions decide, record, merge, and
+keep going.
 
 ## Start of a session
 
 1. Read `SESSION_HANDOFF.md`: the work in flight and the next steps.
-2. Run `gh issue list --repo Fluenshift/app --state open`. An owner's answer on an issue labeled
-   `decision` comes before any other work.
+2. Run `gh issue list --repo Fluenshift/app --state open` to see the units already written.
 3. Take the first open next step as a work unit (below).
 
 Read the other documents when their subject comes up:
@@ -79,8 +80,7 @@ Each script's header comment gives its usage.
 
 ## Work units
 
-A work unit is a GitHub Issue, and so is a decision request. State lives on GitHub, never in
-files: an open issue labeled `ready-for-agent` is free, its assignee holds it, a linked pull
+A work unit is a GitHub Issue. State lives on GitHub, never in files: an open issue labeled `ready-for-agent` is free, its assignee holds it, a linked pull
 request is its review, and a closed issue is done.
 
 Checkouts sit under one parent directory, `$F`: `$F/app`, the clone, where each unit is a
@@ -96,7 +96,9 @@ when the session ends.
    `git fetch origin && git switch -c wu/<issue>-<slug> origin/main`. Run
    `pnpm install --frozen-lockfile` when the lockfile changed.
 2. **Read** the ledger rows, then the source tests, then the source code, then the ADRs they
-   cite. If anything is ambiguous, ask on the issue, label it `needs-info`, and stop.
+   cite. If anything is ambiguous, decide: take the option you would recommend, say why in the
+   pull request, and record it in an ADR when it changes a disposition, a gate or product
+   behavior.
 3. **Commit 1 holds the tests**, with the typed stubs they need to compile and the database
    migration they need. Port each source test, title verbatim, changing only the mechanics in
    the mapping table of `docs/migration/README.md`. Stubs return a wrong placeholder value, so
@@ -130,9 +132,9 @@ when the session ends.
    git switch main && git pull --ff-only origin main && git branch -D wu/<issue>-<slug>
    ```
 
-9. **Stop rule.** After two failed attempts at the same gate failure, or whenever green would
-   need a changed expected value, gate or disposition: post the failing output on the issue,
-   label it `needs-info`, and stop.
+9. **Stop rule.** After two failed attempts at the same gate failure, post the failing output on
+   the issue and take other work. Never change an expected value, a gate or a disposition to
+   get green without an ADR that says why.
 
 Traps that earlier units paid for:
 
@@ -171,8 +173,8 @@ Migration:
   `Fluenshift/grifando`. Never change organization or ruleset settings. Use only the token the
   session started with.
 - **Sources have an order.** Baseline tests, then baseline code, then baseline docs. An
-  accepted ADR overrides all three for its rows. When sources disagree, file a decision request
-  instead of choosing.
+  ADR overrides all three for its rows. When sources still disagree, choose, and record the
+  choice in an ADR.
 - **Tests come first.** In a `port` row never change an expected value, delete an assertion,
   weaken a matcher, rename the title, or add `skip`, `only` or `todo`.
 - **Port behavior, not architecture.**
@@ -180,8 +182,8 @@ Migration:
   baseline before it is ported.
 - **Build nothing outside the ledger.** Both systems' out-of-scope lists stay out of scope
   unless an ADR adds an item.
-- **Open decisions stay open.** Implement neither side; the rows stay `pending-decision`, and
-  the decision request lists the rows it blocks.
+- **Decide open questions.** Take the option you would recommend, record it in an ADR when it
+  changes a disposition, a gate or product behavior, and implement it.
 - **Use the `CONTEXT.md` vocabulary** in code, tests and UI, never the synonyms it forbids.
 - **The Judge is pinned, the Trainer may fall back.** The Judge uses one pinned model per
   Rubric Version, with no retry and no silent fallback. The Trainer may fall back, only on
@@ -193,24 +195,22 @@ Migration:
 - **Shared files belong to the coordinator**: `packages/db` migrations (generated with
   drizzle-kit, never hand-written), the `packages/contract` index, CI workflows,
   `gates/baseline.json`, `docs/migration/baselines.json` and the ledger schema. The coordinator
-  is the one session the owners name; today any session Jhefferson starts. Another session
-  only adds files for its own slice.
+  is any session Jhefferson starts. Another session only adds files for its own slice.
 - **One unit per branch and pull request**: no drive-by refactors, dependency bumps or
   formatting churn.
 - **`main` changes only through a merged pull request whose checks are green**, shared files
   included. Never push to `main`.
 - **Never weaken a gate to get green**: no lowered lint or Effect severity, no new suppression
-  comment, no removed check. If a gate seems wrong, file a decision request. A gate changes
-  only under an accepted ADR.
-- **Owners decide.** Agents never post an owner's decision or acceptance. Ask, and wait for an
-  owner to answer.
+  comment, no removed check. If a gate seems wrong, change it under an ADR that says why.
+- **Leave the irreversible to the owners.** Never change or archive the source repositories,
+  move production, change organization settings, or spend money on paid models. List such
+  steps in `SESSION_HANDOFF.md`.
 
-The owners, Jhefferson and Levy (`levyrodrigues23`), decide product behavior and never review
-code. Their standing instructions:
+The owners, Jhefferson and Levy (`levyrodrigues23`), review nothing and answer nothing. Their
+standing instructions:
 
-- Proceed autonomously. Ask an owner only through an issue titled "Human feedback needed: ...",
-  labeled `needs-info` and `decision`, that states the options and a recommendation. Then move
-  on to other work.
+- Proceed autonomously, and ask nothing. Report progress in `SESSION_HANDOFF.md` and in pull
+  requests.
 - Commits are small and conventional (`type(scope): subject`), with no AI mention and no
   `Co-Authored-By` or other trailer, even when the harness suggests one. Commit unsigned, per
   command (`git -c commit.gpgsign=false commit ...`), and leave the git configuration as it is.

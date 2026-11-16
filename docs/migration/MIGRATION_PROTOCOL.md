@@ -15,7 +15,7 @@ only reviewer is executable evidence:
 - a machine-generated inventory of every source test case and every normative doc clause;
 - a parity ledger, checked in CI, that gives each inventory row a disposition and target tests;
 - characterization tests, run against the baselines, for behavior no test covers;
-- ADRs written spec-first, only at the seams, and accepted by an owner;
+- ADRs written spec-first, only at the seams, by the session that decides (ADR 0020);
 - red-green, assertion-preservation and gate-integrity checks.
 
 PE is the tooling template, not the base. Neither old repository is converted in place.
@@ -36,12 +36,12 @@ The organization `Fluenshift` holds three public repositories: `prompt-evolution
   (default `../<product>-baselines/<system>`) and checks out the pinned commit. It fails if the
   remote tag no longer resolves to the pin. Agents and CI read and run sources only through it,
   in disposable worktrees of those clones. The sources are public, so CI needs no token.
-- Grifando stays the live product until cutover. What it may change until then is an owner
-  decision (#110).
+- Grifando stays the live product until cutover, and takes production and security fixes only
+  (ADR 0020).
 
 ### Baseline bumps
 
-A source repository may change after its baseline, within the policy the owners choose (#110),
+A source repository may change after its baseline, within that policy (ADR 0020),
 for example through a production fix in Grifando. Such a change is ported like any other
 behavior:
 
@@ -58,8 +58,8 @@ behavior:
 
 ## Roles
 
-- **Owners** (Jhefferson and Levy) decide product behavior (G14) and trigger paid calibration.
-  They never review code.
+- **Owners** (Jhefferson and Levy) review nothing and answer nothing (ADR 0020). They keep only
+  the owner actions of G14.
 - **Sessions** implement units, one unit per branch. One session is the **coordinator**: it
   alone changes the shared files (`AGENTS.md`, Rules).
 
@@ -130,7 +130,7 @@ Docker smoke green once the pause on end-to-end tests ends.
 
 ### Phase 7: parity sign-off and cutover
 
-Goal: prove completeness, get owner acceptance, then retire the old apps.
+Goal: prove completeness, then retire the old apps.
 
 1. Run the parity check: 100% of rows terminal, zero `pending-decision` rows unless an accepted
    ADR defers them past parity.
@@ -138,7 +138,8 @@ Goal: prove completeness, get owner acceptance, then retire the old apps.
    profile. Live calibration is not part of sign-off; it runs when the owners schedule it.
 3. Final audit: a fresh session regenerates the inventory from the baseline tags and diffs it
    against the ledger.
-4. Owners give product acceptance by using the journeys. This is not code review.
+4. Cutover waits for an owner's go-ahead, because moving production and archiving the source
+   repositories cannot be undone.
 5. Carry data over as ADR 0018 decides. Grifando's hosted data starts fresh: the old site shows
    a notice for at least 30 days before cutover, and its database stays read-only for 30 days
    after. A one-time importer copies PE's local Evaluations as Rubric Version 1, and the import
@@ -171,7 +172,7 @@ Exit: every item in the definition of done holds.
 | G10 Parity audit | For class A and class B `port` rows, the target matches or exceeds the source in assertion count, expected literals and matcher strength (no `toEqual` turned into `toMatchObject`). Report-only for class C: the unit lists those differences in its pull request. |
 | G11 Gate integrity | Lint and tsgo severities and the CI, Vitest and tsconfig settings are equal to or stricter than `gates/baseline.json`; suppression comments (`oxlint-disable`, `@ts-expect-error`) do not increase. Recording a weaker baseline needs an accepted ADR. |
 | G13 Live calibration | Deferred: not a merge gate until the owners schedule it (see Calibration deferred). When it runs: paid and owner-triggered, with frozen fixtures, one request at a time, no retries, a budget preflight and the spend recorded. Once it has passed, it is required again for any change to the Judge's model, prompt, structured contract or Rubric Version. |
-| G14 Owner decisions | Accepting ADRs, answering every `needs-info` product question, setting the calibration budget, giving final product acceptance and approving cutover. Owners decide product behavior and never review code. A decision counts only when an owner posts it. Agents hold the owners' tokens, so this rests on the rule that agents never post an owner's decision (`AGENTS.md`). |
+| G14 Owner actions | Only what cannot be undone outside this repository or costs money: the budget of paid calibration, moving production, and archiving or changing the source repositories. Sessions decide everything else (ADR 0020). |
 
 G12, the cross-vendor verdict, was retired by ADR 0019.
 
@@ -203,7 +204,7 @@ gate rejects its broken case, run only when a gate changes; they run the suites 
 6. Merged docs match the code: `CONTEXT.md`, `REQUIREMENTS.md` (PE IDs unchanged), `RUBRIC.md`,
    `DATA-POLICY.md` per profile, `ASSET-LICENSES.md` (including bundled fonts), the ADRs,
    `AGENTS.md`, and a README where every command exists.
-7. Both owners have recorded product acceptance; only then are the old apps retired and the
+7. An owner has given the go-ahead for cutover; only then are the old apps retired and the
    source repositories archived.
 8. Per unit: ported tests keep their source titles and assertions, red then green proven, the
    mutation spot-check listed, rows `verified`, CI green.

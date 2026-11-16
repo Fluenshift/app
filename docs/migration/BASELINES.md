@@ -102,8 +102,8 @@ Run on 2026-11-13 (UTC), counts as the reporters give them:
 
 ### Red baseline tests
 
-A red test is marked `baseline-red` in the inventory. It cannot serve as spec until the
-owners decide, through the `needs-info` issue linked here.
+A red test is marked `baseline-red` in the inventory. It cannot serve as spec until a session
+decides how to treat it (ADR 0020), on the issue linked here.
 
 | System | Test | Cause | Decision request |
 | --- | --- | --- | --- |

@@ -83,8 +83,8 @@ The file is one object: `system`, `repository`, `commit` (the pin) and `rows`. E
   commits; `github` for issues.
 - `line`: the clause's first line in `source`. `text`: the clause as written, with wrapped
   lines joined by single spaces; table cells joined with ` | `; code blocks verbatim.
-- `baseline-red` is a test that failed in the stored run. It cannot serve as spec until the
-  owners decide on its `needs-info` issue (listed in `BASELINES.md`).
+- `baseline-red` is a test that failed in the stored run. It cannot serve as spec until a
+  session decides how to treat it, on its issue (listed in `BASELINES.md`).
 
 `grifando-issues.json` was exported once, on 2026-11-13, with `gh issue list --repo
 Fluenshift/grifando --state all` (number, title, state, labels, author, dates, URL, body and
@@ -103,7 +103,7 @@ tests that carry it in this repository. Each file is one object: `slice`, `lane`
 | `class` | Test rows only: `A` ports nearly verbatim (pure code), `B` keeps its assertions on new persistence fixtures (SQLite or Postgres to PGlite), `C` is re-expressed as a contract test (SDK, Elysia, Next.js or Bun bound). `null` for other rows. |
 | `slice` | The slice, also the file name. |
 | `disposition` | `port`, `port-changed`, `superseded`, `drop`, `informative` or `pending-decision` (below). |
-| `decision` | `adr:NNNN` (`docs/adr/NNNN-*.md`) or `issue:N` (a `needs-info` issue in this repo). Required for `pending-decision`, `port-changed`, `superseded` and `drop`; kept on rows that ADR 0001 made `informative`; `null` otherwise. |
+| `decision` | `adr:NNNN` (`docs/adr/NNNN-*.md`) or `issue:N` (an issue in this repo). Required for `pending-decision`, `port-changed`, `superseded` and `drop`; kept on rows that ADR 0001 made `informative`; `null` otherwise. |
 | `targets` | Target tests as `file::full title`, written by the unit that ports the row. A class C row also lists the source or characterization test it re-expresses. |
 
 Dispositions:
@@ -115,9 +115,8 @@ Dispositions:
 - `drop`: removed under an accepted ADR.
 - `informative`: a row with no behavior to port: a non-normative clause, or, under ADR 0001, an
   issue or a commit that changes only the build, tests or tooling.
-- `pending-decision`: blocked by the open decision named in `decision`; nobody implements
-  either side until it is settled (`AGENTS.md`: open decisions stay open). Only these rows may
-  have skipped tests.
+- `pending-decision`: blocked by the open question named in `decision`, until a session
+  decides it (ADR 0020). Only these rows may have skipped tests.
 
 The ledger stores no status. `scripts/migration/parity-check.ts` (gate G9) derives it from the
 dispositions, the ADR index and the Vitest and Playwright reports:
@@ -216,22 +215,20 @@ node scripts/gate-selftest.ts --root ../app-baselines
 
 ## Issue labels
 
-Work units and decision requests are GitHub Issues in this repository. State lives on GitHub,
+Work units are GitHub Issues in this repository. State lives on GitHub,
 never in files; a closed issue is done.
 
 | Label | Meaning |
 | --- | --- |
 | `ready-for-agent` | A unit that no session holds yet. The session that takes it removes the label and assigns the issue to itself. |
-| `needs-info` | The issue waits for an answer: a unit that stopped on a question, or a decision request. |
-| `decision` | An owner decision request, including ADR acceptance. Titled "Human feedback needed: ...". |
-| `ready-for-human` | An owner action other than a decision. |
 | `needs-triage` | A problem found during other work, not yet written as a unit. |
 | `wontfix` | Closed without work, with the reason in a comment. |
 | `lane:evaluation`, `lane:academy`, `lane:platform` | The lane of a unit. |
 
 The assignee of an issue holds the unit, and the pull request that closes it is its review. The
-labels `in-progress`, `in-review` and `implementer:<vendor>` marked those states until ADR 0019
-and are no longer applied.
+labels `in-progress`, `in-review` and `implementer:<vendor>` marked those states until ADR 0019,
+and `needs-info`, `decision` and `ready-for-human` marked requests to the owners until ADR 0020.
+None of them is applied any more.
 
 ## Mechanical mapping
 
