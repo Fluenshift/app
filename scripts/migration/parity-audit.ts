@@ -13,7 +13,7 @@
 //   then `toMatchObject`). Bun's `toBeTrue()` and `toBeFalse()` count as `toBe(true)` and
 //   `toBe(false)`, as the mapping table allows.
 // Class C rows are reported but never fail: their tests are re-expressed, not ported, and the
-// report feeds the cross-vendor verification (G12). --root names the directory that holds the
+// report goes in the unit's pull request. --root names the directory that holds the
 // baseline clones (default: the one baselines.ts uses).
 // Exits 1 when a class A or B row is weaker than its source or cannot be read.
 

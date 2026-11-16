@@ -1,6 +1,6 @@
 // Seeds the parity ledger (Phase 0 steps 5 and 6) from the inventory: one ledger row per
 // inventory row, with its slice, test class, disposition and blocking decision. The rules
-// below are the classification; a verifier reviews them rather than each row.
+// below are the classification: review them rather than each row.
 //
 //   node scripts/migration/ledger-seed.ts [--force]
 //

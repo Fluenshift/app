@@ -3,8 +3,9 @@
 //   node scripts/check-gates.ts            compare the tree with gates/baseline.json
 //   node scripts/check-gates.ts --write    record the tree as gates/baseline.json
 //
-// Only the coordinator records a baseline (agent rule 13), and recording a weaker one needs an
-// accepted ADR (agent rule 15). The comparison covers:
+// Only the coordinator records a baseline, and recording a weaker one needs an accepted ADR
+// (AGENTS.md: shared files belong to the coordinator; never weaken a gate). The comparison
+// covers:
 // - lint: what `oxlint --print-config` resolves for each lint configuration. No rule loses
 //   severity or changes its options, no override relaxes a rule, no plugin is dropped and no
 //   ignore pattern is added;
