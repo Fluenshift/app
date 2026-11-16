@@ -1,12 +1,15 @@
 # Architecture decision records
 
-Each ADR decides one seam or open question of the merge. An ADR is **Proposed** until an owner accepts it on its decision issue ([#5](https://github.com/Fluenshift/app/issues/5) for 0001 to 0018, [#109](https://github.com/Fluenshift/app/issues/109) for 0019); its
+Each ADR decides one seam or open question of the merge. An ADR is **Proposed** until an owner accepts it on its decision issue ([#5](https://github.com/Fluenshift/app/issues/5) for 0001 to 0018, [#117](https://github.com/Fluenshift/app/issues/117) for 0019); its
 status line then links to the acceptance comment. Only an accepted ADR can make a ledger row
 `port-changed`, `superseded` or `drop`, and such a row names it as `"decision": "adr:NNNN"`.
 
 Jhefferson accepted 0001 to 0018 on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)). Levy's acceptance is
 pending, and the migration proceeds meanwhile: an ADR that Levy decides differently is replaced
 by a new ADR, and its rows are reworked.
+
+ADRs 0001 to 0018 cite `docs/migration/PRE_MIGRATION.md` and `docs/migration/HANDOFF.md`, which
+ADR 0019 deleted; commit `39fbb46` holds them.
 
 | ADR | Decision | Status |
 | --- | --- | --- |
