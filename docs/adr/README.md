@@ -1,12 +1,11 @@
 # Architecture decision records
 
-Each ADR decides one seam or open question of the merge. An ADR is **Proposed** until an owner accepts it on its decision issue ([#5](https://github.com/Fluenshift/app/issues/5) for 0001 to 0018, [#117](https://github.com/Fluenshift/app/issues/117) for 0019); its
-status line then links to the acceptance comment. Only an accepted ADR can make a ledger row
-`port-changed`, `superseded` or `drop`, and such a row names it as `"decision": "adr:NNNN"`.
+Each ADR records one decision of the merge. Since ADR 0020 the session that decides writes the
+ADR, and it is in force once its pull request merges; its status line says when, and at whose
+request. Only an ADR can make a ledger row `port-changed`, `superseded` or `drop`, and such a row
+names it as `"decision": "adr:NNNN"`.
 
-Jhefferson accepted 0001 to 0018 on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)). Levy's acceptance is
-pending, and the migration proceeds meanwhile: an ADR that Levy decides differently is replaced
-by a new ADR, and its rows are reworked.
+Jhefferson accepted 0001 to 0018 on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) and 0019 on 2026-11-16.
 
 ADRs 0001 to 0018 cite `docs/migration/PRE_MIGRATION.md` and `docs/migration/HANDOFF.md`, which
 ADR 0019 deleted; commit `39fbb46` holds them.
@@ -33,3 +32,4 @@ ADR 0019 deleted; commit `39fbb46` holds them.
 | [0017](./0017-postgres-and-pglite.md) | Postgres when hosted, PGlite locally and in tests | Accepted |
 | [0018](./0018-data-at-cutover.md) | Grifando starts fresh with notice; PE history is imported | Accepted |
 | [0019](./0019-lighter-gates-and-shorter-documents.md) | G12 retired; each suite once per CI run; rules once in `AGENTS.md`; documents cut to the work ahead | Accepted |
+| [0020](./0020-sessions-decide.md) | Sessions decide and merge; the open owner requests are decided | Accepted |
