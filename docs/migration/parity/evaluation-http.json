@@ -172,8 +172,8 @@
       "source": "apps/server/src/app.characterization.test.ts",
       "class": "C",
       "slice": "evaluation-http",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "port-changed",
+      "decision": "adr:0008",
       "targets": []
     },
     {
@@ -181,8 +181,8 @@
       "source": "apps/server/src/app.characterization.test.ts",
       "class": "C",
       "slice": "evaluation-http",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "port-changed",
+      "decision": "adr:0008",
       "targets": []
     },
     {
@@ -289,8 +289,8 @@
       "source": "apps/server/src/app.characterization.test.ts",
       "class": "C",
       "slice": "evaluation-http",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0020",
       "targets": []
     },
     {

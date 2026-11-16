@@ -119,4 +119,4 @@ browser extensions; reminders; vocabulary review, whose schema exists but whose 
 
 Brought into scope by the merge: the hosted Deploy Profile with anonymous sessions
 (ADR 0003), several Trainer providers and visitors' own keys (ADR 0012), and the Academy's
-simple Streak (Grifando §6.1).
+simple Streak (Grifando §6.1) and searchable Mistake Notebook (ADR 0020).
