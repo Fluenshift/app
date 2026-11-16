@@ -23,6 +23,7 @@ type FakeProvider = { [K in keyof TrainerMethods]: Mock<TrainerMethods[K]> };
 
 const fakeProvider = (): FakeProvider => ({
   continueInterview: vi.fn<TrainerMethods["continueInterview"]>(),
+  enrichFindings: vi.fn<TrainerMethods["enrichFindings"]>(),
   explainAttempt: vi.fn<TrainerMethods["explainAttempt"]>(),
   generateExercises: vi.fn<TrainerMethods["generateExercises"]>(),
 });
@@ -89,6 +90,24 @@ describe("withResilience", () => {
     ).resolves.toEqual({ exercises: [], model: "fallback-model" });
     expect(primary.generateExercises).toHaveBeenCalledTimes(1);
     expect(fallback.generateExercises).toHaveBeenCalledTimes(1);
+  });
+
+  it("sends an overloaded Enrichment to the fallback, whose answer names it", async () => {
+    const primary = fakeProvider();
+    const fallback = fakeProvider();
+    primary.enrichFindings.mockReturnValue(Effect.fail(overloaded()));
+    fallback.enrichFindings.mockReturnValue(
+      Effect.succeed({ findings: [], model: "fallback-model" })
+    );
+    const wrapped = withResilience(primary, fallback, { timeout: 1000 });
+
+    await expect(
+      Effect.runPromise(
+        wrapped.enrichFindings({ findings: [], writingSample: "Hi." })
+      )
+    ).resolves.toEqual({ findings: [], model: "fallback-model" });
+    expect(primary.enrichFindings).toHaveBeenCalledTimes(1);
+    expect(fallback.enrichFindings).toHaveBeenCalledTimes(1);
   });
 
   it("does not retry on a rejected key or exhausted quota", async () => {

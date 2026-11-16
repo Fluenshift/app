@@ -295,6 +295,26 @@ export const occurrences = pgTable(
   ]
 );
 
+// The Trainer's Enrichment of one Evaluation's Findings (docs/adr/0004), which records the model
+// that answered (docs/adr/0012), as Grifando's writing analysis did. One per Evaluation; it goes
+// when that Evaluation is deleted.
+export const enrichments = pgTable(
+  "enrichments",
+  {
+    createdAt: moment("created_at").notNull().defaultNow(),
+    evaluationId: text("evaluation_id").primaryKey(),
+    learnerId: text("learner_id").notNull(),
+    model: text("model").notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.learnerId, table.evaluationId],
+      foreignColumns: [evaluations.learnerId, evaluations.id],
+      name: "enrichments_evaluation_fk",
+    }).onDelete("cascade"),
+  ]
+);
+
 export const exercises = pgTable(
   "exercises",
   {

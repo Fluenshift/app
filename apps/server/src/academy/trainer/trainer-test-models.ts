@@ -76,3 +76,38 @@ export const explainInput = {
   },
   userAnswer: "of",
 };
+
+// Two Findings for the Enrichment, and the entry a model returns for the first one.
+export const enrichmentInput = {
+  findings: [
+    {
+      category: "Preposition",
+      correction: "depend on",
+      explanation: "Use 'depend on', not 'depend of'.",
+      originalText: "depend of",
+    },
+    {
+      category: "Article",
+      correction: "it",
+      explanation: "No article before a pronoun.",
+      originalText: "the it",
+    },
+  ],
+  writingSample: "I depend of the it.",
+} as const;
+
+export const fakeFindingEnrichment = () => ({
+  category: "PREPOSITIONS",
+  example: "I depend on my team.",
+  finding: 1,
+  l1Transfer: true,
+  patternKey: "depend-on",
+});
+
+export const fakeArticleEnrichment = () => ({
+  category: "ARTICLES",
+  example: "It works.",
+  finding: 2,
+  l1Transfer: false,
+  patternKey: "no-article-before-pronoun",
+});

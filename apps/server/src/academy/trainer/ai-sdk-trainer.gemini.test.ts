@@ -13,7 +13,10 @@ import {
 } from "./trainer-errors";
 import {
   answering,
+  enrichmentInput,
   explainInput,
+  fakeArticleEnrichment,
+  fakeFindingEnrichment,
   fakeMultipleChoiceExercise,
   oneTarget,
   refusing,
@@ -77,6 +80,37 @@ describe("createGeminiProvider.explainAttempt", () => {
 
     await expect(
       Effect.runPromise(provider.explainAttempt(explainInput))
+    ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+});
+
+describe("createGeminiProvider.enrichFindings", () => {
+  it("returns each Finding's enrichment for well-formed JSON", async () => {
+    const provider = geminiAnswering({
+      findings: [fakeFindingEnrichment(), fakeArticleEnrichment()],
+    });
+
+    const result = await Effect.runPromise(
+      provider.enrichFindings(enrichmentInput)
+    );
+
+    expect(result.findings.map((finding) => finding.category)).toStrictEqual([
+      "PREPOSITIONS",
+      "ARTICLES",
+    ]);
+    expect(result.model).toBe("test-model");
+  });
+
+  it("throws AIResponseValidationError when two entries name the same Finding", async () => {
+    const provider = geminiAnswering({
+      findings: [
+        fakeFindingEnrichment(),
+        { ...fakeFindingEnrichment(), example: "We depend on you." },
+      ],
+    });
+
+    await expect(
+      Effect.runPromise(provider.enrichFindings(enrichmentInput))
     ).rejects.toBeInstanceOf(AIResponseValidationError);
   });
 });

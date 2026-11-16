@@ -72,6 +72,7 @@ export const withResilience = (
       () => fallback.continueInterview(history),
       timeout
     ),
+  enrichFindings: (input) => primary.enrichFindings(input),
   explainAttempt: (input) =>
     withFallback(
       primary.explainAttempt(input),

@@ -226,6 +226,7 @@ export const createAiSdkTrainer = (model: LanguageModel): TrainerMethods => {
         return { model: answeredBy, question: answer.question };
       }
     ),
+    enrichFindings: () => Effect.succeed({ findings: [], model: "" }),
     explainAttempt: Effect.fn("Trainer.explainAttempt")(function* (input) {
       const { answer, model: answeredBy } = yield* ask({
         maxOutputTokens: ANSWER_EXPLANATION_MAX_TOKENS,

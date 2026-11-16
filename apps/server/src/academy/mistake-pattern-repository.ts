@@ -108,9 +108,14 @@ export const upsertPattern = Effect.fn(
   return toPattern(row);
 });
 
+export interface ListPatternsOptions {
+  // Only the patterns with at least one Occurrence flagged as L1 Transfer.
+  readonly l1TransferOnly?: boolean;
+}
+
 // The Learner's patterns, most frequent first, then most recent.
 export const listPatterns = Effect.fn("MistakePatternRepository.listPatterns")(
-  function* () {
+  function* (_options: ListPatternsOptions = {}) {
     const database = yield* Database;
     const learner = yield* CurrentLearner;
     const rows = yield* database.run((client) =>

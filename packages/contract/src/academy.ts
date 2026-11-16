@@ -5,6 +5,8 @@
 // separately (docs/adr/0005).
 import { Schema } from "effect";
 
+import type { ErrorCategory } from "./evaluation";
+
 type LiteralObject<Values extends readonly string[]> = {
   readonly [Value in Values[number]]: Value;
 };
@@ -95,3 +97,15 @@ export const INTERVIEW_STATUSES = ["ACTIVE", "ENDED"] as const;
 export const InterviewStatus = literalObject(INTERVIEW_STATUSES);
 export type InterviewStatus = (typeof INTERVIEW_STATUSES)[number];
 export const InterviewStatusSchema = Schema.Literals(INTERVIEW_STATUSES);
+
+// The Error Category a Mistake Category rolls up to (docs/adr/0005). UNNATURAL_PHRASING is the
+// "correct but unnatural" channel, not an error, and LITERAL_TRANSLATION becomes the L1 Transfer
+// flag on the category of the underlying error, so neither rolls up to one.
+export const errorCategoryOf = (
+  _category: MistakeCategory
+): ErrorCategory | undefined => undefined;
+
+// The Mistake Categories a Finding of one Error Category may take. Clarity and Other have none.
+export const mistakeCategoriesOf = (
+  _category: ErrorCategory
+): readonly MistakeCategory[] => [];

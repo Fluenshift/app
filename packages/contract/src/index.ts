@@ -1,4 +1,5 @@
 export {
+  errorCategoryOf,
   EXERCISE_TYPES,
   ExerciseType,
   ExerciseTypeSchema,
@@ -14,6 +15,7 @@ export {
   MistakeCategorySchema,
   MistakeSeverity,
   MistakeSeveritySchema,
+  mistakeCategoriesOf,
   PROMPT_TYPES,
   PromptType,
   PromptTypeSchema,

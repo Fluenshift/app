@@ -2,6 +2,7 @@ import { Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
 import {
+  errorCategoryOf,
   EXERCISE_TYPES,
   ExerciseType,
   ExerciseTypeSchema,
@@ -17,6 +18,7 @@ import {
   MistakeCategorySchema,
   MistakeSeverity,
   MistakeSeveritySchema,
+  mistakeCategoriesOf,
   PROMPT_TYPES,
   PromptType,
   PromptTypeSchema,
@@ -27,6 +29,7 @@ import {
   TechnicalCategory,
   TechnicalCategorySchema,
 } from "./academy";
+import { ERROR_CATEGORIES } from "./evaluation";
 
 // The enums of Grifando's prisma/schema.prisma at the pinned commit (74dbb9f), in their
 // declared order. Ported Academy modules read them as `MasteryLevel.MASTERED`, iterate them
@@ -116,5 +119,53 @@ describe("Academy literals", () => {
         Schema.decodeUnknownSync(schema)(values[0]?.toLowerCase())
       ).toThrow("Expected");
     }
+  });
+});
+
+describe("Mistake Category roll-up", () => {
+  it("rolls each Mistake Category up to its Error Category, as ADR 0005 maps them", () => {
+    expect(
+      Object.fromEntries(
+        MISTAKE_CATEGORIES.map((category) => [
+          category,
+          errorCategoryOf(category) ?? null,
+        ])
+      )
+    ).toStrictEqual({
+      ARTICLES: "Article",
+      PREPOSITIONS: "Preposition",
+      VERB_TENSE: "Verb form/tense",
+      SUBJECT_VERB_AGREEMENT: "Verb form/tense",
+      VOCABULARY: "Word choice",
+      WORD_ORDER: "Grammar/syntax",
+      SPELLING: "Spelling",
+      PUNCTUATION: "Punctuation/capitalization",
+      UNNATURAL_PHRASING: null,
+      LITERAL_TRANSLATION: null,
+      COLLOCATION: "Word choice",
+      PRONOUNS: "Grammar/syntax",
+      COUNTABLE_UNCOUNTABLE: "Grammar/syntax",
+    });
+  });
+
+  it("offers each Error Category its Mistake Categories, and none to Clarity and Other", () => {
+    expect(
+      Object.fromEntries(
+        ERROR_CATEGORIES.map((category) => [
+          category,
+          mistakeCategoriesOf(category),
+        ])
+      )
+    ).toStrictEqual({
+      Spelling: ["SPELLING"],
+      Article: ["ARTICLES"],
+      "Verb form/tense": ["VERB_TENSE", "SUBJECT_VERB_AGREEMENT"],
+      Preposition: ["PREPOSITIONS"],
+      "Word choice": ["VOCABULARY", "COLLOCATION"],
+      "Grammar/syntax": ["WORD_ORDER", "PRONOUNS", "COUNTABLE_UNCOUNTABLE"],
+      "Punctuation/capitalization": ["PUNCTUATION"],
+      Clarity: [],
+      Other: [],
+    });
   });
 });
