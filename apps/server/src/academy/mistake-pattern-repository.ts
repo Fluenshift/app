@@ -166,3 +166,55 @@ export const listPatterns = Effect.fn("MistakePatternRepository.listPatterns")(
     return rows.map(toPattern);
   }
 );
+
+// One of the Learner's patterns, or null when the Learner has none with that id.
+export const findPattern = Effect.fn("MistakePatternRepository.findPattern")(
+  function* (id: string) {
+    const database = yield* Database;
+    const learner = yield* CurrentLearner;
+    const [row] = yield* database.run((client) =>
+      client
+        .select()
+        .from(mistakePatterns)
+        .where(
+          and(
+            eq(mistakePatterns.learnerId, learner.id),
+            eq(mistakePatterns.id, id)
+          )
+        )
+    );
+    return row === undefined ? null : toPattern(row);
+  }
+);
+
+export interface RecordAttemptInput {
+  readonly consecutiveCorrectCount: number;
+  readonly isCorrect: boolean;
+  readonly masteryLevel: MasteryLevel;
+}
+
+// One Attempt on the pattern: the new mastery state plus a recall event for the half-life
+// counters.
+export const recordAttempt = Effect.fn(
+  "MistakePatternRepository.recordAttempt"
+)(function* (id: string, { isCorrect, ...mastery }: RecordAttemptInput) {
+  const database = yield* Database;
+  const learner = yield* CurrentLearner;
+  yield* database.run((client) =>
+    client
+      .update(mistakePatterns)
+      .set({
+        ...mastery,
+        ...(isCorrect
+          ? { correctCount: sql`${mistakePatterns.correctCount} + 1` }
+          : { incorrectCount: sql`${mistakePatterns.incorrectCount} + 1` }),
+        lastPracticedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(mistakePatterns.learnerId, learner.id),
+          eq(mistakePatterns.id, id)
+        )
+      )
+  );
+});

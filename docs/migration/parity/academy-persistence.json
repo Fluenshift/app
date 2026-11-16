@@ -18,7 +18,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::attemptExplanationService.explainAttempt > explains a graded attempt without changing it"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::attemptExplanationService.explainAttempt > returns null for an attempt that isn't the user's on that exercise",
@@ -27,7 +29,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::attemptExplanationService.explainAttempt > returns null for an attempt that isn't the user's on that exercise"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::difficulty targeting > asks the generator for a difficulty and stores it on the exercise",
@@ -36,7 +40,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::difficulty targeting > asks the generator for a difficulty and stores it on the exercise"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::difficulty targeting > raises the category ability after a correct attempt on a rated exercise",
@@ -45,7 +51,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::difficulty targeting > raises the category ability after a correct attempt on a rated exercise"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseAttemptService ownership > rejects another user's exercise and leaves the owner's data untouched",
@@ -54,7 +62,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::exerciseAttemptService ownership > rejects another user's exercise and leaves the owner's data untouched"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseAttemptService.submitAttempt > does not require an AI provider to grade an attempt",
@@ -63,7 +73,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::exerciseAttemptService.submitAttempt > does not require an AI provider to grade an attempt"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseAttemptService.submitAttempt > records a correct attempt and promotes the pattern's mastery streak",
@@ -72,7 +84,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::exerciseAttemptService.submitAttempt > records a correct attempt and promotes the pattern's mastery streak"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseAttemptService.submitAttempt > records an incorrect attempt and resets an IMPROVING pattern to ACTIVE",
@@ -81,7 +95,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::exerciseAttemptService.submitAttempt > records an incorrect attempt and resets an IMPROVING pattern to ACTIVE"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseGenerationService.generatePracticeSet > generates and persists one exercise per selected pattern",
@@ -90,7 +106,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::exerciseGenerationService.generatePracticeSet > generates and persists one exercise per selected pattern"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/exercises/exerciseService.test.ts::exerciseGenerationService.generatePracticeSet > returns nothing when the user has no mistake patterns yet",
@@ -99,7 +117,9 @@
       "slice": "academy-persistence",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-service.test.ts::exerciseGenerationService.generatePracticeSet > returns nothing when the user has no mistake patterns yet"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interview ownership > hides, refuses to answer and refuses to end another user's session",
