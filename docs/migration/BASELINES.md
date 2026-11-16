@@ -172,7 +172,7 @@ mise exec node@26.13.0 -- node scripts/migration/ledger-add.ts --slice <slice> -
 | `grifando` | `src/lib/responseError.characterization.test.ts` | Fix `032c115`: `failedSessionIdFrom` reads the FAILED session id from a clone of the response. | 2 |
 | `grifando` | `src/server/ai/aiErrorResponse.characterization.test.ts` | Fix `032c115`: a typed AI error's response carries its FAILED session id, and only when there is one. | 1 |
 | `grifando` | `src/server/ai/client.characterization.test.ts` | Fix `80957b6`: the default model of each provider, the light fallback models, and that a key test runs on the fallback. | 3 |
-| `grifando` | `src/server/domain/interview/interviewService.characterization.test.ts` | Fix `218b7b7` on the interview path: a failed answer returns its FAILED writing session, and a retry re-analyzes that session. | 1 |
+| `grifando` | `src/server/domain/interview/interviewService.characterization.test.ts` | Fix `218b7b7` on the interview path: a failed answer returns its FAILED writing session, and a retry re-analyzes that session. And the conversation each follow-up question is asked with: every answered turn so far, in order. | 2 |
 | `grifando` | `src/app/api/exercises/exercises.characterization.test.ts` | `GET` and `POST /api/exercises` beyond the AI error cases of `route.test.ts`; see the table below. | 6 |
 | `grifando` | `src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts` | Grading and explaining an attempt; neither route has a test. | 6 |
 | `grifando` | `src/app/api/interview/interview.characterization.test.ts` | The four interview routes; none has a test. | 6 |

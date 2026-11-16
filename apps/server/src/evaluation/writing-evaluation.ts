@@ -1,9 +1,11 @@
 // Writing Evaluation: one Writing Sample and the Judge's structured assessment become one stored
 // Evaluation, or a typed refusal that stores nothing. Ported from PE
 // apps/server/src/evaluation/writing-evaluation.ts (5e831bb). The input caps come from the deploy
-// profile (docs/adr/0006); the Evaluation is stored for the Learner of the request.
+// profile (docs/adr/0006); the Evaluation is stored for the Learner of the request, with the
+// origin of its Writing Sample: work unless the Academy asked for it (docs/adr/0010).
 import { createHash, randomUUID } from "node:crypto";
 
+import type { WritingSampleOrigin } from "@fluenshift/contract";
 import {
   InvalidAssessmentError,
   ModelAssessmentSchema,
@@ -92,7 +94,8 @@ export const evaluateWriting = Effect.fn("WritingEvaluation.evaluate")(
   function* (
     writingSample: string,
     submittedAt: Date,
-    now: () => Date = () => new Date()
+    now: () => Date = () => new Date(),
+    origin: WritingSampleOrigin = "work"
   ) {
     if (
       writingSample.trim().length === 0 ||
@@ -241,6 +244,7 @@ export const evaluateWriting = Effect.fn("WritingEvaluation.evaluate")(
       evaluation,
       inputTokens: modelEvaluation.inputTokens,
       latencyMilliseconds: modelEvaluation.latencyMilliseconds,
+      origin,
       outputTokens: modelEvaluation.outputTokens,
       submittedAt: submittedAt.toISOString(),
     });

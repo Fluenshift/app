@@ -7,6 +7,7 @@ import {
   ERROR_CATEGORIES,
   EXERCISE_TYPES,
   FINDING_SEVERITIES,
+  INTERVIEW_STATUSES,
   MASTERY_LEVELS,
   MISTAKE_CATEGORIES,
   MISTAKE_SEVERITIES,
@@ -405,6 +406,78 @@ export const categoryAbilities = pgTable(
     check(
       "category_abilities_attempt_count_check",
       sql`${table.attemptCount} >= 0`
+    ),
+  ]
+);
+
+// An interview the Learner practices, in which the Trainer asks the questions and the Judge
+// evaluates each answer as a practice Writing Sample (docs/adr/0010). Ported from Grifando
+// prisma/schema.prisma (74dbb9f).
+export const interviewSessions = pgTable(
+  "interview_sessions",
+  {
+    createdAt: moment("created_at").notNull().defaultNow(),
+    id: text("id").primaryKey(),
+    learnerId: text("learner_id").notNull(),
+    status: text("status").notNull().default("ACTIVE"),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.learnerId],
+      foreignColumns: [learners.id],
+      name: "interview_sessions_learner_fk",
+    }).onDelete("cascade"),
+    // Turns reference a session together with its Learner.
+    unique("interview_sessions_learner_id_unique").on(
+      table.learnerId,
+      table.id
+    ),
+    check(
+      "interview_sessions_status_check",
+      sql`${table.status} in (${oneOf(INTERVIEW_STATUSES)})`
+    ),
+    index("interview_sessions_learner_created_at_idx").on(
+      table.learnerId,
+      table.createdAt
+    ),
+  ]
+);
+
+// One question of an interview and, once answered, the Evaluation of its answer. The turn keeps
+// no copy of the answer: deleting that Evaluation removes it (DATA-POLICY.md § Deletion), and the
+// turn stays answered.
+export const interviewTurns = pgTable(
+  "interview_turns",
+  {
+    answeredAt: moment("answered_at"),
+    evaluationId: text("evaluation_id"),
+    id: text("id").primaryKey(),
+    interviewSessionId: text("interview_session_id").notNull(),
+    learnerId: text("learner_id").notNull(),
+    // The Trainer model that asked the question (docs/adr/0012).
+    model: text("model").notNull(),
+    order: integer("turn_order").notNull(),
+    question: text("question").notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.learnerId, table.interviewSessionId],
+      foreignColumns: [interviewSessions.learnerId, interviewSessions.id],
+      name: "interview_turns_session_fk",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [table.evaluationId],
+      foreignColumns: [evaluations.id],
+      name: "interview_turns_evaluation_fk",
+    }).onDelete("set null"),
+    unique("interview_turns_evaluation_unique").on(table.evaluationId),
+    unique("interview_turns_session_order_unique").on(
+      table.interviewSessionId,
+      table.order
+    ),
+    check(
+      "interview_turns_answer_check",
+      sql`${table.evaluationId} is null or ${table.answeredAt} is not null`
     ),
   ]
 );

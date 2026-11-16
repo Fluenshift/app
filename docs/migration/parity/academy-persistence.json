@@ -3,6 +3,17 @@
   "lane": "academy",
   "rows": [
     {
+      "id": "grifando:characterization:src/server/domain/interview/interviewService.characterization.test.ts::interviewService.answerTurn history > asks each follow-up with every answered turn so far, in order",
+      "source": "src/server/domain/interview/interviewService.characterization.test.ts",
+      "class": "B",
+      "slice": "academy-persistence",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/server/src/academy/interview-service.test.ts::interviewService.answerTurn history > asks each follow-up with every answered turn so far, in order"
+      ]
+    },
+    {
       "id": "grifando:characterization:src/server/domain/interview/interviewService.characterization.test.ts::interviewService.answerTurn retry > returns the FAILED writing session of a failed answer and re-analyzes that session on retry",
       "source": "src/server/domain/interview/interviewService.characterization.test.ts",
       "class": "B",
@@ -128,7 +139,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-service.test.ts::interview ownership > hides, refuses to answer and refuses to end another user's session"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interviewService.answerTurn > ends the session instead of asking another question once the turn cap is reached",
@@ -137,7 +150,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-service.test.ts::interviewService.answerTurn > ends the session instead of asking another question once the turn cap is reached"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interviewService.answerTurn > returns a failed result and does not create a follow-up question when analysis fails",
@@ -146,7 +161,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-service.test.ts::interviewService.answerTurn > fails and does not create a follow-up question when the Evaluation fails"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interviewService.answerTurn > scores the answer via the Writing Coach pipeline and asks a follow-up",
@@ -155,7 +172,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-service.test.ts::interviewService.answerTurn > evaluates the answer as a practice Writing Sample and asks a follow-up"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/interview/interviewService.test.ts::interviewService.startInterview > creates a session with one opening question",
@@ -164,7 +183,9 @@
       "slice": "academy-persistence",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-service.test.ts::interviewService.startInterview > creates a session with one opening question"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/mistakes/mistakePattern.repository.test.ts::mistakePatternRepository.upsertPattern > collapses repeated occurrences of the same concept into one growing pattern",
