@@ -149,6 +149,15 @@ Reviewed on 2026-11-16; every claim below was checked against the files. Items 1
 8. **Large generated JSON.** The inventory (408 KB), the ledger (376 KB), the baseline reports (188 KB) and the characterization reports (448 KB) are data for scripts. Query one row at a time (`parity-check.ts`, or `node -e` over the parsed file) instead of opening a file.
 9. **Claude Code memory on Jhefferson's machine.** A note claiming that `SESSION_HANDOFF.md` was untracked was corrected on 2026-11-16. After item 3, three of the five notes repeat instructions that `AGENTS.md` will hold; remove them then.
 
+## To do: skip the full CI for documentation-only changes
+
+Raised by Jhefferson on 2026-11-16, when a one-file Markdown pull request (#108) waited about 15 minutes for CI.
+
+- Today `.github/workflows/ci.yml` runs on every `pull_request`, `merge_group` and push to `main`, with no path filter: a Markdown change runs every gate, Docker jobs included, once on the pull request and again after the merge.
+- The `main` ruleset requires no status check (its rules are `deletion` and `non_fast_forward`), so a path filter cannot leave a pull request blocked on a check that never reports.
+- Proposal: a `changes` job (for example `dorny/paths-filter`) that lets a pull request touching only `**/*.md` run the format check and `pnpm check:docs`, and skip the other jobs. The ledger and inventory JSON under `docs/migration/` are data that G9 and G10 check: they keep the full run.
+- Constraints: G11 records the workflow, so the coordinator records `gates/baseline.json` again after the change (`node scripts/check-gates.ts --write`), and the gate self-tests must still pass. `merge-when-green.sh` waits until it sees a check other than G12: teach it that a documentation-only pull request may report only the documentation job.
+
 ## To discuss: the checkout layout
 
 Raised by Jhefferson on 2026-11-16. Nothing changes until the owners decide; decide before cleanup item 6, since the local tools depend on the layout.
