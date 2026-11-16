@@ -1,6 +1,6 @@
 # Session handoff
 
-Where the Fluenshift migration stands and how to resume it. Written on 2026-11-15, at the end of the fourth agent session, for whoever resumes: Jhefferson after a break, or Levy with an agent session of his own.
+Where the Fluenshift migration stands and how to resume it. Written on 2026-11-16, at the end of the fifth agent session, for whoever resumes: Jhefferson after a break, or Levy with an agent session of his own.
 
 Live state lives in GitHub (issues, their labels, pull requests) and in the parity ledger. This file records what the repository does not: the owners' standing instructions, the next units with their design notes, and the lessons of past sessions. It replaces the untracked `SESSION_HANDOFF.md` and the `/tmp` handoffs of earlier sessions. Update it at the end of every session, through a pull request like any other change.
 
@@ -21,11 +21,11 @@ The session then reads, in this order:
 
 Then it checks the open issues below for owner answers before planning any work.
 
-## Where things stand on 2026-11-15
+## Where things stand on 2026-11-16
 
-- `main` holds Phases 0 to 3, Phase 4 except the E2E journey of 4f (paused, see the owner instructions), Phase 5a (the Academy tables) and Phase 5c, the Trainer: prompts (#92), resilience (#94), providers (#96), model choice and key test (#98, closing #97).
-- No unit is in progress and no pull request is open.
-- Every open issue is a decision request waiting on the owners:
+- `main` holds Phases 0 to 3, Phase 4 except the E2E journey of 4f (paused, see the owner instructions), Phase 5a (the Academy tables), Phase 5b (#103, closing #102: Findings folded into Mistake Patterns through the Trainer's Enrichment), Phase 5c (the Trainer) and the exercise part of Phase 5d (#105, closing #104: exercise generation, grading, the explanation of an Attempt).
+- **In progress, paused at the owner's request: #106, the interview** (the rest of 5d). Its branch `wu/106-interview` is pushed with two commits: the tests first (the 5 `port-changed` rows of `interviewService.test.ts`, a characterization of the follow-up history with its new ledger row, typed stubs and migration `0004` for the interview tables), then `evaluateWriting`'s new origin parameter. What remains is in Next work, item 1. No pull request is open for it yet.
+- #107 updates this file. Every other open issue is a decision request waiting on the owners:
 
 | Issue | Asks | Blocks | Recommended answer |
 | --- | --- | --- | --- |
@@ -34,15 +34,16 @@ Then it checks the open issues below for owner answers before planning any work.
 | #66 | May two Progress characterization rows that send a Correction in the query string become `port-changed` under ADR 0008? | Two `evaluation-http` rows. | Option 1. Then port both in a small unit, with the Correction in the body of `POST /api/progress/evidence` (`ProgressEvidenceRequest`). |
 | #72 | May the PGlite test cases get a 60-second timeout? | Nothing since #82 ordered turbo's tasks; a CI run whose only failures are those timeouts is rerun. | Option 1, under a short ADR (G11 records Vitest settings). |
 | #87 | How new Evaluations record the provisional Rubric Version: today `"1"`, which the PE importer of ADR 0018 must not merge with imported Evaluations. | Phase 7. | Option 1: a distinct version such as `"1-provisional"` until live calibration passes. |
+| #101 | Does a Naturalness Note cost mastery? Grifando folded its unnatural mistakes like errors; ADR 0014 and `CONTEXT.md` name only Findings. It also lists two readings applied without asking: a note's Mistake Category is always `UNNATURAL_PHRASING`, and Clarity and Other Findings form no Mistake Pattern. | The Naturalness Notes and the natural version (Next work, item 3). | Option 2: a note grows its pattern's occurrence count but is never a failed recall. |
 
 ### Ledger snapshot
 
-From `docs/migration/parity/*.json` after #98: 869 rows, 425 with targets, 67 superseded, 49 informative and 328 open (`port` or `port-changed` rows without targets). No row is `pending-decision`. Six slices are complete: `academy-core`, `evaluation-core`, `evaluation-judge`, `evaluation-persistence`, `evaluation-web` and `platform`.
+From `docs/migration/parity/*.json` on `main` after #105: 869 rows, 439 with targets, 67 superseded, 49 informative and 314 open (`port` or `port-changed` rows without targets). No row is `pending-decision`. Six slices are complete: `academy-core`, `evaluation-core`, `evaluation-judge`, `evaluation-persistence`, `evaluation-web` and `platform`. The branch of #106 adds an 870th row, the follow-up history characterization, in `academy-persistence`.
 
 | Slice | Open | Where the open rows come from |
 | --- | --- | --- |
 | `academy-trainer` | 2 | `noKeyInLogs.test.ts`, which needs a route that calls the Trainer |
-| `academy-persistence` | 19 | `exerciseService.test.ts` 10, `interviewService.test.ts` 5, `writingCoachService.test.ts` 4 |
+| `academy-persistence` | 5 | `interviewService.test.ts` (#106) |
 | `academy-http` | 29 | exercises, attempts, interview, pages and vocabulary characterizations; `exercises/route.test.ts` |
 | `academy-web` | 42 | `musicLink.test.ts` 25, `specimenData.test.ts` 10, `savedPlaylists.test.ts` 7 |
 | `academy-spec` | 42 | Grifando `SPEC.md` 17, `CLAUDE.md` 16, fix commits 7, issues 2 |
@@ -66,7 +67,7 @@ As an owner, which only an owner can do, since agents never post decisions:
 Through an agent session of his own:
 
 - Set up a machine (below) and resume as above. His session uses the GitHub token he chooses.
-- The units closest to his own code are the Academy ones: 5b (Mistake Patterns from enriched Findings) and 5d (exercises, grading, mastery and the interview). He knows the Grifando behavior they port better than anyone.
+- The units closest to his own code are the Academy ones: the interview (#106, in progress), the Naturalness Notes once #101 is answered, and the Academy routes and screens of 5e. He knows the Grifando behavior they port better than anyone.
 - To work beside Jhefferson's sessions without collisions: take a unit only through its issue (labels `in-progress` and `implementer:<vendor>`), after checking that no other issue is `in-progress`; keep one unit per branch; and agree on one coordinator for the shared files (database migrations, the contract index, CI workflows, `gates/baseline.json`, the ledger schema), today Jhefferson's Claude Code session. Only one database migration may be in flight.
 - G12 is waived. A Codex session may still verify a pull request with the verdict format of `docs/migration/README.md`, as information.
 
@@ -108,25 +109,33 @@ Each worktree runs its own `pnpm install --frozen-lockfile`; the pnpm store make
 
 ## Next work, in order
 
-0. Read #5, #63, #66, #72 and #87 for owner answers, and act on any.
-1. **5b, Mistake Patterns from enriched Findings** (`academy-persistence`, `writingCoachService.test.ts`: 4 rows `port-changed` under ADR 0004). Every Learner text goes through the Judge's Evaluation. The Academy fields (Pattern Key, Mistake Category, L1 Transfer, a natural version and examples) and the Naturalness Notes come from a separate Trainer enrichment call over an Evaluation's Findings, which runs only when the Academy is in use; pattern folding takes Findings plus enrichment. Read ADR 0004, 0005 (category mapping), 0014 (a Finding in new writing costs mastery, whatever its origin), 0015 (Academy state across Rubric Versions) and 0016 (practice is offered). The enrichment call has no source test; ADR 0004 authorizes it. Derive its prompt and schema from Grifando's `src/server/ai/prompts/writingAnalysis.ts` and `schemas/writingAnalysis.ts` at the pin, keeping only the Academy fields; add it to `TrainerMethods` and `withResilience`; pin it with contract tests as #96 did. If its shape needs a product choice (for example how Naturalness Notes are stored), ask on a "Human feedback needed" issue and build the rest.
-2. **5d, exercises, grading, mastery and the interview** (`academy-persistence`: `exerciseService.test.ts` 10 rows, `interviewService.test.ts` 5). The services get a Trainer from `TrainerClient.trainerFor(credentials)` and store the `model` that each result names (Grifando #77).
-3. **The Trainer's keys** (Phase 6 step 2 in the protocol; needed before any route calls the Trainer). ADR 0012 and ADR 0003: the `local` profile reads the key from server configuration (Grifando's `AI_PROVIDER`, `GEMINI_API_KEY` and `ANTHROPIC_API_KEY`, through Effect `Config` in `packages/env`, as `JudgeConfig` does); the `hosted` profile takes it from the `x-ai-provider` and `x-ai-key` request headers only, never stored or logged. Rows in `hosted`: `credentials.test.ts` (`readAICredentials` 3, `resolveAICredentials` 3 `port-changed` under ADR 0012, `aiErrorResponse` 2) and the key test route `ai-key/test/route.test.ts` (8, over `TrainerClient.testKey`); then `noKeyInLogs.test.ts` (2, `academy-trainer`) with the first route that calls the Trainer. Trap: `accessErrorForStatus > classifies provider statuses` (`hosted`, class A) pins behavior that #96 already built in `ai-sdk-trainer.ts`, so its ported test passes before any code and cannot be a G8 target. Add it to the question of #63 instead of working around the gate.
-4. **5e**: the Academy routes (`academy-http`, 29) and screens (`academy-web`, 42), without browser journeys.
-5. **5f**: the seam invariants and the `academy-spec` rows.
+0. Read #5, #63, #66, #72, #87 and #101 for owner answers, and act on any.
+1. **Finish #106, the interview**, on its pushed branch. Jhefferson's machine still has its worktree, `$F/app-wt/wu106`; elsewhere, `git -C $F/app fetch -q origin && git -C $F/app worktree add $F/app-wt/wu106 wu/106-interview`, then `pnpm install --frozen-lockfile`. The tests (`apps/server/src/academy/interview-service.test.ts`) and the typed stubs (`interview-service.ts`) are in the first commit; port Grifando's `interviewService.ts` and `interview.repository.ts` into them:
+   - Tables (migration `0004`, already generated): `interview_sessions` and `interview_turns`. A turn keeps no copy of its answer, because deleting an Evaluation removes its Writing Sample (`DATA-POLICY.md` § Deletion): it holds `evaluation_id` (set null when that Evaluation is deleted), `answered_at`, and the `model` that asked its question (ADR 0012). Read an answer through the turn's Evaluation (`original_text`), scoped to the Learner.
+   - `startInterview(trainer)`: a session, then `trainer.continueInterview([])`, then turn 0 with the model that answered.
+   - `answerTurn(evaluate, trainer, { sessionId, turnId, answer })`: the session of the Learner, else `NotFoundError({ resource: "Interview session" })`; the turn in it, else `NotFoundError({ resource: "Interview turn" })`; then `evaluate(answer)`, the Judge's Evaluation of a practice Writing Sample that the caller provides (ADR 0010), so the Academy writes no Evaluation data; its failure passes through and records nothing. Record `evaluation_id` and `answered_at`; when `order + 1 >= 6` (Grifando's `MAX_TURNS`) end the session and answer `{ status: "ended", evaluation }`; otherwise ask `continueInterview` with every answered turn so far in order plus this one (the characterized history), create the next turn, and answer `{ status: "answered", evaluation, nextTurn }`. `Effect.fn` keeps the generic parameters of `evaluate`.
+   - `getSession(sessionId)` and `endInterview(sessionId)` (true only when the Learner's session changed), as Grifando's repository.
+   - Ledger targets in `apps/server/src/academy/interview-service.test.ts`: the three rows whose titles stay, the characterization row (`port`, same title), and two renamed rows: "scores the answer via the Writing Coach pipeline and asks a follow-up" becomes "evaluates the answer as a practice Writing Sample and asks a follow-up", and "returns a failed result and does not create a follow-up question when analysis fails" becomes "fails and does not create a follow-up question when the Evaluation fails".
+   - Then the mutation spot-check, G8, G10, `pnpm verify`, and the pull request.
+2. **The Trainer's keys** (Phase 6 step 2; needed before any route calls the Trainer). ADR 0012 and ADR 0003: the `local` profile reads the key from server configuration (Grifando's `AI_PROVIDER`, `GEMINI_API_KEY` and `ANTHROPIC_API_KEY`, through Effect `Config` in `packages/env`, beside the model pins of `TrainerConfig`); the `hosted` profile takes it from the `x-ai-provider` and `x-ai-key` request headers only, never stored or logged. Rows in `hosted`: `credentials.test.ts` (`readAICredentials` 3, `resolveAICredentials` 3 `port-changed` under ADR 0012 with production read as the hosted profile, `aiErrorResponse` 2, which become entries of the edge helper with Grifando's codes and statuses: `AI_KEY_REQUIRED` 401, `AI_KEY_REJECTED` 401, `AI_KEY_INVALID` 400, `AI_QUOTA_EXCEEDED` 429, `AI_UNAVAILABLE` 503) and the key test route `ai-key/test/route.test.ts` (8, over `TrainerClient.testKey`; its rate limiter case waits for the hosted request pipeline); then `noKeyInLogs.test.ts` (2, `academy-trainer`) with the first route that calls the Trainer. Trap: `accessErrorForStatus > classifies provider statuses` (`hosted`, class A) pins behavior that #96 already built in `ai-sdk-trainer.ts`, so its ported test passes before any code and cannot be a G8 target. Add it to the question of #63 instead of working around the gate.
+3. **The Naturalness Notes and the natural version**, once #101 is answered: the Enrichment also returns the notes (correct but unnatural spans, Mistake Category `UNNATURAL_PHRASING`, stored as `UNNATURAL` Occurrences without a Finding, as the tables of #89 already allow) and the natural version (a new column of `enrichments`). The answer to #101 decides whether a note is a failed recall. Their rows: Grifando `SPEC.md` §5.1 (`academy-spec`, `port-changed` under ADR 0004) and its screens in 5e.
+4. **5e**: the Academy routes (`academy-http`, 29) and screens (`academy-web`, 42), without browser journeys. The routes compose the services: `evaluateWriting(..., "practice")` for Academy writing and interview answers, then `foldEvaluation` (5b), whose transaction records nothing on failure and refuses a second fold, so the Enrichment alone can be retried when it fails after the Evaluation was stored; how the screens show that is 5e's choice. Grifando's daily session (`afterSessionId`, which mixes the patterns of the latest Writing Sample into a practice set) has no test at the service or the route, so it gets a characterization test at the baseline before its port.
+5. **5f**: the seam invariants and the `academy-spec` rows. The lint rule that forbids Academy imports of Evaluation write services must name the write functions (`persistEvaluation`, `deleteEvaluation`, `evaluateWriting`), because the Academy reads through `getEvaluation` from the same `learning-history.ts`. Progress does not exclude practice-origin Writing Samples from the finding rate yet (ADR 0010); that is a 5f invariant.
 6. Phase 6 (`hosted`), the `evaluation-policy` rows, then Phase 7 (the PE importer of ADR 0018). Read the protocol to place each one before planning it.
 
 While the E2E pause holds, skip the `evaluation-e2e` rows and the `dev-proxy.test.ts` rows.
 
 Dependabot reports two open alerts on `main`, both from development tools: esbuild 0.18.20 (medium, alert 2), which drizzle-kit 0.31.11 pulls in through the deprecated `@esbuild-kit/esm-loader` and which matters only to esbuild's development server; and deepmerge 4.3.1 (low, alert 1, no fixed release yet), through ultracite. A fix changes dependencies, so it belongs in a dedicated unit.
 
-## The Trainer, as 5b and 5d find it
+## The Academy and the Trainer, as the next units find them
 
 - `TrainerConfig` (`packages/env/src/trainer.ts`) holds the model pins: `claude-sonnet-5` and `gemini-3.5-flash` answer unless `ANTHROPIC_MODEL` or `GEMINI_MODEL` names another model; the fallbacks are `claude-haiku-5-5` and `gemini-3.5-flash-lite`, which the environment never changes.
 - `TrainerClient` (`apps/server/src/academy/trainer/trainer-client.ts`): `trainerFor({ provider, apiKey })`, with the key as a `Redacted` value, builds a Trainer for that key. The primary model answers each call within 60 seconds; the fallback answers once when the primary is overloaded or times out. `testKey(credentials)` makes one 1-token call on the light fallback model and answers `works`, `invalid` or `busy` within 15 seconds.
-- `TrainerMethods` (`trainer-model.ts`): `generateExercises`, `explainAttempt` and `continueInterview`. Every result names the `model` that answered. Failures are `TrainerKeyRejectedError`, `TrainerQuotaExceededError`, `TrainerUnavailableError`, and `AIResponseValidationError` (from `@fluenshift/contract`) for an answer its schema refuses.
-- Nothing wires it into `apps/server/src/index.ts` yet, and no route uses it.
-- Its tests never call a provider: they use AI SDK mock models (`trainer-test-models.ts`), or the real providers over a fake `fetch` (`trainer-client.test.ts`).
+- `TrainerMethods` (`trainer-model.ts`): `enrichFindings`, `generateExercises`, `explainAttempt` and `continueInterview`. Every result names the `model` that answered. Failures are `TrainerKeyRejectedError`, `TrainerQuotaExceededError`, `TrainerUnavailableError`, and `AIResponseValidationError` (from `@fluenshift/contract`) for an answer its schema or rules refuse.
+- The Enrichment (`prompts/enrichment.ts`, `ai-sdk-trainer.ts`): one entry per Finding, numbered, with a Mistake Category that rolls up to the Finding's Error Category (`errorCategoryOf` and `mistakeCategoriesOf` in `packages/contract/src/academy.ts`, ADR 0005), a Pattern Key, the L1 Transfer flag and an example.
+- The Academy services in `apps/server/src/academy/`, each scoped to the Learner of the request: `pattern-folding.ts` (`foldEvaluation`: Findings of Clarity and Other are left out, the Trainer is not called without another Finding, and one transaction records the `enrichments` row with the answering model, the patterns and the Occurrences), `mistake-pattern-repository.ts` (`upsertPattern`, `upsertPatternRow` for transactions, `listPatterns` with `l1TransferOnly`, `findPattern`, `recordAttempt`), `exercise-service.ts` (`generatePracticeSet`, `submitAttempt`, `explainAttempt`; each Exercise records its model), `exercise-repository.ts`, `category-ability-repository.ts`, and `errors.ts` (`NotFoundError`, which the routes answer with 404).
+- Nothing wires the Trainer or the Academy into `apps/server/src/index.ts` yet, and no route uses them.
+- Their tests never call a provider: AI SDK mock models (`trainer-test-models.ts`), the real providers over a fake `fetch` (`trainer-client.test.ts`), or fake `TrainerMethods` whose calls answer Effects (the service tests).
 
 ## How a unit runs
 
@@ -180,6 +189,10 @@ Process and gates:
 - CodeQL fails a pull request on `js/biased-cryptographic-random` (`randomBytes` with `%`): use `randomInt`.
 - A full CI run with the Docker jobs takes about 15 minutes.
 - A unit that needs a module from an unmerged unit can branch from that unit's branch, then `git rebase origin/main` once it merges.
+- Only one migration is in flight: a unit that adds one either waits for the previous unit's merge or branches from it and runs `pnpm db:generate` only after that merge (#106 branched from #104 and fast-forwarded onto `main` once #105 merged).
+- G8 accepts a target that is red on an error rather than an assertion and notes it. Stubs that return a wrong placeholder value make most targets fail on assertions; a stub that dies makes all of them notes.
+- `inventory.ts` looks for the baselines beside the checkout (`<checkout>-baselines`): from a worktree, pass `--root $F/app-baselines`, as for G10. A new characterization case: write it in `migration/characterization/<system>/files/`, run `characterization-run.ts <system> --root $F/app-baselines` (Grifando's run takes a few minutes with Docker), regenerate the inventory, check it with `inventory.ts --check --root ...`, run `ledger-add.ts --slice <slice> --class <A|B|C> <row id>`, and update the table of `docs/migration/BASELINES.md` by hand.
+- `merge-when-green.sh` can outlive the tool call that starts it: `setsid nohup bash $F/app-wt/.pending/tools/merge-when-green.sh <pr> > <log> 2>&1 < /dev/null & disown`, then read the log.
 
 Stack:
 
@@ -199,6 +212,9 @@ Effect 4.1.2 and lint:
 
 - `Config.NonEmptyString`, `Config.Port`, `ConfigProvider.fromEnvRecord`. An empty variable reads as missing, so `Config.withDefault` applies to it. A service class is itself an Effect (`yield* ServerConfig`).
 - `lint:effect` requires `Schema.TaggedError<X, { readonly brand: unique symbol }>`. `Effect.catch` is the catch-all, `Effect.catchIf` takes a refinement, `Effect.catchDefect` recovers defects and `Effect.match` turns a failure into a value. `Effect.timeout` fails with a `TimeoutError` (`Cause.isTimeoutError`). `TestClock.layer()` and `TestClock.adjust` come from `effect/testing`. The Effect diagnostics flag `unknownInEffectCatch`, `catchConditionalRefailToCatchIf` and `catchAllToMapError`.
+- oxlint's `unicorn/no-array-method-this-argument` reads `Effect.forEach(array, f)` as an array method with a `this` argument, and the Effect diagnostics flag `Effect.all(array.map(f))` (`allOfMapToForEach`): use the data-last form, `pipe(array, Effect.forEach(f))`.
+- `unicorn/no-array-reduce` bans `reduce`, and lint bans `await` in loops: a sequential chain of queries inside one Drizzle transaction recurses (`foldInOrder` in `pattern-folding.ts`). A Drizzle transaction callback receives a client that `DrizzleClient` accepts, so repository helpers can take either.
+- `Effect.fn` keeps a generator's type parameters (`function* <E, R>(evaluate: (answer: string) => Effect.Effect<A, E, R>)`), so a service can take an Effect-returning capability without naming its errors.
 - `packages/core` exports by path (`@fluenshift/core/<module>`), with no barrel. `expect` takes one argument; no `await` inside loops; arrow constants (`func-style`); no `expect` inside `it.effect` (`no-standalone-expect`), so use plain `it` with `Effect.runPromise`. No `new Promise` (`promise/avoid-new`): use `Promise.withResolvers`. A helper that captures nothing moves to module scope (`unicorn/consistent-function-scoping`).
 
 Shell:
@@ -207,6 +223,7 @@ Shell:
 - A `\uXXXX` sequence typed in a tool input reaches the file as the real character. Write escapes with a script (Python `"\\" + "uFEFF"`) and check for invisible characters.
 - `mise exec` prunes unused tool versions on its own when it starts; nothing in the repository asks for it.
 - Turbo shares its cache across worktrees (an untracked `.turbo/` in each checkout).
+- `git -C $F/app worktree add <path>` resolves a relative `<path>` against `$F/app`, which puts the worktree inside the main checkout: always give the worktree an absolute path.
 
 ## Jhefferson's machine
 
