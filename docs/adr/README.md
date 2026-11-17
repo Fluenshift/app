@@ -35,3 +35,4 @@ ADR 0019 deleted; commit `39fbb46` holds them.
 | [0020](./0020-sessions-decide.md) | Sessions decide and merge; the open owner requests are decided | Accepted |
 | [0021](./0021-rows-built-before-their-tests.md) | A row whose behavior an earlier unit built is superseded by its ported tests | Accepted |
 | [0022](./0022-document-clauses-live-in-the-merged-documents.md) | Document-clause rows are superseded by the merged documents | Accepted |
+| [0023](./0023-academy-record-ids-in-paths.md) | The IDs of the Academy's records may travel in URL paths | Accepted |
