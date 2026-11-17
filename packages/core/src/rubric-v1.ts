@@ -13,6 +13,12 @@ import {
 
 export const RUBRIC_VERSION = "1";
 
+// The Rubric Version that new Evaluations record and that Progress reads as current. The Judge
+// applies Rubric Version 1's policy, but its provider and model are not calibrated yet, so its
+// Evaluations stay apart from PE's calibrated Version 1 until live calibration passes
+// (docs/adr/0020, docs/product/RUBRIC.md).
+export const CURRENT_RUBRIC_VERSION = "1-provisional";
+
 // The closed value sets of Rubric Version 1 belong to the Evaluation contract.
 export { ERROR_CATEGORIES } from "@fluenshift/contract";
 export type {

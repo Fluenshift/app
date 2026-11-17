@@ -16,7 +16,7 @@ import {
   applyCorrections,
   countEnglishWords,
   proficiencyBandForScore,
-  RUBRIC_VERSION,
+  CURRENT_RUBRIC_VERSION,
   scoreEvaluation,
   UnsafeCorrectionError,
 } from "@fluenshift/core/rubric-v1";
@@ -233,7 +233,7 @@ export const evaluateWriting = Effect.fn("WritingEvaluation.evaluate")(
       model: modelEvaluation.model,
       originalText: writingSample,
       provider: modelEvaluation.provider,
-      rubricVersion: RUBRIC_VERSION,
+      rubricVersion: CURRENT_RUBRIC_VERSION,
       score,
       suggestions: orderedSuggestions,
       summary: assessment.summary,

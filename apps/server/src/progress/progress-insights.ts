@@ -13,7 +13,7 @@ import type {
 } from "@fluenshift/contract";
 import {
   proficiencyBandForScore,
-  RUBRIC_VERSION,
+  CURRENT_RUBRIC_VERSION,
 } from "@fluenshift/core/rubric-v1";
 import { Effect } from "effect";
 
@@ -150,16 +150,16 @@ export const getProgressSummary = Effect.fn(
     ...new Set(
       retained
         .map((evaluation) => evaluation.rubricVersion)
-        .filter((version) => version !== RUBRIC_VERSION)
+        .filter((version) => version !== CURRENT_RUBRIC_VERSION)
     ),
   ].toSorted((left, right) => left.localeCompare(right));
 
   return {
     ...segment(
       retained.filter(
-        (evaluation) => evaluation.rubricVersion === RUBRIC_VERSION
+        (evaluation) => evaluation.rubricVersion === CURRENT_RUBRIC_VERSION
       ),
-      RUBRIC_VERSION
+      CURRENT_RUBRIC_VERSION
     ),
     incompatibleSegments: incompatibleVersions.map((version) =>
       segment(
@@ -184,7 +184,7 @@ export const getProgressEvidence = Effect.fn(
   now: Date = new Date()
 ) {
   const retained = (yield* evaluationsInPeriod(period, now)).filter(
-    (evaluation) => evaluation.rubricVersion === RUBRIC_VERSION
+    (evaluation) => evaluation.rubricVersion === CURRENT_RUBRIC_VERSION
   );
   const findingsFor = (evaluation: Evaluation) =>
     evaluation.findings
@@ -232,7 +232,7 @@ export const getProgressEvidence = Effect.fn(
     })),
     findings: selectedFindings,
     period,
-    rubricVersion: RUBRIC_VERSION,
+    rubricVersion: CURRENT_RUBRIC_VERSION,
     selection,
   } satisfies ProgressEvidence;
 });

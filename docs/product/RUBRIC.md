@@ -6,9 +6,9 @@ defined in `CONTEXT.md`.
 
 Status: the Judge applies this policy through one pinned model on OpenRouter, as a
 provisional, uncalibrated Rubric Version (ADR 0012), until live calibration, which the owners
-schedule after parity. Progress never merges the provisional version with the Evaluations
-that Prompt Evolution made under its calibrated Rubric Version 1 and that the importer brings
-in (ADR 0018).
+schedule after parity. New Evaluations record that version as `1-provisional` (ADR 0020).
+Progress never merges it with the Evaluations that Prompt Evolution made under its calibrated
+Rubric Version `1` and that the importer brings in (ADR 0018).
 
 Rubric Version is immutable on a stored Evaluation. Versions are incompatible
 by default; combining them in Progress requires an explicit code-level

@@ -459,8 +459,8 @@
       "source": "apps/server/src/progress/progress-insights.test.ts",
       "class": "B",
       "slice": "evaluation-persistence",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "port-changed",
+      "decision": "adr:0020",
       "targets": [
         "apps/server/src/progress/progress-insights.test.ts::Progress Insights > segments exact period evidence by Rubric Version"
       ]
