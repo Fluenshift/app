@@ -105,6 +105,22 @@ const setup: SetupStatus = {
 const summary = ({ period }: { readonly period: string }) =>
   Effect.succeed({ evaluationCount: 0, period });
 
+// Echoes the decoded request, so a test sees what reached the boundary.
+const evidence = ({
+  period,
+  selection,
+}: {
+  readonly period: string;
+  readonly selection: unknown;
+}) => Effect.succeed({ period, selection });
+
+const postEvidence = (body: unknown) =>
+  new Request("http://localhost/api/progress/evidence", {
+    body: JSON.stringify(body),
+    headers: { "content-type": "application/json" },
+    method: "POST",
+  });
+
 const created = (writingSample: string): EvaluationEndpointResult => ({
   evaluation: {
     band: "Natural",
@@ -1062,6 +1078,102 @@ describe("Progress endpoints", () => {
       expect(body).toEqual({
         code: "invalid-period",
         error: "Progress period is invalid",
+      });
+    }
+  });
+
+  // Ported from PE's app.characterization.test.ts, where every selection travelled in the
+  // query string. ADR 0008 moves the Correction, text the Learner wrote, into the body of
+  // POST /api/progress/evidence; every other selection, status and body stays as it was. #65
+  // built both routes before these tests existed, so their rows are superseded under ADR 0021.
+  it("selects evidence by insight, Error Category or correction", async () => {
+    const app = appWith({ getProgressEvidence: evidence });
+    const responses = await Promise.all([
+      app.request(
+        get(
+          "http://localhost/api/progress/evidence?period=7-days&insight=finding-rate"
+        )
+      ),
+      app.request(
+        get(
+          "http://localhost/api/progress/evidence?period=30-days&insight=average-score"
+        )
+      ),
+      app.request(
+        get(
+          "http://localhost/api/progress/evidence?period=all&insight=category&category=Verb%20form%2Ftense"
+        )
+      ),
+      app.request(
+        postEvidence({
+          period: "all",
+          selection: {
+            correction: "an apple",
+            kind: "correction",
+            originalText: "a apple",
+          },
+        })
+      ),
+    ]);
+    const selections = await Promise.all(
+      responses.map((response) => response.json())
+    );
+
+    expect(selections).toEqual([
+      { period: "7-days", selection: { kind: "finding-rate" } },
+      { period: "30-days", selection: { kind: "average-score" } },
+      {
+        period: "all",
+        selection: { category: "Verb form/tense", kind: "category" },
+      },
+      {
+        period: "all",
+        selection: {
+          correction: "an apple",
+          kind: "correction",
+          originalText: "a apple",
+        },
+      },
+    ]);
+  });
+
+  it("refuses an unknown insight, an unknown category, a half correction and a bad period", async () => {
+    const app = appWith({ getProgressEvidence: evidence });
+    const responses = await Promise.all([
+      app.request(
+        get(
+          "http://localhost/api/progress/evidence?period=all&insight=improvement"
+        )
+      ),
+      app.request(
+        get(
+          "http://localhost/api/progress/evidence?period=all&insight=category&category=Style"
+        )
+      ),
+      app.request(
+        postEvidence({
+          period: "all",
+          selection: { kind: "correction", originalText: "a apple" },
+        })
+      ),
+      app.request(
+        get(
+          "http://localhost/api/progress/evidence?period=year&insight=finding-rate"
+        )
+      ),
+      app.request(get("http://localhost/api/progress/evidence?period=all")),
+    ]);
+    const bodies = await Promise.all(
+      responses.map((response) => response.json())
+    );
+
+    for (const response of responses) {
+      expect(response.status).toBe(400);
+    }
+    for (const body of bodies) {
+      expect(body).toEqual({
+        code: "invalid-selection",
+        error: "Progress selection is invalid",
       });
     }
   });

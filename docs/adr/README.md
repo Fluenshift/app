@@ -33,3 +33,4 @@ ADR 0019 deleted; commit `39fbb46` holds them.
 | [0018](./0018-data-at-cutover.md) | Grifando starts fresh with notice; PE history is imported | Accepted |
 | [0019](./0019-lighter-gates-and-shorter-documents.md) | G12 retired; each suite once per CI run; rules once in `AGENTS.md`; documents cut to the work ahead | Accepted |
 | [0020](./0020-sessions-decide.md) | Sessions decide and merge; the open owner requests are decided | Accepted |
+| [0021](./0021-rows-built-before-their-tests.md) | A row whose behavior an earlier unit built is superseded by its ported tests | Accepted |

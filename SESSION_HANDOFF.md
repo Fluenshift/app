@@ -10,13 +10,11 @@ Merged work: `git log --first-parent --oneline main`. The rows still open per sl
 
 ## Next steps
 
-1. **Provisional Rubric Version** (decided in ADR 0020, from #87): new Evaluations record a version distinct from PE's `"1"`, for example `"1-provisional"`, until live calibration passes; the Judge's prompt and the rubric policy stay as they are. Find every place that records or asserts the version (`RUBRIC_VERSION` in `packages/core/src/rubric-v1.ts`, `apps/server/src/evaluation/writing-evaluation.ts`, the Judge's prompt). A ported test that asserts `"1"` on a new Evaluation changes under ADR 0020: its row becomes `port-changed` with `decision: "adr:0020"`.
-2. **Two Progress rows** (decided in ADR 0020, from #66): port `Progress endpoints > selects evidence by insight, Error Category or correction` and `... refuses an unknown insight, an unknown category, a half correction and a bad period` of `app.characterization.test.ts` (`evaluation-http`, now `port-changed` under ADR 0008), with the Correction in the body of `POST /api/progress/evidence` (`ProgressEvidenceRequest`).
-3. #111: move the three unit helpers into the repository.
-4. #120: give each product rule one home in the documents.
-5. **Naturalness Notes** (decided in ADR 0020, from #101): add the natural version and the Naturalness Notes to the Enrichment (AR-03, AR-04). A note grows its Mistake Pattern's occurrence count and is never a failed recall.
-6. **The Trainer's keys** (Phase 6 step 2), needed before any route calls the Trainer. Rows: `hosted` (`credentials.test.ts`, `ai-key/test/route.test.ts`) and `academy-trainer` (`noKeyInLogs.test.ts`, with the first route that calls the Trainer). ADR 0012 and ADR 0003 decide where keys come from. `accessErrorForStatus > classifies provider statuses` passes before any code (PR #96 built it), so it cannot be a G8 target: mark it `superseded` under an ADR, as ADR 0020 did for #63.
-7. In protocol order (`docs/migration/MIGRATION_PROTOCOL.md`, Phases): 5e (Academy routes and screens), 5f (seam invariants and the `academy-spec` rows), Phase 6, Phase 7.
+1. #111: move the three unit helpers into the repository.
+2. #120: give each product rule one home in the documents.
+3. **Naturalness Notes** (decided in ADR 0020, from #101): add the natural version and the Naturalness Notes to the Enrichment (AR-03, AR-04). A note grows its Mistake Pattern's occurrence count and is never a failed recall.
+4. **The Trainer's keys** (Phase 6 step 2), needed before any route calls the Trainer. Rows: `hosted` (`credentials.test.ts`, `ai-key/test/route.test.ts`) and `academy-trainer` (`noKeyInLogs.test.ts`, with the first route that calls the Trainer). ADR 0012 and ADR 0003 decide where keys come from. `accessErrorForStatus > classifies provider statuses` passes before any code (PR #96 built it), so it cannot be a G8 target: port its test anyway and mark the row `superseded` under ADR 0021.
+5. In protocol order (`docs/migration/MIGRATION_PROTOCOL.md`, Phases): 5e (Academy routes and screens), 5f (seam invariants and the `academy-spec` rows), Phase 6, Phase 7.
 
 Facts these units need that no issue records yet:
 
