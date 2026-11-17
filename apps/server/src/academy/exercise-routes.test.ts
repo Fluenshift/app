@@ -25,6 +25,7 @@ import { CurrentLearner, LearnerIdentity } from "../learner-identity";
 import { makeTemporaryDatabase } from "../test/database";
 import { generateExercisesFor } from "./academy-requests";
 import { listPendingExercises } from "./exercise-repository";
+import { listPatternIdsForEvaluation } from "./mistake-pattern-repository";
 import type { ExerciseTarget } from "./prompts/exercise-generation";
 import { TrainerClient } from "./trainer/trainer-client";
 import { TrainerKeyRejectedError } from "./trainer/trainer-errors";
@@ -307,6 +308,66 @@ describe("POST /api/exercises", () => {
   });
 });
 
+// A practice Evaluation of the visitor with one Finding, and an Occurrence of `patternId` from it.
+const seedOccurrence = async (patternId: string) => {
+  const evaluationId = randomUUID();
+  await runtime.runPromise(
+    persistEvaluation({
+      contentHash: "hash",
+      evaluation: {
+        band: "Clear",
+        correctedText: "I worked on a payments API.",
+        evaluatedAt: "2026-11-17T12:00:00.000Z",
+        evaluatedEnglishWordCount: 5,
+        findings: [
+          {
+            byteEnd: 7,
+            byteStart: 2,
+            category: "Verb form/tense",
+            correction: "worked",
+            explanation: "Use the past tense.",
+            originalText: "work ",
+            severity: "Minor",
+          },
+        ],
+        id: evaluationId,
+        model: "judge-model",
+        originalText: "I work in a payments API.",
+        provider: "test",
+        rubricVersion: "1-provisional",
+        score: 80,
+        suggestions: [],
+        summary: "One tense mistake.",
+      },
+      latencyMilliseconds: 1,
+      origin: "practice",
+      submittedAt: "2026-11-17T12:00:00.000Z",
+    }).pipe(
+      Effect.provideService(
+        CurrentLearner,
+        CurrentLearner.of({ id: "visitor-1" as LearnerId })
+      )
+    )
+  );
+  await query((client) =>
+    client.insert(occurrences).values({
+      category: "PREPOSITIONS",
+      correctedSpan: "worked on",
+      evaluationId,
+      example: "I worked on a payments API.",
+      explanation: "Use the past tense.",
+      findingPosition: 0,
+      id: randomUUID(),
+      learnerId: "visitor-1",
+      originalSpan: "work in",
+      patternId,
+      rubricVersion: "1-provisional",
+      severity: "ERROR",
+    })
+  );
+  return evaluationId;
+};
+
 // Grifando's daily session (exerciseService.ts, 74dbb9f), which no Grifando test covers: after
 // a piece of writing, the patterns that writing produced open the set.
 describe("POST /api/exercises daily session", () => {
@@ -324,61 +385,7 @@ describe("POST /api/exercises daily session", () => {
       lastPracticedAt: new Date(),
       patternKey: "work-on",
     });
-    const evaluationId = randomUUID();
-    await runtime.runPromise(
-      persistEvaluation({
-        contentHash: "hash",
-        evaluation: {
-          band: "Clear",
-          correctedText: "I worked on a payments API.",
-          evaluatedAt: "2026-11-17T12:00:00.000Z",
-          evaluatedEnglishWordCount: 5,
-          findings: [
-            {
-              byteEnd: 7,
-              byteStart: 2,
-              category: "Verb form/tense",
-              correction: "worked",
-              explanation: "Use the past tense.",
-              originalText: "work ",
-              severity: "Minor",
-            },
-          ],
-          id: evaluationId,
-          model: "judge-model",
-          originalText: "I work in a payments API.",
-          provider: "test",
-          rubricVersion: "1-provisional",
-          score: 80,
-          suggestions: [],
-          summary: "One tense mistake.",
-        },
-        latencyMilliseconds: 1,
-        origin: "practice",
-        submittedAt: "2026-11-17T12:00:00.000Z",
-      }).pipe(
-        Effect.provideService(
-          CurrentLearner,
-          CurrentLearner.of({ id: "visitor-1" as LearnerId })
-        )
-      )
-    );
-    await query((client) =>
-      client.insert(occurrences).values({
-        category: "PREPOSITIONS",
-        correctedSpan: "worked on",
-        evaluationId,
-        example: "I worked on a payments API.",
-        explanation: "Use the past tense.",
-        findingPosition: 0,
-        id: randomUUID(),
-        learnerId: "visitor-1",
-        originalSpan: "work in",
-        patternId: fresh.id,
-        rubricVersion: "1-provisional",
-        severity: "ERROR",
-      })
-    );
+    const evaluationId = await seedOccurrence(fresh.id);
 
     await post({});
     await post({ afterEvaluationId: evaluationId });
@@ -387,5 +394,23 @@ describe("POST /api/exercises daily session", () => {
       generateExercises.mock.calls[call]?.[0][0]?.exampleOriginal;
     expect(firstOf(0)).toBe("I depend of this library.");
     expect(firstOf(1)).toBe("I work in a payments API.");
+  });
+
+  it("takes only the patterns of that Evaluation as fresh", async () => {
+    const first = await seedPattern("visitor-1", { patternKey: "first" });
+    const second = await seedPattern("visitor-1", { patternKey: "second" });
+    const evaluationId = await seedOccurrence(first.id);
+    await seedOccurrence(second.id);
+
+    expect(
+      await runtime.runPromise(
+        listPatternIdsForEvaluation(evaluationId).pipe(
+          Effect.provideService(
+            CurrentLearner,
+            CurrentLearner.of({ id: "visitor-1" as LearnerId })
+          )
+        )
+      )
+    ).toEqual([first.id]);
   });
 });
