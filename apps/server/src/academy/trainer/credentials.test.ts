@@ -7,6 +7,7 @@ import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import { ConfigProvider, Effect, Layer, Redacted } from "effect";
 import { describe, expect, it } from "vitest";
 
+import { NotFoundError } from "../errors";
 import { accessErrorForStatus } from "./ai-sdk-trainer";
 import {
   readTrainerCredentials,
@@ -124,6 +125,12 @@ describe("aiErrorResponse", () => {
 
   it("returns null for unrelated errors", () => {
     expect(trainerErrorResponse(new Error("x"))).toBeNull();
+  });
+
+  it("returns null for a tagged error the Learner cannot act on", () => {
+    expect(
+      trainerErrorResponse(new NotFoundError({ resource: "Exercise" }))
+    ).toBeNull();
   });
 });
 
