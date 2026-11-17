@@ -7,8 +7,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -16,8 +16,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port-changed",
-      "decision": "adr:0012",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -25,8 +25,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -34,8 +34,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -43,8 +43,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -52,8 +52,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -61,8 +61,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port-changed",
-      "decision": "adr:0012",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -70,8 +70,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port-changed",
-      "decision": "adr:0017",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -79,8 +79,8 @@
       "source": "docs/product/DATA-POLICY.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -88,8 +88,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -97,8 +97,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port-changed",
-      "decision": "adr:0003",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -106,8 +106,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port-changed",
-      "decision": "adr:0003",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -115,8 +115,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -124,8 +124,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -133,8 +133,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -142,8 +142,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -151,8 +151,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -160,8 +160,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -169,8 +169,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -178,8 +178,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -187,8 +187,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -196,8 +196,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -205,8 +205,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -214,8 +214,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -223,8 +223,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -232,8 +232,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -241,8 +241,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -250,8 +250,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -259,8 +259,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -268,8 +268,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -277,8 +277,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -286,8 +286,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -295,8 +295,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port-changed",
-      "decision": "adr:0003",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -304,8 +304,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -313,8 +313,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -322,8 +322,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -331,8 +331,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -340,8 +340,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -349,8 +349,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -358,8 +358,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -367,8 +367,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -376,8 +376,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -385,8 +385,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -394,8 +394,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -403,8 +403,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -412,8 +412,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -421,8 +421,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -430,8 +430,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -439,8 +439,8 @@
       "source": "docs/product/REQUIREMENTS.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -448,8 +448,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -457,8 +457,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -466,8 +466,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -475,8 +475,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -484,8 +484,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -493,8 +493,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -502,8 +502,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -511,8 +511,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -520,8 +520,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -529,8 +529,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -538,8 +538,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -547,8 +547,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -556,8 +556,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -565,8 +565,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -574,8 +574,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -583,8 +583,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -592,8 +592,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -601,8 +601,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -610,8 +610,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -619,8 +619,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -628,8 +628,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -637,8 +637,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -646,8 +646,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -655,8 +655,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -664,8 +664,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -673,8 +673,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -682,8 +682,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -691,8 +691,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -700,8 +700,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -709,8 +709,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -718,8 +718,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -727,8 +727,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -736,8 +736,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -745,8 +745,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -754,8 +754,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -763,8 +763,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -772,8 +772,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -781,8 +781,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -790,8 +790,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -799,8 +799,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -808,8 +808,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -817,8 +817,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -826,8 +826,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -835,8 +835,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -844,8 +844,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -853,8 +853,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -862,8 +862,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -871,8 +871,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -880,8 +880,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -889,8 +889,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -898,8 +898,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -907,8 +907,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -916,8 +916,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -925,8 +925,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -934,8 +934,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -943,8 +943,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -952,8 +952,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -961,8 +961,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -970,8 +970,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -979,8 +979,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -988,8 +988,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -997,8 +997,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -1006,8 +1006,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -1015,8 +1015,8 @@
       "source": "docs/product/RUBRIC.md",
       "class": null,
       "slice": "evaluation-policy",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     }
   ]

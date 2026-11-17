@@ -25,8 +25,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -34,8 +34,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0003",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -43,8 +43,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0004",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -52,8 +52,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0003",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -79,8 +79,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0012",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -88,8 +88,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -97,8 +97,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -106,8 +106,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -115,8 +115,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -124,8 +124,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -142,8 +142,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -151,8 +151,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -160,8 +160,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -169,8 +169,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0003",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -178,8 +178,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0011",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -196,8 +196,8 @@
       "source": "CLAUDE.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -655,8 +655,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0016",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -682,8 +682,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0004",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -691,8 +691,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -700,8 +700,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -709,8 +709,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -718,8 +718,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -727,8 +727,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -736,8 +736,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -745,8 +745,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0010",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -754,8 +754,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0002",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -763,8 +763,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -772,8 +772,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -781,8 +781,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -799,8 +799,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -808,8 +808,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0012",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -826,8 +826,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0003",
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     },
     {
@@ -835,8 +835,8 @@
       "source": "SPEC.md",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0022",
       "targets": []
     }
   ]
