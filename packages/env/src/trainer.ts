@@ -1,7 +1,14 @@
-import { Config, Context, Effect, Layer } from "effect";
+import { Config, Context, Effect, Layer, Option } from "effect";
+import type { Redacted } from "effect";
 
 /** The providers a Trainer runs on (docs/adr/0012). */
 export type TrainerProvider = "anthropic" | "gemini";
+
+/** A key for one provider. */
+export interface TrainerKey {
+  readonly apiKey: Redacted.Redacted<string>;
+  readonly provider: TrainerProvider;
+}
 
 /** The model that answers a provider's calls, and the one that takes over on overload. */
 export interface TrainerModels {
@@ -26,7 +33,11 @@ const GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite";
  */
 export class TrainerConfig extends Context.Service<
   TrainerConfig,
-  { readonly models: Readonly<Record<TrainerProvider, TrainerModels>> }
+  {
+    /** The local profile's key, from server configuration (docs/adr/0012). */
+    readonly localKey: Option.Option<TrainerKey>;
+    readonly models: Readonly<Record<TrainerProvider, TrainerModels>>;
+  }
 >()("@fluenshift/env/TrainerConfig") {
   static readonly layer = Layer.effect(
     TrainerConfig,
@@ -40,6 +51,7 @@ export class TrainerConfig extends Context.Service<
         ),
       ]);
       return TrainerConfig.of({
+        localKey: Option.none(),
         models: {
           anthropic: { fallback: ANTHROPIC_FALLBACK_MODEL, primary: anthropic },
           gemini: { fallback: GEMINI_FALLBACK_MODEL, primary: gemini },

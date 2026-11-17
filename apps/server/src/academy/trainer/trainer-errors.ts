@@ -21,6 +21,27 @@ export class TrainerUnavailableError extends Schema.TaggedError<
   { readonly brand: unique symbol }
 >()("TrainerUnavailableError", {}) {}
 
+// No key reached the request, and the profile offers none.
+export class TrainerKeyRequiredError extends Schema.TaggedError<
+  TrainerKeyRequiredError,
+  { readonly brand: unique symbol }
+>()("TrainerKeyRequiredError", {}) {}
+
+// The key in the request is malformed: an unknown provider, over 256 characters, or not
+// printable ASCII.
+export class InvalidTrainerCredentialsError extends Schema.TaggedError<
+  InvalidTrainerCredentialsError,
+  { readonly brand: unique symbol }
+>()("InvalidTrainerCredentialsError", {}) {}
+
+// The errors a Learner can act on: set up, check or replace the key, or retry later.
+export type TrainerAccessError =
+  | InvalidTrainerCredentialsError
+  | TrainerKeyRejectedError
+  | TrainerKeyRequiredError
+  | TrainerQuotaExceededError
+  | TrainerUnavailableError;
+
 // A failure of one Trainer call; an answer that its schema refuses is an
 // AIResponseValidationError.
 export type TrainerError =
