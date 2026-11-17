@@ -7,6 +7,10 @@ import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
 
 import { TrainerClient } from "./academy/trainer/trainer-client";
+import {
+  createVocabularyItem,
+  deleteVocabularyItem,
+} from "./academy/vocabulary-repository";
 import { createApp, serveApp } from "./app";
 import { evaluateWritingForEndpoint } from "./evaluation/evaluation-endpoint";
 import { EvaluationModel } from "./evaluation/evaluation-model";
@@ -46,7 +50,9 @@ const HttpServer = Layer.effectDiscard(
       () => storedAt
     );
     const app = createApp({
+      createVocabularyItem,
       deleteEvaluation,
+      deleteVocabularyItem,
       evaluateWriting: (writingSample) =>
         evaluateWritingForEndpoint(writingSample, new Date()),
       getEvaluation,

@@ -9,6 +9,23 @@ const findings = (...lines: readonly string[]) =>
   );
 
 describe("check-url-text", () => {
+  it("accepts the IDs of the Academy's records in a path", () => {
+    assert.deepEqual(
+      findings(
+        '.delete("/api/vocabulary/:itemId", (context) =>',
+        '  context.req.param("itemId")',
+        ")",
+        '.post("/api/exercises/:exerciseId/attempts/:attemptId", (context) =>',
+        '  [context.req.param("exerciseId"), context.req.param("attemptId")]',
+        ")",
+        '.post("/api/interview/:sessionId/turns/:turnId/answer", (context) =>',
+        '  [context.req.param("sessionId"), context.req.param("turnId")]',
+        ")"
+      ),
+      []
+    );
+  });
+
   it("accepts the period, the insight, the Error Category and the Evaluation ID", () => {
     assert.deepEqual(
       findings(

@@ -126,3 +126,21 @@ export const mistakeCategoriesOf = (
   MISTAKE_CATEGORIES.filter(
     (mistakeCategory) => ROLL_UP[mistakeCategory] === category
   );
+
+/**
+ * A vocabulary item the Learner saves, with Grifando's limits (src/app/api/vocabulary/route.ts,
+ * 74dbb9f). Its source is one of the Learner's Evaluations, which replace Grifando's writing
+ * sessions (docs/adr/0004).
+ */
+export const VocabularyItemRequest = Schema.Struct({
+  exampleSentence: Schema.Trim.check(
+    Schema.isMinLength(1),
+    Schema.isMaxLength(500)
+  ),
+  meaningPt: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(300)),
+  sourceEvaluationId: Schema.optional(
+    Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(64))
+  ),
+  term: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(120)),
+});
+export type VocabularyItemRequest = typeof VocabularyItemRequest.Type;

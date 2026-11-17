@@ -24,8 +24,18 @@ export const QUERY_KEYS: ReadonlySet<string> = new Set([
   "period",
 ]);
 
-/** The path parameters a URL may carry: the ID of an Evaluation. */
-export const PATH_PARAMETERS: ReadonlySet<string> = new Set(["evaluationId"]);
+/**
+ * The path parameters a URL may carry: the ID of an Evaluation, and the IDs of the Academy's
+ * records, which the server generates and which hold nothing a Learner wrote (docs/adr/0023).
+ */
+export const PATH_PARAMETERS: ReadonlySet<string> = new Set([
+  "attemptId",
+  "evaluationId",
+  "exerciseId",
+  "itemId",
+  "sessionId",
+  "turnId",
+]);
 
 export interface Finding {
   readonly file: string;

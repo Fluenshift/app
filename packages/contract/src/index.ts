@@ -25,6 +25,7 @@ export {
   TECHNICAL_CATEGORIES,
   TechnicalCategory,
   TechnicalCategorySchema,
+  VocabularyItemRequest,
 } from "./academy";
 export {
   AIResponseValidationError,

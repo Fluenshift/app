@@ -171,25 +171,31 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/vocabulary-routes.test.ts::vocabulary routes > answers 400 with the validation issues for a missing field"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > deletes the visitor's item with 204, and 404s for an unknown or another user's item",
       "source": "src/app/api/vocabulary/vocabulary.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "port",
-      "decision": null,
-      "targets": []
+      "disposition": "port-changed",
+      "decision": "adr:0004",
+      "targets": [
+        "apps/server/src/academy/vocabulary-routes.test.ts::vocabulary routes > deletes the visitor's item with 204, and 404s for an unknown or another user's item"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > saves an item and answers 201 with it",
       "source": "src/app/api/vocabulary/vocabulary.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "port",
-      "decision": null,
-      "targets": []
+      "disposition": "port-changed",
+      "decision": "adr:0004",
+      "targets": [
+        "apps/server/src/academy/vocabulary-routes.test.ts::vocabulary routes > saves an item and answers 201 with it"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > analyzes a submitted text and answers 201 with the session and its analysis",
