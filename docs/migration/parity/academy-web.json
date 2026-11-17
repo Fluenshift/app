@@ -162,7 +162,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/embed/playlist/37i9dQZF1DWWQRwui0ExPn"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/intl-pt/playlist/37i9dQZF1DWWQRwui0ExPn",
@@ -171,7 +173,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/intl-pt/playlist/37i9dQZF1DWWQRwui0ExPn"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn?si=abc123",
@@ -180,7 +184,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn?si=abc123"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/track/37i9dQZF1DWWQRwui0ExPn",
@@ -189,7 +195,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses Spotify link https://open.spotify.com/track/37i9dQZF1DWWQRwui0ExPn"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link open.spotify.com/album/37i9dQZF1DWWQRwui0ExPn",
@@ -198,7 +206,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses Spotify link open.spotify.com/album/37i9dQZF1DWWQRwui0ExPn"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses Spotify link spotify:playlist:37i9dQZF1DWWQRwui0ExPn",
@@ -207,7 +217,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses Spotify link spotify:playlist:37i9dQZF1DWWQRwui0ExPn"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube playlist link https://music.youtube.com/playlist?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG",
@@ -216,7 +228,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses YouTube playlist link https://music.youtube.com/playlist?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube playlist link https://www.youtube.com/playlist?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG",
@@ -225,7 +239,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses YouTube playlist link https://www.youtube.com/playlist?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube playlist link https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG&index=3",
@@ -234,7 +250,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses YouTube playlist link https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG&index=3"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube playlist link https://youtu.be/dQw4w9WgXcQ?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG",
@@ -243,7 +261,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses YouTube playlist link https://youtu.be/dQw4w9WgXcQ?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube video link   https://www.youtube.com/embed/dQw4w9WgXcQ  ",
@@ -252,7 +272,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses YouTube video link   https://www.youtube.com/embed/dQw4w9WgXcQ  "
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube video link https://m.youtube.com/watch?v=dQw4w9WgXcQ&t=42s",
@@ -261,7 +283,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses YouTube video link https://m.youtube.com/watch?v=dQw4w9WgXcQ&t=42s"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube video link https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -270,7 +294,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses YouTube video link https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > parses YouTube video link https://youtu.be/dQw4w9WgXcQ",
@@ -279,7 +305,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > parses YouTube video link https://youtu.be/dQw4w9WgXcQ"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"\"",
@@ -288,7 +316,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://example.com/playlist?list=PL123456789\"",
@@ -297,7 +327,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"https://example.com/playlist?list=PL123456789\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://open.spotify.com/artist/37i9dQZF1DWWQRwui0ExPn\"",
@@ -306,7 +338,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"https://open.spotify.com/artist/37i9dQZF1DWWQRwui0ExPn\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://open.spotify.com/playlist/short\"",
@@ -315,7 +349,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"https://open.spotify.com/playlist/short\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://www.youtube.com/@somechannel\"",
@@ -324,7 +360,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"https://www.youtube.com/@somechannel\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://www.youtube.com/watch?v=\\\"><script>\"",
@@ -333,7 +371,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"https://www.youtube.com/watch?v=\\\"><script>\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"https://www.youtube.com/watch?v=tooshort\"",
@@ -342,7 +382,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"https://www.youtube.com/watch?v=tooshort\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"not a link\"",
@@ -351,7 +393,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"not a link\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::parseMusicLink > rejects \"spotify:show:abc\"",
@@ -360,7 +404,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::parseMusicLink > rejects \"spotify:show:abc\""
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::toEmbedUrl > builds the Spotify embed URL",
@@ -369,7 +415,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::toEmbedUrl > builds the Spotify embed URL"
+      ]
     },
     {
       "id": "grifando:test:src/lib/musicLink.test.ts::toEmbedUrl > builds the YouTube playlist and video embed URLs",
@@ -378,7 +426,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/music-link.test.ts::toEmbedUrl > builds the YouTube playlist and video embed URLs"
+      ]
     },
     {
       "id": "grifando:test:src/lib/savedPlaylists.test.ts::addPlaylist / removePlaylist > adds to the top, moves an existing source up, and renames it when given a name",
@@ -387,7 +437,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/saved-playlists.test.ts::addPlaylist / removePlaylist > adds to the top, moves an existing source up, and renames it when given a name"
+      ]
     },
     {
       "id": "grifando:test:src/lib/savedPlaylists.test.ts::addPlaylist / removePlaylist > caps the list, dropping the oldest entry",
@@ -396,7 +448,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/saved-playlists.test.ts::addPlaylist / removePlaylist > caps the list, dropping the oldest entry"
+      ]
     },
     {
       "id": "grifando:test:src/lib/savedPlaylists.test.ts::addPlaylist / removePlaylist > rejects links that don't parse",
@@ -405,7 +459,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/saved-playlists.test.ts::addPlaylist / removePlaylist > rejects links that don't parse"
+      ]
     },
     {
       "id": "grifando:test:src/lib/savedPlaylists.test.ts::addPlaylist / removePlaylist > removes by source",
@@ -414,7 +470,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/saved-playlists.test.ts::addPlaylist / removePlaylist > removes by source"
+      ]
     },
     {
       "id": "grifando:test:src/lib/savedPlaylists.test.ts::parseSavedPlaylists > drops invalid and duplicate entries and round-trips through serialize",
@@ -423,7 +481,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/saved-playlists.test.ts::parseSavedPlaylists > drops invalid and duplicate entries and round-trips through serialize"
+      ]
     },
     {
       "id": "grifando:test:src/lib/savedPlaylists.test.ts::parseSavedPlaylists > falls back to the default playlist for missing or corrupt storage",
@@ -432,7 +492,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/saved-playlists.test.ts::parseSavedPlaylists > falls back to the default playlist for missing or corrupt storage"
+      ]
     },
     {
       "id": "grifando:test:src/lib/savedPlaylists.test.ts::parseSavedPlaylists > keeps a deliberately emptied list empty",
@@ -441,7 +503,9 @@
       "slice": "academy-web",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/music/saved-playlists.test.ts::parseSavedPlaylists > keeps a deliberately emptied list empty"
+      ]
     }
   ]
 }

@@ -249,3 +249,4 @@ and the assertions stay as they are.
 | `Buffer` byte inputs in tests of `packages/core` and `packages/contract` | the same bytes as `Uint8Array` (`new TextEncoder().encode(...)`) |
 | A sequential `await` in a test loop, which lint rejects | `Promise.all` over the same cases, followed by the same assertions |
 | Zod `schema.safeParse(input)`, read through `.success` and `.data` | a test helper `safeParse(schema, input)` over `Schema.decodeUnknownOption`, returning the same two fields |
+| A non-null assertion (`value!`) or `i++`, which lint rejects | a helper that throws when the value is `null`, so the test still fails there; `i += 1` |
