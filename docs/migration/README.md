@@ -250,3 +250,5 @@ and the assertions stay as they are.
 | A sequential `await` in a test loop, which lint rejects | `Promise.all` over the same cases, followed by the same assertions |
 | Zod `schema.safeParse(input)`, read through `.success` and `.data` | a test helper `safeParse(schema, input)` over `Schema.decodeUnknownOption`, returning the same two fields |
 | A non-null assertion (`value!`) or `i++`, which lint rejects | a helper that throws when the value is `null`, so the test still fails there; `i += 1` |
+| A secret compared as a plain string | the same comparison on `Redacted.value(secret)`, since the target holds it as a `Redacted` value |
+| A function that throws, checked with `toThrow` | an Effect run with `Effect.runSync`, which throws the same tagged error, checked with the same `toThrow` |

@@ -1,7 +1,13 @@
-import { Config, Context, Effect, Layer } from "effect";
+import { Config, Context, Effect, Layer, Option, Redacted } from "effect";
 
 /** The providers a Trainer runs on (docs/adr/0012). */
 export type TrainerProvider = "anthropic" | "gemini";
+
+/** A key for one provider. */
+export interface TrainerKey {
+  readonly apiKey: Redacted.Redacted<string>;
+  readonly provider: TrainerProvider;
+}
 
 /** The model that answers a provider's calls, and the one that takes over on overload. */
 export interface TrainerModels {
@@ -26,20 +32,41 @@ const GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite";
  */
 export class TrainerConfig extends Context.Service<
   TrainerConfig,
-  { readonly models: Readonly<Record<TrainerProvider, TrainerModels>> }
+  {
+    /** The local profile's key, from server configuration (docs/adr/0012). */
+    readonly localKey: Option.Option<TrainerKey>;
+    readonly models: Readonly<Record<TrainerProvider, TrainerModels>>;
+  }
 >()("@fluenshift/env/TrainerConfig") {
   static readonly layer = Layer.effect(
     TrainerConfig,
     Effect.gen(function* () {
-      const [anthropic, gemini] = yield* Config.all([
-        Config.NonEmptyString("ANTHROPIC_MODEL").pipe(
-          Config.withDefault(DEFAULT_ANTHROPIC_MODEL)
-        ),
-        Config.NonEmptyString("GEMINI_MODEL").pipe(
-          Config.withDefault(DEFAULT_GEMINI_MODEL)
-        ),
-      ]);
+      const [anthropic, gemini, aiProvider, anthropicKey, geminiKey] =
+        yield* Config.all([
+          Config.NonEmptyString("ANTHROPIC_MODEL").pipe(
+            Config.withDefault(DEFAULT_ANTHROPIC_MODEL)
+          ),
+          Config.NonEmptyString("GEMINI_MODEL").pipe(
+            Config.withDefault(DEFAULT_GEMINI_MODEL)
+          ),
+          Config.String("AI_PROVIDER").pipe(Config.withDefault("")),
+          Config.option(Config.Redacted("ANTHROPIC_API_KEY")),
+          Config.option(Config.Redacted("GEMINI_API_KEY")),
+        ]);
+      // As Grifando's development keys did: Gemini when AI_PROVIDER names it, Anthropic
+      // otherwise, and no key when that provider's variable is empty.
+      const provider: TrainerProvider =
+        aiProvider === "gemini" ? "gemini" : "anthropic";
+      const localKey = (provider === "gemini" ? geminiKey : anthropicKey).pipe(
+        Option.map((key) => Redacted.value(key).trim()),
+        Option.filter((key) => key.length > 0),
+        Option.map((key): TrainerKey => ({
+          apiKey: Redacted.make(key),
+          provider,
+        }))
+      );
       return TrainerConfig.of({
+        localKey,
         models: {
           anthropic: { fallback: ANTHROPIC_FALLBACK_MODEL, primary: anthropic },
           gemini: { fallback: GEMINI_FALLBACK_MODEL, primary: gemini },

@@ -1,5 +1,5 @@
 import { assert, describe, it } from "@effect/vitest";
-import { ConfigProvider, Effect, Layer } from "effect";
+import { ConfigProvider, Effect, Layer, Option, Redacted } from "effect";
 
 import { TrainerConfig } from "./trainer";
 
@@ -53,5 +53,39 @@ describe("TrainerConfig", () => {
       assert.strictEqual(models.anthropic.primary, "claude-sonnet-5");
       assert.strictEqual(models.gemini.primary, "gemini-3.5-flash");
     }).pipe(Effect.provide(withEnv({ ANTHROPIC_MODEL: "", GEMINI_MODEL: "" })))
+  );
+
+  it.effect(
+    "reads the local key of the provider AI_PROVIDER names, Anthropic otherwise",
+    () =>
+      Effect.gen(function* () {
+        const { localKey } = yield* TrainerConfig;
+
+        assert.deepStrictEqual(
+          localKey.pipe(
+            Option.map(({ apiKey, provider }) => ({
+              apiKey: Redacted.value(apiKey),
+              provider,
+            }))
+          ),
+          Option.some({ apiKey: "k1", provider: "anthropic" })
+        );
+      }).pipe(
+        Effect.provide(
+          withEnv({ ANTHROPIC_API_KEY: " k1 ", GEMINI_API_KEY: "k2" })
+        )
+      )
+  );
+
+  it.effect("has no local key when the named provider's key is empty", () =>
+    Effect.gen(function* () {
+      const { localKey } = yield* TrainerConfig;
+
+      assert.isTrue(Option.isNone(localKey));
+    }).pipe(
+      Effect.provide(
+        withEnv({ AI_PROVIDER: "gemini", ANTHROPIC_API_KEY: "k1" })
+      )
+    )
   );
 });

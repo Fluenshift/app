@@ -414,7 +414,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::accessErrorForStatus > classifies provider statuses"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::aiErrorResponse > maps a rejected key to 401 AI_KEY_REJECTED without echoing the key",
@@ -423,7 +425,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::aiErrorResponse > maps a rejected key to 401 AI_KEY_REJECTED without echoing the key"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::aiErrorResponse > returns null for unrelated errors",
@@ -432,7 +436,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::aiErrorResponse > returns null for unrelated errors"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::readAICredentials > rejects unknown provider, oversized and non-printable keys",
@@ -441,7 +447,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::readAICredentials > rejects unknown provider, oversized and non-printable keys"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::readAICredentials > returns null without headers",
@@ -450,7 +458,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::readAICredentials > returns null without headers"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::readAICredentials > trims the key",
@@ -459,7 +469,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::readAICredentials > trims the key"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::resolveAICredentials > falls back to env keys outside production",
@@ -468,7 +480,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0012",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::resolveAICredentials > falls back to configured keys in the local profile"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::resolveAICredentials > never uses env keys in production",
@@ -477,7 +491,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0012",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::resolveAICredentials > never uses configured keys in the hosted profile"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::resolveAICredentials > prefers header credentials over env",
@@ -486,7 +502,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0012",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/credentials.test.ts::resolveAICredentials > prefers header credentials over configured keys"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/providers/anthropic.test.ts::testKey > makes one 1-token request and resolves when the key works",
