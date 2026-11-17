@@ -13,6 +13,7 @@ import type {
   HealthResponse,
   ProgressEvidenceSelection,
   SetupStatus,
+  GeneratedExercise,
 } from "@fluenshift/contract";
 import {
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
@@ -95,10 +96,23 @@ export interface AppBoundaries<R = never> {
   readonly deleteVocabularyItem?: (
     id: string
   ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
+  /** The Learner's Exercises without an Attempt, oldest first. */
+  readonly listPendingExercises?: () => Effect.Effect<
+    readonly PendingExercise[],
+    DatabaseError,
+    R | CurrentLearner
+  >;
   /** One tiny call with the Learner's key (TrainerClient.testKey). */
   readonly testTrainerKey?: (
     credentials: TrainerCredentials
   ) => Effect.Effect<KeyTestStatus, never, R>;
+}
+
+/** What a route needs of an Exercise to show it. */
+export interface PendingExercise {
+  readonly id: string;
+  readonly promptData: GeneratedExercise;
+  readonly type: string;
 }
 
 export interface AppOptions<R = never> extends AppBoundaries<R> {

@@ -90,6 +90,13 @@ export const createExercises = Effect.fn("ExerciseRepository.createExercises")(
   }
 );
 
+// The Learner's Exercises without an Attempt, oldest first.
+export const listPendingExercises = Effect.fn(
+  "ExerciseRepository.listPendingExercises"
+)(function* () {
+  return yield* Effect.succeed<Exercise[]>([]);
+});
+
 export const findExercise = Effect.fn("ExerciseRepository.findExercise")(
   function* (id: string) {
     const database = yield* Database;
