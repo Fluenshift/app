@@ -220,7 +220,7 @@ standing instructions:
 - End-to-end tests are paused: write no new Playwright journey, Vite dev-proxy case or Docker
   smoke check, and leave their rows open. The existing ones keep running. In-process route
   tests (`app.request`) continue.
-- At the end of a session, rewrite `SESSION_HANDOFF.md` through a pull request.
+- At the end of a session, rewrite `SESSION_HANDOFF.md` through a pull request. A session that resumes from a compacted conversation ends early: it finishes the pull request already in motion, writes the handoff, and stops, so the next session starts with a fresh context.
 
 Code:
 
