@@ -128,7 +128,7 @@ const INVALID_KEY_MESSAGE = /api key not valid|api_key_invalid/iu;
 export const accessErrorForStatus = (
   status: number,
   message = ""
-): TrainerError | undefined => {
+): TrainerError | null => {
   if (status === 401 || status === 403) {
     return new TrainerKeyRejectedError();
   }
@@ -141,7 +141,7 @@ export const accessErrorForStatus = (
   if (UNAVAILABLE_STATUSES.has(status)) {
     return new TrainerUnavailableError();
   }
-  return undefined;
+  return null;
 };
 
 const NETWORK_FAILURES = new Set([
