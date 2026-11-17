@@ -13,12 +13,12 @@ Merged work: `git log --first-parent --oneline main`. The rows still open per sl
 1. #111: move the three unit helpers into the repository.
 2. #120: give each product rule one home in the documents.
 3. **Naturalness Notes** (decided in ADR 0020, from #101): add the natural version and the Naturalness Notes to the Enrichment (AR-03, AR-04). A note grows its Mistake Pattern's occurrence count and is never a failed recall.
-4. **The Trainer's keys** (Phase 6 step 2), needed before any route calls the Trainer. Rows: `hosted` (`credentials.test.ts`, `ai-key/test/route.test.ts`) and `academy-trainer` (`noKeyInLogs.test.ts`, with the first route that calls the Trainer). ADR 0012 and ADR 0003 decide where keys come from. `accessErrorForStatus > classifies provider statuses` passes before any code (PR #96 built it), so it cannot be a G8 target: port its test anyway and mark the row `superseded` under ADR 0021.
-5. In protocol order (`docs/migration/MIGRATION_PROTOCOL.md`, Phases): 5e (Academy routes and screens), 5f (seam invariants and the `academy-spec` rows), Phase 6, Phase 7.
+4. In protocol order (`docs/migration/MIGRATION_PROTOCOL.md`, Phases): 5e (Academy routes and screens), 5f (seam invariants and the `academy-spec` rows), Phase 6, Phase 7.
 
 Facts these units need that no issue records yet:
 
 - No route uses the Trainer or the Academy services; `apps/server/src/index.ts` wires neither.
+- The Trainer's key comes from `resolveTrainerCredentials(headers)` (`apps/server/src/academy/trainer/credentials.ts`): the request headers, and in the local profile the configured key; a route answers its access errors with `trainerFailure`. `index.ts` already builds `TrainerClient`. The first Academy route that calls the Trainer also ports `noKeyInLogs.test.ts` (`academy-trainer`, 2 rows), whose cases post practice writing. The rate limiter row of the key test route waits for the hosted request pipeline.
 - 5e composes the services: `evaluateWriting(text, now, undefined, "practice")`, then `foldEvaluation(trainer, { evaluationId })`. `foldEvaluation` runs in one transaction and refuses a second fold of the same Evaluation, so a failed Enrichment can be retried alone. The interview (#122) takes the evaluation as a function: `answerTurn(evaluate, trainer, input)`.
 - Grifando's daily session (`afterSessionId` in `exerciseService.ts` and `POST /api/exercises`) has no test at the service or the route: characterize it at the baseline before porting it.
 - Progress still counts practice-origin Writing Samples in the finding rate; excluding them by default (ADR 0010) is a 5f invariant.

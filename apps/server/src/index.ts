@@ -3,9 +3,10 @@ import path from "node:path";
 import { NodeRuntime } from "@effect/platform-node";
 import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import { Database } from "@fluenshift/db";
-import { ServerConfig } from "@fluenshift/env";
+import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
 
+import { TrainerClient } from "./academy/trainer/trainer-client";
 import { createApp, serveApp } from "./app";
 import { evaluateWritingForEndpoint } from "./evaluation/evaluation-endpoint";
 import { EvaluationModel } from "./evaluation/evaluation-model";
@@ -29,7 +30,11 @@ const HttpServer = Layer.effectDiscard(
     yield* Database;
     const model = yield* EvaluationModel;
     const services = yield* Effect.context<
-      Database | EvaluationModel | LearnerIdentity | ServerConfig
+      | Database
+      | EvaluationModel
+      | LearnerIdentity
+      | ServerConfig
+      | TrainerClient
     >();
     // Where the setup status says the data lives; a Postgres URL is never shown.
     const storedAt =
@@ -67,6 +72,10 @@ const HttpServer = Layer.effectDiscard(
         provider: model.provider,
         rubricVersion: CURRENT_RUBRIC_VERSION,
       },
+      testTrainerKey: (credentials) =>
+        TrainerClient.pipe(
+          Effect.flatMap((client) => client.testKey(credentials))
+        ),
       webDistPath: config.webDistPath,
     });
     yield* Effect.acquireRelease(
@@ -87,7 +96,8 @@ const HttpServer = Layer.effectDiscard(
     Layer.mergeAll(
       Database.layer,
       OpenRouterEvaluationModelLive,
-      LearnerIdentity.local
+      LearnerIdentity.local,
+      TrainerClient.layer.pipe(Layer.provide(TrainerConfig.layer))
     )
   ),
   Layer.provide(ServerConfig.layer)

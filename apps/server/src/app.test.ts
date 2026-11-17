@@ -6,8 +6,12 @@ import path from "node:path";
 import type { SetupStatus } from "@fluenshift/contract";
 import { ServerConfig } from "@fluenshift/env";
 import { ConfigProvider, Effect, Layer, ManagedRuntime } from "effect";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
+import type {
+  KeyTestStatus,
+  TrainerCredentials,
+} from "./academy/trainer/trainer-client";
 import { createApp, serveApp } from "./app";
 import type { AppBoundaries } from "./app";
 import type { EvaluationEndpointResult } from "./evaluation/evaluation-endpoint";
@@ -1176,6 +1180,70 @@ describe("Progress endpoints", () => {
         error: "Progress selection is invalid",
       });
     }
+  });
+});
+
+// Ported from Grifando src/app/api/ai-key/test/route.test.ts (74dbb9f) as contract tests: the
+// route reads the key from the request headers only, and TrainerClient.testKey, faked here,
+// classifies the provider's answer (#98). The rate limiter's 429 waits for the hosted profile,
+// and the provider that never answers is #98's deadline (ADR 0021).
+const keyTester = (status: KeyTestStatus) =>
+  vi.fn((_credentials: TrainerCredentials) => Effect.succeed(status));
+
+const GEMINI_KEY = { "x-ai-key": "test-key", "x-ai-provider": "gemini" };
+
+const postKeyTest = (headers: Record<string, string> = GEMINI_KEY) =>
+  new Request("http://localhost/api/ai-key/test", { headers, method: "POST" });
+
+describe("POST /api/ai-key/test", () => {
+  it("answers works when the provider accepts the key", async () => {
+    const testTrainerKey = keyTester("works");
+    const res = await appWith({ testTrainerKey }).request(postKeyTest());
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ status: "works" });
+    expect(testTrainerKey).toHaveBeenCalledTimes(1);
+    expect(testTrainerKey.mock.calls[0]?.[0].provider).toBe("gemini");
+  });
+
+  it("uses the Anthropic helper for an Anthropic key", async () => {
+    const testTrainerKey = keyTester("works");
+    const res = await appWith({ testTrainerKey }).request(
+      postKeyTest({ "x-ai-key": "test-key", "x-ai-provider": "anthropic" })
+    );
+    expect(await res.json()).toEqual({ status: "works" });
+    expect(testTrainerKey).toHaveBeenCalledTimes(1);
+    expect(testTrainerKey.mock.calls[0]?.[0].provider).toBe("anthropic");
+  });
+
+  it("answers invalid when the provider rejects the key", async () => {
+    const testTrainerKey = keyTester("invalid");
+    const res = await appWith({ testTrainerKey }).request(postKeyTest());
+    expect(await res.json()).toEqual({ status: "invalid" });
+  });
+
+  it("answers invalid for a malformed key without calling the provider", async () => {
+    const testTrainerKey = keyTester("works");
+    const res = await appWith({ testTrainerKey }).request(
+      postKeyTest({ "x-ai-key": "test-key", "x-ai-provider": "openai" })
+    );
+    expect(await res.json()).toEqual({ status: "invalid" });
+    expect(testTrainerKey).not.toHaveBeenCalled();
+  });
+
+  it("answers busy when the provider is unavailable or out of quota", async () => {
+    const app = appWith({ testTrainerKey: keyTester("busy") });
+    const unavailable = await app.request(postKeyTest());
+    expect(await unavailable.json()).toEqual({ status: "busy" });
+    const outOfQuota = await app.request(postKeyTest());
+    expect(await outOfQuota.json()).toEqual({ status: "busy" });
+  });
+
+  it("answers 401 AI_KEY_REQUIRED when no key headers are sent (env keys are never tested)", async () => {
+    const testTrainerKey = keyTester("works");
+    const res = await appWith({ testTrainerKey }).request(postKeyTest({}));
+    expect(res.status).toBe(401);
+    expect(await res.json()).toMatchObject({ code: "AI_KEY_REQUIRED" });
+    expect(testTrainerKey).not.toHaveBeenCalled();
   });
 });
 
