@@ -13,12 +13,14 @@ import type {
   HealthResponse,
   ProgressEvidenceSelection,
   SetupStatus,
+  GeneratedExercise,
 } from "@fluenshift/contract";
 import {
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
   EVALUATION_MAX_OUTPUT_TOKENS,
   EVALUATION_REQUEST_TIMEOUT_MILLISECONDS,
 } from "@fluenshift/core/evaluation-request-policy";
+import { toPublicExercise } from "@fluenshift/core/public-view";
 import type { DatabaseError } from "@fluenshift/db";
 import type { DeployProfile, InputLimits } from "@fluenshift/env";
 import { getRequestListener } from "@hono/node-server";
@@ -95,10 +97,23 @@ export interface AppBoundaries<R = never> {
   readonly deleteVocabularyItem?: (
     id: string
   ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
+  /** The Learner's Exercises without an Attempt, oldest first. */
+  readonly listPendingExercises?: () => Effect.Effect<
+    readonly PendingExercise[],
+    DatabaseError,
+    R | CurrentLearner
+  >;
   /** One tiny call with the Learner's key (TrainerClient.testKey). */
   readonly testTrainerKey?: (
     credentials: TrainerCredentials
   ) => Effect.Effect<KeyTestStatus, never, R>;
+}
+
+/** What a route needs of an Exercise to show it. */
+export interface PendingExercise {
+  readonly id: string;
+  readonly promptData: GeneratedExercise;
+  readonly type: string;
 }
 
 export interface AppOptions<R = never> extends AppBoundaries<R> {
@@ -535,6 +550,25 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           success: (status) => Response.json({ status }),
         }
       );
+    })
+    // The Learner's pending Exercises, each by its public view: the answer and the explanation
+    // never reach the browser before an Attempt (Grifando's GET /api/exercises).
+    .get("/api/exercises", (context): Response | Promise<Response> => {
+      const { listPendingExercises } = options;
+      if (listPendingExercises === undefined) {
+        return context.json(notReady("Exercises are not available"), 503);
+      }
+      return edge(forLearner(context.req.raw, listPendingExercises()), {
+        errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        success: (pending) =>
+          Response.json({
+            exercises: pending.map(({ id, promptData, type }) => ({
+              id,
+              prompt: toPublicExercise(promptData),
+              type,
+            })),
+          }),
+      });
     })
     .post("/api/vocabulary", (context): Response | Promise<Response> => {
       const { createVocabularyItem } = options;
