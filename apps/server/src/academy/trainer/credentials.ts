@@ -6,6 +6,7 @@ import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import type { TrainerProvider } from "@fluenshift/env";
 import { Effect, Option, Redacted } from "effect";
 
+import type { EdgeFailure } from "../../edge";
 import type { TrainerCredentials } from "./trainer-client";
 import { InvalidTrainerCredentialsError } from "./trainer-errors";
 import type { TrainerAccessError } from "./trainer-errors";
@@ -101,11 +102,17 @@ const isTrainerAccessError = (error: unknown): error is TrainerAccessError =>
   typeof error._tag === "string" &&
   Object.hasOwn(FAILURES, error._tag);
 
+// What a route answers for an error the Learner can act on.
+export const trainerFailure = (error: TrainerAccessError): EdgeFailure => {
+  const { status, ...body } = FAILURES[error._tag];
+  return { body, status };
+};
+
 // The response for an error the Learner can act on, or null for any other error.
 export const trainerErrorResponse = (error: unknown): Response | null => {
   if (!isTrainerAccessError(error)) {
     return null;
   }
-  const { status, ...body } = FAILURES[error._tag];
+  const { body, status } = trainerFailure(error);
   return Response.json(body, { status });
 };

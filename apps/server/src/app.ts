@@ -27,10 +27,15 @@ import type { Context as HonoContext, Handler, MiddlewareHandler } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getMimeType } from "hono/utils/mime";
 
+import {
+  readTrainerCredentials,
+  trainerFailure,
+} from "./academy/trainer/credentials";
 import type {
   KeyTestStatus,
   TrainerCredentials,
 } from "./academy/trainer/trainer-client";
+import { TrainerKeyRequiredError } from "./academy/trainer/trainer-errors";
 import { INTERNAL_ERROR, makeEdge } from "./edge";
 import type { EdgeFailure, EdgeRuntime } from "./edge";
 import type {
@@ -488,6 +493,29 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         (body) =>
           evidence(context, getProgressEvidence, decodeEvidenceRequest(body)),
         () => context.json(INVALID_SELECTION, 400)
+      );
+    })
+    // Tests the key the Learner's browser sends, read from the request headers only: the local
+    // profile's configured key is never tested. A malformed key reads as invalid at once.
+    .post("/api/ai-key/test", (context): Response | Promise<Response> => {
+      const { testTrainerKey } = options;
+      if (testTrainerKey === undefined) {
+        return context.json(notReady("Key tests are not available"), 503);
+      }
+      return edge(
+        readTrainerCredentials(context.req.raw.headers).pipe(
+          Effect.matchEffect({
+            onFailure: () => Effect.succeed<KeyTestStatus>("invalid"),
+            onSuccess: (credentials) =>
+              credentials === null
+                ? Effect.fail(new TrainerKeyRequiredError())
+                : testTrainerKey(credentials),
+          })
+        ),
+        {
+          errors: { TrainerKeyRequiredError: trainerFailure },
+          success: (status) => Response.json({ status }),
+        }
       );
     })
     .get("/api/setup", (context) =>
