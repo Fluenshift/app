@@ -47,7 +47,7 @@ shell environment when a session starts, so start sessions in the repository.
 | `pnpm format` / `pnpm format:fix` | Check or apply oxfmt. |
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
-| `pnpm test` | The scripts' own tests, then Vitest in every workspace. The database cases run first, beside the small suites only, because PGlite's cold start times out next to the web and server suites (#72). |
+| `pnpm test` | The scripts' own tests, then Vitest in every workspace. The database cases run first, beside the small suites only, because PGlite's cold start times out next to the web and server suites (#72); the web suite waits for the server suite, whose load times out its 1-second queries. |
 | `pnpm parity` | Every Vitest suite with a report, the Docker smoke included, then G9 on those reports. CI's test job runs the same two scripts. Needs Docker. |
 | `pnpm db:generate` | Write the next migration of `packages/db` from `packages/db/src/schema.ts` with drizzle-kit. Only the coordinator runs it, one migration in flight at a time. |
 | `pnpm test:postgres` | The `Database` service against a Postgres 17 server; `DEPLOY_PROFILE=hosted` and `DATABASE_URL` name it. |
