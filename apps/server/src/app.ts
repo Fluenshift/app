@@ -5,6 +5,7 @@ import path from "node:path";
 
 import {
   ErrorCategory,
+  ExerciseGenerationRequest,
   ProgressEvidenceRequest,
   ProgressPeriod,
   VocabularyItemRequest,
@@ -15,7 +16,6 @@ import type {
   SetupStatus,
   GeneratedExercise,
   AIResponseValidationError,
-  ExerciseGenerationRequest,
 } from "@fluenshift/contract";
 import {
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
@@ -34,6 +34,7 @@ import { getMimeType } from "hono/utils/mime";
 
 import {
   readTrainerCredentials,
+  TRAINER_FAILURES,
   trainerFailure,
 } from "./academy/trainer/credentials";
 import type {
@@ -267,6 +268,23 @@ const SOMETHING_WENT_WRONG: EdgeFailure = {
   body: { error: "Something went wrong. Please try again." },
   status: 500,
 };
+
+// Grifando's POST /api/exercises takes an optional body; one that is not JSON counts as absent.
+const EXERCISE_REQUEST = Schema.toStandardSchemaV1(ExerciseGenerationRequest, {
+  parseOptions: { errors: "all" },
+});
+const NO_PATTERNS = {
+  error:
+    "No mistake patterns yet \u2014 write something first to get personalized exercises.",
+};
+
+// What the browser may see of an Exercise before its Attempt: never the answer or the
+// explanation.
+const publicView = ({ id, promptData, type }: PendingExercise) => ({
+  id,
+  prompt: toPublicExercise(promptData),
+  type,
+});
 
 const decodePeriod = Schema.decodeUnknownOption(ProgressPeriod);
 const decodeCategory = Schema.decodeUnknownOption(ErrorCategory);
@@ -573,14 +591,48 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       return edge(forLearner(context.req.raw, listPendingExercises()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
         success: (pending) =>
-          Response.json({
-            exercises: pending.map(({ id, promptData, type }) => ({
-              id,
-              prompt: toPublicExercise(promptData),
-              type,
-            })),
-          }),
+          Response.json({ exercises: pending.map(publicView) }),
       });
+    })
+    .post("/api/exercises", (context): Response | Promise<Response> => {
+      const { generateExercises } = options;
+      if (generateExercises === undefined) {
+        return context.json(notReady("Exercises are not available"), 503);
+      }
+      return context.req
+        .json<unknown>()
+        .then(
+          (body) => EXERCISE_REQUEST["~standard"].validate(body),
+          () => EXERCISE_REQUEST["~standard"].validate({})
+        )
+        .then((result) =>
+          result.issues === undefined
+            ? edge(
+                forLearner(
+                  context.req.raw,
+                  generateExercises(context.req.raw.headers, result.value)
+                ),
+                {
+                  errors: {
+                    ...TRAINER_FAILURES,
+                    AIResponseValidationError: () => SOMETHING_WENT_WRONG,
+                    DatabaseError: () => SOMETHING_WENT_WRONG,
+                  },
+                  success: (created) =>
+                    created.length === 0
+                      ? Response.json(NO_PATTERNS, { status: 422 })
+                      : Response.json(
+                          { exercises: created.map(publicView) },
+                          { status: 201 }
+                        ),
+                  unexpected: SOMETHING_WENT_WRONG,
+                }
+              )
+            : Response.json(
+                { error: "Invalid request body", issues: result.issues },
+                { status: 400 }
+              )
+        );
     })
     .post("/api/vocabulary", (context): Response | Promise<Response> => {
       const { createVocabularyItem } = options;

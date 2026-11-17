@@ -11,7 +11,10 @@ import {
 } from "@fluenshift/core/difficulty";
 import { assignExerciseTypeFor } from "@fluenshift/core/exercise-type";
 import { applyExerciseResult } from "@fluenshift/core/mastery";
-import { selectPatternsForPractice } from "@fluenshift/core/selection";
+import {
+  selectPatternsForPractice,
+  selectReviewSet,
+} from "@fluenshift/core/selection";
 import { Effect } from "effect";
 
 import { getRatings, setRating } from "./category-ability-repository";
@@ -24,6 +27,7 @@ import {
 } from "./exercise-repository";
 import {
   findPattern,
+  listPatternIdsForEvaluation,
   listPatterns,
   recordAttempt,
 } from "./mistake-pattern-repository";
@@ -45,13 +49,24 @@ const DEFAULT_PRACTICE_SET_SIZE = 4;
 // exercises (Grifando SPEC.md §5.4). Each Exercise records the model that generated it.
 export const generatePracticeSet = Effect.fn(
   "ExerciseService.generatePracticeSet"
-)(function* (trainer: TrainerMethods, count = DEFAULT_PRACTICE_SET_SIZE) {
+)(function* (
+  trainer: TrainerMethods,
+  count = DEFAULT_PRACTICE_SET_SIZE,
+  options: { readonly afterEvaluationId?: string } = {}
+) {
   const allPatterns = yield* listPatterns();
-  const selected = selectPatternsForPractice(
-    [...allPatterns],
-    count,
-    new Date()
-  );
+  const now = new Date();
+  // The daily session: after a piece of writing, the patterns of that Evaluation's Occurrences
+  // are interleaved with the most-due older patterns (Grifando's afterSessionId).
+  const selected =
+    options.afterEvaluationId === undefined
+      ? selectPatternsForPractice([...allPatterns], count, now)
+      : selectReviewSet(
+          [...allPatterns],
+          count,
+          now,
+          yield* listPatternIdsForEvaluation(options.afterEvaluationId)
+        );
 
   if (selected.length === 0) {
     return [];
