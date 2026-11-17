@@ -108,15 +108,17 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::POST /api/ai-key/test > answers 401 AI_KEY_REQUIRED when no key headers are sent (env keys are never tested)"
+      ]
     },
     {
       "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers busy when the provider does not answer in time",
       "source": "src/app/api/ai-key/test/route.test.ts",
       "class": "C",
       "slice": "hosted",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "superseded",
+      "decision": "adr:0021",
       "targets": []
     },
     {
@@ -126,7 +128,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::POST /api/ai-key/test > answers busy when the provider is unavailable or out of quota"
+      ]
     },
     {
       "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers invalid for a malformed key without calling the provider",
@@ -135,7 +139,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::POST /api/ai-key/test > answers invalid for a malformed key without calling the provider"
+      ]
     },
     {
       "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers invalid when the provider rejects the key",
@@ -144,7 +150,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::POST /api/ai-key/test > answers invalid when the provider rejects the key"
+      ]
     },
     {
       "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > answers works when the provider accepts the key",
@@ -153,7 +161,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::POST /api/ai-key/test > answers works when the provider accepts the key"
+      ]
     },
     {
       "id": "grifando:test:src/app/api/ai-key/test/route.test.ts::POST /api/ai-key/test > passes the rate limiter's 429 through without calling the provider",
@@ -171,7 +181,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/app.test.ts::POST /api/ai-key/test > uses the Anthropic helper for an Anthropic key"
+      ]
     },
     {
       "id": "grifando:test:src/app/api/cron/cleanup/route.test.ts::GET /api/cron/cleanup > 401s with a wrong bearer",
