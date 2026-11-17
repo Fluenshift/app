@@ -63,7 +63,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::GET /api/exercises > lists the visitor's pending exercises by their public view only"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::GET /api/exercises pending > drops an exercise once it has an attempt",
@@ -72,7 +74,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::GET /api/exercises pending > drops an exercise once it has an attempt"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::POST /api/exercises > answers 201 with the new exercises by their public view",
