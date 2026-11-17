@@ -1,7 +1,7 @@
 import path from "node:path";
 
 import { NodeRuntime } from "@effect/platform-node";
-import { RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
+import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import { Database } from "@fluenshift/db";
 import { ServerConfig } from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
@@ -65,7 +65,7 @@ const HttpServer = Layer.effectDiscard(
         dataLocation,
         model: model.model,
         provider: model.provider,
-        rubricVersion: RUBRIC_VERSION,
+        rubricVersion: CURRENT_RUBRIC_VERSION,
       },
       webDistPath: config.webDistPath,
     });

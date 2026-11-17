@@ -215,6 +215,14 @@ describe("Writing Evaluation", () => {
     });
   });
 
+  it("records a new Evaluation under the provisional Rubric Version", async () => {
+    const result = await evaluateSample(
+      "Review this function and explain why the test fails."
+    );
+
+    expect(result.rubricVersion).toBe("1-provisional");
+  });
+
   it("returns a complete no-correction Evaluation for correct English", async () => {
     const sample = "Review this function and explain why the test fails.";
     const result = await evaluateSample(sample);

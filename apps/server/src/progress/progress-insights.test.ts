@@ -1,5 +1,6 @@
 import { rm } from "node:fs/promises";
 
+import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import type { Database } from "@fluenshift/db";
 import { Effect } from "effect";
 import { afterEach, describe, expect, it } from "vitest";
@@ -29,7 +30,7 @@ afterEach(async () => {
 const evaluation = (
   id: string,
   evaluatedAt: string,
-  rubricVersion = "1"
+  rubricVersion = CURRENT_RUBRIC_VERSION
 ): Evaluation => ({
   band: "Clear",
   correctedText: "The command fails.",
@@ -125,7 +126,7 @@ describe("Progress Insights", () => {
       findingRate: 2,
       incompatibleSegments: [{ evaluationCount: 1, rubricVersion: "2" }],
       period: "7-days",
-      rubricVersion: "1",
+      rubricVersion: CURRENT_RUBRIC_VERSION,
     });
     expect(summary.categoryRecurrences).toEqual([
       {
@@ -134,6 +135,19 @@ describe("Progress Insights", () => {
         recurrencePercentage: 100,
       },
     ]);
+  });
+
+  it("labels evidence with the provisional Rubric Version it reads", async () => {
+    const database = await makeTemporaryDatabase();
+    directories.push(database.directory);
+    const evidence = await Effect.runPromise(
+      getProgressEvidence(
+        { period: "all", selection: { kind: "average-score" } },
+        new Date("2026-09-08T12:00:00.000Z")
+      ).pipe(Effect.provide(database.layer))
+    );
+
+    expect(evidence.rubricVersion).toBe("1-provisional");
   });
 
   it("traces every selected Finding while counting each Evaluation once", async () => {
@@ -325,7 +339,7 @@ const retainedEvaluation = (
   model: "test-model",
   originalText: "Text.",
   provider: "test",
-  rubricVersion: "1",
+  rubricVersion: CURRENT_RUBRIC_VERSION,
   score: options.score ?? 70,
   suggestions: [],
   summary: `${id} summary`,
