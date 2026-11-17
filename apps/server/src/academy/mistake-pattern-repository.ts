@@ -168,6 +168,26 @@ export const listPatterns = Effect.fn("MistakePatternRepository.listPatterns")(
 );
 
 // One of the Learner's patterns, or null when the Learner has none with that id.
+// The Learner's patterns with an Occurrence from one Evaluation (Grifando's listIdsForSession).
+export const listPatternIdsForEvaluation = Effect.fn(
+  "MistakePatternRepository.listPatternIdsForEvaluation"
+)(function* (evaluationId: string) {
+  const database = yield* Database;
+  const learner = yield* CurrentLearner;
+  const rows = yield* database.run((client) =>
+    client
+      .selectDistinct({ id: occurrences.patternId })
+      .from(occurrences)
+      .where(
+        and(
+          eq(occurrences.learnerId, learner.id),
+          eq(occurrences.evaluationId, evaluationId)
+        )
+      )
+  );
+  return rows.map((row) => row.id);
+});
+
 export const findPattern = Effect.fn("MistakePatternRepository.findPattern")(
   function* (id: string) {
     const database = yield* Database;

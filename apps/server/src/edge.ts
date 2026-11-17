@@ -49,11 +49,12 @@ const isTagged = (value: unknown): value is Tagged =>
 // of that tag; `never` is the only parameter type every entry accepts.
 const failureOf = <E extends Tagged>(
   cause: Cause.Cause<unknown>,
-  errors: EdgeErrors<E>
+  errors: EdgeErrors<E>,
+  unexpected: EdgeFailure
 ): EdgeFailure => {
   const failure = Option.getOrUndefined(Cause.findErrorOption(cause));
   if (!isTagged(failure) || !Object.hasOwn(errors, failure._tag)) {
-    return INTERNAL_ERROR;
+    return unexpected;
   }
   const respond = errors[failure._tag as E["_tag"]];
   return respond(failure as never);
@@ -71,12 +72,18 @@ export const makeEdge =
     handlers: {
       readonly errors: EdgeErrors<E>;
       readonly success: (value: A) => Response | Promise<Response>;
+      /** The answer to anything unexpected, when a route keeps its source's; `INTERNAL_ERROR` otherwise. */
+      readonly unexpected?: EdgeFailure;
     }
   ): Promise<Response> =>
     runtime.runPromiseExit(effect).then((exit) => {
       if (Exit.isSuccess(exit)) {
         return handlers.success(exit.value);
       }
-      const failure = failureOf(exit.cause, handlers.errors);
+      const failure = failureOf(
+        exit.cause,
+        handlers.errors,
+        handlers.unexpected ?? INTERNAL_ERROR
+      );
       return Response.json(failure.body, { status: failure.status });
     });

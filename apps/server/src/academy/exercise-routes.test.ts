@@ -5,22 +5,31 @@
 import { randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
 
-import type { LearnerId } from "@fluenshift/contract";
+import type { GeneratedExercise, LearnerId } from "@fluenshift/contract";
 import {
   Database,
   exerciseAttempts,
   exercises,
   learners,
   mistakePatterns,
+  occurrences,
 } from "@fluenshift/db";
 import type { DrizzleClient } from "@fluenshift/db";
-import { Effect, Layer, ManagedRuntime, Option } from "effect";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { TrainerConfig } from "@fluenshift/env";
+import { ConfigProvider, Effect, Layer, ManagedRuntime, Option } from "effect";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createApp } from "../app";
-import { LearnerIdentity } from "../learner-identity";
+import { persistEvaluation } from "../history/learning-history";
+import { CurrentLearner, LearnerIdentity } from "../learner-identity";
 import { makeTemporaryDatabase } from "../test/database";
+import { generateExercisesFor } from "./academy-requests";
 import { listPendingExercises } from "./exercise-repository";
+import { listPatternIdsForEvaluation } from "./mistake-pattern-repository";
+import type { ExerciseTarget } from "./prompts/exercise-generation";
+import { TrainerClient } from "./trainer/trainer-client";
+import { TrainerKeyRejectedError } from "./trainer/trainer-errors";
+import type { TrainerMethods } from "./trainer/trainer-model";
 
 const learnerFromHeader = Layer.succeed(
   LearnerIdentity,
@@ -32,16 +41,51 @@ const learnerFromHeader = Layer.succeed(
   })
 );
 
+// The Trainer of every request; a case swaps it before it posts.
+let trainer: TrainerMethods;
+
+const trainerClient = Layer.succeed(
+  TrainerClient,
+  TrainerClient.of({
+    testKey: () => Effect.succeed("works"),
+    trainerFor: () => trainer,
+  })
+);
+
+// No key in the configuration: only the request's headers carry one.
+const noConfiguredKey = TrainerConfig.layer.pipe(
+  Layer.provide(ConfigProvider.layer(ConfigProvider.fromEnvRecord({})))
+);
+
 const runtimeFor = (
   temporary: Awaited<ReturnType<typeof makeTemporaryDatabase>>
-) => ManagedRuntime.make(Layer.mergeAll(temporary.layer, learnerFromHeader));
+) =>
+  ManagedRuntime.make(
+    Layer.mergeAll(
+      temporary.layer,
+      learnerFromHeader,
+      trainerClient,
+      noConfiguredKey
+    )
+  );
 
 let database: Awaited<ReturnType<typeof makeTemporaryDatabase>>;
 let runtime: ReturnType<typeof runtimeFor>;
 
+const generating = (...generated: readonly GeneratedExercise[]) =>
+  vi.fn((_targets: readonly ExerciseTarget[]) =>
+    Effect.succeed({ exercises: generated, model: "test-model" })
+  );
+
 beforeEach(async () => {
   database = await makeTemporaryDatabase();
   runtime = runtimeFor(database);
+  trainer = {
+    continueInterview: vi.fn<TrainerMethods["continueInterview"]>(),
+    enrichFindings: vi.fn<TrainerMethods["enrichFindings"]>(),
+    explainAttempt: vi.fn<TrainerMethods["explainAttempt"]>(),
+    generateExercises: generating(multipleChoice()),
+  };
 });
 
 afterEach(async () => {
@@ -51,6 +95,7 @@ afterEach(async () => {
 
 const appOf = () =>
   createApp({
+    generateExercises: generateExercisesFor,
     limits: {
       bodyMaxBytes: 256 * 1024,
       codeMaxCharacters: Option.none(),
@@ -84,7 +129,10 @@ const multipleChoice = () => ({
   type: "MULTIPLE_CHOICE" as const,
 });
 
-const seedPattern = (learnerId: string) =>
+const seedPattern = (
+  learnerId: string,
+  overrides: Partial<typeof mistakePatterns.$inferInsert> = {}
+) =>
   query(async (client) => {
     await client
       .insert(learners)
@@ -100,6 +148,7 @@ const seedPattern = (learnerId: string) =>
         learnerId,
         occurrenceCount: 3,
         patternKey: "depend-on",
+        ...overrides,
       })
       .returning();
     if (pattern === undefined) {
@@ -173,5 +222,195 @@ describe("GET /api/exercises pending", () => {
 
     const response = await GET();
     expect(await response.json()).toEqual({ exercises: [] });
+  });
+});
+
+const AI_HEADERS = { "x-ai-key": "test-key", "x-ai-provider": "gemini" };
+
+const post = (body: unknown, headers: Record<string, string> = AI_HEADERS) =>
+  appOf().request(
+    new Request("http://localhost/api/exercises", {
+      body: JSON.stringify(body),
+      headers: { "content-type": "application/json", ...headers },
+      method: "POST",
+    })
+  );
+
+// Ported from Grifando's characterization of POST /api/exercises and from its route.test.ts
+// (74dbb9f). The daily session's afterSessionId is afterEvaluationId under docs/adr/0004, and a
+// typed error reaches the route from a real practice set, so that case seeds a pattern first.
+describe("POST /api/exercises", () => {
+  it("answers 400 with the validation issues for a malformed body", async () => {
+    const response = await post({ afterEvaluationId: "" });
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({
+      error: "Invalid request body",
+      issues: [expect.any(Object)],
+    });
+  });
+
+  it("answers 422 before the first mistake pattern exists", async () => {
+    const response = await post({});
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({
+      error:
+        "No mistake patterns yet \u2014 write something first to get personalized exercises.",
+    });
+  });
+
+  it("answers 201 with the new exercises by their public view", async () => {
+    await seedPattern("visitor-1");
+    const response = await post({});
+    expect(response.status).toBe(201);
+    expect(await response.json()).toEqual({
+      exercises: [
+        {
+          id: expect.any(String),
+          prompt: {
+            instruction: "Choose the correct sentence.",
+            options: ["I depend of this library.", "I depend on this library."],
+            type: "MULTIPLE_CHOICE",
+          },
+          type: "MULTIPLE_CHOICE",
+        },
+      ],
+    });
+  });
+
+  it("answers 500 with a generic message when generation fails unexpectedly", async () => {
+    await seedPattern("visitor-1");
+    trainer = {
+      ...trainer,
+      generateExercises: () => Effect.die(new Error("private cause")),
+    };
+    const response = await post({});
+    expect(response.status).toBe(500);
+    expect(await response.json()).toEqual({
+      error: "Something went wrong. Please try again.",
+    });
+  });
+
+  it("answers 401 AI_KEY_REQUIRED without credentials", async () => {
+    const res = await post({}, {});
+    expect(res.status).toBe(401);
+    expect(await res.json()).toMatchObject({ code: "AI_KEY_REQUIRED" });
+  });
+
+  it("maps a typed AI error from generation to its coded response", async () => {
+    await seedPattern("visitor-1");
+    trainer = {
+      ...trainer,
+      generateExercises: () => Effect.fail(new TrainerKeyRejectedError()),
+    };
+    const res = await post({});
+    expect(res.status).toBe(401);
+    expect(await res.json()).toMatchObject({ code: "AI_KEY_REJECTED" });
+  });
+});
+
+// A practice Evaluation of the visitor with one Finding, and an Occurrence of `patternId` from it.
+const seedOccurrence = async (patternId: string) => {
+  const evaluationId = randomUUID();
+  await runtime.runPromise(
+    persistEvaluation({
+      contentHash: "hash",
+      evaluation: {
+        band: "Clear",
+        correctedText: "I worked on a payments API.",
+        evaluatedAt: "2026-11-17T12:00:00.000Z",
+        evaluatedEnglishWordCount: 5,
+        findings: [
+          {
+            byteEnd: 7,
+            byteStart: 2,
+            category: "Verb form/tense",
+            correction: "worked",
+            explanation: "Use the past tense.",
+            originalText: "work ",
+            severity: "Minor",
+          },
+        ],
+        id: evaluationId,
+        model: "judge-model",
+        originalText: "I work in a payments API.",
+        provider: "test",
+        rubricVersion: "1-provisional",
+        score: 80,
+        suggestions: [],
+        summary: "One tense mistake.",
+      },
+      latencyMilliseconds: 1,
+      origin: "practice",
+      submittedAt: "2026-11-17T12:00:00.000Z",
+    }).pipe(
+      Effect.provideService(
+        CurrentLearner,
+        CurrentLearner.of({ id: "visitor-1" as LearnerId })
+      )
+    )
+  );
+  await query((client) =>
+    client.insert(occurrences).values({
+      category: "PREPOSITIONS",
+      correctedSpan: "worked on",
+      evaluationId,
+      example: "I worked on a payments API.",
+      explanation: "Use the past tense.",
+      findingPosition: 0,
+      id: randomUUID(),
+      learnerId: "visitor-1",
+      originalSpan: "work in",
+      patternId,
+      rubricVersion: "1-provisional",
+      severity: "ERROR",
+    })
+  );
+  return evaluationId;
+};
+
+// Grifando's daily session (exerciseService.ts, 74dbb9f), which no Grifando test covers: after
+// a piece of writing, the patterns that writing produced open the set.
+describe("POST /api/exercises daily session", () => {
+  it("opens the set with the patterns of the Evaluation it follows", async () => {
+    const generateExercises = generating(multipleChoice());
+    trainer = { ...trainer, generateExercises };
+    const longAgo = new Date("2026-01-01T00:00:00.000Z");
+    await seedPattern("visitor-1", {
+      lastPracticedAt: longAgo,
+      lastSeenAt: longAgo,
+    });
+    const fresh = await seedPattern("visitor-1", {
+      exampleCorrection: "I worked on a payments API.",
+      exampleOriginal: "I work in a payments API.",
+      lastPracticedAt: new Date(),
+      patternKey: "work-on",
+    });
+    const evaluationId = await seedOccurrence(fresh.id);
+
+    await post({});
+    await post({ afterEvaluationId: evaluationId });
+
+    const firstOf = (call: number) =>
+      generateExercises.mock.calls[call]?.[0][0]?.exampleOriginal;
+    expect(firstOf(0)).toBe("I depend of this library.");
+    expect(firstOf(1)).toBe("I work in a payments API.");
+  });
+
+  it("takes only the patterns of that Evaluation as fresh", async () => {
+    const first = await seedPattern("visitor-1", { patternKey: "first" });
+    const second = await seedPattern("visitor-1", { patternKey: "second" });
+    const evaluationId = await seedOccurrence(first.id);
+    await seedOccurrence(second.id);
+
+    expect(
+      await runtime.runPromise(
+        listPatternIdsForEvaluation(evaluationId).pipe(
+          Effect.provideService(
+            CurrentLearner,
+            CurrentLearner.of({ id: "visitor-1" as LearnerId })
+          )
+        )
+      )
+    ).toEqual([first.id]);
   });
 });

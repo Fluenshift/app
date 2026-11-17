@@ -6,6 +6,7 @@ import { Database } from "@fluenshift/db";
 import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
 
+import { generateExercisesFor } from "./academy/academy-requests";
 import { listPendingExercises } from "./academy/exercise-repository";
 import { TrainerClient } from "./academy/trainer/trainer-client";
 import {
@@ -40,6 +41,7 @@ const HttpServer = Layer.effectDiscard(
       | LearnerIdentity
       | ServerConfig
       | TrainerClient
+      | TrainerConfig
     >();
     // Where the setup status says the data lives; a Postgres URL is never shown.
     const storedAt =
@@ -54,6 +56,7 @@ const HttpServer = Layer.effectDiscard(
       createVocabularyItem,
       deleteEvaluation,
       deleteVocabularyItem,
+      generateExercises: generateExercisesFor,
       evaluateWriting: (writingSample) =>
         evaluateWritingForEndpoint(writingSample, new Date()),
       getEvaluation,
@@ -105,7 +108,7 @@ const HttpServer = Layer.effectDiscard(
       Database.layer,
       OpenRouterEvaluationModelLive,
       LearnerIdentity.local,
-      TrainerClient.layer.pipe(Layer.provide(TrainerConfig.layer))
+      TrainerClient.layer.pipe(Layer.provideMerge(TrainerConfig.layer))
     )
   ),
   Layer.provide(ServerConfig.layer)

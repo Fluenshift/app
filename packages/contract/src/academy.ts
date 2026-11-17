@@ -144,3 +144,15 @@ export const VocabularyItemRequest = Schema.Struct({
   term: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(120)),
 });
 export type VocabularyItemRequest = typeof VocabularyItemRequest.Type;
+
+/**
+ * A request for a practice set (Grifando's POST /api/exercises, 74dbb9f). With an Evaluation,
+ * the daily session's set opens with the patterns of that Evaluation's Occurrences; Evaluations
+ * replace Grifando's writing sessions (docs/adr/0004).
+ */
+export const ExerciseGenerationRequest = Schema.Struct({
+  afterEvaluationId: Schema.optional(
+    Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(64))
+  ),
+});
+export type ExerciseGenerationRequest = typeof ExerciseGenerationRequest.Type;

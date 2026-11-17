@@ -109,6 +109,34 @@ describe("Effect edge", () => {
     expect(text).not.toContain("private-cause");
   });
 
+  it("answers a defect with the route's own body when the route gives one", async () => {
+    const edge = makeEdge(ManagedRuntime.make(greeter));
+    const response = await new Hono()
+      .get("/greet/:name", (context) =>
+        edge(
+          Greeter.pipe(
+            Effect.flatMap((service) =>
+              service.greet(context.req.param("name"))
+            )
+          ),
+          {
+            errors,
+            success: (greeting) => Response.json({ greeting }),
+            unexpected: {
+              body: { error: "Something went wrong." },
+              status: 500,
+            },
+          }
+        )
+      )
+      .request("/greet/defect");
+    const text = await response.text();
+
+    expect(response.status).toBe(500);
+    expect(JSON.parse(text)).toStrictEqual({ error: "Something went wrong." });
+    expect(text).not.toContain("private-cause");
+  });
+
   it("answers an interrupted Effect with a safe internal error", async () => {
     const response = await app().request("/greet/interrupted");
 

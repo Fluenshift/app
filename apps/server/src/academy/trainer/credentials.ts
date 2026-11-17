@@ -6,7 +6,7 @@ import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import type { TrainerProvider } from "@fluenshift/env";
 import { Effect, Option, Redacted } from "effect";
 
-import type { EdgeFailure } from "../../edge";
+import type { EdgeErrors, EdgeFailure } from "../../edge";
 import type { TrainerCredentials } from "./trainer-client";
 import { InvalidTrainerCredentialsError } from "./trainer-errors";
 import type { TrainerAccessError } from "./trainer-errors";
@@ -106,6 +106,15 @@ const isTrainerAccessError = (error: unknown): error is TrainerAccessError =>
 export const trainerFailure = (error: TrainerAccessError): EdgeFailure => {
   const { status, ...body } = FAILURES[error._tag];
   return { body, status };
+};
+
+// The edge's entries for every access error, for the routes that call the Trainer.
+export const TRAINER_FAILURES: EdgeErrors<TrainerAccessError> = {
+  InvalidTrainerCredentialsError: trainerFailure,
+  TrainerKeyRejectedError: trainerFailure,
+  TrainerKeyRequiredError: trainerFailure,
+  TrainerQuotaExceededError: trainerFailure,
+  TrainerUnavailableError: trainerFailure,
 };
 
 // The response for an error the Learner can act on, or null for any other error.
