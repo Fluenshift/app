@@ -63,6 +63,15 @@ describe("parseMusicLink", () => {
   });
 });
 
+// Pins a constant of Grifando's musicLink.ts that its tests leave open (a mutation survived).
+describe("parseMusicLink id length", () => {
+  it("accepts a Spotify id of exactly 22 characters and nothing shorter", () => {
+    expect(
+      parseMusicLink(`https://open.spotify.com/playlist/${SPOTIFY_ID.slice(1)}`)
+    ).toBeNull();
+  });
+});
+
 describe("toEmbedUrl", () => {
   it("builds the Spotify embed URL", () => {
     expect(

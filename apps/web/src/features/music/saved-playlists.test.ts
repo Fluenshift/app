@@ -77,6 +77,13 @@ describe("addPlaylist / removePlaylist", () => {
     expect(playlists.some((p) => p.name === DEFAULT_PLAYLIST.name)).toBe(false);
   });
 
+  // Pins a constant of Grifando's savedPlaylists.ts that its tests leave open.
+  it("keeps the first 40 characters of a long playlist name", () => {
+    expect(added([], SPOTIFY, "x".repeat(41)).map((p) => p.name)).toEqual([
+      "x".repeat(40),
+    ]);
+  });
+
   it("removes by source", () => {
     expect(removePlaylist([DEFAULT_PLAYLIST], DEFAULT_PLAYLIST.source)).toEqual(
       []
