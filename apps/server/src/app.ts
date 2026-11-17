@@ -12,6 +12,7 @@ import type {
   HealthResponse,
   ProgressEvidenceSelection,
   SetupStatus,
+  VocabularyItemRequest,
 } from "@fluenshift/contract";
 import {
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
@@ -87,6 +88,13 @@ export interface AppBoundaries<R = never> {
   >;
   readonly logEvaluation?: (event: EvaluationLogEvent) => void;
   readonly setup?: SetupStatus;
+  readonly createVocabularyItem?: (
+    request: VocabularyItemRequest
+  ) => Effect.Effect<unknown, DatabaseError, R | CurrentLearner>;
+  /** Whether the Learner had an item with that id, which is now deleted. */
+  readonly deleteVocabularyItem?: (
+    id: string
+  ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
   /** One tiny call with the Learner's key (TrainerClient.testKey). */
   readonly testTrainerKey?: (
     credentials: TrainerCredentials
