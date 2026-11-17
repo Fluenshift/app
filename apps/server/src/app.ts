@@ -27,6 +27,10 @@ import type { Context as HonoContext, Handler, MiddlewareHandler } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getMimeType } from "hono/utils/mime";
 
+import type {
+  KeyTestStatus,
+  TrainerCredentials,
+} from "./academy/trainer/trainer-client";
 import { INTERNAL_ERROR, makeEdge } from "./edge";
 import type { EdgeFailure, EdgeRuntime } from "./edge";
 import type {
@@ -78,6 +82,10 @@ export interface AppBoundaries<R = never> {
   >;
   readonly logEvaluation?: (event: EvaluationLogEvent) => void;
   readonly setup?: SetupStatus;
+  /** One tiny call with the Learner's key (TrainerClient.testKey). */
+  readonly testTrainerKey?: (
+    credentials: TrainerCredentials
+  ) => Effect.Effect<KeyTestStatus, never, R>;
 }
 
 export interface AppOptions<R = never> extends AppBoundaries<R> {
