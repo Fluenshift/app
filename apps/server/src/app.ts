@@ -7,12 +7,12 @@ import {
   ErrorCategory,
   ProgressEvidenceRequest,
   ProgressPeriod,
+  VocabularyItemRequest,
 } from "@fluenshift/contract";
 import type {
   HealthResponse,
   ProgressEvidenceSelection,
   SetupStatus,
-  VocabularyItemRequest,
 } from "@fluenshift/contract";
 import {
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
@@ -229,6 +229,16 @@ const INVALID_PERIOD = {
 const INVALID_SELECTION = {
   code: "invalid-selection",
   error: "Progress selection is invalid",
+};
+
+// Grifando's vocabulary routes answer every issue of a refused body (src/app/api/vocabulary,
+// 74dbb9f), and a failure with a message the Learner can act on.
+const VOCABULARY_REQUEST = Schema.toStandardSchemaV1(VocabularyItemRequest, {
+  parseOptions: { errors: "all" },
+});
+const SOMETHING_WENT_WRONG: EdgeFailure = {
+  body: { error: "Something went wrong. Please try again." },
+  status: 500,
 };
 
 const decodePeriod = Schema.decodeUnknownOption(ProgressPeriod);
@@ -526,6 +536,52 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         }
       );
     })
+    .post("/api/vocabulary", (context): Response | Promise<Response> => {
+      const { createVocabularyItem } = options;
+      if (createVocabularyItem === undefined) {
+        return context.json(notReady("Vocabulary is not available"), 503);
+      }
+      return context.req
+        .json<unknown>()
+        .catch(() => null)
+        .then((body) => VOCABULARY_REQUEST["~standard"].validate(body))
+        .then((result) =>
+          result.issues === undefined
+            ? edge(
+                forLearner(context.req.raw, createVocabularyItem(result.value)),
+                {
+                  errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+                  success: (item) => Response.json(item, { status: 201 }),
+                }
+              )
+            : Response.json(
+                { error: "Invalid request body", issues: result.issues },
+                { status: 400 }
+              )
+        );
+    })
+    .delete(
+      "/api/vocabulary/:itemId",
+      (context): Response | Promise<Response> => {
+        const { deleteVocabularyItem } = options;
+        if (deleteVocabularyItem === undefined) {
+          return context.json(notReady("Vocabulary is not available"), 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            deleteVocabularyItem(context.req.param("itemId"))
+          ),
+          {
+            errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            success: (deleted) =>
+              deleted
+                ? new Response(null, { status: 204 })
+                : Response.json({ error: "Not found" }, { status: 404 }),
+          }
+        );
+      }
+    )
     .get("/api/setup", (context) =>
       options.setup === undefined
         ? context.json(notReady("Setup status is not available"), 503)
