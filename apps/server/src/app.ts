@@ -20,6 +20,7 @@ import {
   EVALUATION_MAX_OUTPUT_TOKENS,
   EVALUATION_REQUEST_TIMEOUT_MILLISECONDS,
 } from "@fluenshift/core/evaluation-request-policy";
+import { toPublicExercise } from "@fluenshift/core/public-view";
 import type { DatabaseError } from "@fluenshift/db";
 import type { DeployProfile, InputLimits } from "@fluenshift/env";
 import { getRequestListener } from "@hono/node-server";
@@ -549,6 +550,25 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           success: (status) => Response.json({ status }),
         }
       );
+    })
+    // The Learner's pending Exercises, each by its public view: the answer and the explanation
+    // never reach the browser before an Attempt (Grifando's GET /api/exercises).
+    .get("/api/exercises", (context): Response | Promise<Response> => {
+      const { listPendingExercises } = options;
+      if (listPendingExercises === undefined) {
+        return context.json(notReady("Exercises are not available"), 503);
+      }
+      return edge(forLearner(context.req.raw, listPendingExercises()), {
+        errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        success: (pending) =>
+          Response.json({
+            exercises: pending.map(({ id, promptData, type }) => ({
+              id,
+              prompt: toPublicExercise(promptData),
+              type,
+            })),
+          }),
+      });
     })
     .post("/api/vocabulary", (context): Response | Promise<Response> => {
       const { createVocabularyItem } = options;

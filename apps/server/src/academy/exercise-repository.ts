@@ -5,7 +5,7 @@ import { randomUUID } from "node:crypto";
 
 import type { ExerciseType, GeneratedExercise } from "@fluenshift/contract";
 import { Database, exerciseAttempts, exercises } from "@fluenshift/db";
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq, notExists } from "drizzle-orm";
 import { Effect } from "effect";
 
 import { CurrentLearner } from "../learner-identity";
@@ -90,11 +90,30 @@ export const createExercises = Effect.fn("ExerciseRepository.createExercises")(
   }
 );
 
-// The Learner's Exercises without an Attempt, oldest first.
+// The Learner's Exercises without an Attempt, oldest first (Grifando's listPending).
 export const listPendingExercises = Effect.fn(
   "ExerciseRepository.listPendingExercises"
 )(function* () {
-  return yield* Effect.succeed<Exercise[]>([]);
+  const database = yield* Database;
+  const learner = yield* CurrentLearner;
+  const rows = yield* database.run((client) =>
+    client
+      .select()
+      .from(exercises)
+      .where(
+        and(
+          eq(exercises.learnerId, learner.id),
+          notExists(
+            client
+              .select({ id: exerciseAttempts.id })
+              .from(exerciseAttempts)
+              .where(eq(exerciseAttempts.exerciseId, exercises.id))
+          )
+        )
+      )
+      .orderBy(asc(exercises.createdAt))
+  );
+  return rows.map(toExercise);
 });
 
 export const findExercise = Effect.fn("ExerciseRepository.findExercise")(

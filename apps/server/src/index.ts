@@ -6,6 +6,7 @@ import { Database } from "@fluenshift/db";
 import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
 
+import { listPendingExercises } from "./academy/exercise-repository";
 import { TrainerClient } from "./academy/trainer/trainer-client";
 import {
   createVocabularyItem,
@@ -60,6 +61,7 @@ const HttpServer = Layer.effectDiscard(
       getProgressSummary,
       limits: config.limits,
       listEvaluations: () => listEvaluations(),
+      listPendingExercises,
       // The event carries codes, timings and the model, never the Writing Sample.
       logEvaluation: (event) => {
         Effect.runSyncWith(services)(
