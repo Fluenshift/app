@@ -17,7 +17,7 @@
       "dependsOn": ["@fluenshift/db#test"]
     },
     "web#test": {
-      "dependsOn": ["@fluenshift/db#test"]
+      "dependsOn": ["@fluenshift/db#test", "server#test"]
     },
     "dev": {
       "cache": false,
