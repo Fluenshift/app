@@ -14,6 +14,8 @@ import type {
   ProgressEvidenceSelection,
   SetupStatus,
   GeneratedExercise,
+  AIResponseValidationError,
+  ExerciseGenerationRequest,
 } from "@fluenshift/contract";
 import {
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
@@ -39,6 +41,7 @@ import type {
   TrainerCredentials,
 } from "./academy/trainer/trainer-client";
 import { TrainerKeyRequiredError } from "./academy/trainer/trainer-errors";
+import type { TrainerAccessError } from "./academy/trainer/trainer-errors";
 import { INTERNAL_ERROR, makeEdge } from "./edge";
 import type { EdgeFailure, EdgeRuntime } from "./edge";
 import type {
@@ -97,6 +100,15 @@ export interface AppBoundaries<R = never> {
   readonly deleteVocabularyItem?: (
     id: string
   ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
+  /** A practice set from the Learner's patterns, generated on the key the request carries. */
+  readonly generateExercises?: (
+    headers: Headers,
+    request: ExerciseGenerationRequest
+  ) => Effect.Effect<
+    readonly PendingExercise[],
+    AIResponseValidationError | DatabaseError | TrainerAccessError,
+    R | CurrentLearner
+  >;
   /** The Learner's Exercises without an Attempt, oldest first. */
   readonly listPendingExercises?: () => Effect.Effect<
     readonly PendingExercise[],

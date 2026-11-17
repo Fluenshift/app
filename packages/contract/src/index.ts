@@ -24,6 +24,7 @@ export {
   SessionStatusSchema,
   TECHNICAL_CATEGORIES,
   TechnicalCategory,
+  ExerciseGenerationRequest,
   TechnicalCategorySchema,
   VocabularyItemRequest,
 } from "./academy";
