@@ -69,7 +69,7 @@ describe("integrated same-origin backend", () => {
       getProgressSummary: (options) => getProgressSummary(options, NOW),
       limits: config.limits,
       listEvaluations: () => listEvaluations(),
-      profile: config.profile,
+      profile: "local",
       runtime,
       serveWeb: false,
       setup: {

@@ -37,10 +37,17 @@ const oneOf = (values: readonly string[]) =>
 const moment = (name: string) =>
   timestamp(name, { mode: "date", withTimezone: true });
 
-export const learners = pgTable("learners", {
-  createdAt: moment("created_at").notNull().defaultNow(),
-  id: text("id").primaryKey(),
-});
+export const learners = pgTable(
+  "learners",
+  {
+    createdAt: moment("created_at").notNull().defaultNow(),
+    id: text("id").primaryKey(),
+    // The Learner's last write, moved at most once an hour (ensureLearner); the hosted profile's
+    // idle cleanup reads it (docs/adr/0011). Ported from Grifando's User.lastActiveAt (74dbb9f).
+    lastActiveAt: moment("last_active_at").notNull().defaultNow(),
+  },
+  (table) => [index("learners_last_active_at_idx").on(table.lastActiveAt)]
+);
 
 // The columns of an Evaluation, shared by its table and by the read-only view the Academy reads
 // it through (evaluation-views.ts).

@@ -38,6 +38,12 @@ const LIMITS: Readonly<Record<DeployProfile, InputLimits>> = {
   },
 };
 
+/** What `NODE_ENV` names: whether the server runs as production, development or a test. */
+export const nodeEnvConfig = Config.Literals(
+  ["development", "production", "test"],
+  "NODE_ENV"
+).pipe(Config.withDefault("development" as const));
+
 const databaseConfig = (
   profile: DeployProfile
 ): Config.Config<DatabaseConfig> =>
@@ -94,9 +100,7 @@ export class ServerConfig extends Context.Service<
         Config.NonEmptyString("MIGRATIONS_PATH").pipe(
           Config.withDefault("../../packages/db/src/migrations")
         ),
-        Config.Literals(["development", "production", "test"], "NODE_ENV").pipe(
-          Config.withDefault("development" as const)
-        ),
+        nodeEnvConfig,
         Config.Port("SERVER_PORT").pipe(Config.withDefault(3000)),
         Config.NonEmptyString("WEB_DIST_PATH").pipe(
           Config.withDefault("../web/dist")

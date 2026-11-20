@@ -316,6 +316,22 @@
       "baseline": "green"
     },
     {
+      "id": "grifando:characterization:src/nextConfig.characterization.test.ts::next.config security headers > adds nosniff, the referrer policy, the permissions policy and HSTS to every path, without X-Powered-By",
+      "kind": "characterization",
+      "source": "src/nextConfig.characterization.test.ts",
+      "title": "next.config security headers > adds nosniff, the referrer policy, the permissions policy and HSTS to every path, without X-Powered-By",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/proxy.characterization.test.ts::proxy session cookie > mints the session cookie site-wide for a year, Secure in production only",
+      "kind": "characterization",
+      "source": "src/proxy.characterization.test.ts",
+      "title": "proxy session cookie > mints the session cookie site-wide for a year, Secure in production only",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:characterization:src/server/ai/aiErrorResponse.characterization.test.ts::aiErrorResponse guards > carries the FAILED session id of a typed AI error, and only when there is one",
       "kind": "characterization",
       "source": "src/server/ai/aiErrorResponse.characterization.test.ts",
@@ -584,6 +600,46 @@
       "kind": "characterization",
       "source": "src/server/domain/writing/technicalPrompts.characterization.test.ts",
       "title": "technical prompt guards > keeps the technical prompt bank as written",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > falls back to an insecure development secret, with a warning, outside production",
+      "kind": "characterization",
+      "source": "src/server/session/sessionSecret.characterization.test.ts",
+      "title": "getSessionSecret > falls back to an insecure development secret, with a warning, outside production",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > refuses to run in production without SESSION_SECRET",
+      "kind": "characterization",
+      "source": "src/server/session/sessionSecret.characterization.test.ts",
+      "title": "getSessionSecret > refuses to run in production without SESSION_SECRET",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > returns SESSION_SECRET whenever it is set",
+      "kind": "characterization",
+      "source": "src/server/session/sessionSecret.characterization.test.ts",
+      "title": "getSessionSecret > returns SESSION_SECRET whenever it is set",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionToken.characterization.test.ts::sessionToken > rejects a signed token with an extra part, and a signature of another length, without throwing",
+      "kind": "characterization",
+      "source": "src/server/session/sessionToken.characterization.test.ts",
+      "title": "sessionToken > rejects a signed token with an extra part, and a signature of another length, without throwing",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionToken.characterization.test.ts::sessionToken > signs an id with the base64url HMAC-SHA256 of the secret",
+      "kind": "characterization",
+      "source": "src/server/session/sessionToken.characterization.test.ts",
+      "title": "sessionToken > signs an id with the base64url HMAC-SHA256 of the secret",
       "suite": "vitest",
       "baseline": "green"
     },

@@ -21,6 +21,69 @@
       "targets": []
     },
     {
+      "id": "grifando:characterization:src/nextConfig.characterization.test.ts::next.config security headers > adds nosniff, the referrer policy, the permissions policy and HSTS to every path, without X-Powered-By",
+      "source": "src/nextConfig.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/proxy.characterization.test.ts::proxy session cookie > mints the session cookie site-wide for a year, Secure in production only",
+      "source": "src/proxy.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > falls back to an insecure development secret, with a warning, outside production",
+      "source": "src/server/session/sessionSecret.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > refuses to run in production without SESSION_SECRET",
+      "source": "src/server/session/sessionSecret.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > returns SESSION_SECRET whenever it is set",
+      "source": "src/server/session/sessionSecret.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionToken.characterization.test.ts::sessionToken > rejects a signed token with an extra part, and a signature of another length, without throwing",
+      "source": "src/server/session/sessionToken.characterization.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/session/sessionToken.characterization.test.ts::sessionToken > signs an id with the base64url HMAC-SHA256 of the secret",
+      "source": "src/server/session/sessionToken.characterization.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "grifando:deploy-smoke:01",
       "source": "docs/deploy.md",
       "class": null,
