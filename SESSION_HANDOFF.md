@@ -55,15 +55,6 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 - Give the go-ahead for cutover (Phase 7).
 - Say where Grifando's visual style came from, for `docs/product/ASSET-LICENSES.md` (#119, question 4).
 
-## Local helpers, until #111
-
-In `$F/app-wt/.pending/` on Jhefferson's machine only:
-
-- `mutation-tools/mutate.mjs <workspace> <mutations.json>`: applies each `{ file, from, to, tests }` alone, runs Vitest on `tests`, lists the tests that caught it, and restores the file. A `from` must match once in the file; a short anchor can also match inside a longer, more indented line.
-- `mutation-tools/targets.mjs <repo> <slice> <report.json> <map.json>`: writes `targets` for rows whose verbatim titles passed in a Vitest JSON report. It refuses when any row of a mapped source has not passed.
-- `mutation-tools/targets-subset.cjs <repo> <slice> <report.json> <source> <target file> <title>...`: the same for the named rows only, when a unit ports part of a source test.
-- `tools/ledger-union.ts <repo> <ledger file>...`: during a merge conflict in `docs/migration/parity/`, keeps the union of both sides' rows and targets.
-
 ## Jhefferson's machine
 
 - `$F` is `/home/jheff/projects/personal/fluenshift`. `$F/app-verify/protocol-review` is an old checkout outside the migration.
