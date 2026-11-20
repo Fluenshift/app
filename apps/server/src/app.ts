@@ -123,6 +123,12 @@ export interface AppBoundaries<R = never> {
   readonly deleteEvaluation?: (
     evaluationId: string
   ) => Effect.Effect<void, DatabaseError, R | CurrentLearner>;
+  /** Deletes the hosted Learner of the request and all their data (`DELETE /api/me`). */
+  readonly deleteLearner?: () => Effect.Effect<
+    void,
+    DatabaseError,
+    R | CurrentLearner
+  >;
   readonly evaluateWriting?: (
     writingSample: string
   ) => Effect.Effect<EvaluationEndpointResult, never, R | CurrentLearner>;
