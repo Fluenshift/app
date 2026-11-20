@@ -4,6 +4,8 @@
 import { cn } from "@fluenshift/ui/utils";
 import type { ReactNode } from "react";
 
+import { AcademyNav } from "./academy-nav";
+
 // The editorial "spread" opening every page: a whisper-weight headline on the
 // left, a narrow serif standfirst (and optional actions) in a column beside it.
 export const PageHeader = ({
@@ -54,7 +56,8 @@ export const PageHeader = ({
   </header>
 );
 
-// The page container: the reference's 1200px column with generous gutters.
+// The page container: the reference's 1200px column with generous gutters, under the Academy's
+// own navigation, which Grifando's site header carried.
 export const PageShell = ({
   children,
   className,
@@ -65,6 +68,7 @@ export const PageShell = ({
   <main
     className={cn("mx-auto w-full max-w-[1200px] px-6 md:px-12", className)}
   >
+    <AcademyNav />
     {children}
   </main>
 );

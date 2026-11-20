@@ -49,7 +49,13 @@ describe("/technical", () => {
     ]);
     expect(TECHNICAL_CATEGORIES).toHaveLength(14);
 
-    const links = within(page).getAllByRole("link");
+    // The Academy's own navigation links the screens; every other link opens a prompt.
+    const navigation = within(page).getByRole("navigation", {
+      name: "Academy",
+    });
+    const links = within(page)
+      .getAllByRole("link")
+      .filter((link) => !navigation.contains(link));
     expect(links).toHaveLength(TECHNICAL_PROMPTS.length);
     const backend = within(page).getByRole("link", {
       name: "Explain the difference between synchronous and asynchronous request handling.",
