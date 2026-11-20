@@ -4,6 +4,7 @@ import { createServer } from "node:http";
 import path from "node:path";
 
 import {
+  AttemptRequest,
   ErrorCategory,
   ExerciseGenerationRequest,
   ProgressEvidenceRequest,
@@ -32,6 +33,8 @@ import type { Context as HonoContext, Handler, MiddlewareHandler } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getMimeType } from "hono/utils/mime";
 
+import type { NotFoundError } from "./academy/errors";
+import type { SubmitAttemptResult } from "./academy/exercise-service";
 import {
   readTrainerCredentials,
   TRAINER_FAILURES,
@@ -101,6 +104,15 @@ export interface AppBoundaries<R = never> {
   readonly deleteVocabularyItem?: (
     id: string
   ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
+  /** An explanation of one graded Attempt on the key the request carries, or null for none. */
+  readonly explainAttempt?: (
+    headers: Headers,
+    input: { readonly attemptId: string; readonly exerciseId: string }
+  ) => Effect.Effect<
+    string | null,
+    AIResponseValidationError | DatabaseError | TrainerAccessError,
+    R | CurrentLearner
+  >;
   /** A practice set from the Learner's patterns, generated on the key the request carries. */
   readonly generateExercises?: (
     headers: Headers,
@@ -114,6 +126,15 @@ export interface AppBoundaries<R = never> {
   readonly listPendingExercises?: () => Effect.Effect<
     readonly PendingExercise[],
     DatabaseError,
+    R | CurrentLearner
+  >;
+  /** Grades one answer to the Learner's Exercise; no Trainer takes part. */
+  readonly submitAttempt?: (
+    exerciseId: string,
+    answer: string
+  ) => Effect.Effect<
+    SubmitAttemptResult,
+    DatabaseError | NotFoundError,
     R | CurrentLearner
   >;
   /** One tiny call with the Learner's key (TrainerClient.testKey). */
@@ -276,6 +297,23 @@ const EXERCISE_REQUEST = Schema.toStandardSchemaV1(ExerciseGenerationRequest, {
 const NO_PATTERNS = {
   error:
     "No mistake patterns yet \u2014 write something first to get personalized exercises.",
+};
+
+// Grifando's attempt route refuses a body without a valid answer before it reads the Exercise;
+// a body that is not JSON is refused too.
+const ATTEMPT_REQUEST = Schema.toStandardSchemaV1(AttemptRequest, {
+  parseOptions: { errors: "all" },
+});
+// Another Learner's Exercise or Attempt reads as one that does not exist.
+const NOT_FOUND: EdgeFailure = { body: { error: "Not found" }, status: 404 };
+// Grifando's answer when an explanation fails: 500, or 502 for an answer the Trainer's schema
+// refuses. The grade stays as it was.
+const EXPLANATION_FAILED: EdgeFailure = {
+  body: {
+    error:
+      "We couldn't explain this answer right now. Your grade is unaffected \u2014 try again.",
+  },
+  status: 500,
 };
 
 // What the browser may see of an Exercise before its Attempt: never the answer or the
@@ -634,6 +672,80 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
               )
         );
     })
+    // Grades one answer to the Learner's Exercise and answers with the whole Exercise, its
+    // answer key included (Grifando's POST /api/exercises/[id]/attempts). No Trainer takes part.
+    .post(
+      "/api/exercises/:exerciseId/attempts",
+      (context): Response | Promise<Response> => {
+        const { submitAttempt } = options;
+        if (submitAttempt === undefined) {
+          return context.json(notReady("Exercises are not available"), 503);
+        }
+        return context.req
+          .json<unknown>()
+          .catch(() => null)
+          .then((body) => ATTEMPT_REQUEST["~standard"].validate(body))
+          .then((result) =>
+            result.issues === undefined
+              ? edge(
+                  forLearner(
+                    context.req.raw,
+                    submitAttempt(
+                      context.req.param("exerciseId"),
+                      result.value.answer
+                    )
+                  ),
+                  {
+                    errors: {
+                      DatabaseError: () => SOMETHING_WENT_WRONG,
+                      NotFoundError: () => NOT_FOUND,
+                    },
+                    success: (graded) => Response.json(graded),
+                    unexpected: SOMETHING_WENT_WRONG,
+                  }
+                )
+              : Response.json(
+                  { error: "Invalid request body", issues: result.issues },
+                  { status: 400 }
+                )
+          );
+      }
+    )
+    // "Explain my answer" on the key the request carries (Grifando's explanation route): the
+    // key is resolved before the Attempt is read, and the explanation never changes the grade.
+    .post(
+      "/api/exercises/:exerciseId/attempts/:attemptId/explanation",
+      (context): Response | Promise<Response> => {
+        const { explainAttempt } = options;
+        if (explainAttempt === undefined) {
+          return context.json(notReady("Exercises are not available"), 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            explainAttempt(context.req.raw.headers, {
+              attemptId: context.req.param("attemptId"),
+              exerciseId: context.req.param("exerciseId"),
+            })
+          ),
+          {
+            errors: {
+              ...TRAINER_FAILURES,
+              AIResponseValidationError: () => ({
+                ...EXPLANATION_FAILED,
+                status: 502,
+              }),
+              DatabaseError: () => EXPLANATION_FAILED,
+            },
+            success: (explanation) =>
+              explanation === null
+                ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
+                : Response.json({ explanation }),
+            unexpected: EXPLANATION_FAILED,
+          }
+        );
+      }
+    )
     .post("/api/vocabulary", (context): Response | Promise<Response> => {
       const { createVocabularyItem } = options;
       if (createVocabularyItem === undefined) {

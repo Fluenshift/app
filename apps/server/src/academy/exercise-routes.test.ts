@@ -5,6 +5,7 @@
 import { randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
 
+import { AIResponseValidationError } from "@fluenshift/contract";
 import type { GeneratedExercise, LearnerId } from "@fluenshift/contract";
 import {
   Database,
@@ -23,12 +24,17 @@ import { createApp } from "../app";
 import { persistEvaluation } from "../history/learning-history";
 import { CurrentLearner, LearnerIdentity } from "../learner-identity";
 import { makeTemporaryDatabase } from "../test/database";
-import { generateExercisesFor } from "./academy-requests";
+import { explainAttemptFor, generateExercisesFor } from "./academy-requests";
 import { listPendingExercises } from "./exercise-repository";
+import { submitAttempt } from "./exercise-service";
 import { listPatternIdsForEvaluation } from "./mistake-pattern-repository";
 import type { ExerciseTarget } from "./prompts/exercise-generation";
 import { TrainerClient } from "./trainer/trainer-client";
-import { TrainerKeyRejectedError } from "./trainer/trainer-errors";
+import {
+  TrainerKeyRejectedError,
+  TrainerQuotaExceededError,
+} from "./trainer/trainer-errors";
+import type { TrainerError } from "./trainer/trainer-errors";
 import type { TrainerMethods } from "./trainer/trainer-model";
 
 const learnerFromHeader = Layer.succeed(
@@ -83,7 +89,12 @@ beforeEach(async () => {
   trainer = {
     continueInterview: vi.fn<TrainerMethods["continueInterview"]>(),
     enrichFindings: vi.fn<TrainerMethods["enrichFindings"]>(),
-    explainAttempt: vi.fn<TrainerMethods["explainAttempt"]>(),
+    explainAttempt: vi.fn<TrainerMethods["explainAttempt"]>(() =>
+      Effect.succeed({
+        explanation: "'Depend' takes 'on'.",
+        model: "test-model",
+      })
+    ),
     generateExercises: generating(multipleChoice()),
   };
 });
@@ -95,6 +106,7 @@ afterEach(async () => {
 
 const appOf = () =>
   createApp({
+    explainAttempt: explainAttemptFor,
     generateExercises: generateExercisesFor,
     limits: {
       bodyMaxBytes: 256 * 1024,
@@ -107,6 +119,7 @@ const appOf = () =>
     profile: "local",
     runtime,
     serveWeb: false,
+    submitAttempt,
     webDistPath: "unused",
   });
 
@@ -412,5 +425,128 @@ describe("POST /api/exercises daily session", () => {
         )
       )
     ).toEqual([first.id]);
+  });
+});
+
+// Ported from Grifando's characterization of the attempt routes (74dbb9f,
+// migration/characterization/grifando/files/src/app/api/exercises/[id]/attempts): grading an
+// Attempt needs no key, and its explanation never changes the grade. Grifando's provider mock is
+// the fake Trainer, which fails with a typed error or dies for an unknown one.
+const postAttempt = (exerciseId: string, body: unknown) =>
+  appOf().request(
+    new Request(`http://localhost/api/exercises/${exerciseId}/attempts`, {
+      body: JSON.stringify(body),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    })
+  );
+
+const postExplanation = (
+  ids: { readonly attemptId: string; readonly exerciseId: string },
+  headers: Record<string, string> = {}
+) =>
+  appOf().request(
+    new Request(
+      `http://localhost/api/exercises/${ids.exerciseId}/attempts/${ids.attemptId}/explanation`,
+      {
+        headers: { "content-type": "application/json", ...headers },
+        method: "POST",
+      }
+    )
+  );
+
+// Grifando's seedExercise: a Mistake Pattern of the Learner and an Exercise from it.
+const seedExerciseWithPattern = async (learnerId: string) => {
+  const pattern = await seedPattern(learnerId);
+  return seedExercise(learnerId, pattern.id);
+};
+
+// A wrong answer of the visitor to a new Exercise, graded through the route.
+const seedAttempt = async () => {
+  const exercise = await seedExerciseWithPattern("visitor-1");
+  const graded = await postAttempt(exercise.id, { answer: "0" });
+  const { attemptId } = (await graded.json()) as { attemptId: string };
+  return { attemptId, exerciseId: exercise.id };
+};
+
+describe("POST /api/exercises/[id]/attempts", () => {
+  it("grades an answer and returns the attempt with the whole exercise", async () => {
+    const exercise = await seedExerciseWithPattern("visitor-1");
+    const response = await postAttempt(exercise.id, { answer: "1" });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      attemptId: expect.any(String),
+      exercise: multipleChoice(),
+      explanation: "Use 'depend on', not 'depend of'.",
+      isCorrect: true,
+    });
+  });
+
+  it("answers 400 with the validation issues for an empty answer", async () => {
+    const exercise = await seedExerciseWithPattern("visitor-1");
+    const response = await postAttempt(exercise.id, { answer: "  " });
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({
+      error: "Invalid request body",
+      issues: [expect.any(Object)],
+    });
+  });
+
+  it("answers 404 for an unknown exercise and for another user's", async () => {
+    const other = await seedExerciseWithPattern("other-user");
+    const unknown = await postAttempt("missing", { answer: "1" });
+    const foreign = await postAttempt(other.id, { answer: "1" });
+    expect([unknown.status, foreign.status]).toEqual([404, 404]);
+    expect(await foreign.json()).toEqual({ error: "Not found" });
+  });
+});
+
+describe("POST /api/exercises/[id]/attempts/[attemptId]/explanation", () => {
+  it("explains an attempt with the provider's text", async () => {
+    const ids = await seedAttempt();
+    const response = await postExplanation(ids, AI_HEADERS);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      explanation: "'Depend' takes 'on'.",
+    });
+  });
+
+  it("answers 401 AI_KEY_REQUIRED without a key and 404 for an unknown attempt", async () => {
+    const ids = await seedAttempt();
+    const withoutKey = await postExplanation(ids);
+    const unknown = await postExplanation(
+      { ...ids, attemptId: "missing" },
+      AI_HEADERS
+    );
+    expect(withoutKey.status).toBe(401);
+    expect(await withoutKey.json()).toMatchObject({ code: "AI_KEY_REQUIRED" });
+    expect(unknown.status).toBe(404);
+    expect(await unknown.json()).toEqual({ error: "Not found" });
+  });
+
+  it("keeps the grade and answers 502, 500 or the AI code when the explanation fails", async () => {
+    const ids = await seedAttempt();
+    const explainWith = async (failure: Effect.Effect<never, TrainerError>) => {
+      trainer = { ...trainer, explainAttempt: () => failure };
+      const response = await postExplanation(ids, AI_HEADERS);
+      return { body: await response.json(), status: response.status };
+    };
+    const failed =
+      "We couldn't explain this answer right now. Your grade is unaffected \u2014 try again.";
+
+    expect(
+      await explainWith(
+        Effect.fail(
+          new AIResponseValidationError({ issues: [], message: "bad shape" })
+        )
+      )
+    ).toEqual({ body: { error: failed }, status: 502 });
+    expect(await explainWith(Effect.die(new Error("private cause")))).toEqual({
+      body: { error: failed },
+      status: 500,
+    });
+    expect(
+      await explainWith(Effect.fail(new TrainerQuotaExceededError()))
+    ).toMatchObject({ body: { code: "AI_QUOTA_EXCEEDED" }, status: 429 });
   });
 });

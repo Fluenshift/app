@@ -9,7 +9,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::POST /api/exercises/[id]/attempts > answers 400 with the validation issues for an empty answer"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts > answers 404 for an unknown exercise and for another user's",
@@ -18,7 +20,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::POST /api/exercises/[id]/attempts > answers 404 for an unknown exercise and for another user's"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts > grades an answer and returns the attempt with the whole exercise",
@@ -27,7 +31,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::POST /api/exercises/[id]/attempts > grades an answer and returns the attempt with the whole exercise"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > answers 401 AI_KEY_REQUIRED without a key and 404 for an unknown attempt",
@@ -36,7 +42,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > answers 401 AI_KEY_REQUIRED without a key and 404 for an unknown attempt"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > explains an attempt with the provider's text",
@@ -45,7 +53,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > explains an attempt with the provider's text"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > keeps the grade and answers 502, 500 or the AI code when the explanation fails",
@@ -54,7 +64,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::POST /api/exercises/[id]/attempts/[attemptId]/explanation > keeps the grade and answers 502, 500 or the AI code when the explanation fails"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/exercises/exercises.characterization.test.ts::GET /api/exercises > lists the visitor's pending exercises by their public view only",
