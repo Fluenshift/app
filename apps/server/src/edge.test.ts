@@ -165,7 +165,7 @@ describe("Effect edge", () => {
     expect(lines).toHaveLength(1);
     expect(lines[0]).toMatchObject({
       annotations: { error: "Error" },
-      logLevel: "ERROR",
+      level: "ERROR",
       message: "Failed to greet",
     });
     expect(JSON.stringify(lines)).not.toContain("private-cause");

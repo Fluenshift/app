@@ -1,9 +1,14 @@
-// The Learner's Occurrences, counted. Ported from Grifando
-// src/server/domain/mistakes/mistakeOccurrence.repository.ts (74dbb9f), countByCategory.
-import type { MistakeCategory } from "@fluenshift/contract";
+// The Learner's Occurrences, counted and listed. Ported from Grifando
+// src/server/domain/mistakes/mistakeOccurrence.repository.ts (74dbb9f): countByCategory and
+// listByAnalysis.
+import type {
+  MistakeCategory,
+  MistakeSeverity,
+  PracticeOccurrence,
+} from "@fluenshift/contract";
 import type { CategoryCount } from "@fluenshift/core/analytics";
 import { Database, occurrences } from "@fluenshift/db";
-import { and, count, eq, gte } from "drizzle-orm";
+import { and, asc, count, eq, gte } from "drizzle-orm";
 import { Effect } from "effect";
 
 import { CurrentLearner } from "../learner-identity";
@@ -36,5 +41,37 @@ export const countOccurrencesByCategory = Effect.fn(
   return rows.map((row): CategoryCount => ({
     category: row.category as MistakeCategory,
     count: row.count,
+  }));
+});
+
+// The Learner's Occurrences from one Evaluation, in the order of its Findings; Naturalness Notes,
+// which have no Finding, come last (Grifando's listByAnalysis).
+export const listOccurrencesForEvaluation = Effect.fn(
+  "OccurrenceRepository.listOccurrencesForEvaluation"
+)(function* (evaluationId: string) {
+  const database = yield* Database;
+  const learner = yield* CurrentLearner;
+  const rows = yield* database.run((client) =>
+    client
+      .select()
+      .from(occurrences)
+      .where(
+        and(
+          eq(occurrences.learnerId, learner.id),
+          eq(occurrences.evaluationId, evaluationId)
+        )
+      )
+      .orderBy(asc(occurrences.findingPosition), asc(occurrences.createdAt))
+  );
+  return rows.map((row): PracticeOccurrence => ({
+    category: row.category as MistakeCategory,
+    correctedSpan: row.correctedSpan,
+    example: row.example,
+    explanation: row.explanation,
+    findingPosition: row.findingPosition,
+    id: row.id,
+    l1Transfer: row.l1Transfer,
+    originalSpan: row.originalSpan,
+    severity: row.severity as MistakeSeverity,
   }));
 });

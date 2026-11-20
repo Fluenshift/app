@@ -10,6 +10,7 @@ import { Effect, Schema } from "effect";
 import { trainerForRequest } from "../academy/academy-requests";
 import { answerTurn } from "../academy/interview-service";
 import type { AnswerTurnInput } from "../academy/interview-service";
+import { listOccurrencesForEvaluation } from "../academy/occurrence-repository";
 import { foldEvaluation } from "../academy/pattern-folding";
 import type { TrainerMethods } from "../academy/trainer/trainer-model";
 import { evaluateWriting } from "../evaluation/writing-evaluation";
@@ -66,9 +67,13 @@ export interface PracticeWriting {
   readonly occurrences: readonly PracticeOccurrence[];
 }
 
-// Practice writing on the key the request carries (docs/adr/0026).
-export const practiceWritingFor: (
-  headers: Headers,
-  writingSample: string
-) => Effect.Effect<PracticeWriting> = () =>
-  Effect.die(new Error("Practice writing is not built yet"));
+// Practice writing on the key the request carries (docs/adr/0026): the key is resolved before
+// the Judge runs, as Grifando resolved it before its analysis.
+export const practiceWritingFor = Effect.fn(
+  "PracticeWriting.practiceWritingFor"
+)(function* (headers: Headers, writingSample: string) {
+  const trainer = yield* trainerForRequest(headers);
+  const evaluation = yield* evaluatePractice(trainer, writingSample);
+  const occurrences = yield* listOccurrencesForEvaluation(evaluation.id);
+  return { evaluation, occurrences } satisfies PracticeWriting;
+});

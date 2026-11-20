@@ -773,6 +773,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, listPendingExercises()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to list exercises",
         success: (pending) =>
           Response.json({ exercises: pending.map(publicView) }),
       });
@@ -801,6 +802,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                     AIResponseValidationError: () => SOMETHING_WENT_WRONG,
                     DatabaseError: () => SOMETHING_WENT_WRONG,
                   },
+                  log: "Failed to generate exercises",
                   success: (created) =>
                     created.length === 0
                       ? Response.json(NO_PATTERNS, { status: 422 })
@@ -845,6 +847,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                       DatabaseError: () => SOMETHING_WENT_WRONG,
                       NotFoundError: () => NOT_FOUND,
                     },
+                    log: "Failed to submit exercise attempt",
                     success: (graded) => Response.json(graded),
                     unexpected: SOMETHING_WENT_WRONG,
                   }
@@ -882,6 +885,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
               }),
               DatabaseError: () => EXPLANATION_FAILED,
             },
+            log: "Failed to explain exercise attempt",
             success: (explanation) =>
               explanation === null
                 ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
@@ -906,6 +910,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             AIResponseValidationError: () => SOMETHING_WENT_WRONG,
             DatabaseError: () => SOMETHING_WENT_WRONG,
           },
+          log: "Failed to start interview",
           success: ({ sessionId, turn }) =>
             Response.json(
               {
@@ -934,6 +939,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           ),
           {
             errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            log: "Failed to fetch interview session",
             success: (session) =>
               session === null
                 ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
@@ -963,6 +969,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           ),
           {
             errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            log: "Failed to end interview session",
             success: (ended) =>
               ended
                 ? Response.json({ status: "ended" })
@@ -1018,6 +1025,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                       NotFoundError: () => NOT_FOUND,
                       UnsafeCorrectionError: judgeFailure,
                     },
+                    log: "Failed to answer interview turn",
                     success: (answered) => Response.json(answered),
                     unexpected: SOMETHING_WENT_WRONG,
                   }
@@ -1037,6 +1045,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, getAcademyDashboard()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to read the Academy dashboard",
         success: (dashboard) => Response.json(dashboard),
       });
     })
@@ -1049,6 +1058,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, getDailyChallenge()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to read today's challenge",
         success: (challenge) => Response.json(challenge),
       });
     })
@@ -1061,6 +1071,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, getMistakeNotebook()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to read the Mistake Notebook",
         success: (notebook) => Response.json(notebook),
       });
     })
@@ -1073,6 +1084,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, listVocabularyItems()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to list vocabulary items",
         success: (items) => Response.json({ items }),
       });
     })
@@ -1148,6 +1160,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 forLearner(context.req.raw, createVocabularyItem(result.value)),
                 {
                   errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+                  log: "Failed to save vocabulary item",
                   success: (item) => Response.json(item, { status: 201 }),
                 }
               )
@@ -1171,6 +1184,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           ),
           {
             errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            log: "Failed to delete vocabulary item",
             success: (deleted) =>
               deleted
                 ? new Response(null, { status: 204 })
