@@ -45,6 +45,60 @@
       ]
     },
     {
+      "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::getIpHashSalt > falls back to a fixed development salt outside production",
+      "source": "src/server/clientIp.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::getIpHashSalt > refuses to run in production without IP_HASH_SALT",
+      "source": "src/server/clientIp.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::getIpHashSalt > returns IP_HASH_SALT whenever it is set",
+      "source": "src/server/clientIp.characterization.test.ts",
+      "class": "C",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::hashedClientIp > hashes the salt followed by the IP with SHA-256, keeping 32 hex digits",
+      "source": "src/server/clientIp.characterization.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/rateLimit.characterization.test.ts::rate limits > counts every call against the bucket's rules for the user and the client IP's daily ceiling",
+      "source": "src/server/rateLimit.characterization.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
+      "id": "grifando:characterization:src/server/rateLimit.characterization.test.ts::rate limits > limits each bucket per minute, hour or day, and tells the visitor to slow down",
+      "source": "src/server/rateLimit.characterization.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > falls back to an insecure development secret, with a warning, outside production",
       "source": "src/server/session/sessionSecret.characterization.test.ts",
       "class": "C",

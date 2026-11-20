@@ -77,6 +77,7 @@ import {
   sessionCookie,
   sessionGate,
 } from "./session/hosted-pipeline";
+import type { RateLimitBucket, RateLimitedError } from "./session/rate-limit";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -127,6 +128,24 @@ export interface AppBoundaries<R = never> {
   readonly deleteEvaluation?: (
     evaluationId: string
   ) => Effect.Effect<void, DatabaseError, R | CurrentLearner>;
+  /**
+   * Counts a state-changing call against the hosted profile's rate limits, and fails when they
+   * refuse it (docs/adr/0033). Without it, as in the local profile, nothing is limited.
+   */
+  readonly limitRequest?: (
+    headers: Headers,
+    bucket: RateLimitBucket
+  ) => Effect.Effect<
+    void,
+    DatabaseError | RateLimitedError,
+    R | CurrentLearner
+  >;
+  /** Creates the Learner's row and records the write's activity, once the rate limit passed. */
+  readonly ensureLearner?: () => Effect.Effect<
+    void,
+    DatabaseError,
+    R | CurrentLearner
+  >;
   /** Deletes the hosted Learner of the request and all their data (`DELETE /api/me`). */
   readonly deleteLearner?: () => Effect.Effect<
     void,

@@ -10,6 +10,8 @@ export interface Tagged {
 export interface EdgeFailure {
   readonly status: ContentfulStatusCode;
   readonly body: Readonly<Record<string, JSONValue>>;
+  /** Headers the answer carries besides its JSON body, such as a 429's `Retry-After`. */
+  readonly headers?: Readonly<Record<string, string>>;
 }
 
 /**

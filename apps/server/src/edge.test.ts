@@ -52,6 +52,7 @@ const errors = {
   }),
   Unavailable: (error) => ({
     body: { code: "unavailable", retryable: error.retryable },
+    headers: { "Retry-After": "30" },
     status: 503,
   }),
 } satisfies EdgeErrors<NotFound | Unavailable>;
@@ -87,10 +88,11 @@ describe("Effect edge", () => {
     });
   });
 
-  it("answers Unavailable with its status and body", async () => {
+  it("answers Unavailable with its status, its headers and its body", async () => {
     const response = await app().request("/greet/busy");
 
     expect(response.status).toBe(503);
+    expect(response.headers.get("retry-after")).toBe("30");
     expect(await response.json()).toStrictEqual({
       code: "unavailable",
       retryable: true,
