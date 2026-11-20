@@ -2,6 +2,7 @@
 // vocabulary it is given and saves, and records each save request. A read with no fixture fails.
 import type {
   DailyChallenge,
+  MistakeNotebook,
   VocabularyItem,
   VocabularyItemRequest,
 } from "@fluenshift/contract";
@@ -13,6 +14,7 @@ interface InMemoryAcademyClientOptions {
   readonly dailyChallenge?: DailyChallenge;
   /** Every save fails, as a refused or failed request does. */
   readonly failVocabularySaves?: boolean;
+  readonly mistakeNotebook?: MistakeNotebook;
   /** The Learner's vocabulary, newest first. */
   readonly vocabulary?: readonly VocabularyItem[];
 }
@@ -24,6 +26,7 @@ export type InMemoryAcademyClient = AcademyClient & {
 export const createInMemoryAcademyClient = ({
   dailyChallenge,
   failVocabularySaves = false,
+  mistakeNotebook,
   vocabulary,
 }: InMemoryAcademyClientOptions = {}): InMemoryAcademyClient => {
   let items = vocabulary;
@@ -59,6 +62,10 @@ export const createInMemoryAcademyClient = ({
       dailyChallenge === undefined
         ? unavailableAcademyClient.getDailyChallenge()
         : Promise.resolve(dailyChallenge),
+    getMistakeNotebook: () =>
+      mistakeNotebook === undefined
+        ? unavailableAcademyClient.getMistakeNotebook()
+        : Promise.resolve(mistakeNotebook),
     listVocabulary: () =>
       items === undefined
         ? unavailableAcademyClient.listVocabulary()

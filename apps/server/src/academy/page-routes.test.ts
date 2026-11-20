@@ -7,12 +7,13 @@
 import { randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
 
-import type { LearnerId } from "@fluenshift/contract";
+import type { LearnerId, MistakeCategory } from "@fluenshift/contract";
 import {
   Database,
   DatabaseError,
   learners,
   mistakePatterns,
+  occurrences,
   vocabularyItems,
 } from "@fluenshift/db";
 import type { DrizzleClient } from "@fluenshift/db";
@@ -21,9 +22,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createApp } from "../app";
 import type { AppBoundaries } from "../app";
-import { LearnerIdentity } from "../learner-identity";
+import { persistEvaluation } from "../history/learning-history";
+import { CurrentLearner, LearnerIdentity } from "../learner-identity";
 import { makeTemporaryDatabase } from "../test/database";
 import { dailyChallenge } from "./daily-challenge";
+import { mistakeNotebook } from "./mistake-notebook";
 import { listVocabularyItems } from "./vocabulary-repository";
 
 const NOW = new Date("2026-03-05T12:00:00Z");
@@ -62,6 +65,7 @@ afterEach(async () => {
 const appOf = (boundaries: AppBoundaries = {}) =>
   createApp({
     getDailyChallenge: dailyChallenge,
+    getMistakeNotebook: mistakeNotebook,
     limits: {
       bodyMaxBytes: 256 * 1024,
       codeMaxCharacters: Option.none(),
@@ -99,6 +103,7 @@ const seedPattern = (
     | "category"
     | "lastPracticedAt"
     | "lastSeenAt"
+    | "masteryLevel"
     | "occurrenceCount"
     | "patternKey"
   >
@@ -108,14 +113,91 @@ const seedPattern = (
       .insert(learners)
       .values({ id: learnerId })
       .onConflictDoNothing();
+    const id = randomUUID();
     await client.insert(mistakePatterns).values({
       exampleCorrection: `${values.patternKey} correction`,
       exampleOriginal: `${values.patternKey} original`,
-      id: randomUUID(),
+      id,
       learnerId,
       ...values,
     });
+    return id;
   });
+
+interface SeededOccurrence {
+  readonly category: MistakeCategory;
+  readonly l1Transfer?: boolean;
+  readonly patternId: string;
+}
+
+// A practice Evaluation of the Learner at `evaluatedAt`, with one Finding per Occurrence, as
+// Grifando's analyzed writing session with its mistake occurrences (docs/adr/0004).
+const seedEvaluation = async (
+  learnerId: string,
+  evaluatedAt: Date,
+  seeded: readonly SeededOccurrence[] = []
+) => {
+  const evaluationId = randomUUID();
+  await runtime.runPromise(
+    persistEvaluation({
+      contentHash: "hash",
+      evaluation: {
+        band: "Clear",
+        correctedText: "Corrected.",
+        evaluatedAt: evaluatedAt.toISOString(),
+        evaluatedEnglishWordCount: 4,
+        findings: seeded.map(() => ({
+          byteEnd: 1,
+          byteStart: 0,
+          category: "Preposition" as const,
+          correction: "y",
+          explanation: "z",
+          originalText: "x",
+          severity: "Minor" as const,
+        })),
+        id: evaluationId,
+        model: "judge-model",
+        originalText: `Text written ${evaluatedAt.toISOString()}.`,
+        provider: "test",
+        rubricVersion: "1-provisional",
+        score: 80,
+        suggestions: [],
+        summary: "Feedback.",
+      },
+      latencyMilliseconds: 1,
+      origin: "practice",
+      submittedAt: evaluatedAt.toISOString(),
+    }).pipe(
+      Effect.provideService(
+        CurrentLearner,
+        CurrentLearner.of({ id: learnerId as LearnerId })
+      )
+    )
+  );
+  if (seeded.length > 0) {
+    await query((client) =>
+      client.insert(occurrences).values(
+        seeded.map((occurrence, position) => ({
+          category: occurrence.category,
+          correctedSpan: "y",
+          createdAt: evaluatedAt,
+          evaluationId,
+          example: "w",
+          explanation: "z",
+          findingPosition: position,
+          id: randomUUID(),
+          l1Transfer: occurrence.l1Transfer ?? false,
+          learnerId,
+          originalSpan: "x",
+          patternId: occurrence.patternId,
+          rubricVersion: "1-provisional",
+          severity: "ERROR",
+        }))
+      )
+    );
+  }
+  return evaluationId;
+};
 
 describe("/today", () => {
   it("hands TodaySession today's challenge, biased toward the visitor's active categories", async () => {
@@ -246,6 +328,167 @@ describe("GET /api/vocabulary", () => {
       listVocabularyItems: () =>
         Effect.fail(new DatabaseError({ cause: new Error("down") })),
     }).request(new Request("http://localhost/api/vocabulary"));
+
+    expect(response.status).toBe(500);
+    expect(await response.json()).toEqual({
+      error: "Something went wrong. Please try again.",
+    });
+  });
+});
+
+describe("/mistakes", () => {
+  it("shows each pattern once with its mastery, the category breakdown and the due count", async () => {
+    const empty = await GET("/api/mistakes");
+    expect(empty.status).toBe(200);
+    expect(await empty.json()).toEqual({
+      breakdown: { allTime: [], last30Days: [] },
+      patterns: [],
+    });
+
+    // Half-life 1 day: recall far below 0.5 after 5 days, so both patterns are due.
+    const due = await seedPattern("visitor-1", {
+      category: "PREPOSITIONS",
+      lastPracticedAt: daysAgo(5),
+      lastSeenAt: daysAgo(5),
+      occurrenceCount: 2,
+      patternKey: "depend-on",
+    });
+    const fading = await seedPattern("visitor-1", {
+      category: "ARTICLES",
+      lastPracticedAt: daysAgo(5),
+      lastSeenAt: daysAgo(40),
+      masteryLevel: "MASTERED",
+      occurrenceCount: 1,
+      patternKey: "a-an",
+    });
+    await seedEvaluation("visitor-1", daysAgo(5), [
+      { category: "PREPOSITIONS", patternId: due },
+      { category: "PREPOSITIONS", l1Transfer: true, patternId: due },
+    ]);
+    await seedEvaluation("visitor-1", daysAgo(40), [
+      { category: "ARTICLES", patternId: fading },
+    ]);
+    const foreign = await seedPattern("other-user", {
+      category: "VERB_TENSE",
+      lastPracticedAt: daysAgo(5),
+      lastSeenAt: daysAgo(5),
+      occurrenceCount: 1,
+      patternKey: "past-tense",
+    });
+    await seedEvaluation("other-user", daysAgo(5), [
+      { category: "VERB_TENSE", l1Transfer: true, patternId: foreign },
+    ]);
+
+    const listed = await GET("/api/mistakes");
+    expect(listed.status).toBe(200);
+    expect(await listed.json()).toEqual({
+      breakdown: {
+        allTime: [
+          { category: "PREPOSITIONS", count: 2, percentage: 66.7 },
+          { category: "ARTICLES", count: 1, percentage: 33.3 },
+        ],
+        last30Days: [{ category: "PREPOSITIONS", count: 2, percentage: 100 }],
+      },
+      patterns: [
+        {
+          category: "PREPOSITIONS",
+          due: true,
+          exampleCorrection: "depend-on correction",
+          exampleOriginal: "depend-on original",
+          fading: false,
+          fromPortuguese: true,
+          id: due,
+          lastSeenAt: daysAgo(5).toISOString(),
+          masteryLevel: "ACTIVE",
+          occurrenceCount: 2,
+        },
+        {
+          category: "ARTICLES",
+          due: true,
+          exampleCorrection: "a-an correction",
+          exampleOriginal: "a-an original",
+          fading: true,
+          fromPortuguese: false,
+          id: fading,
+          lastSeenAt: daysAgo(40).toISOString(),
+          masteryLevel: "MASTERED",
+          occurrenceCount: 1,
+        },
+      ],
+    });
+  });
+
+  it("narrows the breakdown to 30 days and the patterns to those from Portuguese", async () => {
+    const recent = await seedPattern("visitor-1", {
+      category: "PREPOSITIONS",
+      lastPracticedAt: NOW,
+      lastSeenAt: NOW,
+      occurrenceCount: 1,
+      patternKey: "depend-on",
+    });
+    const old = await seedPattern("visitor-1", {
+      category: "ARTICLES",
+      lastPracticedAt: NOW,
+      lastSeenAt: daysAgo(40),
+      occurrenceCount: 1,
+      patternKey: "a-an",
+    });
+    await seedEvaluation("visitor-1", daysAgo(1), [
+      { category: "PREPOSITIONS", l1Transfer: true, patternId: recent },
+    ]);
+    await seedEvaluation("visitor-1", daysAgo(40), [
+      { category: "ARTICLES", patternId: old },
+    ]);
+
+    const notebook = await GET("/api/mistakes");
+    const { breakdown, patterns } = (await notebook.json()) as {
+      readonly breakdown: {
+        readonly allTime: readonly unknown[];
+        readonly last30Days: readonly unknown[];
+      };
+      readonly patterns: readonly {
+        readonly fromPortuguese: boolean;
+        readonly id: string;
+      }[];
+    };
+    // Grifando orders the breakdown by count only, so a tie keeps no order.
+    expect(breakdown.allTime).toHaveLength(2);
+    expect(breakdown.allTime).toEqual(
+      expect.arrayContaining([
+        { category: "PREPOSITIONS", count: 1, percentage: 50 },
+        { category: "ARTICLES", count: 1, percentage: 50 },
+      ])
+    );
+    expect(breakdown.last30Days).toEqual([
+      { category: "PREPOSITIONS", count: 1, percentage: 100 },
+    ]);
+    expect(
+      patterns.map(({ fromPortuguese, id }) => ({ fromPortuguese, id }))
+    ).toEqual([
+      { fromPortuguese: true, id: recent },
+      { fromPortuguese: false, id: old },
+    ]);
+
+    await query((client) =>
+      client.update(occurrences).set({ l1Transfer: false })
+    );
+    const unflagged = await GET("/api/mistakes");
+    const after = (await unflagged.json()) as {
+      readonly patterns: readonly { readonly fromPortuguese: boolean }[];
+    };
+    expect(after.patterns.map(({ fromPortuguese }) => fromPortuguese)).toEqual([
+      false,
+      false,
+    ]);
+  });
+});
+
+describe("GET /api/mistakes", () => {
+  it("answers the generic 500 when the database fails", async () => {
+    const response = await appOf({
+      getMistakeNotebook: () =>
+        Effect.fail(new DatabaseError({ cause: new Error("down") })),
+    }).request(new Request("http://localhost/api/mistakes"));
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({

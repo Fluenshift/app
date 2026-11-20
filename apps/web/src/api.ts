@@ -8,6 +8,7 @@ import {
   Evaluation,
   EvaluationSubmissionResult,
   EvaluationSummary,
+  MistakeNotebook,
   ProgressEvidence,
   ProgressSummary,
   SetupStatus,
@@ -51,6 +52,7 @@ const decodeProgressEvidence = Schema.decodeUnknownOption(ProgressEvidence);
 const decodeSetupStatus = Schema.decodeUnknownOption(SetupStatus);
 const decodeDailyChallenge = Schema.decodeUnknownOption(DailyChallenge);
 const decodeVocabularyList = Schema.decodeUnknownOption(VocabularyList);
+const decodeMistakeNotebook = Schema.decodeUnknownOption(MistakeNotebook);
 
 const parseJson = async (response: ApiResponse): Promise<unknown> => {
   try {
@@ -189,6 +191,10 @@ export const createHttpAcademyClient = ({
         await api["daily-challenge"].$get(),
         decodeDailyChallenge
       );
+    },
+
+    async getMistakeNotebook() {
+      return requireJson(await api.mistakes.$get(), decodeMistakeNotebook);
     },
 
     async listVocabulary() {

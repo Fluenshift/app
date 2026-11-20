@@ -1,5 +1,6 @@
 export {
   AttemptRequest,
+  CategoryBreakdownEntry,
   DailyChallenge,
   errorCategoryOf,
   EXERCISE_TYPES,
@@ -16,9 +17,11 @@ export {
   MISTAKE_SEVERITIES,
   MistakeCategory,
   MistakeCategorySchema,
+  MistakeNotebook,
   MistakeSeverity,
   MistakeSeveritySchema,
   mistakeCategoriesOf,
+  NotebookPattern,
   PROMPT_TYPES,
   PromptType,
   PromptTypeSchema,
