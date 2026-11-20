@@ -1,4 +1,4 @@
-import { Schema } from "effect";
+import { Exit, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -7,6 +7,7 @@ import {
   ExerciseType,
   ExerciseTypeSchema,
   INTERVIEW_STATUSES,
+  InterviewAnswerRequest,
   InterviewStatus,
   InterviewStatusSchema,
   MASTERY_LEVELS,
@@ -22,6 +23,7 @@ import {
   PROMPT_TYPES,
   PromptType,
   PromptTypeSchema,
+  SampleLimits,
   SESSION_STATUSES,
   SessionStatus,
   SessionStatusSchema,
@@ -167,5 +169,42 @@ describe("Mistake Category roll-up", () => {
       Clarity: [],
       Other: [],
     });
+  });
+});
+
+describe("SampleLimits", () => {
+  it("decodes the Deploy Profile's caps, with or without a character cap", () => {
+    const decode = Schema.decodeUnknownExit(SampleLimits);
+
+    expect(
+      [
+        { sampleMaxBytes: 32_768, sampleMaxCharacters: null },
+        { sampleMaxBytes: 32_768, sampleMaxCharacters: 5000 },
+        { sampleMaxBytes: 32_768 },
+      ].map((limits) => decode(limits)._tag)
+    ).toStrictEqual(["Success", "Success", "Failure"]);
+  });
+});
+
+// Grifando capped an interview answer at 5000 characters, its public site's cap. Under
+// docs/adr/0006 the Deploy Profile's caps bound every Writing Sample where the Judge evaluates it,
+// so the request takes a trimmed answer of any length.
+describe("InterviewAnswerRequest", () => {
+  it("takes a trimmed answer longer than Grifando's 5000 characters", () => {
+    const answer = "I shipped it. ".repeat(500);
+
+    const decoded = Schema.decodeUnknownExit(InterviewAnswerRequest)({
+      answer,
+    });
+
+    expect(Exit.isSuccess(decoded) && decoded.value).toStrictEqual({
+      answer: answer.trim(),
+    });
+  });
+
+  it("refuses an answer that is empty once trimmed", () => {
+    expect(
+      Schema.decodeUnknownExit(InterviewAnswerRequest)({ answer: "   " })._tag
+    ).toBe("Failure");
   });
 });

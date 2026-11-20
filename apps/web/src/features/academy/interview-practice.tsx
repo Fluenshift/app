@@ -5,6 +5,7 @@
 import type {
   InterviewAnswerResult,
   InterviewTurnRef,
+  SampleLimits,
   StartedInterview,
 } from "@fluenshift/contract";
 import { Button } from "@fluenshift/ui/components/button";
@@ -129,7 +130,10 @@ const endQuietly = async (request: Promise<void>) => {
   }
 };
 
-export const InterviewPractice = () => {
+export const InterviewPractice = (_props: {
+  // The Deploy Profile's caps, which size the answer sheet (docs/adr/0006).
+  readonly sampleLimits: SampleLimits;
+}) => {
   const { academyClient } = useRouteContext({ from: "__root__" });
   const [state, setState] = useState<State>({ kind: "idle" });
   const [answer, setAnswer] = useState("");

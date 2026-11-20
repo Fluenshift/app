@@ -5,6 +5,7 @@
 import type {
   Evaluation,
   PracticeOccurrence,
+  SampleLimits,
   TechnicalCategory,
 } from "@fluenshift/contract";
 import { Button } from "@fluenshift/ui/components/button";
@@ -90,6 +91,8 @@ export const WritingCoach = ({
     readonly label: string;
     readonly onClick: (evaluationId: string) => void;
   };
+  // The Deploy Profile's caps, which size the sheet (docs/adr/0006).
+  readonly sampleLimits: SampleLimits;
 }) => {
   const { academyClient } = useRouteContext({ from: "__root__" });
   const [text, setText] = useState("");

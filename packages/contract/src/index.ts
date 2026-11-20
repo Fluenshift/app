@@ -35,6 +35,7 @@ export {
   PromptType,
   PromptTypeSchema,
   PublicExercise,
+  SampleLimits,
   SESSION_STATUSES,
   SessionStatus,
   SessionStatusSchema,

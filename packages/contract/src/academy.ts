@@ -432,6 +432,17 @@ export const AttemptRequest = Schema.Struct({
 export type AttemptRequest = typeof AttemptRequest.Type;
 
 /**
+ * The Deploy Profile's caps on one Writing Sample, which size the Academy's writing sheets
+ * (GET /api/sample-limits, docs/adr/0006): UTF-8 bytes always, and characters when the profile
+ * caps them, null otherwise.
+ */
+export const SampleLimits = Schema.Struct({
+  sampleMaxBytes: Schema.Int,
+  sampleMaxCharacters: Schema.NullOr(Schema.Int),
+});
+export type SampleLimits = typeof SampleLimits.Type;
+
+/**
  * One answer to an interview turn (Grifando's POST /api/interview/[id]/turns/[turnId]/answer,
  * 74dbb9f): trimmed, then 1 to 5000 characters. Grifando's retrySessionId is gone
  * (docs/adr/0024).

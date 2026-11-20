@@ -3,7 +3,11 @@
 // its challenge and heading from the query. Under docs/adr/0025 the SPA reads `promptId` and
 // `mode` from its own URL: a technical prompt comes from the bank of packages/core, and the daily
 // challenge from the Academy client, whose route test covers /today.
-import type { Evaluation, PracticeWritingResult } from "@fluenshift/contract";
+import type {
+  Evaluation,
+  PracticeWritingResult,
+  SampleLimits,
+} from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -351,5 +355,48 @@ describe("/write practice writing", () => {
     expect(
       within(page).getByRole("textbox", { name: "Your text" })
     ).toHaveValue("I goed home.");
+  });
+});
+
+// The sheet a /write page offers under a Deploy Profile with these caps.
+const sheetUnder = async (limits: SampleLimits) => {
+  render(
+    <RouterProvider
+      router={createAppRouter({
+        academyClient: createInMemoryAcademyClient({ sampleLimits: limits }),
+        evaluationClient: createInMemoryEvaluationClient(),
+        history: createMemoryHistory({ initialEntries: ["/write"] }),
+      })}
+    />
+  );
+  const page = await screen.findByRole("main");
+  return {
+    page,
+    sheet: within(page).getByRole("textbox", { name: "Your text" }),
+  };
+};
+
+// Grifando's sheet stopped at its public site's 5000 characters; under docs/adr/0006 the Deploy
+// Profile's caps size it (#196).
+describe("/write sheet caps", () => {
+  it("stops the sheet at the Deploy Profile's character cap, and counts up to it", async () => {
+    const { page, sheet } = await sheetUnder({
+      sampleMaxBytes: 32_768,
+      sampleMaxCharacters: 4000,
+    });
+
+    expect(sheet).toHaveAttribute("maxlength", "4000");
+    expect(within(page).getByText("0 / 4000")).toBeVisible();
+  });
+
+  it("leaves the sheet without a character cap when the Deploy Profile has none", async () => {
+    const { page, sheet } = await sheetUnder({
+      sampleMaxBytes: 32_768,
+      sampleMaxCharacters: null,
+    });
+    await userEvent.type(sheet, "I goed home.");
+
+    expect(sheet).not.toHaveAttribute("maxlength");
+    expect(within(page).getByText("12 characters")).toBeVisible();
   });
 });

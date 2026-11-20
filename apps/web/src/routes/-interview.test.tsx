@@ -2,7 +2,11 @@
 // source under docs/adr/0025, decision 5. Each answer is a practice Writing Sample whose
 // Evaluation is its feedback, with no separate interview score (docs/adr/0010), and a failed
 // Enrichment keeps the answer and shows the route's message (docs/adr/0024).
-import type { Evaluation, InterviewAnswerResult } from "@fluenshift/contract";
+import type {
+  Evaluation,
+  InterviewAnswerResult,
+  SampleLimits,
+} from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -287,5 +291,53 @@ describe("/interview", () => {
     expect(
       await within(page).findByRole("link", { name: "Set up a key" })
     ).toHaveAttribute("href", "/setup");
+  });
+});
+
+// The answer sheet of a started interview under a Deploy Profile with these caps.
+const answerSheetUnder = async (limits: SampleLimits) => {
+  render(
+    <RouterProvider
+      router={createAppRouter({
+        academyClient: createInMemoryAcademyClient({
+          interview: { started: { sessionId: "session-1", turn: firstTurn } },
+          sampleLimits: limits,
+        }),
+        evaluationClient: createInMemoryEvaluationClient(),
+        history: createMemoryHistory({ initialEntries: ["/interview"] }),
+      })}
+    />
+  );
+  const page = await screen.findByRole("main");
+  await userEvent.click(
+    within(page).getByRole("button", { name: "Start interview" })
+  );
+  return {
+    page,
+    sheet: await within(page).findByRole("textbox", { name: "Your answer" }),
+  };
+};
+
+// Grifando capped an answer at 5000 characters; under docs/adr/0006 the Deploy Profile's caps
+// size the answer sheet (#196).
+describe("/interview answer sheet caps", () => {
+  it("stops the answer sheet at the Deploy Profile's character cap", async () => {
+    const { page, sheet } = await answerSheetUnder({
+      sampleMaxBytes: 32_768,
+      sampleMaxCharacters: 4000,
+    });
+
+    expect(sheet).toHaveAttribute("maxlength", "4000");
+    expect(within(page).getByText("0 / 4000")).toBeVisible();
+  });
+
+  it("leaves the answer sheet without a character cap when the Deploy Profile has none", async () => {
+    const { page, sheet } = await answerSheetUnder({
+      sampleMaxBytes: 32_768,
+      sampleMaxCharacters: null,
+    });
+
+    expect(sheet).not.toHaveAttribute("maxlength");
+    expect(within(page).getByText("0 characters")).toBeVisible();
   });
 });

@@ -129,3 +129,30 @@ describe("/today review", () => {
     ]);
   });
 });
+
+// Under docs/adr/0006 the Deploy Profile's caps size today's sheet too (#196).
+describe("/today sheet caps", () => {
+  it("stops today's sheet at the Deploy Profile's character cap", async () => {
+    render(
+      <RouterProvider
+        router={createAppRouter({
+          academyClient: createInMemoryAcademyClient({
+            dailyChallenge: {
+              promptText:
+                "Explain what an API is to someone with no programming background.",
+              promptType: "DAILY_CHALLENGE",
+            },
+            sampleLimits: { sampleMaxBytes: 32_768, sampleMaxCharacters: 4000 },
+          }),
+          evaluationClient: createInMemoryEvaluationClient(),
+          history: createMemoryHistory({ initialEntries: ["/today"] }),
+        })}
+      />
+    );
+    const page = await screen.findByRole("main");
+
+    expect(
+      within(page).getByRole("textbox", { name: "Your answer" })
+    ).toHaveAttribute("maxlength", "4000");
+  });
+});

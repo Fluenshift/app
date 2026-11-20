@@ -10,6 +10,7 @@ import type {
   MistakeNotebook,
   PendingExercise,
   PracticeWritingResult,
+  SampleLimits,
   StartedInterview,
   VocabularyItem,
   VocabularyItemRequest,
@@ -48,6 +49,8 @@ interface InMemoryAcademyClientOptions {
   readonly mistakeNotebook?: MistakeNotebook;
   /** What practice writing answers, or the failure of its request. */
   readonly practiceWriting?: PracticeWritingResult | AcademyRequestError;
+  /** The Deploy Profile's caps; the local profile's when left out (ADR 0006). */
+  readonly sampleLimits?: SampleLimits;
   /** The Learner's vocabulary, newest first. */
   readonly vocabulary?: readonly VocabularyItem[];
 }
@@ -85,6 +88,7 @@ export const createInMemoryAcademyClient = ({
   interview = {},
   mistakeNotebook,
   practiceWriting,
+  sampleLimits = { sampleMaxBytes: 32_768, sampleMaxCharacters: null },
   vocabulary,
 }: InMemoryAcademyClientOptions = {}): InMemoryAcademyClient => {
   let items = vocabulary;
@@ -154,6 +158,7 @@ export const createInMemoryAcademyClient = ({
       mistakeNotebook === undefined
         ? unavailableAcademyClient.getMistakeNotebook()
         : Promise.resolve(mistakeNotebook),
+    getSampleLimits: () => Promise.resolve(sampleLimits),
     listPendingExercises: () => settle(exercises.pending),
     listVocabulary: () =>
       items === undefined

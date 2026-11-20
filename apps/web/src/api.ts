@@ -15,6 +15,7 @@ import {
   MistakeNotebook,
   PendingExerciseList,
   PracticeWritingResult,
+  SampleLimits,
   StartedInterview,
   ProgressEvidence,
   ProgressSummary,
@@ -62,6 +63,7 @@ const decodeDailyChallenge = Schema.decodeUnknownOption(DailyChallenge);
 const decodeAcademyDashboard = Schema.decodeUnknownOption(AcademyDashboard);
 const decodeVocabularyList = Schema.decodeUnknownOption(VocabularyList);
 const decodeMistakeNotebook = Schema.decodeUnknownOption(MistakeNotebook);
+const decodeSampleLimits = Schema.decodeUnknownOption(SampleLimits);
 const decodePendingExercises = Schema.decodeUnknownOption(PendingExerciseList);
 const decodeGradedAttempt = Schema.decodeUnknownOption(GradedAttempt);
 const decodeAttemptExplanation = Schema.decodeUnknownOption(AttemptExplanation);
@@ -292,6 +294,10 @@ export const createHttpAcademyClient = ({
 
     async getMistakeNotebook() {
       return academyJson(await api.mistakes.$get(), decodeMistakeNotebook);
+    },
+
+    async getSampleLimits() {
+      return academyJson(await api["sample-limits"].$get(), decodeSampleLimits);
     },
 
     async listPendingExercises() {
