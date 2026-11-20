@@ -1013,7 +1013,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, listVocabularyItems()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
-        success: () => Response.json({ items: [] }),
+        success: (items) => Response.json({ items }),
       });
     })
     .post("/api/vocabulary", (context): Response | Promise<Response> => {

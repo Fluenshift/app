@@ -19,6 +19,7 @@ import { TrainerClient } from "./academy/trainer/trainer-client";
 import {
   createVocabularyItem,
   deleteVocabularyItem,
+  listVocabularyItems,
 } from "./academy/vocabulary-repository";
 import { createApp, serveApp } from "./app";
 import { evaluateWritingForEndpoint } from "./evaluation/evaluation-endpoint";
@@ -78,6 +79,7 @@ const HttpServer = Layer.effectDiscard(
       limits: config.limits,
       listEvaluations: () => listEvaluations(),
       listPendingExercises,
+      listVocabularyItems,
       // The event carries codes, timings and the model, never the Writing Sample.
       logEvaluation: (event) => {
         Effect.runSyncWith(services)(
