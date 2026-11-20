@@ -193,9 +193,7 @@ describe("InterviewAnswerRequest", () => {
   it("takes a trimmed answer longer than Grifando's 5000 characters", () => {
     const answer = "I shipped it. ".repeat(500);
 
-    const decoded = Schema.decodeUnknownExit(InterviewAnswerRequest)({
-      answer,
-    });
+    const decoded = Schema.decodeExit(InterviewAnswerRequest)({ answer });
 
     expect(Exit.isSuccess(decoded) && decoded.value).toStrictEqual({
       answer: answer.trim(),
@@ -204,7 +202,7 @@ describe("InterviewAnswerRequest", () => {
 
   it("refuses an answer that is empty once trimmed", () => {
     expect(
-      Schema.decodeUnknownExit(InterviewAnswerRequest)({ answer: "   " })._tag
+      Schema.decodeExit(InterviewAnswerRequest)({ answer: "   " })._tag
     ).toBe("Failure");
   });
 });
