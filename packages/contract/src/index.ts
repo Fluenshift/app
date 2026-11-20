@@ -29,7 +29,9 @@ export {
   TechnicalCategory,
   ExerciseGenerationRequest,
   TechnicalCategorySchema,
+  VocabularyItem,
   VocabularyItemRequest,
+  VocabularyList,
 } from "./academy";
 export {
   AIResponseValidationError,

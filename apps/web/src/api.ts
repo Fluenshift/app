@@ -11,6 +11,7 @@ import {
   ProgressEvidence,
   ProgressSummary,
   SetupStatus,
+  VocabularyList,
 } from "@fluenshift/contract";
 import { Option, Schema } from "effect";
 import { hc } from "hono/client";
@@ -49,6 +50,7 @@ const decodeProgressSummary = Schema.decodeUnknownOption(ProgressSummary);
 const decodeProgressEvidence = Schema.decodeUnknownOption(ProgressEvidence);
 const decodeSetupStatus = Schema.decodeUnknownOption(SetupStatus);
 const decodeDailyChallenge = Schema.decodeUnknownOption(DailyChallenge);
+const decodeVocabularyList = Schema.decodeUnknownOption(VocabularyList);
 
 const parseJson = async (response: ApiResponse): Promise<unknown> => {
   try {
@@ -159,11 +161,42 @@ export const createHttpAcademyClient = ({
   const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
 
   return {
+    async createVocabularyItem(request) {
+      const response = await api.vocabulary.$post({ json: request });
+      if (!response.ok) {
+        throw new EvaluationRequestError(
+          response,
+          failureOf(await parseJson(response))
+        );
+      }
+    },
+
+    // A 404 means the item is already gone, as when another tab removed it.
+    async deleteVocabularyItem(itemId) {
+      const response = await api.vocabulary[":itemId"].$delete({
+        param: { itemId: encodeURIComponent(itemId) },
+      });
+      if (!response.ok && response.status !== 404) {
+        throw new EvaluationRequestError(
+          response,
+          failureOf(await parseJson(response))
+        );
+      }
+    },
+
     async getDailyChallenge() {
       return requireJson(
         await api["daily-challenge"].$get(),
         decodeDailyChallenge
       );
+    },
+
+    async listVocabulary() {
+      const { items } = await requireJson(
+        await api.vocabulary.$get(),
+        decodeVocabularyList
+      );
+      return items;
     },
   };
 };

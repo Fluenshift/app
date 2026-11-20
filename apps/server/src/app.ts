@@ -133,6 +133,12 @@ export interface AppBoundaries<R = never> {
   readonly createVocabularyItem?: (
     request: VocabularyItemRequest
   ) => Effect.Effect<unknown, DatabaseError, R | CurrentLearner>;
+  /** The Learner's vocabulary items, newest first. */
+  readonly listVocabularyItems?: () => Effect.Effect<
+    readonly unknown[],
+    DatabaseError,
+    R | CurrentLearner
+  >;
   /** Whether the Learner had an item with that id, which is now deleted. */
   readonly deleteVocabularyItem?: (
     id: string
@@ -996,6 +1002,18 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       return edge(forLearner(context.req.raw, getDailyChallenge()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
         success: (challenge) => Response.json(challenge),
+      });
+    })
+    // The Learner's vocabulary, newest first (Grifando's /vocabulary page read it in a Server
+    // Component; docs/adr/0025).
+    .get("/api/vocabulary", (context): Response | Promise<Response> => {
+      const { listVocabularyItems } = options;
+      if (listVocabularyItems === undefined) {
+        return context.json(notReady("Vocabulary is not available"), 503);
+      }
+      return edge(forLearner(context.req.raw, listVocabularyItems()), {
+        errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        success: () => Response.json({ items: [] }),
       });
     })
     .post("/api/vocabulary", (context): Response | Promise<Response> => {
