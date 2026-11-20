@@ -1,6 +1,9 @@
-import type { LearnerId } from "@fluenshift/contract";
+import { LearnerId } from "@fluenshift/contract";
 import { SessionConfig } from "@fluenshift/env";
-import { Context, Effect, Layer, Schema } from "effect";
+import { Context, Effect, Layer, Option, Redacted, Schema } from "effect";
+import { parse } from "hono/utils/cookie";
+
+import { SESSION_COOKIE, verifySessionToken } from "./session/session-token";
 
 /** The one implicit Learner of the local profile (docs/adr/0003). */
 export const LOCAL_LEARNER_ID = "local" as LearnerId;
@@ -14,6 +17,8 @@ export class MissingSessionError extends Schema.TaggedError<
   MissingSessionError,
   { readonly brand: unique symbol }
 >()("MissingSessionError", {}) {}
+
+const decodeLearnerId = Schema.decodeOption(LearnerId);
 
 /**
  * Tells which Learner a request belongs to. Every stored row is scoped by that Learner. The
@@ -37,13 +42,22 @@ export class LearnerIdentity extends Context.Service<
    * One Learner per signed session cookie, ported from getCurrentUserId in Grifando
    * src/server/session/currentUser.ts (74dbb9f): read-only, it never creates a row.
    */
-  // Stub: every request is a placeholder Learner.
   static readonly hosted = Layer.effect(
     LearnerIdentity,
     Effect.gen(function* () {
-      yield* SessionConfig;
+      const { secret } = yield* SessionConfig;
       return LearnerIdentity.of({
-        identify: () => Effect.succeed("placeholder" as LearnerId),
+        identify: (request) => {
+          const token = parse(
+            request.headers.get("cookie") ?? "",
+            SESSION_COOKIE
+          )[SESSION_COOKIE];
+          const id = verifySessionToken(token, Redacted.value(secret));
+          const learner = id === null ? Option.none() : decodeLearnerId(id);
+          return Effect.fromOption(learner).pipe(
+            Effect.mapError(() => new MissingSessionError())
+          );
+        },
       });
     })
   );

@@ -1,4 +1,17 @@
-import { Context, Layer, Redacted, Schema } from "effect";
+import {
+  Config,
+  Context,
+  Effect,
+  Layer,
+  Option,
+  Redacted,
+  Schema,
+} from "effect";
+
+import { nodeEnvConfig } from "./server";
+
+// Ported from getSessionSecret in Grifando src/server/session/sessionToken.ts (74dbb9f).
+const DEVELOPMENT_SECRET = "dev-only-session-secret-do-not-use-in-production";
 
 /** What the hosted profile signs and sets its session cookie with (docs/adr/0003). */
 export interface SessionSettings {
@@ -23,9 +36,32 @@ export class SessionConfig extends Context.Service<
   SessionConfig,
   SessionSettings
 >()("@fluenshift/env/SessionConfig") {
-  // Stub: a placeholder secret, whatever the environment says.
-  static readonly layer = Layer.succeed(
+  static readonly layer = Layer.effect(
     SessionConfig,
-    SessionConfig.of({ secret: Redacted.make(""), secureCookie: false })
+    Effect.gen(function* () {
+      const [secret, environment] = yield* Config.all([
+        Config.option(Config.Redacted("SESSION_SECRET")),
+        nodeEnvConfig,
+      ]);
+      const production = environment === "production";
+      if (Option.isSome(secret)) {
+        return SessionConfig.of({
+          secret: secret.value,
+          secureCookie: production,
+        });
+      }
+      if (production) {
+        return yield* new MissingSessionSecretError({
+          message: "SESSION_SECRET is not set — it is required in production.",
+        });
+      }
+      yield* Effect.logWarning(
+        "SESSION_SECRET is not set — using an insecure development secret."
+      );
+      return SessionConfig.of({
+        secret: Redacted.make(DEVELOPMENT_SECRET),
+        secureCookie: false,
+      });
+    })
   );
 }
