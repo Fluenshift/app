@@ -3,10 +3,13 @@
 // its challenge and heading from the query. Under docs/adr/0025 the SPA reads `promptId` and
 // `mode` from its own URL: a technical prompt comes from the bank of packages/core, and the daily
 // challenge from the Academy client, whose route test covers /today.
+import type { Evaluation, PracticeWritingResult } from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
+import { AcademyRequestError } from "../features/academy/academy-client";
 import { createInMemoryAcademyClient } from "../features/academy/in-memory-academy-client";
 import { createInMemoryEvaluationClient } from "../features/evaluations/in-memory-evaluation-client";
 import { createAppRouter } from "../router";
@@ -62,5 +65,188 @@ describe("/write", () => {
         "Explain what an API is to someone with no programming background.",
       title: "Today’s challenge",
     });
+  });
+});
+
+const evaluation: Evaluation = {
+  band: "Clear",
+  correctedText: "I went home.",
+  evaluatedAt: "2026-03-05T12:00:00.000Z",
+  evaluatedEnglishWordCount: 3,
+  findings: [
+    {
+      byteEnd: 6,
+      byteStart: 2,
+      category: "Verb form/tense",
+      correction: "went",
+      explanation: "'Go' has an irregular past: 'went'.",
+      originalText: "goed",
+      severity: "Moderate",
+    },
+  ],
+  id: "practice-1",
+  model: "judge-model",
+  originalText: "I goed home.",
+  provider: "test",
+  rubricVersion: "1",
+  score: 76,
+  suggestions: [],
+  summary: "One verb form mistake.",
+};
+
+const evaluated: PracticeWritingResult = {
+  evaluation,
+  occurrences: [
+    {
+      category: "VERB_TENSE",
+      correctedSpan: "went",
+      example: "I went home early.",
+      explanation: "'Go' has an irregular past: 'went'.",
+      findingPosition: 0,
+      id: "occurrence-1",
+      l1Transfer: true,
+      originalSpan: "goed",
+      severity: "ERROR",
+    },
+  ],
+  status: "evaluated",
+};
+
+const renderWrite = async (
+  practiceWriting: PracticeWritingResult | AcademyRequestError
+) => {
+  const client = createInMemoryAcademyClient({
+    practiceWriting,
+    vocabulary: [],
+  });
+  render(
+    <RouterProvider
+      router={createAppRouter({
+        academyClient: client,
+        evaluationClient: createInMemoryEvaluationClient(),
+        history: createMemoryHistory({ initialEntries: ["/write"] }),
+      })}
+    />
+  );
+  const page = await screen.findByRole("main");
+  await userEvent.type(
+    within(page).getByRole("textbox", { name: "Your text" }),
+    "I goed home."
+  );
+  return { client, page };
+};
+
+// Grifando's WritingCoach and WritingResults (74dbb9f), ported from source under docs/adr/0025,
+// decision 5, onto a practice Evaluation as docs/adr/0026 decides.
+describe("/write practice writing", () => {
+  it("evaluates the text and shows Grifando's results on the Evaluation", async () => {
+    const { client, page } = await renderWrite(evaluated);
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    const results = await within(page).findByRole("region", {
+      name: "Your writing",
+    });
+    expect(client.writeRequests).toEqual(["I goed home."]);
+    expect(results).toHaveTextContent("1 mark");
+    expect(results).toHaveTextContent("I goed home.");
+    expect(results).toHaveTextContent("One verb form mistake.");
+    const notes = within(page).getByRole("region", { name: "Notes" });
+    expect(notes).toHaveTextContent(
+      "IncorrectVerb tenseFrom Portuguesegoed → corrected towent'Go' has an irregular past: 'went'.“I went home early.”Save to vocabulary"
+    );
+    expect(
+      within(page).getByRole("region", { name: "Corrected version" })
+    ).toHaveTextContent("I went home.");
+    expect(
+      within(page).getByRole("region", { name: "Score" })
+    ).toHaveTextContent("76Clear");
+    expect(
+      within(page).getByRole("link", { name: "Open the Evaluation" })
+    ).toHaveAttribute("href", "/evaluations/practice-1");
+  });
+
+  it("starts over on the same page with an empty sheet", async () => {
+    const { page } = await renderWrite(evaluated);
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+    await userEvent.click(
+      await within(page).findByRole("button", { name: "Write something else" })
+    );
+
+    expect(
+      within(page).getByRole("textbox", { name: "Your text" })
+    ).toHaveValue("");
+  });
+
+  it("saves a mistake to vocabulary through the history state", async () => {
+    const { page } = await renderWrite(evaluated);
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+    await userEvent.click(
+      await within(page).findByRole("link", { name: "Save to vocabulary" })
+    );
+
+    const vocabulary = await screen.findByRole("heading", {
+      level: 1,
+      name: "Vocabulary",
+    });
+    expect(vocabulary).toBeVisible();
+    expect(screen.getByRole("textbox", { name: "Term" })).toHaveValue("went");
+    expect(
+      screen.getByRole("textbox", { name: "Example sentence" })
+    ).toHaveValue("I went home early.");
+  });
+
+  it("keeps the text and shows the route's message when the Enrichment fails", async () => {
+    const { page } = await renderWrite({
+      evaluationId: "practice-1",
+      message:
+        "We couldn't analyze this writing right now. Your text has not been lost — you can try again.",
+      status: "failed",
+    });
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    expect(await within(page).findByRole("alert")).toHaveTextContent(
+      "We couldn't analyze this writing right now. Your text has not been lost — you can try again."
+    );
+    expect(
+      within(page).getByRole("textbox", { name: "Your text" })
+    ).toHaveValue("I goed home.");
+  });
+
+  it("points to setup when the Trainer has no key", async () => {
+    const { page } = await renderWrite(
+      new AcademyRequestError(401, {
+        code: "AI_KEY_REQUIRED",
+        error: "Set up your AI key to get feedback.",
+      })
+    );
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    expect(
+      await within(page).findByRole("link", { name: "Set up a key" })
+    ).toHaveAttribute("href", "/setup");
+  });
+
+  it("keeps the text and shows Grifando's generic message for any other failure", async () => {
+    const { page } = await renderWrite(new AcademyRequestError(503));
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    expect(await within(page).findByRole("alert")).toHaveTextContent(
+      "We couldn't analyze this writing right now. Your text has not been lost."
+    );
+    expect(
+      within(page).getByRole("textbox", { name: "Your text" })
+    ).toHaveValue("I goed home.");
   });
 });

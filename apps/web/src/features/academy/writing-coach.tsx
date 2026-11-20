@@ -1,11 +1,29 @@
-// The Academy's writing screen: the sheet and, beside it, the Practice Prompt or what feedback
-// brings. Ported from Grifando src/components/writing/WritingCoach.tsx (74dbb9f), in its editing
-// view; the submit and the results arrive with practice writing (#160).
+// The Academy's writing screen: the sheet, the Practice Prompt or what feedback brings, and the
+// results. Ported from Grifando src/components/writing/WritingCoach.tsx (74dbb9f): the text goes
+// to practice writing (docs/adr/0026), and no failed session is retried, since an Evaluation
+// cannot be evaluated again in place (docs/adr/0024); the Learner posts the text again.
+import type { Evaluation, PracticeOccurrence } from "@fluenshift/contract";
+import { Button } from "@fluenshift/ui/components/button";
+import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 
+import { AcademyRequestError, isKeyRequired } from "./academy-client";
+import {
+  AnalyzingStatus,
+  ButtonSpinner,
+  WRITING_STEPS,
+} from "./analyzing-status";
+import { KeyRequiredNotice } from "./key-required-notice";
+import { WritingResults } from "./writing-results";
 import { WritingSheet } from "./writing-sheet";
 
 const MAX_LENGTH = 5000;
+const GENERIC_FAILURE_MESSAGE =
+  "We couldn't analyze this writing right now. Your text has not been lost.";
+
+// The statuses whose message a route writes for the Learner (Grifando's errorMessageFor): a
+// rate limit's, or a coded key failure's.
+const SHOWN_STATUSES = new Set([400, 401, 429, 503]);
 
 export type InitialChallenge =
   | { readonly promptText: string; readonly promptType: "DAILY_CHALLENGE" }
@@ -15,17 +33,118 @@ export type InitialChallenge =
       readonly technicalCategory: string;
     };
 
+type ViewState =
+  | {
+      readonly errorMessage?: string;
+      readonly keyRequired?: boolean;
+      readonly kind: "editing";
+    }
+  | { readonly kind: "submitting" }
+  | {
+      readonly evaluation: Evaluation;
+      readonly kind: "result";
+      readonly occurrences: readonly PracticeOccurrence[];
+    };
+
+const messageFor = (error: AcademyRequestError): string => {
+  if (!SHOWN_STATUSES.has(error.status) || error.serverMessage === undefined) {
+    return GENERIC_FAILURE_MESSAGE;
+  }
+  if (error.status === 429) {
+    return error.serverMessage;
+  }
+  return error.code?.startsWith("AI_") === true
+    ? error.serverMessage
+    : GENERIC_FAILURE_MESSAGE;
+};
+
+// Practice writing's answer as the next view state.
+const submitState = async (
+  request: Promise<
+    | {
+        readonly evaluation: Evaluation;
+        readonly occurrences: readonly PracticeOccurrence[];
+        readonly status: "evaluated";
+      }
+    | { readonly message: string; readonly status: "failed" }
+  >
+): Promise<ViewState> => {
+  try {
+    const result = await request;
+    return result.status === "failed"
+      ? { errorMessage: result.message, kind: "editing" }
+      : {
+          evaluation: result.evaluation,
+          kind: "result",
+          occurrences: result.occurrences,
+        };
+  } catch (error) {
+    if (isKeyRequired(error)) {
+      return { keyRequired: true, kind: "editing" };
+    }
+    return {
+      errorMessage:
+        error instanceof AcademyRequestError
+          ? messageFor(error)
+          : GENERIC_FAILURE_MESSAGE,
+      kind: "editing",
+    };
+  }
+};
+
 export const WritingCoach = ({
   initialChallenge,
+  nextStep,
 }: {
   readonly initialChallenge?: InitialChallenge;
+  // Shown after a successful Evaluation; receives the Evaluation's id.
+  readonly nextStep?: {
+    readonly label: string;
+    readonly onClick: (evaluationId: string) => void;
+  };
 }) => {
+  const { academyClient } = useRouteContext({ from: "__root__" });
   const [text, setText] = useState("");
+  const [view, setView] = useState<ViewState>({ kind: "editing" });
+
+  const handleSubmit = async () => {
+    setView({ kind: "submitting" });
+    setView(await submitState(academyClient.writePractice(text)));
+  };
+
+  const handleWriteAnother = () => {
+    setText("");
+    setView({ kind: "editing" });
+  };
+
+  if (view.kind === "result") {
+    const { evaluation } = view;
+    return (
+      <WritingResults
+        evaluation={evaluation}
+        occurrences={view.occurrences}
+        onWriteAnother={handleWriteAnother}
+        {...(nextStep === undefined
+          ? {}
+          : {
+              nextStep: {
+                label: nextStep.label,
+                onClick: () => {
+                  nextStep.onClick(evaluation.id);
+                },
+              },
+            })}
+      />
+    );
+  }
+
+  const isSubmitting = view.kind === "submitting";
 
   return (
     <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1fr)_340px]">
       <div className="space-y-6">
         <WritingSheet
+          disabled={isSubmitting}
           label={initialChallenge === undefined ? "Your text" : "Your answer"}
           maxLength={MAX_LENGTH}
           onChange={setText}
@@ -36,6 +155,31 @@ export const WritingCoach = ({
           }
           value={text}
         />
+        {view.kind === "editing" && view.keyRequired === true ? (
+          <KeyRequiredNotice />
+        ) : null}
+        {view.kind === "editing" && view.errorMessage !== undefined ? (
+          <p className="text-destructive text-sm" role="alert">
+            {view.errorMessage}
+          </p>
+        ) : null}
+        <div className="flex flex-wrap items-center gap-3" data-slot="actions">
+          <Button
+            disabled={isSubmitting || text.trim().length === 0}
+            onClick={() => {
+              void handleSubmit();
+            }}
+          >
+            {isSubmitting ? (
+              <>
+                <ButtonSpinner /> Analyzing…
+              </>
+            ) : (
+              "Get feedback"
+            )}
+          </Button>
+          {isSubmitting ? <AnalyzingStatus steps={WRITING_STEPS} /> : null}
+        </div>
       </div>
 
       <aside className="order-first space-y-4 lg:order-none lg:pt-6">
