@@ -7,7 +7,7 @@ import { Button } from "@fluenshift/ui/components/button";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 
-import { AcademyRequestError, isKeyRequired } from "./academy-client";
+import { isKeyRequired, messageFor } from "./academy-client";
 import {
   AnalyzingStatus,
   ButtonSpinner,
@@ -20,10 +20,6 @@ import { WritingSheet } from "./writing-sheet";
 const MAX_LENGTH = 5000;
 const GENERIC_FAILURE_MESSAGE =
   "We couldn't analyze this writing right now. Your text has not been lost.";
-
-// The statuses whose message a route writes for the Learner (Grifando's errorMessageFor): a
-// rate limit's, or a coded key failure's.
-const SHOWN_STATUSES = new Set([400, 401, 429, 503]);
 
 export type InitialChallenge =
   | { readonly promptText: string; readonly promptType: "DAILY_CHALLENGE" }
@@ -45,18 +41,6 @@ type ViewState =
       readonly kind: "result";
       readonly occurrences: readonly PracticeOccurrence[];
     };
-
-const messageFor = (error: AcademyRequestError): string => {
-  if (!SHOWN_STATUSES.has(error.status) || error.serverMessage === undefined) {
-    return GENERIC_FAILURE_MESSAGE;
-  }
-  if (error.status === 429) {
-    return error.serverMessage;
-  }
-  return error.code?.startsWith("AI_") === true
-    ? error.serverMessage
-    : GENERIC_FAILURE_MESSAGE;
-};
 
 // Practice writing's answer as the next view state.
 const submitState = async (
@@ -83,10 +67,7 @@ const submitState = async (
       return { keyRequired: true, kind: "editing" };
     }
     return {
-      errorMessage:
-        error instanceof AcademyRequestError
-          ? messageFor(error)
-          : GENERIC_FAILURE_MESSAGE,
+      errorMessage: messageFor(error, GENERIC_FAILURE_MESSAGE),
       kind: "editing",
     };
   }

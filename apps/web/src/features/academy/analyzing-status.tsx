@@ -10,6 +10,13 @@ export const WRITING_STEPS = [
   "Almost there — long texts take up to a minute",
 ];
 
+export const INTERVIEW_STEPS = [
+  "Reading your answer…",
+  "Marking mistakes…",
+  "Thinking of the next question…",
+  "Almost there — long answers take up to a minute",
+];
+
 export const EXERCISE_STEPS = [
   "Looking through your mistakes…",
   "Picking what to practice…",

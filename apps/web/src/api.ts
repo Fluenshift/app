@@ -11,9 +11,11 @@ import {
   EvaluationSubmissionResult,
   EvaluationSummary,
   GradedAttempt,
+  InterviewAnswerResult,
   MistakeNotebook,
   PendingExerciseList,
   PracticeWritingResult,
+  StartedInterview,
   ProgressEvidence,
   ProgressSummary,
   SetupStatus,
@@ -64,6 +66,8 @@ const decodePendingExercises = Schema.decodeUnknownOption(PendingExerciseList);
 const decodeGradedAttempt = Schema.decodeUnknownOption(GradedAttempt);
 const decodeAttemptExplanation = Schema.decodeUnknownOption(AttemptExplanation);
 const decodePracticeWriting = Schema.decodeUnknownOption(PracticeWritingResult);
+const decodeStartedInterview = Schema.decodeUnknownOption(StartedInterview);
+const decodeInterviewAnswer = Schema.decodeUnknownOption(InterviewAnswerResult);
 
 /** What a failed Academy answer says: its code and the message its route wrote for the Learner. */
 const AcademyFailureBody = Schema.Struct({
@@ -198,6 +202,27 @@ export const createHttpAcademyClient = ({
   const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
 
   return {
+    async answerInterviewTurn(sessionId, turnId, answer) {
+      // The route reads its body itself, so the typed client takes no JSON for it.
+      return academyJson(
+        await api.interview[":sessionId"].turns[":turnId"].answer.$post(
+          {
+            param: {
+              sessionId: encodeURIComponent(sessionId),
+              turnId: encodeURIComponent(turnId),
+            },
+          },
+          {
+            init: {
+              body: JSON.stringify({ answer }),
+              headers: { "content-type": "application/json" },
+            },
+          }
+        ),
+        decodeInterviewAnswer
+      );
+    },
+
     async createVocabularyItem(request) {
       const response = await api.vocabulary.$post({ json: request });
       if (!response.ok) {
@@ -219,6 +244,13 @@ export const createHttpAcademyClient = ({
           failureOf(await parseJson(response))
         );
       }
+    },
+
+    // Ending is best-effort: the wrap-up shows whatever the route answers.
+    async endInterview(sessionId) {
+      await api.interview[":sessionId"].end.$post({
+        param: { sessionId: encodeURIComponent(sessionId) },
+      });
     },
 
     async explainAttempt(exerciseId, attemptId) {
@@ -276,6 +308,10 @@ export const createHttpAcademyClient = ({
         decodeVocabularyList
       );
       return items;
+    },
+
+    async startInterview() {
+      return academyJson(await api.interview.$post(), decodeStartedInterview);
     },
 
     async submitAttempt(exerciseId, answer) {
