@@ -35,6 +35,11 @@ import { getMimeType } from "hono/utils/mime";
 
 import type { NotFoundError } from "./academy/errors";
 import type { SubmitAttemptResult } from "./academy/exercise-service";
+import type {
+  InterviewSession,
+  InterviewTurn,
+  NextTurn,
+} from "./academy/interview-service";
 import {
   readTrainerCredentials,
   TRAINER_FAILURES,
@@ -104,6 +109,10 @@ export interface AppBoundaries<R = never> {
   readonly deleteVocabularyItem?: (
     id: string
   ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
+  /** Ends the Learner's interview session; false when the Learner has no such session. */
+  readonly endInterview?: (
+    sessionId: string
+  ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
   /** An explanation of one graded Attempt on the key the request carries, or null for none. */
   readonly explainAttempt?: (
     headers: Headers,
@@ -122,10 +131,26 @@ export interface AppBoundaries<R = never> {
     AIResponseValidationError | DatabaseError | TrainerAccessError,
     R | CurrentLearner
   >;
+  /** The Learner's interview session with its turns in order, or null for none. */
+  readonly getInterviewSession?: (
+    sessionId: string
+  ) => Effect.Effect<
+    InterviewSession | null,
+    DatabaseError,
+    R | CurrentLearner
+  >;
   /** The Learner's Exercises without an Attempt, oldest first. */
   readonly listPendingExercises?: () => Effect.Effect<
     readonly PendingExercise[],
     DatabaseError,
+    R | CurrentLearner
+  >;
+  /** A new interview session and its opening question, asked on the key the request carries. */
+  readonly startInterview?: (
+    headers: Headers
+  ) => Effect.Effect<
+    StartedInterview,
+    AIResponseValidationError | DatabaseError | TrainerAccessError,
     R | CurrentLearner
   >;
   /** Grades one answer to the Learner's Exercise; no Trainer takes part. */
@@ -141,6 +166,12 @@ export interface AppBoundaries<R = never> {
   readonly testTrainerKey?: (
     credentials: TrainerCredentials
   ) => Effect.Effect<KeyTestStatus, never, R>;
+}
+
+/** A new interview session and the turn that asks its opening question. */
+export interface StartedInterview {
+  readonly sessionId: string;
+  readonly turn: NextTurn;
 }
 
 /** What a route needs of an Exercise to show it. */
@@ -269,6 +300,7 @@ const INVALID_REQUEST = {
 const notReady = (error: string) => ({ code: "not-ready", error });
 
 const PROGRESS_NOT_READY = notReady("Progress is not available");
+const INTERVIEWS_NOT_READY = notReady("Interviews are not available");
 
 const INVALID_PERIOD = {
   code: "invalid-period",
@@ -304,7 +336,7 @@ const NO_PATTERNS = {
 const ATTEMPT_REQUEST = Schema.toStandardSchemaV1(AttemptRequest, {
   parseOptions: { errors: "all" },
 });
-// Another Learner's Exercise or Attempt reads as one that does not exist.
+// Another Learner's record reads as one that does not exist.
 const NOT_FOUND: EdgeFailure = { body: { error: "Not found" }, status: 404 };
 // Grifando's answer when an explanation fails: 500, or 502 for an answer the Trainer's schema
 // refuses. The grade stays as it was.
@@ -322,6 +354,29 @@ const publicView = ({ id, promptData, type }: PendingExercise) => ({
   id,
   prompt: toPublicExercise(promptData),
   type,
+});
+
+// What the browser sees of a turn that asks a question.
+const nextTurnView = ({ id, order, question }: NextTurn) => ({
+  id,
+  order,
+  question,
+});
+
+// What the browser sees of an interview turn: its answer and Evaluation, both null until it is
+// answered, instead of Grifando's writing analysis (docs/adr/0010).
+const interviewTurnView = ({
+  answer,
+  evaluationId,
+  id,
+  order,
+  question,
+}: InterviewTurn) => ({
+  answer,
+  evaluationId,
+  id,
+  order,
+  question,
 });
 
 const decodePeriod = Schema.decodeUnknownOption(ProgressPeriod);
@@ -742,6 +797,87 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
                 : Response.json({ explanation }),
             unexpected: EXPLANATION_FAILED,
+          }
+        );
+      }
+    )
+    // A new interview with its opening question, asked on the key the request carries
+    // (Grifando's POST /api/interview): the key is resolved before the session is created.
+    .post("/api/interview", (context): Response | Promise<Response> => {
+      const { startInterview } = options;
+      if (startInterview === undefined) {
+        return context.json(INTERVIEWS_NOT_READY, 503);
+      }
+      return edge(
+        forLearner(context.req.raw, startInterview(context.req.raw.headers)),
+        {
+          errors: {
+            ...TRAINER_FAILURES,
+            AIResponseValidationError: () => SOMETHING_WENT_WRONG,
+            DatabaseError: () => SOMETHING_WENT_WRONG,
+          },
+          success: ({ sessionId, turn }) =>
+            Response.json(
+              {
+                sessionId,
+                turn: nextTurnView(turn),
+              },
+              { status: 201 }
+            ),
+          unexpected: SOMETHING_WENT_WRONG,
+        }
+      );
+    })
+    // The Learner's interview session with its turns in order (Grifando's
+    // GET /api/interview/[id]); another Learner's session reads as missing.
+    .get(
+      "/api/interview/:sessionId",
+      (context): Response | Promise<Response> => {
+        const { getInterviewSession } = options;
+        if (getInterviewSession === undefined) {
+          return context.json(INTERVIEWS_NOT_READY, 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            getInterviewSession(context.req.param("sessionId"))
+          ),
+          {
+            errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            success: (session) =>
+              session === null
+                ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
+                : Response.json({
+                    id: session.id,
+                    status: session.status,
+                    turns: session.turns.map(interviewTurnView),
+                  }),
+            unexpected: SOMETHING_WENT_WRONG,
+          }
+        );
+      }
+    )
+    // Ends the Learner's interview session (Grifando's POST /api/interview/[id]/end). No
+    // Trainer takes part.
+    .post(
+      "/api/interview/:sessionId/end",
+      (context): Response | Promise<Response> => {
+        const { endInterview } = options;
+        if (endInterview === undefined) {
+          return context.json(INTERVIEWS_NOT_READY, 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            endInterview(context.req.param("sessionId"))
+          ),
+          {
+            errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            success: (ended) =>
+              ended
+                ? Response.json({ status: "ended" })
+                : Response.json(NOT_FOUND.body, { status: NOT_FOUND.status }),
+            unexpected: SOMETHING_WENT_WRONG,
           }
         );
       }

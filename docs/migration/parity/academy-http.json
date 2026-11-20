@@ -159,7 +159,9 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > ends a session once, and 404s for an unknown or another user's session"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > reads a session with its turns, and 404s for an unknown or another user's session",
@@ -168,7 +170,9 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > reads a session with its turns, and 404s for an unknown or another user's session"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > returns the FAILED writing session when the analysis fails, and validates the answer",
@@ -186,7 +190,9 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > starts a session with its opening question"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/vocabulary/vocabulary.characterization.test.ts::vocabulary routes > answers 400 with the validation issues for a missing field",

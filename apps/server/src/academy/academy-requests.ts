@@ -4,6 +4,7 @@ import type { ExerciseGenerationRequest } from "@fluenshift/contract";
 import { Effect } from "effect";
 
 import { explainAttempt, generatePracticeSet } from "./exercise-service";
+import { startInterview } from "./interview-service";
 import { resolveTrainerCredentials } from "./trainer/credentials";
 import { TrainerClient } from "./trainer/trainer-client";
 import { TrainerKeyRequiredError } from "./trainer/trainer-errors";
@@ -45,5 +46,14 @@ export const explainAttemptFor = Effect.fn("AcademyRequests.explainAttemptFor")(
   ) {
     const trainer = yield* trainerForRequest(headers);
     return yield* explainAttempt(trainer, input);
+  }
+);
+
+// A new interview on the Learner's key, with its opening question. The key is resolved before the
+// session is created, as in Grifando.
+export const startInterviewFor = Effect.fn("AcademyRequests.startInterviewFor")(
+  function* (headers: Headers) {
+    const trainer = yield* trainerForRequest(headers);
+    return yield* startInterview(trainer);
   }
 );
