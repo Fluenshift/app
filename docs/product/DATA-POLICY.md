@@ -80,10 +80,12 @@ CORS is off.
 
 Deleting an Evaluation removes its Writing Sample, Findings, Suggestions, and metadata, and
 Progress recalculates without that evidence. It also removes the Occurrences and the
-Enrichment record made from it, and unlinks vocabulary items that came from it. A Mistake
-Pattern still keeps its counts and its example; removing that derived state too is a seam
-invariant of migration Phase 5f. The local profile runs no cleanup: data stays
-until the Learner deletes it (ADR 0011). There are no application-managed backups, so
+Enrichment record made from it, and unlinks vocabulary items that came from it. Each Mistake
+Pattern those Occurrences belonged to is rebuilt from what remains, its other Occurrences and
+the Attempts on its Exercises, so its counts, example, times and Mastery Level no longer show
+the deleted Evaluation; a pattern left without an Occurrence is removed. Exercises and
+Attempts stay, as the Learner's practice (ADR 0031). The local profile runs no cleanup: data
+stays until the Learner deletes it (ADR 0011). There are no application-managed backups, so
 deletion cannot be undone through the product. Introducing backups later requires a new
 explicit policy.
 

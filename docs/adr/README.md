@@ -43,3 +43,4 @@ ADR 0019 deleted; commit `39fbb46` holds them.
 | [0028](./0028-naturalness-notes.md) | The Enrichment adds the natural version and the Naturalness Notes on every folded Evaluation; a note grows its pattern without a recall | Accepted |
 | [0029](./0029-layout-and-motion-fixes.md) | Grifando's layout and motion fixes have no test target: the spacing roles are informative, the reveal and count-up fix is dropped | Accepted |
 | [0030](./0030-progress-without-practice.md) | Progress leaves practice-origin Writing Samples out of every insight and its evidence, with no switch, and says so | Accepted |
+| [0031](./0031-deleting-an-evaluation-rebuilds-its-patterns.md) | Deleting an Evaluation rebuilds the Mistake Patterns it touched from what remains, and removes a pattern left without an Occurrence; practice stays | Accepted |
