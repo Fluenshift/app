@@ -36,6 +36,8 @@ import { getMimeType } from "hono/utils/mime";
 import type { NotFoundError } from "./academy/errors";
 import type { SubmitAttemptResult } from "./academy/exercise-service";
 import type {
+  AnswerTurnInput,
+  AnswerTurnResult,
   InterviewSession,
   InterviewTurn,
   NextTurn,
@@ -56,8 +58,11 @@ import type { EdgeFailure, EdgeRuntime } from "./edge";
 import type {
   EvaluationEndpointResult,
   EvaluationFailureCode,
+  WritingEvaluationFailure,
 } from "./evaluation/evaluation-endpoint";
+import type { Evaluation } from "./history/learning-history";
 import { CurrentLearner, LearnerIdentity } from "./learner-identity";
+import type { EnrichmentFailedError } from "./practice/practice-writing";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -79,6 +84,20 @@ export interface EvaluationLogEvent {
  * 503, as PE's did.
  */
 export interface AppBoundaries<R = never> {
+  /** One answer to the Learner's interview turn, evaluated as practice writing on the request's key. */
+  readonly answerInterviewTurn?: (
+    headers: Headers,
+    input: AnswerTurnInput
+  ) => Effect.Effect<
+    AnswerTurnResult<Evaluation>,
+    | AIResponseValidationError
+    | DatabaseError
+    | EnrichmentFailedError
+    | NotFoundError
+    | TrainerAccessError
+    | WritingEvaluationFailure,
+    R | CurrentLearner
+  >;
   readonly deleteEvaluation?: (
     evaluationId: string
   ) => Effect.Effect<void, DatabaseError, R | CurrentLearner>;

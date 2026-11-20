@@ -5,6 +5,7 @@ export {
   ExerciseType,
   ExerciseTypeSchema,
   INTERVIEW_STATUSES,
+  InterviewAnswerRequest,
   InterviewStatus,
   InterviewStatusSchema,
   MASTERY_LEVELS,

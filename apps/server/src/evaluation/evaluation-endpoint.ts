@@ -28,6 +28,16 @@ export type EvaluationEndpointResult =
       readonly retryable: boolean;
     };
 
+/** Why the Judge could not evaluate a Writing Sample. */
+export type WritingEvaluationFailure =
+  ReturnType<typeof evaluateWriting> extends Effect.Effect<
+    unknown,
+    infer Failure,
+    unknown
+  >
+    ? Failure
+    : never;
+
 export const evaluateWritingForEndpoint = Effect.fn(
   "EvaluationEndpoint.evaluateWriting"
 )(function* (writingSample: string, submittedAt: Date, now?: () => Date) {
