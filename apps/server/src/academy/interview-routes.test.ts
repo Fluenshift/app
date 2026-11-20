@@ -8,7 +8,9 @@ import { rm } from "node:fs/promises";
 
 import { AIResponseValidationError } from "@fluenshift/contract";
 import type { LearnerId } from "@fluenshift/contract";
+import { Database, evaluations } from "@fluenshift/db";
 import { TrainerConfig } from "@fluenshift/env";
+import { eq } from "drizzle-orm";
 import { ConfigProvider, Effect, Layer, ManagedRuntime, Option } from "effect";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -380,5 +382,43 @@ describe("POST /api/interview answers when the Judge fails", () => {
     expect(await read.json()).toMatchObject({
       turns: [{ answer: null, evaluationId: null, order: 0 }],
     });
+  });
+});
+
+// docs/adr/0010: an interview answer is a practice Writing Sample, which no route shows yet, so
+// the case reads the origin the Evaluation recorded.
+describe("POST /api/interview answers as practice writing", () => {
+  it("records the answer as a practice Writing Sample", async () => {
+    const { body } = await start();
+    const response = await answer(body, ANSWER);
+    const { evaluation } = (await response.json()) as {
+      evaluation: { id: string };
+    };
+    const recorded = await runtime.runPromise(
+      Effect.gen(function* () {
+        const service = yield* Database;
+        return yield* service.run((client) =>
+          client
+            .select({ origin: evaluations.origin })
+            .from(evaluations)
+            .where(eq(evaluations.id, evaluation.id))
+        );
+      })
+    );
+    expect(recorded).toEqual([{ origin: "practice" }]);
+  });
+});
+
+// Grifando's answer route resolves the key after the body and before the analysis
+// (src/app/api/interview/[id]/turns/[turnId]/answer/route.ts, 74dbb9f); no Grifando test covers it.
+describe("POST /api/interview answers without a key", () => {
+  it("answers 401 AI_KEY_REQUIRED before the Judge runs", async () => {
+    const { body } = await start();
+    const evaluate = vi.fn(oneFinding);
+    judge = evaluate;
+    const response = await answer(body, ANSWER, {});
+    expect(response.status).toBe(401);
+    expect(await response.json()).toMatchObject({ code: "AI_KEY_REQUIRED" });
+    expect(evaluate).not.toHaveBeenCalled();
   });
 });
