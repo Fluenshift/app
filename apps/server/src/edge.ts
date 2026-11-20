@@ -114,6 +114,9 @@ export const makeEdge =
         return handlers.success(exit.value);
       }
       const failure = failureOf(exit.cause, handlers.errors, unexpected);
-      return Response.json(failure.body, { status: failure.status });
+      return Response.json(failure.body, {
+        ...(failure.headers === undefined ? {} : { headers: failure.headers }),
+        status: failure.status,
+      });
     });
   };

@@ -3,7 +3,12 @@ import path from "node:path";
 import { NodeRuntime } from "@effect/platform-node";
 import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import { Database } from "@fluenshift/db";
-import { ServerConfig, SessionConfig, TrainerConfig } from "@fluenshift/env";
+import {
+  ClientIpConfig,
+  ServerConfig,
+  SessionConfig,
+  TrainerConfig,
+} from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
 
 import { academyDashboard } from "./academy/academy-dashboard";
@@ -24,7 +29,7 @@ import {
   listVocabularyItems,
 } from "./academy/vocabulary-repository";
 import { createApp, serveApp } from "./app";
-import type { ProfileOptions } from "./app";
+import type { AppBoundaries, ProfileOptions } from "./app";
 import { evaluateWritingForEndpoint } from "./evaluation/evaluation-endpoint";
 import { EvaluationModel } from "./evaluation/evaluation-model";
 import { OpenRouterEvaluationModelLive } from "./evaluation/openrouter-evaluation-model";
@@ -43,9 +48,17 @@ import {
   getProgressSummary,
 } from "./progress/progress-insights";
 import { deleteLearner } from "./session/delete-learner";
+import { ensureLearner } from "./session/ensure-learner";
+import { limitRequest } from "./session/rate-limit";
+import type { RateLimitBucket } from "./session/rate-limit";
 
-// The HTTP server of one deploy profile: `profile` names it, with the hosted profile's session.
-const httpServer = <R>(profile: Effect.Effect<ProfileOptions, never, R>) =>
+// What one deploy profile gives the routes: its name, and the hosted profile's session, rate
+// limits and Learner rows (docs/adr/0032, docs/adr/0033).
+type ProfileServer = ProfileOptions &
+  Pick<AppBoundaries<Database>, "ensureLearner" | "limitRequest">;
+
+// The HTTP server of one deploy profile.
+const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
   Layer.effectDiscard(
     Effect.gen(function* () {
       const config = yield* ServerConfig;
@@ -136,9 +149,10 @@ const httpServer = <R>(profile: Effect.Effect<ProfileOptions, never, R>) =>
     })
   );
 
-// The local profile acts for its one implicit Learner. The hosted profile reads SessionConfig
-// once, for the session gate and for the Learner each signed cookie names; it fails to start in
-// production without a session secret (docs/adr/0032).
+// The local profile acts for its one implicit Learner, with no rate limit. The hosted profile reads
+// SessionConfig once, for the session gate and for the Learner each signed cookie names, and
+// ClientIpConfig for its rate limits; it fails to start in production without a session secret
+// or a salt for client IPs (docs/adr/0032, docs/adr/0033).
 const HttpServer = Layer.unwrap(
   Effect.gen(function* () {
     const config = yield* ServerConfig;
@@ -146,11 +160,22 @@ const HttpServer = Layer.unwrap(
       ? httpServer(
           Effect.gen(function* () {
             const session = yield* SessionConfig;
-            return { profile: "hosted" as const, session };
+            const clientIp = yield* ClientIpConfig;
+            return {
+              ensureLearner,
+              limitRequest: (headers: Headers, bucket: RateLimitBucket) =>
+                limitRequest(headers, bucket).pipe(
+                  Effect.provideService(ClientIpConfig, clientIp)
+                ),
+              profile: "hosted" as const,
+              session,
+            };
           })
         ).pipe(
           Layer.provide(LearnerIdentity.hosted),
-          Layer.provide(SessionConfig.layer)
+          Layer.provide(
+            Layer.mergeAll(SessionConfig.layer, ClientIpConfig.layer)
+          )
         )
       : httpServer(Effect.succeed({ profile: "local" as const })).pipe(
           Layer.provide(LearnerIdentity.local)

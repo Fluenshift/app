@@ -1,12 +1,20 @@
 // Ported from hashedClientIp in Grifando src/server/clientIp.ts (74dbb9f): the header that carries
 // the client IP and the salt come from ClientIpConfig (@fluenshift/env), x-forwarded-for unless
 // the deployment names the header its proxy sets (docs/adr/0033).
-import { randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
 
 import type { ClientIpSettings } from "@fluenshift/env";
+import { Redacted } from "effect";
 
-// Stub: a fresh placeholder each time, never a hash of the IP.
+/** A salted, truncated hash of the request's client IP: the raw IP is never stored or logged. */
 export const hashedClientIp = (
-  _headers: Headers,
-  _settings: ClientIpSettings
-): string => randomUUID();
+  headers: Headers,
+  { header, salt }: ClientIpSettings
+): string => {
+  const first = headers.get(header)?.split(",")[0]?.trim();
+  const ip = first === undefined || first === "" ? "unknown" : first;
+  return createHash("sha256")
+    .update(Redacted.value(salt) + ip)
+    .digest("hex")
+    .slice(0, 32);
+};

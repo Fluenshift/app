@@ -1,4 +1,17 @@
-import { Context, Layer, Redacted, Schema } from "effect";
+import {
+  Config,
+  Context,
+  Effect,
+  Layer,
+  Option,
+  Redacted,
+  Schema,
+} from "effect";
+
+import { nodeEnvConfig } from "./server";
+
+// Ported from getIpHashSalt in Grifando src/server/clientIp.ts (74dbb9f).
+const DEVELOPMENT_SALT = "dev-only-ip-hash-salt-do-not-use-in-production";
 
 /** How the hosted profile finds a request's client IP, and hides it, for its rate limits. */
 export interface ClientIpSettings {
@@ -24,9 +37,28 @@ export class ClientIpConfig extends Context.Service<
   ClientIpConfig,
   ClientIpSettings
 >()("@fluenshift/env/ClientIpConfig") {
-  // Stub: placeholders, whatever the environment says.
-  static readonly layer = Layer.succeed(
+  static readonly layer = Layer.effect(
     ClientIpConfig,
-    ClientIpConfig.of({ header: "", salt: Redacted.make("") })
+    Effect.gen(function* () {
+      const [salt, header, environment] = yield* Config.all([
+        Config.option(Config.Redacted("IP_HASH_SALT")),
+        Config.NonEmptyString("CLIENT_IP_HEADER").pipe(
+          Config.withDefault("x-forwarded-for")
+        ),
+        nodeEnvConfig,
+      ]);
+      if (Option.isSome(salt)) {
+        return ClientIpConfig.of({ header, salt: salt.value });
+      }
+      if (environment === "production") {
+        return yield* new MissingIpHashSaltError({
+          message: "IP_HASH_SALT is not set — it is required in production.",
+        });
+      }
+      return ClientIpConfig.of({
+        header,
+        salt: Redacted.make(DEVELOPMENT_SALT),
+      });
+    })
   );
 }

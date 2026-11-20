@@ -77,6 +77,7 @@ import {
   sessionCookie,
   sessionGate,
 } from "./session/hosted-pipeline";
+import { rateLimited } from "./session/rate-limit";
 import type { RateLimitBucket, RateLimitedError } from "./session/rate-limit";
 
 export interface EvaluationLogEvent {
@@ -605,6 +606,42 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     );
   const failedHistory = { DatabaseError: () => INTERNAL_ERROR };
 
+  // A state-changing call, admitted in Grifando's order (fix 9ba8040): the rate limit, then the
+  // Learner's row, then the route's own work (docs/adr/0033). Without the boundaries, as in the
+  // local profile, the work runs as it is.
+  const admitted = <A, E>(
+    request: Request,
+    bucket: RateLimitBucket,
+    effect: Effect.Effect<A, E, R | CurrentLearner>
+  ) => {
+    const { ensureLearner, limitRequest } = options;
+    return (
+      limitRequest === undefined
+        ? Effect.void
+        : limitRequest(request.headers, bucket)
+    ).pipe(
+      Effect.andThen(
+        ensureLearner === undefined ? Effect.void : ensureLearner()
+      ),
+      Effect.andThen(effect)
+    );
+  };
+  // A route that calls the Trainer checks the visitor's key first, as Grifando's did: a request
+  // without a usable key is not counted, and the route answers it for its key. The hosted profile
+  // reads keys from request headers only (docs/adr/0012).
+  const admittedWithKey = <A, E>(
+    request: Request,
+    bucket: RateLimitBucket,
+    effect: Effect.Effect<A, E, R | CurrentLearner>
+  ) =>
+    readTrainerCredentials(request.headers).pipe(
+      Effect.matchEffect({
+        onFailure: () => effect,
+        onSuccess: (credentials) =>
+          credentials === null ? effect : admitted(request, bucket, effect),
+      })
+    );
+
   // Both evidence routes answer here once they have read a selection, or failed to.
   const evidence = (
     context: HonoContext,
@@ -648,7 +685,10 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       });
     };
     return edge(
-      forLearner(context.req.raw, evaluateWriting(writingSample)).pipe(
+      forLearner(
+        context.req.raw,
+        admitted(context.req.raw, "analysis", evaluateWriting(writingSample))
+      ).pipe(
         Effect.tapDefect(() =>
           Effect.sync(() => {
             log("internal-error");
@@ -656,7 +696,10 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         )
       ),
       {
-        errors: {},
+        errors: {
+          DatabaseError: () => INTERNAL_ERROR,
+          RateLimitedError: rateLimited,
+        },
         success: (result) => {
           log(resultCode(result));
           return context.json(result, resultStatus(result));
@@ -731,10 +774,14 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         return edge(
           forLearner(
             context.req.raw,
-            deleteEvaluation(context.req.param("evaluationId"))
+            admitted(
+              context.req.raw,
+              "write",
+              deleteEvaluation(context.req.param("evaluationId"))
+            )
           ),
           {
-            errors: failedHistory,
+            errors: { ...failedHistory, RateLimitedError: rateLimited },
             success: () => context.body(null, 204),
           }
         );
@@ -796,21 +843,33 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       if (testTrainerKey === undefined) {
         return context.json(notReady("Key tests are not available"), 503);
       }
-      return edge(
-        readTrainerCredentials(context.req.raw.headers).pipe(
-          Effect.matchEffect({
-            onFailure: () => Effect.succeed<KeyTestStatus>("invalid"),
-            onSuccess: (credentials) =>
-              credentials === null
-                ? Effect.fail(new TrainerKeyRequiredError())
-                : testTrainerKey(credentials),
-          })
-        ),
-        {
-          errors: { TrainerKeyRequiredError: trainerFailure },
-          success: (status) => Response.json({ status }),
-        }
+      // Grifando's order: the key's shape, then the rate limit, then the provider.
+      type KeyTest = Effect.Effect<
+        KeyTestStatus,
+        DatabaseError | RateLimitedError | TrainerKeyRequiredError,
+        R | CurrentLearner
+      >;
+      const tested = readTrainerCredentials(context.req.raw.headers).pipe(
+        Effect.matchEffect({
+          onFailure: (): KeyTest => Effect.succeed("invalid"),
+          onSuccess: (credentials): KeyTest =>
+            credentials === null
+              ? Effect.fail(new TrainerKeyRequiredError())
+              : admitted(
+                  context.req.raw,
+                  "keyTest",
+                  testTrainerKey(credentials)
+                ),
+        })
       );
+      return edge(forLearner(context.req.raw, tested), {
+        errors: {
+          DatabaseError: () => INTERNAL_ERROR,
+          RateLimitedError: rateLimited,
+          TrainerKeyRequiredError: trainerFailure,
+        },
+        success: (status) => Response.json({ status }),
+      });
     })
     // The Learner's pending Exercises, each by its public view: the answer and the explanation
     // never reach the browser before an Attempt (Grifando's GET /api/exercises).
@@ -842,13 +901,18 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             ? edge(
                 forLearner(
                   context.req.raw,
-                  generateExercises(context.req.raw.headers, result.value)
+                  admittedWithKey(
+                    context.req.raw,
+                    "generation",
+                    generateExercises(context.req.raw.headers, result.value)
+                  )
                 ),
                 {
                   errors: {
                     ...TRAINER_FAILURES,
                     AIResponseValidationError: () => SOMETHING_WENT_WRONG,
                     DatabaseError: () => SOMETHING_WENT_WRONG,
+                    RateLimitedError: rateLimited,
                   },
                   log: "Failed to generate exercises",
                   success: (created) =>
@@ -885,15 +949,20 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
               ? edge(
                   forLearner(
                     context.req.raw,
-                    submitAttempt(
-                      context.req.param("exerciseId"),
-                      result.value.answer
+                    admitted(
+                      context.req.raw,
+                      "write",
+                      submitAttempt(
+                        context.req.param("exerciseId"),
+                        result.value.answer
+                      )
                     )
                   ),
                   {
                     errors: {
                       DatabaseError: () => SOMETHING_WENT_WRONG,
                       NotFoundError: () => NOT_FOUND,
+                      RateLimitedError: rateLimited,
                     },
                     log: "Failed to submit exercise attempt",
                     success: (graded) => Response.json(graded),
@@ -919,10 +988,14 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         return edge(
           forLearner(
             context.req.raw,
-            explainAttempt(context.req.raw.headers, {
-              attemptId: context.req.param("attemptId"),
-              exerciseId: context.req.param("exerciseId"),
-            })
+            admittedWithKey(
+              context.req.raw,
+              "analysis",
+              explainAttempt(context.req.raw.headers, {
+                attemptId: context.req.param("attemptId"),
+                exerciseId: context.req.param("exerciseId"),
+              })
+            )
           ),
           {
             errors: {
@@ -932,6 +1005,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 status: 502,
               }),
               DatabaseError: () => EXPLANATION_FAILED,
+              RateLimitedError: rateLimited,
             },
             log: "Failed to explain exercise attempt",
             success: (explanation) =>
@@ -951,12 +1025,20 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         return context.json(INTERVIEWS_NOT_READY, 503);
       }
       return edge(
-        forLearner(context.req.raw, startInterview(context.req.raw.headers)),
+        forLearner(
+          context.req.raw,
+          admittedWithKey(
+            context.req.raw,
+            "generation",
+            startInterview(context.req.raw.headers)
+          )
+        ),
         {
           errors: {
             ...TRAINER_FAILURES,
             AIResponseValidationError: () => SOMETHING_WENT_WRONG,
             DatabaseError: () => SOMETHING_WENT_WRONG,
+            RateLimitedError: rateLimited,
           },
           log: "Failed to start interview",
           success: ({ sessionId, turn }) =>
@@ -1013,10 +1095,17 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         return edge(
           forLearner(
             context.req.raw,
-            endInterview(context.req.param("sessionId"))
+            admitted(
+              context.req.raw,
+              "write",
+              endInterview(context.req.param("sessionId"))
+            )
           ),
           {
-            errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            errors: {
+              DatabaseError: () => SOMETHING_WENT_WRONG,
+              RateLimitedError: rateLimited,
+            },
             log: "Failed to end interview session",
             success: (ended) =>
               ended
@@ -1047,11 +1136,15 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
               ? edge(
                   forLearner(
                     context.req.raw,
-                    answerInterviewTurn(context.req.raw.headers, {
-                      answer: result.value.answer,
-                      sessionId: context.req.param("sessionId"),
-                      turnId: context.req.param("turnId"),
-                    })
+                    admittedWithKey(
+                      context.req.raw,
+                      "analysis",
+                      answerInterviewTurn(context.req.raw.headers, {
+                        answer: result.value.answer,
+                        sessionId: context.req.param("sessionId"),
+                        turnId: context.req.param("turnId"),
+                      })
+                    )
                   ),
                   {
                     errors: {
@@ -1071,6 +1164,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                       InvalidWritingSampleError: judgeFailure,
                       NoEnglishError: judgeFailure,
                       NotFoundError: () => NOT_FOUND,
+                      RateLimitedError: rateLimited,
                       UnsafeCorrectionError: judgeFailure,
                     },
                     log: "Failed to answer interview turn",
@@ -1154,9 +1248,13 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             ? edge(
                 forLearner(
                   context.req.raw,
-                  writePractice(
-                    context.req.raw.headers,
-                    result.value.writingSample
+                  admittedWithKey(
+                    context.req.raw,
+                    "analysis",
+                    writePractice(
+                      context.req.raw.headers,
+                      result.value.writingSample
+                    )
                   )
                 ),
                 {
@@ -1176,6 +1274,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                     InvalidAssessmentError: judgeFailure,
                     InvalidWritingSampleError: judgeFailure,
                     NoEnglishError: judgeFailure,
+                    RateLimitedError: rateLimited,
                     UnsafeCorrectionError: judgeFailure,
                   },
                   log: "Failed to evaluate practice writing",
@@ -1210,9 +1309,19 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         .then((result) =>
           result.issues === undefined
             ? edge(
-                forLearner(context.req.raw, createVocabularyItem(result.value)),
+                forLearner(
+                  context.req.raw,
+                  admitted(
+                    context.req.raw,
+                    "write",
+                    createVocabularyItem(result.value)
+                  )
+                ),
                 {
-                  errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+                  errors: {
+                    DatabaseError: () => SOMETHING_WENT_WRONG,
+                    RateLimitedError: rateLimited,
+                  },
                   log: "Failed to save vocabulary item",
                   success: (item) => Response.json(item, { status: 201 }),
                 }
@@ -1233,10 +1342,17 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         return edge(
           forLearner(
             context.req.raw,
-            deleteVocabularyItem(context.req.param("itemId"))
+            admitted(
+              context.req.raw,
+              "write",
+              deleteVocabularyItem(context.req.param("itemId"))
+            )
           ),
           {
-            errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            errors: {
+              DatabaseError: () => SOMETHING_WENT_WRONG,
+              RateLimitedError: rateLimited,
+            },
             log: "Failed to delete vocabulary item",
             success: (deleted) =>
               deleted
@@ -1258,15 +1374,24 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         return context.json(notReady("Deletion is not available"), 503);
       }
       const expired = sessionCookie("", 0, options.session.secureCookie);
-      return edge(forLearner(context.req.raw, deleteLearner()), {
-        errors: { DatabaseError: () => INTERNAL_ERROR },
-        log: "Failed to delete the Learner's data",
-        success: () =>
-          new Response(null, {
-            headers: { "Set-Cookie": expired },
-            status: 204,
-          }),
-      });
+      return edge(
+        forLearner(
+          context.req.raw,
+          admitted(context.req.raw, "write", deleteLearner())
+        ),
+        {
+          errors: {
+            DatabaseError: () => INTERNAL_ERROR,
+            RateLimitedError: rateLimited,
+          },
+          log: "Failed to delete the Learner's data",
+          success: () =>
+            new Response(null, {
+              headers: { "Set-Cookie": expired },
+              status: 204,
+            }),
+        }
+      );
     })
     // The Deploy Profile's caps on one Writing Sample, which size the Academy's writing sheets
     // (docs/adr/0006).
