@@ -333,7 +333,10 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0025",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/page-routes.test.ts::/vocabulary > lists the visitor's items newest first and prefills the form from the history state",
+        "apps/web/src/routes/-vocabulary.test.tsx::/vocabulary > lists the visitor's items newest first and prefills the form from the history state"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/pages.characterization.test.ts::/write > takes its challenge and heading from the query",
