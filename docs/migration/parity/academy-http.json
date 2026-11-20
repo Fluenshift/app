@@ -331,8 +331,8 @@
       "source": "src/app/pages.characterization.test.ts",
       "class": "C",
       "slice": "academy-http",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "port-changed",
+      "decision": "adr:0025",
       "targets": []
     },
     {
