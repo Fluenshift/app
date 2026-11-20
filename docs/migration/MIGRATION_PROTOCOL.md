@@ -161,7 +161,7 @@ Exit: every item in the definition of done holds.
 | Gate | What it enforces |
 | --- | --- |
 | G1 Types | tsgo typecheck with Effect diagnostics at error severity, in every workspace. |
-| G2 Lint and format | Type-aware oxlint with the Effect preset, oxlint-tsgolint, `oxfmt --check`. Bans focused and skipped tests, Node built-ins in `packages/core` and `packages/contract`, `zod` imports, and `process.env` outside `packages/env`; from 5f, Academy imports of Evaluation write services. |
+| G2 Lint and format | Type-aware oxlint with the Effect preset, oxlint-tsgolint, `oxfmt --check`. Bans focused and skipped tests, Node built-ins in `packages/core` and `packages/contract`, `zod` imports, and `process.env` outside `packages/env`; from 5f, Academy imports of Evaluation write services and of the writable Evaluation tables, which the Academy reads through read-only views. |
 | G3 Tests | Vitest with `@effect/vitest`, unit and integration, on PGlite databases; CI also runs the `Database` service against a Postgres 17 service container. |
 | G4 Build | Server bundle and SPA build; the single process starts and serves `/api/health` and the SPA. |
 | G5 E2E | Playwright journeys against the built process, from `e2e/mvp.spec.ts` and the Phase 0 characterizations. |

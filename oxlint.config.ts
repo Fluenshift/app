@@ -87,6 +87,45 @@ export default defineConfig({
       rules: { "node/no-process-env": "off" },
     },
     {
+      // Phase 5f seam (docs/migration/MIGRATION_PROTOCOL.md): the Academy reads Evaluations and
+      // never writes them, so it reaches the Evaluation tables only through their read-only views.
+      files: ["apps/server/src/academy/**"],
+      rules: {
+        "no-restricted-imports": [
+          "error",
+          {
+            paths: [
+              noZod,
+              {
+                importNames: ["evaluations", "findings", "suggestions"],
+                message:
+                  "The Academy reads the Evaluation tables through evaluationsView, findingsView and suggestionsView, which cannot be written.",
+                name: "@fluenshift/db",
+              },
+            ],
+            patterns: [
+              {
+                group: ["**/history/learning-history"],
+                importNames: ["deleteEvaluation", "persistEvaluation"],
+                message:
+                  "The Academy reads Evaluations through Learning History and never writes them.",
+              },
+              {
+                group: ["**/evaluation/*", "**/practice/*"],
+                message:
+                  "The Academy never calls the Judge or practice writing, which write Evaluations.",
+              },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      // Academy tests seed the Evaluations they read, as the Evaluation axis stores them.
+      files: ["apps/server/src/academy/**/*.test.ts"],
+      rules: { "no-restricted-imports": ["error", { paths: [noZod] }] },
+    },
+    {
       files: effectSources,
       rules: {
         // `Effect.gen(function* () {})` is the documented generator form; `Effect.fn` names it.
