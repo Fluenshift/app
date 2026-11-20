@@ -422,3 +422,26 @@ describe("POST /api/interview answers without a key", () => {
     expect(evaluate).not.toHaveBeenCalled();
   });
 });
+
+// docs/adr/0024: an Enrichment the Trainer's schema refuses is a FAILED writing session too.
+describe("POST /api/interview answers when the Enrichment is refused", () => {
+  it("keeps the Evaluation and answers failed when the Trainer's answer is refused", async () => {
+    const { body } = await start();
+    vi.mocked(trainer.enrichFindings).mockReturnValueOnce(
+      Effect.fail(
+        new AIResponseValidationError({ issues: [], message: "bad shape" })
+      )
+    );
+    const failed = await answer(body, ANSWER);
+    expect(failed.status).toBe(200);
+    expect(await failed.json()).toEqual({
+      evaluationId: expect.any(String),
+      message: expect.any(String),
+      status: "failed",
+    });
+    const read = await send("GET", `/api/interview/${body.sessionId}`);
+    expect(await read.json()).toMatchObject({
+      turns: [{ answer: null, evaluationId: null, order: 0 }],
+    });
+  });
+});
