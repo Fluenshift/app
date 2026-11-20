@@ -1,4 +1,4 @@
-// A card on the cream canvas, with its content and footer. Ported from Grifando
+// A card on the cream canvas, with its header, title, content and footer. Ported from Grifando
 // src/components/ui/card.tsx (74dbb9f); the parts no screen uses yet are left out.
 import type { ComponentProps } from "react";
 
@@ -16,6 +16,28 @@ const Card = ({
     )}
     data-size={size}
     data-slot="card"
+    {...props}
+  />
+);
+
+const CardHeader = ({ className, ...props }: ComponentProps<"div">) => (
+  <div
+    className={cn(
+      "group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)",
+      className
+    )}
+    data-slot="card-header"
+    {...props}
+  />
+);
+
+const CardTitle = ({ className, ...props }: ComponentProps<"div">) => (
+  <div
+    className={cn(
+      "text-heading-sm text-foreground group-data-[size=sm]/card:text-subheading",
+      className
+    )}
+    data-slot="card-title"
     {...props}
   />
 );
@@ -39,4 +61,4 @@ const CardFooter = ({ className, ...props }: ComponentProps<"div">) => (
   />
 );
 
-export { Card, CardContent, CardFooter };
+export { Card, CardContent, CardFooter, CardHeader, CardTitle };

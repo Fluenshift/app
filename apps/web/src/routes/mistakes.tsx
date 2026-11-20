@@ -2,6 +2,7 @@
 // comes from the server, and the page applies `window` and `origin` from its own URL
 // (docs/adr/0025).
 import { Badge } from "@fluenshift/ui/components/badge";
+import { buttonVariants } from "@fluenshift/ui/components/button";
 import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 
 import { MISTAKE_CATEGORY_LABELS } from "../features/academy/mistake-category-labels";
@@ -74,6 +75,11 @@ const MistakesPage = () => {
           <p className="text-heading-sm">
             {dueCount} pattern{dueCount === 1 ? " is" : "s are"} due for review.
           </p>
+          {/* Practice sets are built from the most-forgotten patterns first
+              (selectPatternsForPractice), so generating one there reviews these. */}
+          <Link className={buttonVariants()} to="/exercises">
+            Practice due patterns
+          </Link>
         </section>
       ) : null}
 
