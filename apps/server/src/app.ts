@@ -306,11 +306,14 @@ const ATTEMPT_REQUEST = Schema.toStandardSchemaV1(AttemptRequest, {
 });
 // Another Learner's Exercise or Attempt reads as one that does not exist.
 const NOT_FOUND: EdgeFailure = { body: { error: "Not found" }, status: 404 };
-// Grifando's answer when an explanation fails: 502 for an answer the Trainer's schema refuses,
-// 500 for anything else. The grade stays as it was.
-const EXPLANATION_FAILED = {
-  error:
-    "We couldn't explain this answer right now. Your grade is unaffected \u2014 try again.",
+// Grifando's answer when an explanation fails: 500, or 502 for an answer the Trainer's schema
+// refuses. The grade stays as it was.
+const EXPLANATION_FAILED: EdgeFailure = {
+  body: {
+    error:
+      "We couldn't explain this answer right now. Your grade is unaffected \u2014 try again.",
+  },
+  status: 500,
 };
 
 // What the browser may see of an Exercise before its Attempt: never the answer or the
@@ -729,16 +732,16 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             errors: {
               ...TRAINER_FAILURES,
               AIResponseValidationError: () => ({
-                body: EXPLANATION_FAILED,
+                ...EXPLANATION_FAILED,
                 status: 502,
               }),
-              DatabaseError: () => ({ body: EXPLANATION_FAILED, status: 500 }),
+              DatabaseError: () => EXPLANATION_FAILED,
             },
             success: (explanation) =>
               explanation === null
                 ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
                 : Response.json({ explanation }),
-            unexpected: { body: EXPLANATION_FAILED, status: 500 },
+            unexpected: EXPLANATION_FAILED,
           }
         );
       }

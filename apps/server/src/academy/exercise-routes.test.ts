@@ -456,14 +456,14 @@ const postExplanation = (
   );
 
 // Grifando's seedExercise: a Mistake Pattern of the Learner and an Exercise from it.
-const seedExerciseFor = async (learnerId: string) => {
+const seedExerciseWithPattern = async (learnerId: string) => {
   const pattern = await seedPattern(learnerId);
   return seedExercise(learnerId, pattern.id);
 };
 
 // A wrong answer of the visitor to a new Exercise, graded through the route.
 const seedAttempt = async () => {
-  const exercise = await seedExerciseFor("visitor-1");
+  const exercise = await seedExerciseWithPattern("visitor-1");
   const graded = await postAttempt(exercise.id, { answer: "0" });
   const { attemptId } = (await graded.json()) as { attemptId: string };
   return { attemptId, exerciseId: exercise.id };
@@ -471,7 +471,7 @@ const seedAttempt = async () => {
 
 describe("POST /api/exercises/[id]/attempts", () => {
   it("grades an answer and returns the attempt with the whole exercise", async () => {
-    const exercise = await seedExerciseFor("visitor-1");
+    const exercise = await seedExerciseWithPattern("visitor-1");
     const response = await postAttempt(exercise.id, { answer: "1" });
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({
@@ -483,7 +483,7 @@ describe("POST /api/exercises/[id]/attempts", () => {
   });
 
   it("answers 400 with the validation issues for an empty answer", async () => {
-    const exercise = await seedExerciseFor("visitor-1");
+    const exercise = await seedExerciseWithPattern("visitor-1");
     const response = await postAttempt(exercise.id, { answer: "  " });
     expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({
@@ -493,7 +493,7 @@ describe("POST /api/exercises/[id]/attempts", () => {
   });
 
   it("answers 404 for an unknown exercise and for another user's", async () => {
-    const other = await seedExerciseFor("other-user");
+    const other = await seedExerciseWithPattern("other-user");
     const unknown = await postAttempt("missing", { answer: "1" });
     const foreign = await postAttempt(other.id, { answer: "1" });
     expect([unknown.status, foreign.status]).toEqual([404, 404]);
