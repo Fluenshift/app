@@ -38,3 +38,4 @@ ADR 0019 deleted; commit `39fbb46` holds them.
 | [0023](./0023-academy-record-ids-in-paths.md) | The IDs of the Academy's records may travel in URL paths | Accepted |
 | [0024](./0024-interview-answer-failures.md) | An interview answer fails as the Evaluation route or as Grifando's FAILED session | Accepted |
 | [0025](./0025-academy-pages.md) | Each Academy page ports as a Hono read and an SPA route; the Academy dashboard moves to `/academy` | Accepted |
+| [0026](./0026-practice-writing.md) | Practice writing's route and results; Academy routes log an unexpected failure by its tag or name only | Accepted |
