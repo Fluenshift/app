@@ -91,6 +91,15 @@
       ]
     },
     {
+      "id": "grifando:characterization:src/server/domain/privacy/cleanup.characterization.test.ts::cleanupIdleData bounds > keeps a user idle exactly 90 days and a rate-limit window exactly 2 days old",
+      "source": "src/server/domain/privacy/cleanup.characterization.test.ts",
+      "class": "B",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "grifando:characterization:src/server/rateLimit.characterization.test.ts::rate limits > counts every call against the bucket's rules for the user and the client IP's daily ceiling",
       "source": "src/server/rateLimit.characterization.test.ts",
       "class": "B",
