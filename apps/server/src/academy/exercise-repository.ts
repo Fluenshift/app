@@ -90,7 +90,6 @@ export const createExercises = Effect.fn("ExerciseRepository.createExercises")(
   }
 );
 
-// The Learner's Exercises without an Attempt, oldest first (Grifando's listPending).
 // When the Learner answered and whether each answer was right, newest first: the dashboard's
 // streak and accuracy need no more (Grifando's listAttemptDates, countByUser and recentAccuracy).
 export const listAttemptOutcomes = Effect.fn(
@@ -110,6 +109,7 @@ export const listAttemptOutcomes = Effect.fn(
   );
 });
 
+// The Learner's Exercises without an Attempt, oldest first (Grifando's listPending).
 export const listPendingExercises = Effect.fn(
   "ExerciseRepository.listPendingExercises"
 )(function* () {

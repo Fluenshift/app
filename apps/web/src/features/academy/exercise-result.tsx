@@ -13,7 +13,7 @@ import {
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 
-import { isKeyRequired } from "./academy-client";
+import { AcademyRequestError, isKeyRequired } from "./academy-client";
 import {
   AnalyzingStatus,
   ButtonSpinner,
@@ -86,9 +86,17 @@ const explanationState = async (
   try {
     return { kind: "done", text: await request };
   } catch (error) {
-    return isKeyRequired(error)
-      ? { kind: "keyRequired" }
-      : { kind: "error", message: EXPLANATION_ERROR };
+    if (isKeyRequired(error)) {
+      return { kind: "keyRequired" };
+    }
+    // Grifando showed the route's own message when it wrote one.
+    return {
+      kind: "error",
+      message:
+        error instanceof AcademyRequestError
+          ? (error.serverMessage ?? EXPLANATION_ERROR)
+          : EXPLANATION_ERROR,
+    };
   }
 };
 

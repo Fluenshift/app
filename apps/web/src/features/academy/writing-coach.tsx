@@ -2,7 +2,11 @@
 // results. Ported from Grifando src/components/writing/WritingCoach.tsx (74dbb9f): the text goes
 // to practice writing (docs/adr/0026), and no failed session is retried, since an Evaluation
 // cannot be evaluated again in place (docs/adr/0024); the Learner posts the text again.
-import type { Evaluation, PracticeOccurrence } from "@fluenshift/contract";
+import type {
+  Evaluation,
+  PracticeOccurrence,
+  TechnicalCategory,
+} from "@fluenshift/contract";
 import { Button } from "@fluenshift/ui/components/button";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
@@ -26,7 +30,7 @@ export type InitialChallenge =
   | {
       readonly promptText: string;
       readonly promptType: "TECHNICAL";
-      readonly technicalCategory: string;
+      readonly technicalCategory: TechnicalCategory;
     };
 
 type ViewState =

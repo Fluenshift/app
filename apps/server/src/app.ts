@@ -57,6 +57,7 @@ import type {
 } from "./academy/trainer/trainer-client";
 import { TrainerKeyRequiredError } from "./academy/trainer/trainer-errors";
 import type { TrainerAccessError } from "./academy/trainer/trainer-errors";
+import type { VocabularyItem } from "./academy/vocabulary-repository";
 import { INTERNAL_ERROR, makeEdge } from "./edge";
 import type { EdgeFailure, EdgeRuntime } from "./edge";
 import { endpointFailure } from "./evaluation/evaluation-endpoint";
@@ -146,7 +147,7 @@ export interface AppBoundaries<R = never> {
   ) => Effect.Effect<unknown, DatabaseError, R | CurrentLearner>;
   /** The Learner's vocabulary items, newest first. */
   readonly listVocabularyItems?: () => Effect.Effect<
-    readonly unknown[],
+    readonly VocabularyItem[],
     DatabaseError,
     R | CurrentLearner
   >;
