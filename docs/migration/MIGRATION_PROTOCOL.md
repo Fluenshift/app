@@ -206,5 +206,5 @@ gate rejects its broken case, run only when a gate changes; they run the suites 
    `AGENTS.md`, and a README where every command exists.
 7. An owner has given the go-ahead for cutover; only then are the old apps retired and the
    source repositories archived.
-8. Per unit: ported tests keep their source titles and assertions, red then green proven, the
-   mutation spot-check listed, rows `verified`, CI green.
+8. Per unit: ported tests keep their source titles and assertions, red then green proven, rows
+   `verified`, CI green.
