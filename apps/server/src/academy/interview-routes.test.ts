@@ -6,6 +6,7 @@
 // fake Trainer asks the questions.
 import { rm } from "node:fs/promises";
 
+import { AIResponseValidationError } from "@fluenshift/contract";
 import type { LearnerId } from "@fluenshift/contract";
 import { TrainerConfig } from "@fluenshift/env";
 import { ConfigProvider, Effect, Layer, ManagedRuntime, Option } from "effect";
@@ -187,5 +188,30 @@ describe("interview routes", () => {
     );
     expect([foreign.status, unknown.status]).toEqual([404, 404]);
     expect(await unknown.json()).toEqual({ error: "Not found" });
+  });
+});
+
+// Grifando's start route answers its generic 500 for an answer the Trainer's schema refuses and
+// for anything unexpected (src/app/api/interview/route.ts, 74dbb9f); no Grifando test covers it.
+describe("POST /api/interview failures", () => {
+  it("answers the generic 500 when the opening question fails", async () => {
+    const continueInterview = vi.mocked(trainer.continueInterview);
+    continueInterview.mockReturnValueOnce(
+      Effect.fail(
+        new AIResponseValidationError({ issues: [], message: "bad shape" })
+      )
+    );
+    const refused = await start();
+    continueInterview.mockReturnValueOnce(
+      Effect.die(new Error("private cause"))
+    );
+    const crashed = await start();
+    expect([refused.response.status, crashed.response.status]).toEqual([
+      500, 500,
+    ]);
+    expect([refused.body, crashed.body]).toEqual([
+      { error: "Something went wrong. Please try again." },
+      { error: "Something went wrong. Please try again." },
+    ]);
   });
 });
