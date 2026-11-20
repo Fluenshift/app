@@ -92,9 +92,9 @@ _Not: writing, prose._
 
 **Progress Insight**: a normalized or descriptive observation derived from Evaluations over a
 period: Findings per 100 evaluated English words, category recurrence, average score,
-distribution, recurring Corrections. Practice-origin Writing Samples stay out of the finding
-rate by default (ADR 0010). Insights combine Rubric Versions only under an explicit
-compatibility declaration (`docs/product/RUBRIC.md`).
+distribution, recurring Corrections. Practice-origin Writing Samples stay out of every insight
+(ADR 0010, ADR 0030). Insights combine Rubric Versions only under an explicit compatibility
+declaration (`docs/product/RUBRIC.md`).
 _Not: statistic, metric, trend._
 
 **Rubric Version**: the identifiable evaluation policy that produced an Evaluation. Versions
