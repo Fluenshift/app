@@ -32,6 +32,8 @@ import type { Context as HonoContext, Handler, MiddlewareHandler } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getMimeType } from "hono/utils/mime";
 
+import type { NotFoundError } from "./academy/errors";
+import type { SubmitAttemptResult } from "./academy/exercise-service";
 import {
   readTrainerCredentials,
   TRAINER_FAILURES,
@@ -101,6 +103,15 @@ export interface AppBoundaries<R = never> {
   readonly deleteVocabularyItem?: (
     id: string
   ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
+  /** An explanation of one graded Attempt on the key the request carries, or null for none. */
+  readonly explainAttempt?: (
+    headers: Headers,
+    input: { readonly attemptId: string; readonly exerciseId: string }
+  ) => Effect.Effect<
+    string | null,
+    AIResponseValidationError | DatabaseError | TrainerAccessError,
+    R | CurrentLearner
+  >;
   /** A practice set from the Learner's patterns, generated on the key the request carries. */
   readonly generateExercises?: (
     headers: Headers,
@@ -114,6 +125,15 @@ export interface AppBoundaries<R = never> {
   readonly listPendingExercises?: () => Effect.Effect<
     readonly PendingExercise[],
     DatabaseError,
+    R | CurrentLearner
+  >;
+  /** Grades one answer to the Learner's Exercise; no Trainer takes part. */
+  readonly submitAttempt?: (
+    exerciseId: string,
+    answer: string
+  ) => Effect.Effect<
+    SubmitAttemptResult,
+    DatabaseError | NotFoundError,
     R | CurrentLearner
   >;
   /** One tiny call with the Learner's key (TrainerClient.testKey). */

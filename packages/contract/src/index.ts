@@ -1,4 +1,5 @@
 export {
+  AttemptRequest,
   errorCategoryOf,
   EXERCISE_TYPES,
   ExerciseType,

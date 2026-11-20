@@ -35,3 +35,8 @@ export const generateExercisesFor = Effect.fn(
       : { afterEvaluationId: request.afterEvaluationId }
   );
 });
+
+export const explainAttemptFor = (
+  _headers: Headers,
+  _input: { readonly attemptId: string; readonly exerciseId: string }
+) => Effect.succeed<string | null>(null);

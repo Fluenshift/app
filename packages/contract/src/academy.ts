@@ -156,3 +156,12 @@ export const ExerciseGenerationRequest = Schema.Struct({
   ),
 });
 export type ExerciseGenerationRequest = typeof ExerciseGenerationRequest.Type;
+
+/**
+ * One answer to an Exercise (Grifando's POST /api/exercises/[id]/attempts, 74dbb9f): trimmed,
+ * then 1 to 1000 characters.
+ */
+export const AttemptRequest = Schema.Struct({
+  answer: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(1000)),
+});
+export type AttemptRequest = typeof AttemptRequest.Type;
