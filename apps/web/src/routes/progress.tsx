@@ -191,6 +191,8 @@ const PeriodRail = ({
       <p>Rubric v{progressSummary.rubricVersion}</p>
       <p>{PERIOD_LABELS[period]}</p>
       <p>{evaluationCountLabel(progressSummary)}</p>
+      {/* Progress reads the Learner's work (docs/adr/0030). */}
+      <p>Academy practice is not counted.</p>
     </section>
   </aside>
 );

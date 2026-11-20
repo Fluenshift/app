@@ -117,9 +117,11 @@ const segment = (
   };
 };
 
+// The Learner's work in the period. Practice-origin Writing Samples stay out of every insight and
+// of its evidence (docs/adr/0010, docs/adr/0030).
 const evaluationsInPeriod = Effect.fn("ProgressInsights.evaluationsInPeriod")(
   function* (period: ProgressPeriod, now: Date) {
-    const summaries = yield* listEvaluations();
+    const summaries = yield* listEvaluations({ origin: "work" });
     const all: Evaluation[] = [];
     for (const summary of summaries) {
       const evaluation = yield* getEvaluation(summary.id);

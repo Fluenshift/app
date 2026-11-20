@@ -1,8 +1,12 @@
 import { rm } from "node:fs/promises";
 
+import type {
+  ProgressEvidenceSelection,
+  WritingSampleOrigin,
+} from "@fluenshift/contract";
 import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import type { Database } from "@fluenshift/db";
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
@@ -367,6 +371,30 @@ const afterRetaining = async <A, E>(
   );
 };
 
+// Retains each Evaluation with the origin of its Writing Sample, in order, then reads what
+// Progress makes of them.
+const afterRetainingWithOrigins = async <A, E>(
+  retained: readonly (readonly [Evaluation, WritingSampleOrigin])[],
+  read: Effect.Effect<A, E, Database | CurrentLearner>
+) => {
+  const database = await makeTemporaryDatabase();
+  directories.push(database.directory);
+  return Effect.runPromise(
+    Effect.gen(function* () {
+      for (const [value, origin] of retained) {
+        yield* persistEvaluation({
+          contentHash: `${value.id}-hash`,
+          evaluation: value,
+          latencyMilliseconds: 1,
+          origin,
+          submittedAt: value.evaluatedAt,
+        });
+      }
+      return yield* read;
+    }).pipe(Effect.provide(database.layer))
+  );
+};
+
 describe("Progress Insights guards", () => {
   it("rounds the average score to one decimal place", async () => {
     const summary = await afterRetaining(
@@ -482,5 +510,89 @@ describe("Progress Insights guards", () => {
       { correction: "on", occurrenceCount: 2, originalText: "in" },
       { correction: "y", occurrenceCount: 2, originalText: "x" },
     ]);
+  });
+});
+
+// Progress reads the Learner's work: a practice-origin Writing Sample, written inside the
+// Academy, stays out of every insight and of its evidence (docs/adr/0010, docs/adr/0030). The
+// Academy's own trend reads it (docs/adr/0027).
+describe("Progress Insights and practice writing", () => {
+  const work = retainedEvaluation("work", MOMENT, {
+    findings: [findingOf("Spelling", "teh", "the")],
+    score: 80,
+  });
+  // A practice sample that would move every insight: another Error Category, score, word count
+  // and Correction, and a recurring one.
+  const practice: Evaluation = {
+    ...retainedEvaluation("practice", MOMENT, {
+      findings: [
+        findingOf("Article", "a", "an"),
+        findingOf("Spelling", "teh", "the"),
+      ],
+      score: 40,
+    }),
+    evaluatedEnglishWordCount: 20,
+  };
+  const selections: readonly ProgressEvidenceSelection[] = [
+    { kind: "finding-rate" },
+    { kind: "average-score" },
+    { category: "Spelling", kind: "category" },
+    { category: "Article", kind: "category" },
+    { correction: "the", kind: "correction", originalText: "teh" },
+    { correction: "an", kind: "correction", originalText: "a" },
+  ];
+
+  // What Progress reads after the work sample alone, and after it and the practice sample.
+  const withAndWithoutPractice = <A, E>(
+    read: Effect.Effect<A, E, Database | CurrentLearner>
+  ) =>
+    Promise.all([
+      afterRetainingWithOrigins([[work, "work"]], read),
+      afterRetainingWithOrigins(
+        [
+          [work, "work"],
+          [practice, "practice"],
+        ],
+        read
+      ),
+    ]).then(([workOnly, withPractice]) => ({ withPractice, workOnly }));
+
+  it("leaves practice-origin Writing Samples out of every insight by default", async () => {
+    const summaries = await withAndWithoutPractice(
+      Effect.all([
+        getProgressSummary({ period: "all" }),
+        getProgressSummary(
+          { period: "30-days" },
+          new Date("2026-09-08T12:00:00.000Z")
+        ),
+      ])
+    );
+
+    expect(
+      summaries.workOnly.map(({ evaluationCount, findingCount }) => [
+        evaluationCount,
+        findingCount,
+      ])
+    ).toStrictEqual([
+      [1, 1],
+      [1, 1],
+    ]);
+    expect(summaries.withPractice).toStrictEqual(summaries.workOnly);
+  });
+
+  it("leaves practice-origin Writing Samples out of the evidence of every insight", async () => {
+    const evidence = await withAndWithoutPractice(
+      pipe(
+        selections,
+        Effect.forEach((selection) =>
+          getProgressEvidence({ period: "all", selection })
+        )
+      )
+    );
+
+    expect(
+      evidence.workOnly.map(({ evaluations }) => evaluations.length)
+    ).toStrictEqual([1, 1, 1, 0, 1, 0]);
+    expect(evidence.withPractice).toStrictEqual(evidence.workOnly);
   });
 });

@@ -79,6 +79,14 @@ describe("Progress", () => {
     ).toHaveTextContent("4 findings");
   });
 
+  test("the period summary says Academy practice is not counted", async () => {
+    renderProgress();
+
+    expect(
+      await screen.findByRole("region", { name: "Period summary" })
+    ).toHaveTextContent("Academy practice is not counted.");
+  });
+
   test("incompatible Rubric Versions stay separate and labeled", async () => {
     renderProgress();
 

@@ -141,14 +141,15 @@ whole only when letters sit on both sides.
 
 ## Progress Insights
 
-Only successful, retained Evaluations contribute. Suggestions never enter any
-calculation. Deleted Evaluations vanish from recalculated insights; repeated
-Writing Samples stay separate observations.
+Only successful, retained Evaluations of work-origin Writing Samples
+contribute: practice-origin samples, written inside the Academy, stay out of
+every insight and its evidence (ADR 0010, ADR 0030). Suggestions never enter
+any calculation. Deleted Evaluations vanish from recalculated insights;
+repeated Writing Samples stay separate observations.
 
 - **Primary — Finding Rate:** `Findings / evaluated English words × 100`.
   Lower is better within one compatible version. Always shown with its
-  Evaluation, word, and Finding counts. Practice-origin Writing Samples stay
-  out of it by default (ADR 0010).
+  Evaluation, word, and Finding counts.
 - **Habit — Category Recurrence:** `samples containing the category /
   evaluated samples × 100`. Count each sample once per category.
 - **Secondary — average Overall Score.** Model variation makes it weaker
