@@ -237,6 +237,10 @@ Code:
   `Schema.Number`; raw secret strings use `Schema.RedactedFromValue`.
 - The Hono edge turns an Effect result into a response through one typed helper that requires
   a status for every tagged error, with one test per error.
+- The Academy reads Evaluations: through Learning History's reads and the read-only views
+  `evaluationsView`, `findingsView` and `suggestionsView` of `@fluenshift/db`. Code that writes
+  both an Evaluation and Academy state composes them outside `apps/server/src/academy`, as
+  `apps/server/src/practice/practice-writing.ts` does.
 - The server bundle keeps npm packages external: every npm package that bundled workspace code
   imports is also a dependency of `apps/server`.
 - Whatever starts the built server sets `DATA_DIRECTORY` (local profile) or `DATABASE_URL`

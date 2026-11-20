@@ -542,6 +542,60 @@
           }
         },
         {
+          "files": ["apps/server/src/academy/**"],
+          "plugins": [],
+          "rules": {
+            "no-restricted-imports": [
+              "deny",
+              [
+                {
+                  "paths": [
+                    {
+                      "message": "Validation uses Effect Schema; zod may only remain as an AI SDK peer.",
+                      "name": "zod"
+                    },
+                    {
+                      "importNames": ["evaluations", "findings", "suggestions"],
+                      "message": "The Academy reads the Evaluation tables through evaluationsView, findingsView and suggestionsView, which cannot be written.",
+                      "name": "@fluenshift/db"
+                    }
+                  ],
+                  "patterns": [
+                    {
+                      "group": ["**/history/learning-history"],
+                      "importNames": ["deleteEvaluation", "persistEvaluation"],
+                      "message": "The Academy reads Evaluations through Learning History and never writes them."
+                    },
+                    {
+                      "group": ["**/evaluation/*", "**/practice/*"],
+                      "message": "The Academy never calls the Judge or practice writing, which write Evaluations."
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "files": ["apps/server/src/academy/**/*.test.ts"],
+          "plugins": [],
+          "rules": {
+            "no-restricted-imports": [
+              "deny",
+              [
+                {
+                  "paths": [
+                    {
+                      "message": "Validation uses Effect Schema; zod may only remain as an AI SDK peer.",
+                      "name": "zod"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        {
           "files": [
             "apps/server/**/*.ts",
             "packages/contract/**/*.ts",

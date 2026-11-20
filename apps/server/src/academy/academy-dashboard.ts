@@ -8,7 +8,7 @@ import { isDueForReview } from "@fluenshift/core/recall";
 import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import { selectPatternsForPractice } from "@fluenshift/core/selection";
 import { computeStreak } from "@fluenshift/core/streak";
-import { Database, evaluations, findings } from "@fluenshift/db";
+import { Database, evaluationsView, findingsView } from "@fluenshift/db";
 import { and, count, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 
@@ -31,31 +31,31 @@ const listPracticeWriting = Effect.fn("AcademyDashboard.listPracticeWriting")(
     return yield* database.run((client) =>
       client
         .select({
-          evaluatedAt: evaluations.evaluatedAt,
-          evaluatedEnglishWordCount: evaluations.evaluatedEnglishWordCount,
-          findingCount: count(findings.id),
-          id: evaluations.id,
-          originalText: evaluations.originalText,
-          rubricVersion: evaluations.rubricVersion,
+          evaluatedAt: evaluationsView.evaluatedAt,
+          evaluatedEnglishWordCount: evaluationsView.evaluatedEnglishWordCount,
+          findingCount: count(findingsView.id),
+          id: evaluationsView.id,
+          originalText: evaluationsView.originalText,
+          rubricVersion: evaluationsView.rubricVersion,
         })
-        .from(evaluations)
+        .from(evaluationsView)
         .leftJoin(
-          findings,
+          findingsView,
           and(
-            eq(findings.learnerId, evaluations.learnerId),
-            eq(findings.evaluationId, evaluations.id)
+            eq(findingsView.learnerId, evaluationsView.learnerId),
+            eq(findingsView.evaluationId, evaluationsView.id)
           )
         )
         .where(
           and(
-            eq(evaluations.learnerId, learner.id),
-            eq(evaluations.origin, "practice")
+            eq(evaluationsView.learnerId, learner.id),
+            eq(evaluationsView.origin, "practice")
           )
         )
-        .groupBy(evaluations.id)
+        .groupBy(evaluationsView.id)
         .orderBy(
-          desc(evaluations.evaluatedAt),
-          desc(evaluations.insertionOrder)
+          desc(evaluationsView.evaluatedAt),
+          desc(evaluationsView.insertionOrder)
         )
     );
   }

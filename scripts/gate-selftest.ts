@@ -89,6 +89,8 @@ const urlText: Check = (tree) =>
   run(tree, "node", ["scripts/check-url-text.ts"]);
 
 const TEST_FILE = "packages/core/src/selftest.test.ts";
+// Academy code, which the Phase 5f seam keeps from writing Evaluations.
+const ACADEMY_FILE = "apps/server/src/academy/selftest.ts";
 const PROTECTED_CONTENT_TEST = "src/protected-content.test.ts";
 const RUBRIC_TEST = "src/rubric-v1.test.ts";
 const UTF8_TEST = "src/utf8.test.ts";
@@ -107,6 +109,8 @@ export const SELF_TEST_FIXTURES: readonly string[] = [
   LEDGER,
   // The unmapped tagged error case calls `makeEdge`.
   "apps/server/src/edge.ts",
+  // The Academy cases write through, and import beside, the read-only Evaluation views.
+  "packages/db/src/evaluation-views.ts",
   `packages/core/${PROTECTED_CONTENT_TEST}`,
   `packages/core/${RUBRIC_TEST}`,
   `packages/core/${UTF8_TEST}`,
@@ -246,6 +250,49 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
         ),
       rejectedBy: [["types", types("apps/server")]],
       acceptedBy: [["lint", lint("apps/server/src/selftest.ts")]],
+    },
+    {
+      gate: "G2",
+      name: "an Academy import of an Evaluation write service",
+      apply: (tree) =>
+        write(
+          tree,
+          ACADEMY_FILE,
+          'import { persistEvaluation } from "../history/learning-history";\n\nexport const store = persistEvaluation;\n'
+        ),
+      rejectedBy: [["lint", lint(ACADEMY_FILE)]],
+      acceptedBy: [["types", types("apps/server")]],
+    },
+    {
+      gate: "G2",
+      name: "an Academy import of a writable Evaluation table",
+      apply: (tree) =>
+        write(
+          tree,
+          ACADEMY_FILE,
+          'import { evaluations } from "@fluenshift/db";\n\nexport const table = evaluations;\n'
+        ),
+      rejectedBy: [["lint", lint(ACADEMY_FILE)]],
+      acceptedBy: [["types", types("apps/server")]],
+    },
+    {
+      gate: "G1",
+      name: "an Academy write through a read-only Evaluation view",
+      apply: (tree) =>
+        write(
+          tree,
+          ACADEMY_FILE,
+          [
+            'import { evaluationsView } from "@fluenshift/db";',
+            'import type { DrizzleClient } from "@fluenshift/db";',
+            "",
+            "export const erase = (client: DrizzleClient) =>",
+            "  client.delete(evaluationsView);",
+            "",
+          ].join("\n")
+        ),
+      rejectedBy: [["types", types("apps/server")]],
+      acceptedBy: [["lint", lint(ACADEMY_FILE)]],
     },
     {
       gate: "G7",
