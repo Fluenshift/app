@@ -104,7 +104,7 @@ tests that carry it in this repository. Each file is one object: `slice`, `lane`
 | `slice` | The slice, also the file name. |
 | `disposition` | `port`, `port-changed`, `superseded`, `drop`, `informative` or `pending-decision` (below). |
 | `decision` | `adr:NNNN` (`docs/adr/NNNN-*.md`) or `issue:N` (an issue in this repo). Required for `pending-decision`, `port-changed`, `superseded` and `drop`; kept on rows that ADR 0001 made `informative`; `null` otherwise. |
-| `targets` | Target tests as `file::full title`, written by the unit that ports the row. A class C row also lists the source or characterization test it re-expresses. |
+| `targets` | Target tests as `file::full title`, written by the unit that ports the row. |
 
 Dispositions:
 

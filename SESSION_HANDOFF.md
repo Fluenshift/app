@@ -1,10 +1,10 @@
 # Session handoff
 
-Last updated 2026-11-17, at the end of the sixth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Last updated 2026-11-20, at the end of the seventh agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
 
 ## Work in flight
 
-Nothing besides this handoff. The last unit, #144 (`POST /api/exercises`), merged.
+Nothing besides this handoff. This session merged the attempt routes (#148, PR #150) and the interview start, read and end routes (#151, PR #152).
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -12,27 +12,32 @@ Merged work: `git log --first-parent --oneline main`. The rows that still wait f
 node -e 'const fs=require("fs");const d="docs/migration/parity/";for(const f of fs.readdirSync(d))for(const r of JSON.parse(fs.readFileSync(d+f)).rows)if(r.disposition.startsWith("port")&&r.targets.length===0)console.log(f,r.id)'
 ```
 
-On 2026-11-17 there were 101: `academy-http` 18, `academy-web` 10, `academy-spec` 9, `academy-trainer` 2, `hosted` 52, and 10 paused end-to-end rows (the 4 dev-proxy cases of `evaluation-http`, the 6 rows of `evaluation-e2e`), which stay open.
+On 2026-11-20 there were 92: `academy-http` 9, `academy-web` 10, `academy-spec` 9, `academy-trainer` 2, `hosted` 52, and 10 paused end-to-end rows (the 4 dev-proxy cases of `evaluation-http`, the 6 rows of `evaluation-e2e`), which stay open.
 
 ## Next steps
 
-1. **Attempt routes** (`academy-http`, the 6 rows of `attempts.characterization.test.ts`, class C): `POST /api/exercises/:exerciseId/attempts` and `POST /api/exercises/:exerciseId/attempts/:attemptId/explanation`. Sources: `migration/characterization/grifando/files/src/app/api/exercises/[id]/attempts/attempts.characterization.test.ts`, and Grifando's two `route.ts` files under `src/app/api/exercises/[id]/attempts/`. The services exist in `apps/server/src/academy/exercise-service.ts`: `submitAttempt(exerciseId, learnerAnswer)` fails with `NotFoundError`, and `explainAttempt(trainer, { attemptId, exerciseId })` returns `null` for an unknown attempt. The explanation route resolves the key before it reads the attempt; its own failures answer 502 for an invalid Trainer response and 500 otherwise, with the message of the characterization test.
-2. **Interview routes** (`academy-http`, the 6 rows of `interview.characterization.test.ts`, `port-changed`): the service is `apps/server/src/academy/interview-service.ts`; each row's `decision` says what changes.
-3. **Page reads** (`academy-http`, the 6 rows of `pages.characterization.test.ts`): what `/`, `/mistakes`, `/today`, `/vocabulary` and `/write` read; each row's `decision` says how it ports.
-4. **`specimenData`** (`academy-web`, 10 rows, `port-changed` under ADR 0004).
-5. #111, #120, then the **Naturalness Notes** (decided in ADR 0020, from #101): add the natural version and the Naturalness Notes to the Enrichment (AR-03, AR-04). A note grows its Mistake Pattern's occurrence count and is never a failed recall.
-6. In protocol order (`docs/migration/MIGRATION_PROTOCOL.md`, Phases): 5f (the seam invariants below and the 9 `academy-spec` rows: seven Grifando fix commits and Grifando issues 77 and 78), Phase 6 (`hosted`), Phase 7.
+1. **Interview answer route** (`academy-http`, the 3 remaining rows of `interview.characterization.test.ts`, `port-changed` under ADR 0010): `POST /api/interview/:sessionId/turns/:turnId/answer`. Source: Grifando's `src/app/api/interview/[id]/turns/[turnId]/answer/route.ts`. It is the first Academy route that posts practice writing, so it also ports `noKeyInLogs.test.ts` (`academy-trainer`, 2 rows) and takes #149. Decide, and record in the pull request:
+   - The body is `{ answer }`, trimmed, 1 to 5000 characters, checked before the key. Grifando's `retrySessionId` retried a FAILED writing session; under ADR 0010 a failed evaluation records nothing, so the Learner posts the same turn again.
+   - The route composes `trainerForRequest(headers)`, then `answerTurn(evaluate, trainer, { answer, sessionId, turnId })`, where `evaluate` runs `evaluateWriting(answer, now, undefined, "practice")` and then `foldEvaluation(trainer, { evaluationId })`. Where the fold sits decides what a failed Enrichment leaves: inside `evaluate`, an Evaluation and an unanswered turn; after `answerTurn`, an answered turn whose Enrichment can be retried alone.
+   - Grifando's 200 `{ status: "failed", message, sessionId }` becomes the Judge's failure answer, and the Judge can also answer "no English". PE's evaluation route answers each failure code with `FAILURE_STATUS` and `{ kind, code, retryable }`.
+   - The answered body follows `AnswerTurnResult`: `{ status: "answered", evaluation, nextTurn }` or `{ status: "ended", evaluation }`. The ported case asserts the Evaluation's keys instead of Grifando's analysis keys, and `nextTurnView` in `app.ts` shapes `nextTurn`.
+2. **Page reads** (`academy-http`, the 6 rows of `pages.characterization.test.ts`): what `/`, `/mistakes`, `/today`, `/vocabulary` and `/write` read; each row's `decision` says how it ports.
+3. **`specimenData`** (`academy-web`, 10 rows, `port-changed` under ADR 0004).
+4. #147 (two Dependabot alerts on development dependencies), #111, #120, then the **Naturalness Notes** (decided in ADR 0020, from #101): add the natural version and the Naturalness Notes to the Enrichment (AR-03, AR-04). A note grows its Mistake Pattern's occurrence count and is never a failed recall.
+5. In protocol order (`docs/migration/MIGRATION_PROTOCOL.md`, Phases): 5f (the seam invariants below and the 9 `academy-spec` rows: seven Grifando fix commits and Grifando issues 77 and 78), Phase 6 (`hosted`), Phase 7.
 
 Facts these units need that no issue records yet:
 
-- A route that calls the Trainer takes it from `trainerForRequest(headers)` (`apps/server/src/academy/academy-requests.ts`): the request headers, else the local profile's configured key, else `TrainerKeyRequiredError`. The route's edge answers access errors through `TRAINER_FAILURES` (`apps/server/src/academy/trainer/credentials.ts`); an edge handler takes an `unexpected` failure (`apps/server/src/edge.ts`) when a route keeps its source's 500 message.
-- Academy route tests follow `apps/server/src/academy/exercise-routes.test.ts`: a real PGlite database, the `x-test-learner` header picks the Learner, a fake `TrainerClient` layer, and `TrainerConfig` read from an empty environment.
+- A route that calls the Trainer takes it from `trainerForRequest(headers)` (`apps/server/src/academy/academy-requests.ts`): the request headers, else the local profile's configured key, else `TrainerKeyRequiredError`. Each such route has a helper there (`generateExercisesFor`, `explainAttemptFor`, `startInterviewFor`) that resolves the key before it reads anything. The route's edge answers access errors through `TRAINER_FAILURES` (`apps/server/src/academy/trainer/credentials.ts`), and takes an `unexpected` failure (`apps/server/src/edge.ts`) when it keeps its source's 500 message (`SOMETHING_WENT_WRONG`, `EXPLANATION_FAILED` in `app.ts`). `NOT_FOUND` is Grifando's 404 body.
+- Academy route tests follow `apps/server/src/academy/exercise-routes.test.ts` or `interview-routes.test.ts`: a real PGlite database, the `x-test-learner` header picks the Learner, a fake `TrainerClient` layer, and `TrainerConfig` read from an empty environment. Grifando's mocked `createAIProvider` maps onto that fake Trainer (`docs/migration/README.md`, Mechanical mapping).
+- A route's error entries need a case when no source test covers them, or a remapped answer passes every gate. `POST /api/exercises` still maps a refused Trainer answer to the generic 500 with no case; `interview-routes.test.ts` shows the pattern ("answers the generic 500 when the opening question fails").
 - G7 accepts only the path parameters ADR 0023 lists (`PATH_PARAMETERS` in `scripts/check-url-text.ts`); a new one needs an ADR.
-- The first Academy route that posts practice writing also ports `noKeyInLogs.test.ts` (`academy-trainer`, 2 rows). The rate limiter rows wait for the hosted request pipeline (Phase 6).
+- The rate limiter rows wait for the hosted request pipeline (Phase 6), with Grifando's `ensureUser` (`hosted`, `rateLimitFirst`).
 - Practice writing composes the services: `evaluateWriting(text, now, undefined, "practice")`, then `foldEvaluation(trainer, { evaluationId })`. `foldEvaluation` runs in one transaction and refuses a second fold of the same Evaluation, so a failed Enrichment can be retried alone. The interview takes the evaluation as a function: `answerTurn(evaluate, trainer, input)`.
 - 5f invariants: Progress stops counting practice-origin Writing Samples in the finding rate by default (ADR 0010); a Mistake Pattern loses the counts and example of a deleted Evaluation (`DATA-POLICY.md`, Deletion); the lint rule against Academy imports of Evaluation write services names the functions (`persistEvaluation`, `deleteEvaluation`, `evaluateWriting`), because Academy code reads through `getEvaluation`, which shares a module with `persistEvaluation`.
 - The server's persistence tests copy one migrated PGlite template per test (#112), kept in the system temporary directory under a hash of the migrations and the lockfile. A new migration builds a new template on the next run.
 - CI runs the gate self-tests, about 2 more minutes, when a pull request changes a gate or a file in `SELF_TEST_FIXTURES` (`scripts/gate-selftest.ts`), `apps/server/src/edge.ts` among them.
+- G10 audits `port` rows only; a `port-changed` row's differences go in the pull request.
 
 CI, measured on 2026-11-16: a pull request that changes product code takes about 2.3 minutes, one that changes a gate about 2.8, and one that changes only Markdown outside the workspaces runs the static checks and G7 alone. Measure before changing CI again.
 
@@ -50,8 +55,9 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 
 In `$F/app-wt/.pending/` on Jhefferson's machine only:
 
-- `mutation-tools/mutate.mjs <workspace> <mutations.json>`: applies each `{ file, from, to, tests }` alone, runs Vitest on `tests`, lists the tests that caught it, and restores the file.
-- `mutation-tools/targets.mjs <repo> <slice> <report.json> <map.json>`: writes `targets` for rows whose verbatim titles passed in a Vitest JSON report.
+- `mutation-tools/mutate.mjs <workspace> <mutations.json>`: applies each `{ file, from, to, tests }` alone, runs Vitest on `tests`, lists the tests that caught it, and restores the file. A `from` must match once in the file; a short anchor can also match inside a longer, more indented line.
+- `mutation-tools/targets.mjs <repo> <slice> <report.json> <map.json>`: writes `targets` for rows whose verbatim titles passed in a Vitest JSON report. It refuses when any row of a mapped source has not passed.
+- `mutation-tools/targets-subset.cjs <repo> <slice> <report.json> <source> <target file> <title>...`: the same for the named rows only, when a unit ports part of a source test.
 - `tools/ledger-union.ts <repo> <ledger file>...`: during a merge conflict in `docs/migration/parity/`, keeps the union of both sides' rows and targets.
 
 ## Jhefferson's machine
