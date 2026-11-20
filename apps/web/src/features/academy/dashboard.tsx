@@ -195,3 +195,96 @@ export const RecentWriting = ({
     </ul>
   );
 };
+
+const metricFormatter = new Intl.NumberFormat("en", {
+  maximumFractionDigits: 1,
+});
+
+// As PE's Progress shows a rate: one decimal, and "<0.1" for a rate too small to round.
+const formatMetric = (value: number) =>
+  value > 0 && value < 0.1 ? "<0.1" : metricFormatter.format(value);
+
+const countLabel = (count: number, one: string, many: string) =>
+  `${String(count)} ${count === 1 ? one : many}`;
+
+// The Finding Rate of the last practice samples, in the place of Grifando's averaged scores
+// (docs/adr/0027): values and counts only, never a direction.
+export const FindingTrend = ({
+  trend,
+}: {
+  readonly trend: AcademyDashboard["findingTrend"];
+}) => {
+  const { samples, window } = trend;
+  const highest = Math.max(0, ...samples.map((sample) => sample.findingRate));
+
+  return (
+    <section aria-labelledby="finding-trend-title" className="space-y-4">
+      <h3 className="text-heading-sm" id="finding-trend-title">
+        Finding rate
+      </h3>
+      {window.evaluationCount === 0 || window.findingRate === null ? (
+        <p className="text-muted-foreground text-sm">
+          Your finding rate will show up after your first practice writing.
+        </p>
+      ) : (
+        <>
+          <p className="text-iron">
+            {formatMetric(window.findingRate)} per 100 words over your last{" "}
+            {countLabel(
+              window.evaluationCount,
+              "practice sample",
+              "practice samples"
+            )}
+          </p>
+          <ul className="text-muted-foreground space-y-1 text-sm">
+            <li>
+              {countLabel(
+                window.evaluationCount,
+                "practice sample",
+                "practice samples"
+              )}
+            </li>
+            <li>
+              {countLabel(
+                window.evaluatedEnglishWordCount,
+                "English word",
+                "English words"
+              )}
+            </li>
+            <li>{countLabel(window.findingCount, "finding", "findings")}</li>
+          </ul>
+          <ol aria-label="Each practice sample" className="space-y-2">
+            {samples.map((sample) => (
+              <li className="space-y-1 text-sm" key={sample.evaluatedAt}>
+                <p>
+                  <time
+                    className="text-muted-foreground"
+                    dateTime={sample.evaluatedAt}
+                  >
+                    {new Date(sample.evaluatedAt).toLocaleDateString()}
+                  </time>{" "}
+                  {formatMetric(sample.findingRate)} per 100 words (
+                  {countLabel(sample.findingCount, "finding", "findings")} in{" "}
+                  {countLabel(
+                    sample.evaluatedEnglishWordCount,
+                    "English word",
+                    "English words"
+                  )}
+                  )
+                </p>
+                <div aria-hidden="true" className="bg-stone/60 h-1 w-full">
+                  <div
+                    className="bg-foreground h-full"
+                    style={{
+                      width: `${String(highest === 0 ? 0 : (sample.findingRate / highest) * 100)}%`,
+                    }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
+    </section>
+  );
+};

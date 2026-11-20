@@ -5,6 +5,7 @@ import { buttonVariants } from "@fluenshift/ui/components/button";
 import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 
 import {
+  FindingTrend,
   ProgressSummary,
   RecentMistakes,
   RecentWriting,
@@ -101,7 +102,10 @@ const AcademyPage = () => {
 
       <Section tone="linen">
         <SectionTitle>Progress</SectionTitle>
-        <ProgressSummary progress={dashboard.progress} />
+        <div className="space-y-12">
+          <ProgressSummary progress={dashboard.progress} />
+          <FindingTrend trend={dashboard.findingTrend} />
+        </div>
       </Section>
 
       <div className="grid gap-x-16 gap-y-16 pt-20 md:pt-24 lg:grid-cols-2">
