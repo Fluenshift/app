@@ -35,7 +35,11 @@ import { getMimeType } from "hono/utils/mime";
 
 import type { NotFoundError } from "./academy/errors";
 import type { SubmitAttemptResult } from "./academy/exercise-service";
-import type { InterviewSession } from "./academy/interview-service";
+import type {
+  InterviewSession,
+  InterviewTurn,
+  NextTurn,
+} from "./academy/interview-service";
 import {
   readTrainerCredentials,
   TRAINER_FAILURES,
@@ -167,11 +171,7 @@ export interface AppBoundaries<R = never> {
 /** A new interview session and the turn that asks its opening question. */
 export interface StartedInterview {
   readonly sessionId: string;
-  readonly turn: {
-    readonly id: string;
-    readonly order: number;
-    readonly question: string;
-  };
+  readonly turn: NextTurn;
 }
 
 /** What a route needs of an Exercise to show it. */
@@ -300,6 +300,7 @@ const INVALID_REQUEST = {
 const notReady = (error: string) => ({ code: "not-ready", error });
 
 const PROGRESS_NOT_READY = notReady("Progress is not available");
+const INTERVIEWS_NOT_READY = notReady("Interviews are not available");
 
 const INVALID_PERIOD = {
   code: "invalid-period",
@@ -335,7 +336,7 @@ const NO_PATTERNS = {
 const ATTEMPT_REQUEST = Schema.toStandardSchemaV1(AttemptRequest, {
   parseOptions: { errors: "all" },
 });
-// Another Learner's Exercise or Attempt reads as one that does not exist.
+// Another Learner's record reads as one that does not exist.
 const NOT_FOUND: EdgeFailure = { body: { error: "Not found" }, status: 404 };
 // Grifando's answer when an explanation fails: 500, or 502 for an answer the Trainer's schema
 // refuses. The grade stays as it was.
@@ -355,6 +356,13 @@ const publicView = ({ id, promptData, type }: PendingExercise) => ({
   type,
 });
 
+// What the browser sees of a turn that asks a question.
+const nextTurnView = ({ id, order, question }: NextTurn) => ({
+  id,
+  order,
+  question,
+});
+
 // What the browser sees of an interview turn: its answer and Evaluation, both null until it is
 // answered, instead of Grifando's writing analysis (docs/adr/0010).
 const interviewTurnView = ({
@@ -363,7 +371,7 @@ const interviewTurnView = ({
   id,
   order,
   question,
-}: InterviewSession["turns"][number]) => ({
+}: InterviewTurn) => ({
   answer,
   evaluationId,
   id,
@@ -798,7 +806,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     .post("/api/interview", (context): Response | Promise<Response> => {
       const { startInterview } = options;
       if (startInterview === undefined) {
-        return context.json(notReady("Interviews are not available"), 503);
+        return context.json(INTERVIEWS_NOT_READY, 503);
       }
       return edge(
         forLearner(context.req.raw, startInterview(context.req.raw.headers)),
@@ -812,11 +820,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             Response.json(
               {
                 sessionId,
-                turn: {
-                  id: turn.id,
-                  order: turn.order,
-                  question: turn.question,
-                },
+                turn: nextTurnView(turn),
               },
               { status: 201 }
             ),
@@ -831,7 +835,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       (context): Response | Promise<Response> => {
         const { getInterviewSession } = options;
         if (getInterviewSession === undefined) {
-          return context.json(notReady("Interviews are not available"), 503);
+          return context.json(INTERVIEWS_NOT_READY, 503);
         }
         return edge(
           forLearner(
@@ -860,7 +864,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       (context): Response | Promise<Response> => {
         const { endInterview } = options;
         if (endInterview === undefined) {
-          return context.json(notReady("Interviews are not available"), 503);
+          return context.json(INTERVIEWS_NOT_READY, 503);
         }
         return edge(
           forLearner(
