@@ -114,7 +114,11 @@ export const submitAttempt = Effect.fn("ExerciseService.submitAttempt")(
     const { promptData } = exercise;
     const isCorrect = evaluateExerciseAnswer(promptData, learnerAnswer);
 
+    // One moment for the Attempt and for the recall it records on the pattern, so a pattern
+    // replayed from its Attempts gets the same time back (docs/adr/0031).
+    const now = new Date();
     const attempt = yield* createAttempt({
+      attemptedAt: now,
       exerciseId,
       feedback: promptData.explanation,
       isCorrect,
@@ -134,7 +138,7 @@ export const submitAttempt = Effect.fn("ExerciseService.submitAttempt")(
         isCorrect,
         exercise.type
       );
-      yield* recordAttempt(pattern.id, { ...nextState, isCorrect });
+      yield* recordAttempt(pattern.id, { ...nextState, at: now, isCorrect });
 
       if (exercise.difficulty !== null) {
         const ratings = yield* getRatings();

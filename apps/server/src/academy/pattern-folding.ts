@@ -143,6 +143,7 @@ const foldFinding = (
         .values({
           category: enrichment.category,
           correctedSpan: finding.correction,
+          createdAt: now,
           evaluationId: evaluation.id,
           example: enrichment.example,
           explanation: finding.explanation,
@@ -188,6 +189,7 @@ const foldNote = (
       .values({
         category: MistakeCategory.UNNATURAL_PHRASING,
         correctedSpan: note.naturalSpan,
+        createdAt: now,
         evaluationId: evaluation.id,
         example: note.example,
         explanation: note.explanation,
