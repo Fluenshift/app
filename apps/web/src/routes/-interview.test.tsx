@@ -339,5 +339,7 @@ describe("/interview answer sheet caps", () => {
 
     expect(sheet).not.toHaveAttribute("maxlength");
     expect(within(page).getByText("0 characters")).toBeVisible();
+    await userEvent.type(sheet, "I");
+    expect(within(page).getByText("1 character")).toBeVisible();
   });
 });

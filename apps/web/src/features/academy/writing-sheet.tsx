@@ -1,5 +1,6 @@
 // The sheet a Learner writes on. Ported from Grifando src/components/writing/WritingSheet.tsx
-// (74dbb9f).
+// (74dbb9f). Grifando always stopped it at 5000 characters; here the Deploy Profile's character
+// cap does, and a profile without one leaves the sheet uncapped (docs/adr/0006).
 import { cn } from "@fluenshift/ui/utils";
 import { useId } from "react";
 
@@ -17,7 +18,8 @@ export const WritingSheet = ({
 }: {
   readonly disabled?: boolean;
   readonly label: string;
-  readonly maxLength: number;
+  // The Deploy Profile's character cap, or null when it has none.
+  readonly maxLength: number | null;
   readonly minHeight?: string;
   readonly onChange: (value: string) => void;
   readonly placeholder?: string;
@@ -36,7 +38,9 @@ export const WritingSheet = ({
           aria-live="polite"
           className="label-mono text-muted-foreground tabular-nums"
         >
-          {value.length} / {maxLength}
+          {maxLength === null
+            ? `${String(value.length)} character${value.length === 1 ? "" : "s"}`
+            : `${String(value.length)} / ${String(maxLength)}`}
         </span>
       </div>
       <textarea
@@ -49,7 +53,7 @@ export const WritingSheet = ({
             : "prose-serif text-xl leading-[1.7]"
         )}
         id={id}
-        maxLength={maxLength}
+        maxLength={maxLength ?? undefined}
         onChange={(event) => {
           onChange(event.target.value);
         }}

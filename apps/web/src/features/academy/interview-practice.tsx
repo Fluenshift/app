@@ -30,7 +30,6 @@ import { TurnFeedback } from "./turn-feedback";
 import type { CompletedTurn } from "./turn-feedback";
 import { WritingSheet } from "./writing-sheet";
 
-const MAX_LENGTH = 5000;
 const GENERIC_ERROR = "Something went wrong. Please try again.";
 
 interface Interviewing {
@@ -130,7 +129,9 @@ const endQuietly = async (request: Promise<void>) => {
   }
 };
 
-export const InterviewPractice = (_props: {
+export const InterviewPractice = ({
+  sampleLimits,
+}: {
   // The Deploy Profile's caps, which size the answer sheet (docs/adr/0006).
   readonly sampleLimits: SampleLimits;
 }) => {
@@ -262,7 +263,7 @@ export const InterviewPractice = (_props: {
           <WritingSheet
             disabled={isSubmitting}
             label="Your answer"
-            maxLength={MAX_LENGTH}
+            maxLength={sampleLimits.sampleMaxCharacters}
             minHeight="min-h-[240px]"
             onChange={setAnswer}
             placeholder="Answer in English..."

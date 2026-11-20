@@ -444,10 +444,11 @@ export type SampleLimits = typeof SampleLimits.Type;
 
 /**
  * One answer to an interview turn (Grifando's POST /api/interview/[id]/turns/[turnId]/answer,
- * 74dbb9f): trimmed, then 1 to 5000 characters. Grifando's retrySessionId is gone
- * (docs/adr/0024).
+ * 74dbb9f): trimmed, then at least 1 character. Grifando's 5000 characters were its public site's
+ * cap: the answer is a Writing Sample, so the Deploy Profile's caps bound it where the Judge
+ * evaluates it (docs/adr/0006). Grifando's retrySessionId is gone (docs/adr/0024).
  */
 export const InterviewAnswerRequest = Schema.Struct({
-  answer: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(5000)),
+  answer: Schema.Trim.check(Schema.isMinLength(1)),
 });
 export type InterviewAnswerRequest = typeof InterviewAnswerRequest.Type;
