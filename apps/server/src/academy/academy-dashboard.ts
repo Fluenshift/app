@@ -4,11 +4,6 @@
 // Attempts, the Streak. The averaged model scores are gone (docs/adr/0002).
 import type { AcademyDashboard } from "@fluenshift/contract";
 import { computeCategoryBreakdown } from "@fluenshift/core/analytics";
-import {
-  DAILY_PROMPTS,
-  extractActiveWeakCategories,
-  selectDailyPrompt,
-} from "@fluenshift/core/daily-prompt";
 import { isDueForReview } from "@fluenshift/core/recall";
 import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import { selectPatternsForPractice } from "@fluenshift/core/selection";
@@ -18,6 +13,7 @@ import { and, count, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 
 import { CurrentLearner } from "../learner-identity";
+import { dailyChallengeFor } from "./daily-challenge";
 import { listAttemptOutcomes } from "./exercise-repository";
 import { listPatterns } from "./mistake-pattern-repository";
 import { countOccurrencesByCategory } from "./occurrence-repository";
@@ -116,18 +112,10 @@ export const academyDashboard = Effect.fn("AcademyDashboard.academyDashboard")(
     const writing = yield* listPracticeWriting();
     const attempts = yield* listAttemptOutcomes();
 
-    const prompt = selectDailyPrompt(
-      DAILY_PROMPTS,
-      now,
-      extractActiveWeakCategories(patterns)
-    );
     const [recommendation] = selectPatternsForPractice(patterns, 1, now);
     const recentAttempts = attempts.slice(0, ACCURACY_WINDOW);
     return {
-      dailyChallenge: {
-        promptText: prompt.text,
-        promptType: "DAILY_CHALLENGE",
-      },
+      dailyChallenge: dailyChallengeFor(patterns, now),
       dueCount: patterns.filter((pattern) => isDueForReview(pattern, now))
         .length,
       progress: {
