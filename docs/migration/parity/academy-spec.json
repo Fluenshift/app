@@ -250,7 +250,12 @@
       "slice": "academy-spec",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::hosted request pipeline > answers 401 SESSION_REQUIRED to an /api request without a valid cookie and mints nothing",
+        "apps/server/src/session/rate-limit-routes.test.ts::rate limit before the user > refuses every state-changing route at its rate limit before creating the visitor's user",
+        "packages/env/src/session.test.ts::getSessionSecret > refuses to run in production without SESSION_SECRET",
+        "packages/env/src/client-ip.test.ts::getIpHashSalt > refuses to run in production without IP_HASH_SALT"
+      ]
     },
     {
       "id": "grifando:fix-commit:9e86e94",

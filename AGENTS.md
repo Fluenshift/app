@@ -244,7 +244,8 @@ Code:
 - The server bundle keeps npm packages external: every npm package that bundled workspace code
   imports is also a dependency of `apps/server`.
 - Whatever starts the built server sets `DATA_DIRECTORY` (local profile) or `DATABASE_URL`
-  (hosted), and `SESSION_SECRET` for the hosted profile in production (ADR 0032).
+  (hosted). A hosted production server also needs `SESSION_SECRET` (ADR 0032), `IP_HASH_SALT`,
+  and `CLIENT_IP_HEADER` naming the header its proxy writes (ADR 0033).
 - pnpm fails an install on a dependency build script nobody reviewed: list it in `allowBuilds`.
 - Web tests import relatively: an `@/` alias would change `vite.config.ts`, which G11 records.
 
