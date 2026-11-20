@@ -171,6 +171,45 @@ describe("Effect edge", () => {
     expect(JSON.stringify(lines)).not.toContain("private-cause");
   });
 
+  it("logs a tagged failure the route answers with a 500, and not one it answers otherwise", async () => {
+    const lines: unknown[] = [];
+    const keepLogs = Logger.layer([
+      Logger.make((options) => {
+        lines.push(Logger.formatStructured.log(options));
+      }),
+    ]);
+    const edge = makeEdge(
+      ManagedRuntime.make(Layer.mergeAll(greeter, keepLogs))
+    );
+    const route = new Hono().get("/greet/:name", (context) =>
+      edge(
+        Greeter.use((service) => service.greet(context.req.param("name"))),
+        {
+          errors: {
+            NotFound: () => ({
+              body: { error: "Something went wrong." },
+              status: 500,
+            }),
+            Unavailable: errors.Unavailable,
+          },
+          log: "Failed to greet",
+          success: (greeting) => Response.json({ greeting }),
+        }
+      )
+    );
+
+    const failed = await route.request("/greet/missing");
+    const busy = await route.request("/greet/busy");
+
+    expect([failed.status, busy.status]).toEqual([500, 503]);
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toMatchObject({
+      annotations: { error: "NotFound" },
+      level: "ERROR",
+      message: "Failed to greet",
+    });
+  });
+
   it("answers an interrupted Effect with a safe internal error", async () => {
     const response = await app().request("/greet/interrupted");
 

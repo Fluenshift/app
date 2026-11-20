@@ -44,16 +44,6 @@ const isTagged = (value: unknown): value is Tagged =>
   "_tag" in value &&
   typeof value._tag === "string";
 
-// Whether the edge answers a cause with its `unexpected` answer: no failure, or one without an
-// entry.
-const isUnexpected = <E extends Tagged>(
-  cause: Cause.Cause<unknown>,
-  errors: EdgeErrors<E>
-): boolean => {
-  const failure = Option.getOrUndefined(Cause.findErrorOption(cause));
-  return !isTagged(failure) || !Object.hasOwn(errors, failure._tag);
-};
-
 // Each entry takes its own error class, so the entry found by tag is called with the failure
 // of that tag; `never` is the only parameter type every entry accepts.
 const failureOf = <E extends Tagged>(
@@ -93,22 +83,25 @@ export const makeEdge =
       readonly errors: EdgeErrors<E>;
       readonly success: (value: A) => Response | Promise<Response>;
       /**
-       * The context of the one error-level line an unexpected failure logs, with the error's tag
-       * or name only (docs/adr/0026). A route without one logs nothing.
+       * The context of the one error-level line each generic 500 logs, with the error's tag or
+       * name only (docs/adr/0026). A route without one logs nothing.
        */
       readonly log?: string;
       /** The answer to anything unexpected, when a route keeps its source's; `INTERNAL_ERROR` otherwise. */
       readonly unexpected?: EdgeFailure;
     }
   ): Promise<Response> => {
-    const { log } = handlers;
+    const unexpected = handlers.unexpected ?? INTERNAL_ERROR;
+    const { log: context } = handlers;
+    // A route that names a log context logs each generic 500 it answers, through an entry or
+    // through `unexpected`, as Grifando logged before each one (docs/adr/0026).
     const logged =
-      log === undefined
+      context === undefined
         ? effect
         : effect.pipe(
             Effect.tapCause((cause) =>
-              isUnexpected(cause, handlers.errors)
-                ? Effect.logError(log).pipe(
+              failureOf(cause, handlers.errors, unexpected).status === 500
+                ? Effect.logError(context).pipe(
                     Effect.annotateLogs({ error: nameOf(cause) })
                   )
                 : Effect.void
@@ -118,11 +111,7 @@ export const makeEdge =
       if (Exit.isSuccess(exit)) {
         return handlers.success(exit.value);
       }
-      const failure = failureOf(
-        exit.cause,
-        handlers.errors,
-        handlers.unexpected ?? INTERNAL_ERROR
-      );
+      const failure = failureOf(exit.cause, handlers.errors, unexpected);
       return Response.json(failure.body, { status: failure.status });
     });
   };
