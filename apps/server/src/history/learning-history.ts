@@ -178,8 +178,13 @@ export const persistEvaluation = Effect.fn("LearningHistory.persistEvaluation")(
   }
 );
 
+export interface ListEvaluationsOptions {
+  // Only the Evaluations of Writing Samples of this origin; every origin when absent.
+  readonly origin?: WritingSampleOrigin;
+}
+
 export const listEvaluations = Effect.fn("LearningHistory.listEvaluations")(
-  function* () {
+  function* (options: ListEvaluationsOptions = {}) {
     const database = yield* Database;
     const learner = yield* CurrentLearner;
     const rows = yield* database.run((client) =>
@@ -193,7 +198,14 @@ export const listEvaluations = Effect.fn("LearningHistory.listEvaluations")(
           summary: evaluations.summary,
         })
         .from(evaluations)
-        .where(eq(evaluations.learnerId, learner.id))
+        .where(
+          and(
+            eq(evaluations.learnerId, learner.id),
+            options.origin === undefined
+              ? undefined
+              : eq(evaluations.origin, options.origin)
+          )
+        )
         .orderBy(
           desc(evaluations.evaluatedAt),
           desc(evaluations.insertionOrder)
