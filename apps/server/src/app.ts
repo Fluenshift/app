@@ -7,6 +7,7 @@ import {
   AttemptRequest,
   ErrorCategory,
   ExerciseGenerationRequest,
+  InterviewAnswerRequest,
   ProgressEvidenceRequest,
   ProgressPeriod,
   VocabularyItemRequest,
@@ -36,6 +37,8 @@ import { getMimeType } from "hono/utils/mime";
 import type { NotFoundError } from "./academy/errors";
 import type { SubmitAttemptResult } from "./academy/exercise-service";
 import type {
+  AnswerTurnInput,
+  AnswerTurnResult,
   InterviewSession,
   InterviewTurn,
   NextTurn,
@@ -53,11 +56,15 @@ import { TrainerKeyRequiredError } from "./academy/trainer/trainer-errors";
 import type { TrainerAccessError } from "./academy/trainer/trainer-errors";
 import { INTERNAL_ERROR, makeEdge } from "./edge";
 import type { EdgeFailure, EdgeRuntime } from "./edge";
+import { endpointFailure } from "./evaluation/evaluation-endpoint";
 import type {
   EvaluationEndpointResult,
   EvaluationFailureCode,
+  WritingEvaluationFailure,
 } from "./evaluation/evaluation-endpoint";
+import type { Evaluation } from "./history/learning-history";
 import { CurrentLearner, LearnerIdentity } from "./learner-identity";
+import type { EnrichmentFailedError } from "./practice/practice-writing";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -79,6 +86,20 @@ export interface EvaluationLogEvent {
  * 503, as PE's did.
  */
 export interface AppBoundaries<R = never> {
+  /** One answer to the Learner's interview turn, evaluated as practice writing on the request's key. */
+  readonly answerInterviewTurn?: (
+    headers: Headers,
+    input: AnswerTurnInput
+  ) => Effect.Effect<
+    AnswerTurnResult<Evaluation>,
+    | AIResponseValidationError
+    | DatabaseError
+    | EnrichmentFailedError
+    | NotFoundError
+    | TrainerAccessError
+    | WritingEvaluationFailure,
+    R | CurrentLearner
+  >;
   readonly deleteEvaluation?: (
     evaluationId: string
   ) => Effect.Effect<void, DatabaseError, R | CurrentLearner>;
@@ -430,6 +451,22 @@ const resultStatus = (
   }
   return result.kind === "no-english" ? 422 : FAILURE_STATUS[result.code];
 };
+
+// What the Evaluation route answers when the Judge could not evaluate a Writing Sample.
+const judgeFailure = (failure: WritingEvaluationFailure): EdgeFailure => {
+  const result = endpointFailure(failure);
+  return { body: result, status: resultStatus(result) };
+};
+
+// The body of an interview answer; one that is not JSON is refused like an empty answer.
+const INTERVIEW_ANSWER_REQUEST = Schema.toStandardSchemaV1(
+  InterviewAnswerRequest,
+  { parseOptions: { errors: "all" } }
+);
+// Grifando's answer when the analysis of a writing fails for a reason the Learner cannot act on
+// (src/server/domain/writing/writingCoachService.ts, 74dbb9f).
+const ANALYSIS_FAILURE_MESSAGE =
+  "We couldn't analyze this writing right now. Your text has not been lost \u2014 you can try again.";
 
 const safelyLogEvaluation = (
   logEvaluation: AppBoundaries["logEvaluation"],
@@ -880,6 +917,63 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             unexpected: SOMETHING_WENT_WRONG,
           }
         );
+      }
+    )
+    // One answer to the Learner's interview turn (Grifando's
+    // POST /api/interview/[id]/turns/[turnId]/answer): the Judge evaluates it as practice
+    // writing and the Trainer folds its Findings before the next question (docs/adr/0010,
+    // docs/adr/0024). The body is checked before the key.
+    .post(
+      "/api/interview/:sessionId/turns/:turnId/answer",
+      (context): Response | Promise<Response> => {
+        const { answerInterviewTurn } = options;
+        if (answerInterviewTurn === undefined) {
+          return context.json(INTERVIEWS_NOT_READY, 503);
+        }
+        return context.req
+          .json<unknown>()
+          .catch(() => null)
+          .then((body) => INTERVIEW_ANSWER_REQUEST["~standard"].validate(body))
+          .then((result) =>
+            result.issues === undefined
+              ? edge(
+                  forLearner(
+                    context.req.raw,
+                    answerInterviewTurn(context.req.raw.headers, {
+                      answer: result.value.answer,
+                      sessionId: context.req.param("sessionId"),
+                      turnId: context.req.param("turnId"),
+                    })
+                  ),
+                  {
+                    errors: {
+                      ...TRAINER_FAILURES,
+                      AIResponseValidationError: () => SOMETHING_WENT_WRONG,
+                      DatabaseError: () => SOMETHING_WENT_WRONG,
+                      EnrichmentFailedError: ({ evaluationId }) => ({
+                        body: {
+                          evaluationId,
+                          message: ANALYSIS_FAILURE_MESSAGE,
+                          status: "failed",
+                        },
+                        status: 200,
+                      }),
+                      EvaluationModelError: judgeFailure,
+                      InvalidAssessmentError: judgeFailure,
+                      InvalidWritingSampleError: judgeFailure,
+                      NoEnglishError: judgeFailure,
+                      NotFoundError: () => NOT_FOUND,
+                      UnsafeCorrectionError: judgeFailure,
+                    },
+                    success: (answered) => Response.json(answered),
+                    unexpected: SOMETHING_WENT_WRONG,
+                  }
+                )
+              : Response.json(
+                  { error: "Invalid request body", issues: result.issues },
+                  { status: 400 }
+                )
+          );
       }
     )
     .post("/api/vocabulary", (context): Response | Promise<Response> => {

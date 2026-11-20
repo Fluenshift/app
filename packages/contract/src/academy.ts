@@ -165,3 +165,13 @@ export const AttemptRequest = Schema.Struct({
   answer: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(1000)),
 });
 export type AttemptRequest = typeof AttemptRequest.Type;
+
+/**
+ * One answer to an interview turn (Grifando's POST /api/interview/[id]/turns/[turnId]/answer,
+ * 74dbb9f): trimmed, then 1 to 5000 characters. Grifando's retrySessionId is gone
+ * (docs/adr/0024).
+ */
+export const InterviewAnswerRequest = Schema.Struct({
+  answer: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(5000)),
+});
+export type InterviewAnswerRequest = typeof InterviewAnswerRequest.Type;

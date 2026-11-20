@@ -141,7 +141,9 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > answers 404 to another user's turn"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > answers a turn with its analysis and the next question",
@@ -150,7 +152,9 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > answers a turn with its analysis and the next question"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > ends a session once, and 404s for an unknown or another user's session",
@@ -181,7 +185,9 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0010",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > returns the FAILED writing session when the analysis fails, and validates the answer"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/interview/interview.characterization.test.ts::interview routes > starts a session with its opening question",
