@@ -9,7 +9,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/me-route.test.ts::DELETE /api/me guards > expires the session cookie as HttpOnly, SameSite=Lax and site-wide, Secure in production only"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/rateLimitFirst.characterization.test.ts::rate limit before the user > refuses every state-changing route at its rate limit before creating the visitor's user",
@@ -305,7 +307,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/me-route.test.ts::DELETE /api/me > deletes the data, expires the cookie and answers 204"
+      ]
     },
     {
       "id": "grifando:test:src/app/api/me/route.test.ts::DELETE /api/me > is rate limited",
@@ -705,7 +709,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/delete-learner.test.ts::deleteUserData > deletes the user and their data but not others"
+      ]
     },
     {
       "id": "grifando:test:src/server/rateLimit.test.ts::consume > allows again in a new window",
