@@ -72,7 +72,11 @@ import type {
   PracticeWriting,
 } from "./practice/practice-writing";
 import { sampleLimitsOf } from "./sample-limits";
-import { securityHeaders, sessionGate } from "./session/hosted-pipeline";
+import {
+  securityHeaders,
+  sessionCookie,
+  sessionGate,
+} from "./session/hosted-pipeline";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -123,6 +127,12 @@ export interface AppBoundaries<R = never> {
   readonly deleteEvaluation?: (
     evaluationId: string
   ) => Effect.Effect<void, DatabaseError, R | CurrentLearner>;
+  /** Deletes the hosted Learner of the request and all their data (`DELETE /api/me`). */
+  readonly deleteLearner?: () => Effect.Effect<
+    void,
+    DatabaseError,
+    R | CurrentLearner
+  >;
   readonly evaluateWriting?: (
     writingSample: string
   ) => Effect.Effect<EvaluationEndpointResult, never, R | CurrentLearner>;
@@ -1217,6 +1227,28 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         );
       }
     )
+    // A hosted Learner deletes themselves and all their data, and the session cookie expires, so
+    // the next page load mints a new session (Grifando src/app/api/me/route.ts, docs/adr/0003).
+    // The local profile has no such route.
+    .delete("/api/me", (context): Response | Promise<Response> => {
+      if (options.profile === "local") {
+        return context.notFound();
+      }
+      const { deleteLearner } = options;
+      if (deleteLearner === undefined) {
+        return context.json(notReady("Deletion is not available"), 503);
+      }
+      const expired = sessionCookie("", 0, options.session.secureCookie);
+      return edge(forLearner(context.req.raw, deleteLearner()), {
+        errors: { DatabaseError: () => INTERNAL_ERROR },
+        log: "Failed to delete the Learner's data",
+        success: () =>
+          new Response(null, {
+            headers: { "Set-Cookie": expired },
+            status: 204,
+          }),
+      });
+    })
     // The Deploy Profile's caps on one Writing Sample, which size the Academy's writing sheets
     // (docs/adr/0006).
     .get("/api/sample-limits", (context) =>

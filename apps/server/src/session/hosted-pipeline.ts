@@ -62,14 +62,24 @@ export const SESSION_REQUIRED = {
   error: "Session expired. Reload the page.",
 };
 
-// A new session cookie, written as Next.js wrote it: Path, Expires and Max-Age, Secure in
-// production only, HttpOnly and SameSite=lax.
-const mintedCookie = (token: string, secure: boolean): string =>
+/**
+ * A session cookie as Next.js wrote it: Path, then Expires and Max-Age, or Max-Age=0 alone for a
+ * cookie that expires now, Secure in production only, HttpOnly and SameSite=lax.
+ */
+export const sessionCookie = (
+  value: string,
+  maxAgeSeconds: number,
+  secure: boolean
+): string =>
   [
-    `${SESSION_COOKIE}=${encodeURIComponent(token)}`,
+    `${SESSION_COOKIE}=${encodeURIComponent(value)}`,
     "Path=/",
-    `Expires=${new Date(Date.now() + SESSION_MAX_AGE_SECONDS * 1000).toUTCString()}`,
-    `Max-Age=${SESSION_MAX_AGE_SECONDS}`,
+    ...(maxAgeSeconds === 0
+      ? []
+      : [
+          `Expires=${new Date(Date.now() + maxAgeSeconds * 1000).toUTCString()}`,
+        ]),
+    `Max-Age=${maxAgeSeconds}`,
     ...(secure ? ["Secure"] : []),
     "HttpOnly",
     "SameSite=lax",
@@ -101,9 +111,13 @@ export const sessionGate =
     }
     const token = signSessionId(newSessionId(), Redacted.value(secret));
     const setCookie = () => {
-      context.header("Set-Cookie", mintedCookie(token, secureCookie), {
-        append: true,
-      });
+      context.header(
+        "Set-Cookie",
+        sessionCookie(token, SESSION_MAX_AGE_SECONDS, secureCookie),
+        {
+          append: true,
+        }
+      );
     };
     return next().then(setCookie);
   };

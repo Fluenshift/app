@@ -42,6 +42,7 @@ import {
   getProgressEvidence,
   getProgressSummary,
 } from "./progress/progress-insights";
+import { deleteLearner } from "./session/delete-learner";
 
 // The HTTP server of one deploy profile: `profile` names it, with the hosted profile's session.
 const httpServer = <R>(profile: Effect.Effect<ProfileOptions, never, R>) =>
@@ -74,6 +75,7 @@ const httpServer = <R>(profile: Effect.Effect<ProfileOptions, never, R>) =>
         answerInterviewTurn: answerInterviewTurnFor,
         createVocabularyItem,
         deleteEvaluation,
+        deleteLearner,
         deleteVocabularyItem,
         endInterview,
         explainAttempt: explainAttemptFor,
