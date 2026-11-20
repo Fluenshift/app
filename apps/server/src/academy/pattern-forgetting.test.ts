@@ -175,21 +175,31 @@ const dependOn = (example: string): FindingEnrichment => ({
   patternKey: "preposition:depend",
 });
 
-const meetingNote = (originalSpan: string): NaturalnessNote => ({
+const makeNote = (
+  originalSpan: string,
+  naturalSpan: string
+): NaturalnessNote => ({
   example: "We hold a meeting every Monday.",
-  explanation: "A meeting is held, not made.",
+  explanation: "English uses another verb here.",
   l1Transfer: true,
-  naturalSpan: "hold a meeting",
+  naturalSpan,
   originalSpan,
-  patternKey: "collocation:meeting",
+  patternKey: "collocation:make",
 });
 
-// The first Evaluation: a preposition Finding and an unnatural-phrasing note.
+// The first Evaluation: two preposition Findings of one pattern and two unnatural-phrasing notes
+// of another, each with its own spans, so the example tells which Occurrence was folded last. Their
+// spans sort against their order, so no other order passes for it.
 const foldFirst = async (session: Session) => {
   const evaluation = await storeEvaluation(
     session,
-    "I depend of it, so we make a meeting.",
+    "It depends of you and I depend of it, so we make a meeting and make a decision.",
     [
+      {
+        category: "Preposition",
+        correction: "depends on",
+        originalText: "depends of",
+      },
       {
         category: "Preposition",
         correction: "depend on",
@@ -200,8 +210,11 @@ const foldFirst = async (session: Session) => {
   await session.run(
     foldEvaluation(
       trainerAnswering(
-        [dependOn("It depends on the cache.")],
-        [meetingNote("make a meeting")]
+        [dependOn("It depends on the cache."), dependOn("I depend on you.")],
+        [
+          makeNote("make a meeting", "hold a meeting"),
+          makeNote("make a decision", "take a decision"),
+        ]
       ),
       { evaluationId: evaluation.id }
     )
@@ -214,12 +227,12 @@ const foldFirst = async (session: Session) => {
 const foldSecond = async (session: Session) => {
   const evaluation = await storeEvaluation(
     session,
-    "It depends of teh cache, so we make a meeting again.",
+    "It depended of teh cache, so we make a plan.",
     [
       {
         category: "Preposition",
-        correction: "depends on",
-        originalText: "depends of",
+        correction: "depended on",
+        originalText: "depended of",
       },
       { category: "Spelling", correction: "the", originalText: "teh" },
     ]
@@ -236,7 +249,7 @@ const foldSecond = async (session: Session) => {
             patternKey: "spelling:the",
           },
         ],
-        [meetingNote("make a meeting again")]
+        [makeNote("make a plan", "draw up a plan")]
       ),
       { evaluationId: evaluation.id }
     )
@@ -335,8 +348,8 @@ describe("Deleting an Evaluation", () => {
         occurrenceCount,
       ])
     ).toStrictEqual([
-      [MistakeCategory.UNNATURAL_PHRASING, "ACTIVE", 1],
-      [MistakeCategory.PREPOSITIONS, "IMPROVING", 1],
+      [MistakeCategory.UNNATURAL_PHRASING, "ACTIVE", 2],
+      [MistakeCategory.PREPOSITIONS, "IMPROVING", 2],
     ]);
     expect(deleted).toStrictEqual(neverFolded);
   });
@@ -385,10 +398,12 @@ describe("Deleting an Evaluation", () => {
     );
 
     expect(await patternsOf(session)).toStrictEqual(before);
-    expect(
-      await session.query((client) =>
-        client.select({ id: evaluations.id }).from(evaluations)
-      )
-    ).toStrictEqual([{ id: first.id }]);
+    const kept = await session.query((client) =>
+      Promise.all([
+        client.select({ id: evaluations.id }).from(evaluations),
+        client.select().from(occurrences),
+      ])
+    );
+    expect([kept[0], kept[1].length]).toStrictEqual([[{ id: first.id }], 4]);
   });
 });
