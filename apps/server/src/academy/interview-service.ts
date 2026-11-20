@@ -8,7 +8,7 @@ import { randomUUID } from "node:crypto";
 import type { InterviewStatus } from "@fluenshift/contract";
 import {
   Database,
-  evaluations,
+  evaluationsView,
   interviewSessions,
   interviewTurns,
   learners,
@@ -155,13 +155,13 @@ export const getSession = Effect.fn("InterviewService.getSession")(function* (
   }
   const turns = yield* database.run((client) =>
     client
-      .select({ answer: evaluations.originalText, turn: interviewTurns })
+      .select({ answer: evaluationsView.originalText, turn: interviewTurns })
       .from(interviewTurns)
       .leftJoin(
-        evaluations,
+        evaluationsView,
         and(
-          eq(evaluations.learnerId, interviewTurns.learnerId),
-          eq(evaluations.id, interviewTurns.evaluationId)
+          eq(evaluationsView.learnerId, interviewTurns.learnerId),
+          eq(evaluationsView.id, interviewTurns.evaluationId)
         )
       )
       .where(

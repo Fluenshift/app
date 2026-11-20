@@ -6,7 +6,7 @@ import { randomUUID } from "node:crypto";
 
 import {
   Database,
-  evaluations,
+  evaluationsView,
   learners,
   vocabularyItems,
 } from "@fluenshift/db";
@@ -55,12 +55,12 @@ export const createVocabularyItem = Effect.fn(
           sourceEvaluationId === undefined
             ? []
             : transaction
-                .select({ id: evaluations.id })
-                .from(evaluations)
+                .select({ id: evaluationsView.id })
+                .from(evaluationsView)
                 .where(
                   and(
-                    eq(evaluations.id, sourceEvaluationId),
-                    eq(evaluations.learnerId, learner.id)
+                    eq(evaluationsView.id, sourceEvaluationId),
+                    eq(evaluationsView.learnerId, learner.id)
                   )
                 )
         )
