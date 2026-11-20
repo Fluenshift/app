@@ -128,6 +128,16 @@ export const mistakeCategoriesOf = (
   );
 
 /**
+ * Today's Practice Prompt from the daily bank (Grifando's resolveDailyChallenge, 74dbb9f), which
+ * its /today and /write?mode=daily pages share (docs/adr/0025).
+ */
+export const DailyChallenge = Schema.Struct({
+  promptText: Schema.String,
+  promptType: Schema.Literal("DAILY_CHALLENGE"),
+});
+export type DailyChallenge = typeof DailyChallenge.Type;
+
+/**
  * A vocabulary item the Learner saves, with Grifando's limits (src/app/api/vocabulary/route.ts,
  * 74dbb9f). Its source is one of the Learner's Evaluations, which replace Grifando's writing
  * sessions (docs/adr/0004).

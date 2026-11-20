@@ -13,6 +13,7 @@ import {
   VocabularyItemRequest,
 } from "@fluenshift/contract";
 import type {
+  DailyChallenge,
   HealthResponse,
   ProgressEvidenceSelection,
   SetupStatus,
@@ -98,6 +99,12 @@ export interface AppBoundaries<R = never> {
     | NotFoundError
     | TrainerAccessError
     | WritingEvaluationFailure,
+    R | CurrentLearner
+  >;
+  /** Today's Practice Prompt from the daily bank, biased toward the Learner's weak categories. */
+  readonly getDailyChallenge?: () => Effect.Effect<
+    DailyChallenge,
+    DatabaseError,
     R | CurrentLearner
   >;
   readonly deleteEvaluation?: (
@@ -322,6 +329,9 @@ const notReady = (error: string) => ({ code: "not-ready", error });
 
 const PROGRESS_NOT_READY = notReady("Progress is not available");
 const INTERVIEWS_NOT_READY = notReady("Interviews are not available");
+const PRACTICE_PROMPTS_NOT_READY = notReady(
+  "Practice prompts are not available"
+);
 
 const INVALID_PERIOD = {
   code: "invalid-period",
@@ -976,6 +986,18 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           );
       }
     )
+    // Today's Practice Prompt (Grifando's resolveDailyChallenge, which its /today and
+    // /write?mode=daily pages read), biased toward the categories the Learner has not mastered.
+    .get("/api/daily-challenge", (context): Response | Promise<Response> => {
+      const { getDailyChallenge } = options;
+      if (getDailyChallenge === undefined) {
+        return context.json(PRACTICE_PROMPTS_NOT_READY, 503);
+      }
+      return edge(forLearner(context.req.raw, getDailyChallenge()), {
+        errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        success: (challenge) => Response.json(challenge),
+      });
+    })
     .post("/api/vocabulary", (context): Response | Promise<Response> => {
       const { createVocabularyItem } = options;
       if (createVocabularyItem === undefined) {

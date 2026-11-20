@@ -5,7 +5,7 @@ import type {
 } from "@fluenshift/contract";
 import { describe, expect, test } from "vitest";
 
-import { createHttpEvaluationClient } from "./api";
+import { createHttpAcademyClient, createHttpEvaluationClient } from "./api";
 import { EvaluationRequestError } from "./features/evaluations/evaluation-client";
 
 const retainedEvaluation: Evaluation = {
@@ -293,5 +293,34 @@ describe("HTTP Evaluation client decoding", () => {
       retryable: false,
       status: 200,
     });
+  });
+});
+
+describe("HTTP Academy client", () => {
+  test("reads today's challenge through the Academy contract", async () => {
+    const challenge = {
+      promptText:
+        "Explain what an API is to someone with no programming background.",
+      promptType: "DAILY_CHALLENGE",
+    };
+    const client = createHttpAcademyClient({
+      fetch: (input) => {
+        expect(input).toBe("/api/daily-challenge");
+        return Promise.resolve(Response.json(challenge));
+      },
+    });
+
+    expect(await client.getDailyChallenge()).toEqual(challenge);
+  });
+
+  test("refuses a challenge outside the Academy contract", async () => {
+    const client = createHttpAcademyClient({
+      fetch: () =>
+        Promise.resolve(Response.json({ promptText: "Free writing" })),
+    });
+
+    await expect(client.getDailyChallenge()).rejects.toBeInstanceOf(
+      EvaluationRequestError
+    );
   });
 });

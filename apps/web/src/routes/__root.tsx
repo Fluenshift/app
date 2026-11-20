@@ -4,9 +4,11 @@ import { Toaster } from "@fluenshift/ui/components/sonner";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
 import Header from "../components/header";
+import type { AcademyClient } from "../features/academy/academy-client";
 import type { EvaluationClient } from "../features/evaluations/evaluation-client";
 
 export interface RouterAppContext {
+  readonly academyClient: AcademyClient;
   readonly evaluationClient: EvaluationClient;
 }
 

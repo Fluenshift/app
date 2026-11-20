@@ -11,6 +11,7 @@ import {
   generateExercisesFor,
   startInterviewFor,
 } from "./academy/academy-requests";
+import { dailyChallenge } from "./academy/daily-challenge";
 import { listPendingExercises } from "./academy/exercise-repository";
 import { submitAttempt } from "./academy/exercise-service";
 import { endInterview, getSession } from "./academy/interview-service";
@@ -67,6 +68,7 @@ const HttpServer = Layer.effectDiscard(
       endInterview,
       explainAttempt: explainAttemptFor,
       generateExercises: generateExercisesFor,
+      getDailyChallenge: dailyChallenge,
       evaluateWriting: (writingSample) =>
         evaluateWritingForEndpoint(writingSample, new Date()),
       getEvaluation,
