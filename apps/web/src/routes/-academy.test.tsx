@@ -6,6 +6,7 @@
 import type { AcademyDashboard } from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import { createInMemoryAcademyClient } from "../features/academy/in-memory-academy-client";
@@ -143,5 +144,34 @@ describe("/academy", () => {
     expect(
       within(navigation).getByRole("link", { name: "Academy" })
     ).toHaveAttribute("href", "/academy");
+  });
+});
+
+// Grifando's LiveSpecimen (74dbb9f), ported from source under docs/adr/0025, decision 5.
+describe("/academy specimen", () => {
+  it("shows a proofed example and swaps its scenario", async () => {
+    const { page } = await renderDashboard(empty);
+    const scenarios = within(page).getByRole("group", {
+      name: "Example scenario",
+    });
+    const standup = within(scenarios).getByRole("button", {
+      name: "Standup update",
+    });
+    expect(standup).toHaveAttribute("aria-pressed", "true");
+    expect(page).toHaveTextContent(
+      "Example of a proofed paragraph: Yesterday I fixed the bug on the login page"
+    );
+    expect(page).toHaveTextContent(
+      '"will to work" should be "will work". After "will" the verb comes bare, with no "to".'
+    );
+
+    await userEvent.click(
+      within(scenarios).getByRole("button", { name: "Code review comment" })
+    );
+
+    expect(standup).toHaveAttribute("aria-pressed", "false");
+    expect(page).toHaveTextContent(
+      '"too much things" should be "too many things".'
+    );
   });
 });

@@ -1,6 +1,6 @@
 // The Academy dashboard. Ported from Grifando src/app/page.tsx (74dbb9f), at /academy: the
 // Writing Desk keeps / (docs/adr/0025). The dashboard comes from the server; the landing specimen
-// waits for its own unit.
+// is fixed data.
 import { buttonVariants } from "@fluenshift/ui/components/button";
 import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 
@@ -11,6 +11,8 @@ import {
   StreakStatus,
   WeakAreas,
 } from "../features/academy/dashboard";
+import { HeroNote } from "../features/academy/hero-note";
+import { LiveSpecimen } from "../features/academy/live-specimen";
 import { MISTAKE_CATEGORY_LABELS } from "../features/academy/mistake-category-labels";
 import {
   PageShell,
@@ -40,19 +42,26 @@ const AcademyPage = () => {
             Write anything. Fluenshift marks each slip, explains it, and turns
             it into practice built from your own writing.
           </p>
-          <div className="flex flex-wrap gap-2">
-            <Link className={buttonVariants({ size: "lg" })} to="/write">
-              Proof your own writing
-            </Link>
-            <Link
-              className={buttonVariants({ size: "lg", variant: "ghost" })}
-              to="/today"
-            >
-              Today&apos;s session
-            </Link>
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Link className={buttonVariants({ size: "lg" })} to="/write">
+                Proof your own writing
+              </Link>
+              <Link
+                className={buttonVariants({ size: "lg", variant: "ghost" })}
+                to="/today"
+              >
+                Today&apos;s session
+              </Link>
+            </div>
+            <HeroNote>your own mistakes, not generic drills</HeroNote>
           </div>
         </div>
       </header>
+
+      <Section className="pb-16 md:pb-24">
+        <LiveSpecimen />
+      </Section>
 
       <Section className="pb-16 md:pb-24">
         <div className="grid gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-end">
