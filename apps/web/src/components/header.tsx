@@ -6,6 +6,7 @@ const Header = () => {
     { exact: true, label: "Writing Desk", to: "/" },
     { exact: false, label: "History", to: "/evaluations" },
     { exact: true, label: "Progress", to: "/progress" },
+    { exact: false, label: "Academy", to: "/academy" },
     { exact: true, label: "Setup & privacy", to: "/setup" },
   ] as const;
 

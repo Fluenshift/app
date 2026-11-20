@@ -68,3 +68,39 @@ export const PageShell = ({
     {children}
   </main>
 );
+
+// A section separated by surface tone and space, never by a divider line.
+export const Section = ({
+  children,
+  className,
+  tone = "canvas",
+}: {
+  readonly children: ReactNode;
+  readonly className?: string;
+  readonly tone?: "canvas" | "linen";
+}) => (
+  <section
+    className={cn(
+      tone === "linen"
+        ? "rounded-card bg-linen px-6 py-10 md:px-10 md:py-12"
+        : "py-4",
+      className
+    )}
+  >
+    {children}
+  </section>
+);
+
+// Section heading: Inter 300 at 32px. No eyebrow/kicker above it.
+export const SectionTitle = ({
+  aside,
+  children,
+}: {
+  readonly aside?: ReactNode;
+  readonly children: ReactNode;
+}) => (
+  <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
+    <h2 className="text-heading">{children}</h2>
+    {aside}
+  </div>
+);

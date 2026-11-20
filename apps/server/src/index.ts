@@ -6,6 +6,7 @@ import { Database } from "@fluenshift/db";
 import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
 
+import { academyDashboard } from "./academy/academy-dashboard";
 import {
   explainAttemptFor,
   generateExercisesFor,
@@ -70,6 +71,7 @@ const HttpServer = Layer.effectDiscard(
       endInterview,
       explainAttempt: explainAttemptFor,
       generateExercises: generateExercisesFor,
+      getAcademyDashboard: academyDashboard,
       getDailyChallenge: dailyChallenge,
       getMistakeNotebook: mistakeNotebook,
       evaluateWriting: (writingSample) =>
