@@ -2,7 +2,26 @@
 // has not mastered. Ported from Grifando src/server/domain/writing/dailyChallenge.ts (74dbb9f),
 // which its /today and /write?mode=daily pages share so both show the same prompt.
 import type { DailyChallenge } from "@fluenshift/contract";
+import {
+  DAILY_PROMPTS,
+  extractActiveWeakCategories,
+  selectDailyPrompt,
+} from "@fluenshift/core/daily-prompt";
 import { Effect } from "effect";
 
-export const dailyChallenge = (): Effect.Effect<DailyChallenge> =>
-  Effect.succeed({ promptText: "", promptType: "DAILY_CHALLENGE" });
+import { listPatterns } from "./mistake-pattern-repository";
+
+export const dailyChallenge = Effect.fn("DailyChallenge.dailyChallenge")(
+  function* () {
+    const patterns = yield* listPatterns();
+    const prompt = selectDailyPrompt(
+      DAILY_PROMPTS,
+      new Date(),
+      extractActiveWeakCategories(patterns)
+    );
+    return {
+      promptText: prompt.text,
+      promptType: "DAILY_CHALLENGE",
+    } satisfies DailyChallenge;
+  }
+);
