@@ -6,6 +6,7 @@
 import { Schema } from "effect";
 
 import type { ErrorCategory } from "./evaluation";
+import { generatedExerciseSchema } from "./exercise-generation";
 
 type LiteralObject<Values extends readonly string[]> = {
   readonly [Value in Values[number]]: Value;
@@ -254,6 +255,61 @@ export const AcademyDashboard = Schema.Struct({
   weakAreas: Schema.Array(CategoryBreakdownEntry),
 });
 export type AcademyDashboard = typeof AcademyDashboard.Type;
+
+/**
+ * An Exercise as the Learner sees it before an Attempt: never its answer or its explanation
+ * (Grifando's public view, 74dbb9f).
+ */
+export const PublicExercise = Schema.Union([
+  Schema.Struct({
+    instruction: Schema.String,
+    options: Schema.Array(Schema.String),
+    type: Schema.Literal("MULTIPLE_CHOICE"),
+  }),
+  Schema.Struct({
+    instruction: Schema.String,
+    template: Schema.String,
+    type: Schema.Literal("FILL_BLANK"),
+  }),
+  Schema.Struct({
+    instruction: Schema.String,
+    original: Schema.String,
+    type: Schema.Literal("REWRITE"),
+  }),
+  Schema.Struct({
+    instruction: Schema.String,
+    sourceText: Schema.String,
+    type: Schema.Literal("TRANSLATION"),
+  }),
+]);
+export type PublicExercise = typeof PublicExercise.Type;
+
+/** One of the Learner's Exercises without an Attempt (Grifando's GET /api/exercises). */
+export const PendingExercise = Schema.Struct({
+  id: Schema.String,
+  prompt: PublicExercise,
+  type: ExerciseTypeSchema,
+});
+export type PendingExercise = typeof PendingExercise.Type;
+
+export const PendingExerciseList = Schema.Struct({
+  exercises: Schema.Array(PendingExercise),
+});
+export type PendingExerciseList = typeof PendingExerciseList.Type;
+
+/** A graded Attempt with the whole Exercise, its answer key included. */
+export const GradedAttempt = Schema.Struct({
+  attemptId: Schema.String,
+  exercise: generatedExerciseSchema,
+  explanation: Schema.String,
+  isCorrect: Schema.Boolean,
+});
+export type GradedAttempt = typeof GradedAttempt.Type;
+
+export const AttemptExplanation = Schema.Struct({
+  explanation: Schema.String,
+});
+export type AttemptExplanation = typeof AttemptExplanation.Type;
 
 /**
  * A request for a practice set (Grifando's POST /api/exercises, 74dbb9f). With an Evaluation,

@@ -1,19 +1,37 @@
 // A fake Academy client for the screen tests: it answers from explicit fixtures, keeps the
-// vocabulary it is given and saves, and records each save request. A read with no fixture fails.
+// vocabulary it is given and saves, and records each save, generation and Attempt request. A call
+// with no fixture fails.
 import type {
   AcademyDashboard,
   DailyChallenge,
+  ExerciseGenerationRequest,
+  GradedAttempt,
   MistakeNotebook,
+  PendingExercise,
   VocabularyItem,
   VocabularyItemRequest,
 } from "@fluenshift/contract";
 
-import { unavailableAcademyClient } from "./academy-client";
+import {
+  AcademyRequestError,
+  unavailableAcademyClient,
+} from "./academy-client";
 import type { AcademyClient } from "./academy-client";
+
+interface InMemoryExercises {
+  /** The Trainer's explanation, or the failure of the explanation request. */
+  readonly explanation?: string | AcademyRequestError;
+  /** The set a generation creates, or the failure of the generation request. */
+  readonly generated?: readonly PendingExercise[] | AcademyRequestError;
+  /** The grade of an answer to each Exercise, by its id. */
+  readonly graded?: Readonly<Record<string, GradedAttempt>>;
+  readonly pending?: readonly PendingExercise[];
+}
 
 interface InMemoryAcademyClientOptions {
   readonly academyDashboard?: AcademyDashboard;
   readonly dailyChallenge?: DailyChallenge;
+  readonly exercises?: InMemoryExercises;
   /** Every save fails, as a refused or failed request does. */
   readonly failVocabularySaves?: boolean;
   readonly mistakeNotebook?: MistakeNotebook;
@@ -22,20 +40,38 @@ interface InMemoryAcademyClientOptions {
 }
 
 export type InMemoryAcademyClient = AcademyClient & {
+  readonly attemptRequests: readonly {
+    readonly answer: string;
+    readonly exerciseId: string;
+  }[];
+  readonly generationRequests: readonly ExerciseGenerationRequest[];
   readonly vocabularyRequests: readonly VocabularyItemRequest[];
+};
+
+const settle = <A>(fixture: A | AcademyRequestError | undefined) => {
+  if (fixture === undefined) {
+    return Promise.reject(new AcademyRequestError(500));
+  }
+  return fixture instanceof AcademyRequestError
+    ? Promise.reject(fixture)
+    : Promise.resolve(fixture);
 };
 
 export const createInMemoryAcademyClient = ({
   academyDashboard,
   dailyChallenge,
+  exercises = {},
   failVocabularySaves = false,
   mistakeNotebook,
   vocabulary,
 }: InMemoryAcademyClientOptions = {}): InMemoryAcademyClient => {
   let items = vocabulary;
   const vocabularyRequests: VocabularyItemRequest[] = [];
+  const generationRequests: ExerciseGenerationRequest[] = [];
+  const attemptRequests: { answer: string; exerciseId: string }[] = [];
 
   return {
+    attemptRequests,
     createVocabularyItem: (request) => {
       vocabularyRequests.push(request);
       if (failVocabularySaves || items === undefined) {
@@ -61,6 +97,12 @@ export const createInMemoryAcademyClient = ({
       items = items.filter((item) => item.id !== itemId);
       return Promise.resolve();
     },
+    explainAttempt: () => settle(exercises.explanation),
+    generateExercises: (request) => {
+      generationRequests.push(request);
+      return settle(exercises.generated);
+    },
+    generationRequests,
     getAcademyDashboard: () =>
       academyDashboard === undefined
         ? unavailableAcademyClient.getAcademyDashboard()
@@ -73,10 +115,15 @@ export const createInMemoryAcademyClient = ({
       mistakeNotebook === undefined
         ? unavailableAcademyClient.getMistakeNotebook()
         : Promise.resolve(mistakeNotebook),
+    listPendingExercises: () => settle(exercises.pending),
     listVocabulary: () =>
       items === undefined
         ? unavailableAcademyClient.listVocabulary()
         : Promise.resolve(items),
+    submitAttempt: (exerciseId, answer) => {
+      attemptRequests.push({ answer, exerciseId });
+      return settle(exercises.graded?.[exerciseId]);
+    },
     vocabularyRequests,
   };
 };
