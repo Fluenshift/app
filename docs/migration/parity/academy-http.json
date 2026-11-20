@@ -321,7 +321,10 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/page-routes.test.ts::/today > hands TodaySession today's challenge, biased toward the visitor's active categories",
+        "apps/web/src/routes/-today.test.tsx::/today > hands TodaySession today's challenge, biased toward the visitor's active categories"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/pages.characterization.test.ts::/vocabulary > lists the visitor's items newest first and prefills the form from the query",
