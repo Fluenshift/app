@@ -7,6 +7,7 @@ import type {
   GradedAttempt,
   MistakeNotebook,
   PendingExercise,
+  PracticeWritingResult,
   VocabularyItem,
   VocabularyItemRequest,
 } from "@fluenshift/contract";
@@ -35,6 +36,10 @@ export interface AcademyClient {
     exerciseId: string,
     answer: string
   ) => Promise<GradedAttempt>;
+  /** Practice writing: the Judge's Evaluation, then the Enrichment's Occurrences (ADR 0026). */
+  readonly writePractice: (
+    writingSample: string
+  ) => Promise<PracticeWritingResult>;
 }
 
 /**
@@ -81,4 +86,5 @@ export const unavailableAcademyClient: AcademyClient = {
   listPendingExercises: unavailable,
   listVocabulary: unavailable,
   submitAttempt: unavailable,
+  writePractice: unavailable,
 };

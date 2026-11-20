@@ -8,6 +8,7 @@ import type {
   GradedAttempt,
   MistakeNotebook,
   PendingExercise,
+  PracticeWritingResult,
   VocabularyItem,
   VocabularyItemRequest,
 } from "@fluenshift/contract";
@@ -35,6 +36,8 @@ interface InMemoryAcademyClientOptions {
   /** Every save fails, as a refused or failed request does. */
   readonly failVocabularySaves?: boolean;
   readonly mistakeNotebook?: MistakeNotebook;
+  /** What practice writing answers, or the failure of its request. */
+  readonly practiceWriting?: PracticeWritingResult | AcademyRequestError;
   /** The Learner's vocabulary, newest first. */
   readonly vocabulary?: readonly VocabularyItem[];
 }
@@ -46,6 +49,7 @@ export type InMemoryAcademyClient = AcademyClient & {
   }[];
   readonly generationRequests: readonly ExerciseGenerationRequest[];
   readonly vocabularyRequests: readonly VocabularyItemRequest[];
+  readonly writeRequests: readonly string[];
 };
 
 const settle = <A>(fixture: A | AcademyRequestError | undefined) => {
@@ -63,12 +67,14 @@ export const createInMemoryAcademyClient = ({
   exercises = {},
   failVocabularySaves = false,
   mistakeNotebook,
+  practiceWriting,
   vocabulary,
 }: InMemoryAcademyClientOptions = {}): InMemoryAcademyClient => {
   let items = vocabulary;
   const vocabularyRequests: VocabularyItemRequest[] = [];
   const generationRequests: ExerciseGenerationRequest[] = [];
   const attemptRequests: { answer: string; exerciseId: string }[] = [];
+  const writeRequests: string[] = [];
 
   return {
     attemptRequests,
@@ -125,5 +131,10 @@ export const createInMemoryAcademyClient = ({
       return settle(exercises.graded?.[exerciseId]);
     },
     vocabularyRequests,
+    writePractice: (writingSample) => {
+      writeRequests.push(writingSample);
+      return settle(practiceWriting);
+    },
+    writeRequests,
   };
 };

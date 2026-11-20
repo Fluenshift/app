@@ -13,6 +13,7 @@ import {
   GradedAttempt,
   MistakeNotebook,
   PendingExerciseList,
+  PracticeWritingResult,
   ProgressEvidence,
   ProgressSummary,
   SetupStatus,
@@ -62,6 +63,7 @@ const decodeMistakeNotebook = Schema.decodeUnknownOption(MistakeNotebook);
 const decodePendingExercises = Schema.decodeUnknownOption(PendingExerciseList);
 const decodeGradedAttempt = Schema.decodeUnknownOption(GradedAttempt);
 const decodeAttemptExplanation = Schema.decodeUnknownOption(AttemptExplanation);
+const decodePracticeWriting = Schema.decodeUnknownOption(PracticeWritingResult);
 
 /** What a failed Academy answer says: its code and the message its route wrote for the Learner. */
 const AcademyFailureBody = Schema.Struct({
@@ -289,6 +291,13 @@ export const createHttpAcademyClient = ({
           }
         ),
         decodeGradedAttempt
+      );
+    },
+
+    async writePractice(writingSample) {
+      return academyJson(
+        await api["practice-writing"].$post({ json: { writingSample } }),
+        decodePracticeWriting
       );
     },
   };

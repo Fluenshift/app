@@ -6,6 +6,7 @@
 import type { DailyChallenge } from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import { createInMemoryAcademyClient } from "../features/academy/in-memory-academy-client";
@@ -60,5 +61,70 @@ describe("/today", () => {
     expect(await screen.findByRole("complementary")).toHaveTextContent(
       "PromptDescribe a bug you recently solved and how you found the root cause."
     );
+  });
+});
+
+// Grifando's TodaySession (74dbb9f): after today's writing, "Continue to review" opens a practice
+// set that starts with the patterns of that writing (docs/adr/0025, decision 5).
+describe("/today review", () => {
+  it("continues to a review that opens with the patterns of today's writing", async () => {
+    const client = createInMemoryAcademyClient({
+      dailyChallenge: {
+        promptText:
+          "Explain what an API is to someone with no programming background.",
+        promptType: "DAILY_CHALLENGE",
+      },
+      exercises: { generated: [] },
+      practiceWriting: {
+        evaluation: {
+          band: "Natural",
+          correctedText: "An API lets programs talk.",
+          evaluatedAt: "2026-03-05T12:00:00.000Z",
+          evaluatedEnglishWordCount: 5,
+          findings: [],
+          id: "today-1",
+          model: "judge-model",
+          originalText: "An API lets programs talk.",
+          provider: "test",
+          rubricVersion: "1",
+          score: 100,
+          suggestions: [],
+          summary: "No errors found.",
+        },
+        occurrences: [],
+        status: "evaluated",
+      },
+    });
+    render(
+      <RouterProvider
+        router={createAppRouter({
+          academyClient: client,
+          evaluationClient: createInMemoryEvaluationClient(),
+          history: createMemoryHistory({ initialEntries: ["/today"] }),
+        })}
+      />
+    );
+    const page = await screen.findByRole("main");
+    await userEvent.type(
+      within(page).getByRole("textbox", { name: "Your answer" }),
+      "An API lets programs talk."
+    );
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+    await userEvent.click(
+      await within(page).findByRole("button", { name: "Continue to review" })
+    );
+
+    const [, review] = within(
+      within(page).getByRole("list", { name: "Session steps" })
+    ).getAllByRole("listitem");
+    expect(review).toHaveAttribute("aria-current", "step");
+    expect(
+      await within(page).findByText("No exercises to practice right now")
+    ).toBeVisible();
+    expect(client.generationRequests).toEqual([
+      { afterEvaluationId: "today-1" },
+    ]);
   });
 });
