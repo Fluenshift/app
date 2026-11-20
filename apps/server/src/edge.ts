@@ -1,5 +1,4 @@
-import { Cause, Exit, Option } from "effect";
-import type { Effect } from "effect";
+import { Cause, Effect, Exit, Option } from "effect";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import type { JSONValue } from "hono/utils/types";
 
@@ -45,6 +44,16 @@ const isTagged = (value: unknown): value is Tagged =>
   "_tag" in value &&
   typeof value._tag === "string";
 
+// Whether the edge answers a cause with its `unexpected` answer: no failure, or one without an
+// entry.
+const isUnexpected = <E extends Tagged>(
+  cause: Cause.Cause<unknown>,
+  errors: EdgeErrors<E>
+): boolean => {
+  const failure = Option.getOrUndefined(Cause.findErrorOption(cause));
+  return !isTagged(failure) || !Object.hasOwn(errors, failure._tag);
+};
+
 // Each entry takes its own error class, so the entry found by tag is called with the failure
 // of that tag; `never` is the only parameter type every entry accepts.
 const failureOf = <E extends Tagged>(
@@ -60,6 +69,17 @@ const failureOf = <E extends Tagged>(
   return respond(failure as never);
 };
 
+// What a log line may say about an unexpected failure: a tagged error's tag or a thrown value's
+// name, never its message or other properties, which can carry a request's key or Learner text
+// (docs/adr/0026).
+const nameOf = (cause: Cause.Cause<unknown>): string => {
+  const failure = Cause.squash(cause);
+  if (isTagged(failure)) {
+    return failure._tag;
+  }
+  return failure instanceof Error ? failure.name : "NonErrorThrown";
+};
+
 /**
  * The only way a route answers from an Effect. It runs the Effect in the application runtime,
  * answers a success through `success`, a tagged error through its entry in `errors`, and
@@ -72,11 +92,29 @@ export const makeEdge =
     handlers: {
       readonly errors: EdgeErrors<E>;
       readonly success: (value: A) => Response | Promise<Response>;
+      /**
+       * The context of the one error-level line an unexpected failure logs, with the error's tag
+       * or name only (docs/adr/0026). A route without one logs nothing.
+       */
+      readonly log?: string;
       /** The answer to anything unexpected, when a route keeps its source's; `INTERNAL_ERROR` otherwise. */
       readonly unexpected?: EdgeFailure;
     }
-  ): Promise<Response> =>
-    runtime.runPromiseExit(effect).then((exit) => {
+  ): Promise<Response> => {
+    const { log } = handlers;
+    const logged =
+      log === undefined
+        ? effect
+        : effect.pipe(
+            Effect.tapCause((cause) =>
+              isUnexpected(cause, handlers.errors)
+                ? Effect.logError(log).pipe(
+                    Effect.annotateLogs({ error: nameOf(cause) })
+                  )
+                : Effect.void
+            )
+          );
+    return runtime.runPromiseExit(logged).then((exit) => {
       if (Exit.isSuccess(exit)) {
         return handlers.success(exit.value);
       }
@@ -87,3 +125,4 @@ export const makeEdge =
       );
       return Response.json(failure.body, { status: failure.status });
     });
+  };

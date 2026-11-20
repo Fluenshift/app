@@ -27,6 +27,8 @@ export {
   NotebookPattern,
   PendingExercise,
   PendingExerciseList,
+  PracticeOccurrence,
+  PracticeWritingResult,
   PROMPT_TYPES,
   PromptType,
   PromptTypeSchema,

@@ -5,6 +5,7 @@
 // separately (docs/adr/0005).
 import { Schema } from "effect";
 
+import { Evaluation } from "./evaluation";
 import type { ErrorCategory } from "./evaluation";
 import { generatedExerciseSchema } from "./exercise-generation";
 
@@ -310,6 +311,41 @@ export const AttemptExplanation = Schema.Struct({
   explanation: Schema.String,
 });
 export type AttemptExplanation = typeof AttemptExplanation.Type;
+
+/**
+ * One Occurrence the Enrichment recorded from a practice Writing Sample, as Grifando's mistake
+ * card showed it (docs/adr/0026). A Naturalness Note has no Finding position.
+ */
+export const PracticeOccurrence = Schema.Struct({
+  category: MistakeCategorySchema,
+  correctedSpan: Schema.String,
+  example: Schema.String,
+  explanation: Schema.String,
+  findingPosition: Schema.NullOr(Schema.Int),
+  id: Schema.String,
+  l1Transfer: Schema.Boolean,
+  originalSpan: Schema.String,
+  severity: MistakeSeveritySchema,
+});
+export type PracticeOccurrence = typeof PracticeOccurrence.Type;
+
+/**
+ * What POST /api/practice-writing answers with 201 (docs/adr/0026): the Evaluation and its
+ * Occurrences, or the Evaluation's id with Grifando's message when the Enrichment failed.
+ */
+export const PracticeWritingResult = Schema.Union([
+  Schema.Struct({
+    evaluation: Evaluation,
+    occurrences: Schema.Array(PracticeOccurrence),
+    status: Schema.Literal("evaluated"),
+  }),
+  Schema.Struct({
+    evaluationId: Schema.String,
+    message: Schema.String,
+    status: Schema.Literal("failed"),
+  }),
+]);
+export type PracticeWritingResult = typeof PracticeWritingResult.Type;
 
 /**
  * A request for a practice set (Grifando's POST /api/exercises, 74dbb9f). With an Evaluation,

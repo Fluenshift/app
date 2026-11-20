@@ -1,15 +1,20 @@
 // Practice writing: a Writing Sample the Academy asked for, evaluated by the Judge like any other
 // (docs/adr/0010), whose Findings the Trainer then folds into the Learner's Mistake Patterns. It
 // sits outside the Academy, which reads Evaluations and never writes them.
-import type { AIResponseValidationError } from "@fluenshift/contract";
+import type {
+  AIResponseValidationError,
+  PracticeOccurrence,
+} from "@fluenshift/contract";
 import { Effect, Schema } from "effect";
 
 import { trainerForRequest } from "../academy/academy-requests";
 import { answerTurn } from "../academy/interview-service";
 import type { AnswerTurnInput } from "../academy/interview-service";
+import { listOccurrencesForEvaluation } from "../academy/occurrence-repository";
 import { foldEvaluation } from "../academy/pattern-folding";
 import type { TrainerMethods } from "../academy/trainer/trainer-model";
 import { evaluateWriting } from "../evaluation/writing-evaluation";
+import type { Evaluation } from "../history/learning-history";
 
 // The Judge's Evaluation stands, but the Trainer's Enrichment failed for a reason the Learner
 // cannot act on: Grifando's FAILED writing session (docs/adr/0024).
@@ -54,4 +59,21 @@ export const answerInterviewTurnFor = Effect.fn(
     trainer,
     input
   );
+});
+
+/** A practice Writing Sample's Evaluation and the Occurrences its Enrichment recorded. */
+export interface PracticeWriting {
+  readonly evaluation: Evaluation;
+  readonly occurrences: readonly PracticeOccurrence[];
+}
+
+// Practice writing on the key the request carries (docs/adr/0026): the key is resolved before
+// the Judge runs, as Grifando resolved it before its analysis.
+export const practiceWritingFor = Effect.fn(
+  "PracticeWriting.practiceWritingFor"
+)(function* (headers: Headers, writingSample: string) {
+  const trainer = yield* trainerForRequest(headers);
+  const evaluation = yield* evaluatePractice(trainer, writingSample);
+  const occurrences = yield* listOccurrencesForEvaluation(evaluation.id);
+  return { evaluation, occurrences } satisfies PracticeWriting;
 });

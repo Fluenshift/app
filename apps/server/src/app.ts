@@ -67,7 +67,10 @@ import type {
 } from "./evaluation/evaluation-endpoint";
 import type { Evaluation } from "./history/learning-history";
 import { CurrentLearner, LearnerIdentity } from "./learner-identity";
-import type { EnrichmentFailedError } from "./practice/practice-writing";
+import type {
+  EnrichmentFailedError,
+  PracticeWriting,
+} from "./practice/practice-writing";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -208,6 +211,19 @@ export interface AppBoundaries<R = never> {
   ) => Effect.Effect<
     SubmitAttemptResult,
     DatabaseError | NotFoundError,
+    R | CurrentLearner
+  >;
+  /** Practice writing on the request's key: the Judge's Evaluation, then the Enrichment's fold. */
+  readonly writePractice?: (
+    headers: Headers,
+    writingSample: string
+  ) => Effect.Effect<
+    PracticeWriting,
+    | AIResponseValidationError
+    | DatabaseError
+    | EnrichmentFailedError
+    | TrainerAccessError
+    | WritingEvaluationFailure,
     R | CurrentLearner
   >;
   /** One tiny call with the Learner's key (TrainerClient.testKey). */
@@ -511,6 +527,13 @@ const safelyLogEvaluation = (
 
 const WritingSampleRequest = Schema.Struct({ writingSample: Schema.String });
 
+// Grifando's writing route answered every issue of a refused body (src/app/api/writing-sessions,
+// 74dbb9f); a body that is not JSON is refused too.
+const PRACTICE_WRITING_REQUEST = Schema.toStandardSchemaV1(
+  WritingSampleRequest,
+  { parseOptions: { errors: "all" } }
+);
+
 /** The idle time a connection keeps while the Judge answers, beyond its own deadline. */
 export const HTTP_IDLE_TIMEOUT_MILLISECONDS =
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS * 1000;
@@ -750,6 +773,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, listPendingExercises()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to list exercises",
         success: (pending) =>
           Response.json({ exercises: pending.map(publicView) }),
       });
@@ -778,6 +802,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                     AIResponseValidationError: () => SOMETHING_WENT_WRONG,
                     DatabaseError: () => SOMETHING_WENT_WRONG,
                   },
+                  log: "Failed to generate exercises",
                   success: (created) =>
                     created.length === 0
                       ? Response.json(NO_PATTERNS, { status: 422 })
@@ -822,6 +847,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                       DatabaseError: () => SOMETHING_WENT_WRONG,
                       NotFoundError: () => NOT_FOUND,
                     },
+                    log: "Failed to submit exercise attempt",
                     success: (graded) => Response.json(graded),
                     unexpected: SOMETHING_WENT_WRONG,
                   }
@@ -859,6 +885,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
               }),
               DatabaseError: () => EXPLANATION_FAILED,
             },
+            log: "Failed to explain exercise attempt",
             success: (explanation) =>
               explanation === null
                 ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
@@ -883,6 +910,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             AIResponseValidationError: () => SOMETHING_WENT_WRONG,
             DatabaseError: () => SOMETHING_WENT_WRONG,
           },
+          log: "Failed to start interview",
           success: ({ sessionId, turn }) =>
             Response.json(
               {
@@ -911,6 +939,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           ),
           {
             errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            log: "Failed to fetch interview session",
             success: (session) =>
               session === null
                 ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
@@ -940,6 +969,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           ),
           {
             errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            log: "Failed to end interview session",
             success: (ended) =>
               ended
                 ? Response.json({ status: "ended" })
@@ -995,6 +1025,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                       NotFoundError: () => NOT_FOUND,
                       UnsafeCorrectionError: judgeFailure,
                     },
+                    log: "Failed to answer interview turn",
                     success: (answered) => Response.json(answered),
                     unexpected: SOMETHING_WENT_WRONG,
                   }
@@ -1014,6 +1045,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, getAcademyDashboard()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to read the Academy dashboard",
         success: (dashboard) => Response.json(dashboard),
       });
     })
@@ -1026,6 +1058,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, getDailyChallenge()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to read today's challenge",
         success: (challenge) => Response.json(challenge),
       });
     })
@@ -1038,6 +1071,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, getMistakeNotebook()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to read the Mistake Notebook",
         success: (notebook) => Response.json(notebook),
       });
     })
@@ -1050,8 +1084,66 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       }
       return edge(forLearner(context.req.raw, listVocabularyItems()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        log: "Failed to list vocabulary items",
         success: (items) => Response.json({ items }),
       });
+    })
+    // Practice writing (Grifando's POST /api/writing-sessions, docs/adr/0026): the Judge
+    // evaluates the text as a practice Writing Sample and the Trainer folds its Findings. The
+    // key is resolved first; a failed Enrichment keeps the Evaluation and answers 201, as
+    // Grifando answered with its FAILED session.
+    .post("/api/practice-writing", (context): Response | Promise<Response> => {
+      const { writePractice } = options;
+      if (writePractice === undefined) {
+        return context.json(notReady("Practice writing is not available"), 503);
+      }
+      return context.req
+        .json<unknown>()
+        .catch(() => null)
+        .then((body) => PRACTICE_WRITING_REQUEST["~standard"].validate(body))
+        .then((result) =>
+          result.issues === undefined
+            ? edge(
+                forLearner(
+                  context.req.raw,
+                  writePractice(
+                    context.req.raw.headers,
+                    result.value.writingSample
+                  )
+                ),
+                {
+                  errors: {
+                    ...TRAINER_FAILURES,
+                    AIResponseValidationError: () => SOMETHING_WENT_WRONG,
+                    DatabaseError: () => SOMETHING_WENT_WRONG,
+                    EnrichmentFailedError: ({ evaluationId }) => ({
+                      body: {
+                        evaluationId,
+                        message: ANALYSIS_FAILURE_MESSAGE,
+                        status: "failed",
+                      },
+                      status: 201,
+                    }),
+                    EvaluationModelError: judgeFailure,
+                    InvalidAssessmentError: judgeFailure,
+                    InvalidWritingSampleError: judgeFailure,
+                    NoEnglishError: judgeFailure,
+                    UnsafeCorrectionError: judgeFailure,
+                  },
+                  log: "Failed to evaluate practice writing",
+                  success: ({ evaluation, occurrences }) =>
+                    Response.json(
+                      { evaluation, occurrences, status: "evaluated" },
+                      { status: 201 }
+                    ),
+                  unexpected: SOMETHING_WENT_WRONG,
+                }
+              )
+            : Response.json(
+                { error: "Invalid request body", issues: result.issues },
+                { status: 400 }
+              )
+        );
     })
     .post("/api/vocabulary", (context): Response | Promise<Response> => {
       const { createVocabularyItem } = options;
@@ -1068,6 +1160,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 forLearner(context.req.raw, createVocabularyItem(result.value)),
                 {
                   errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+                  log: "Failed to save vocabulary item",
                   success: (item) => Response.json(item, { status: 201 }),
                 }
               )
@@ -1091,6 +1184,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           ),
           {
             errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            log: "Failed to delete vocabulary item",
             success: (deleted) =>
               deleted
                 ? new Response(null, { status: 204 })

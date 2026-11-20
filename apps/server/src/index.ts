@@ -33,7 +33,10 @@ import {
   listEvaluations,
 } from "./history/learning-history";
 import { LearnerIdentity } from "./learner-identity";
-import { answerInterviewTurnFor } from "./practice/practice-writing";
+import {
+  answerInterviewTurnFor,
+  practiceWritingFor,
+} from "./practice/practice-writing";
 import {
   getProgressEvidence,
   getProgressSummary,
@@ -109,6 +112,7 @@ const HttpServer = Layer.effectDiscard(
           Effect.flatMap((client) => client.testKey(credentials))
         ),
       webDistPath: config.webDistPath,
+      writePractice: practiceWritingFor,
     });
     yield* Effect.acquireRelease(
       Effect.sync(() =>
