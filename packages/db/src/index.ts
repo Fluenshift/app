@@ -1,6 +1,11 @@
 export { Database, DatabaseError } from "./database";
 export type { DrizzleClient } from "./database";
 export {
+  evaluationsView,
+  findingsView,
+  suggestionsView,
+} from "./evaluation-views";
+export {
   categoryAbilities,
   enrichments,
   evaluations,

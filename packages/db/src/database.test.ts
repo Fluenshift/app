@@ -11,6 +11,12 @@ import { ConfigProvider, Effect, Exit, Layer, Option } from "effect";
 import { afterAll, beforeAll } from "vitest";
 
 import { Database, DatabaseError } from "./database";
+import {
+  evaluationsView,
+  findingsView,
+  suggestionsView,
+} from "./evaluation-views";
+import { evaluations, findings, suggestions } from "./schema";
 
 // Every data directory of this file lives under one scratch directory.
 let scratch = "";
@@ -459,5 +465,49 @@ describe("Database", () => {
       Option.getOrUndefined(Exit.findErrorOption(outcome.failed))
     ).toBeInstanceOf(DatabaseError);
     expect(outcome.entries).toStrictEqual([{ value: "kept" }]);
+  });
+
+  it("reads the Evaluation tables whole through their read-only views", async () => {
+    const read = await Effect.runPromise(
+      Effect.gen(function* () {
+        const database = yield* Database;
+        yield* verdict([
+          learner("learner-1"),
+          evaluation("evaluation-1", "learner-1"),
+          finding("evaluation-1", "learner-1"),
+          suggestion("evaluation-1", "learner-1"),
+        ]);
+        return yield* database.run((client) =>
+          Promise.all([
+            client.select().from(evaluations),
+            client.select().from(findings),
+            client.select().from(suggestions),
+            client.select().from(evaluationsView),
+            client.select().from(findingsView),
+            client.select().from(suggestionsView),
+          ]).then(
+            ([evaluationRows, findingRows, suggestionRows, ...views]) => ({
+              tables: {
+                evaluation: evaluationRows,
+                finding: findingRows,
+                suggestion: suggestionRows,
+              },
+              views,
+            })
+          )
+        );
+      }).pipe(Effect.provide(migrated()))
+    );
+
+    expect(
+      [read.tables.evaluation, read.tables.finding, read.tables.suggestion].map(
+        (rows) => rows.length
+      )
+    ).toStrictEqual([1, 1, 1]);
+    expect(read.views).toStrictEqual([
+      read.tables.evaluation,
+      read.tables.finding,
+      read.tables.suggestion,
+    ]);
   });
 });
