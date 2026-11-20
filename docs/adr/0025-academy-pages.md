@@ -44,7 +44,9 @@
    `/mistakes`, `/exercises`, `/interview`, `/technical` and `/explain-code`.
 3. A prefill of the vocabulary form travels in the router's history state, never in the URL:
    "Save to vocabulary" opens `/vocabulary` with the term, the example and the source
-   Evaluation in state. A reload or a shared link opens an empty form.
+   Evaluation in state. A shared link opens an empty form; a reload in the same tab keeps the
+   prefill, since the browser keeps a history entry's state outside its URL (corrected on
+   2026-11-20, #193).
 4. Each page row targets the route test of its read in `apps/server` and the screen test of its
    route in `apps/web`, both under the row's title. The route test seeds PGlite and fixes the
    clock as the characterization does; the screen test renders the route on the in-memory

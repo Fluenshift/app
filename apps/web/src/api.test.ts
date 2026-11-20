@@ -6,6 +6,7 @@ import type {
 import { describe, expect, test } from "vitest";
 
 import { createHttpAcademyClient, createHttpEvaluationClient } from "./api";
+import { AcademyRequestError } from "./features/academy/academy-client";
 import { EvaluationRequestError } from "./features/evaluations/evaluation-client";
 
 const retainedEvaluation: Evaluation = {
@@ -320,7 +321,7 @@ describe("HTTP Academy client", () => {
     });
 
     await expect(client.getDailyChallenge()).rejects.toBeInstanceOf(
-      EvaluationRequestError
+      AcademyRequestError
     );
   });
 });

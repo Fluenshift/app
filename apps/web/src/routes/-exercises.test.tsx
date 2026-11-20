@@ -209,6 +209,34 @@ describe("/exercises", () => {
     expect(within(page).getByText("Not quite")).toBeVisible();
   });
 
+  it("shows the route's message when the explanation fails", async () => {
+    const { page } = await renderExercises({
+      explanation: new AcademyRequestError(502, {
+        error:
+          "We couldn't explain this answer right now. Your grade is unaffected — try again.",
+      }),
+      graded: { choice: gradedChoice },
+      pending: [multipleChoice],
+    });
+    await userEvent.click(
+      await within(page).findByRole("radio", {
+        name: "I depend of this library.",
+      })
+    );
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Check answer" })
+    );
+    await userEvent.click(
+      await within(page).findByRole("button", { name: "Explain my answer" })
+    );
+
+    expect(
+      await within(page).findByText(
+        "We couldn't explain this answer right now. Your grade is unaffected — try again."
+      )
+    ).toBeVisible();
+  });
+
   it("says the grade stands when the explanation fails", async () => {
     const { page } = await renderExercises({
       explanation: new AcademyRequestError(500),

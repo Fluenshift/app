@@ -14,23 +14,21 @@ import { createInMemoryAcademyClient } from "../features/academy/in-memory-acade
 import { createInMemoryEvaluationClient } from "../features/evaluations/in-memory-evaluation-client";
 import { createAppRouter } from "../router";
 
-// The page's heading and what its sheet's aside shows: the Practice Prompt, or no prompt at all.
+// The page's heading, what its sheet's aside shows, and the challenge the route hands
+// WritingCoach (the characterization's initialChallenge prop).
 const read = async (url: string) => {
-  const view = render(
-    <RouterProvider
-      router={createAppRouter({
-        academyClient: createInMemoryAcademyClient({
-          dailyChallenge: {
-            promptText:
-              "Explain what an API is to someone with no programming background.",
-            promptType: "DAILY_CHALLENGE",
-          },
-        }),
-        evaluationClient: createInMemoryEvaluationClient(),
-        history: createMemoryHistory({ initialEntries: [url] }),
-      })}
-    />
-  );
+  const router = createAppRouter({
+    academyClient: createInMemoryAcademyClient({
+      dailyChallenge: {
+        promptText:
+          "Explain what an API is to someone with no programming background.",
+        promptType: "DAILY_CHALLENGE",
+      },
+    }),
+    evaluationClient: createInMemoryEvaluationClient(),
+    history: createMemoryHistory({ initialEntries: [url] }),
+  });
+  const view = render(<RouterProvider router={router} />);
   const page = await screen.findByRole("main");
   const aside = within(page).queryByRole("complementary");
   const seen = {
@@ -39,6 +37,9 @@ const read = async (url: string) => {
       within(aside).queryByRole("heading", { name: "Prompt" }) === null
         ? undefined
         : within(aside).getByRole("paragraph").textContent,
+    initialChallenge: router.state.matches.find(
+      (match) => match.routeId === "/write"
+    )?.loaderData,
     title: within(page).queryByRole("heading", { level: 1 })?.textContent,
   };
   view.unmount();
@@ -49,20 +50,33 @@ describe("/write", () => {
   it("takes its challenge and heading from the query", async () => {
     expect(await read("/write")).toEqual({
       challenge: undefined,
+      initialChallenge: undefined,
       title: "Write",
     });
     expect(await read("/write?promptId=missing")).toEqual({
       challenge: undefined,
+      initialChallenge: undefined,
       title: "Write",
     });
     expect(await read("/write?promptId=backend-1")).toEqual({
       challenge:
         "Explain the difference between synchronous and asynchronous request handling.",
+      initialChallenge: {
+        promptText:
+          "Explain the difference between synchronous and asynchronous request handling.",
+        promptType: "TECHNICAL",
+        technicalCategory: "BACKEND",
+      },
       title: "Technical English",
     });
     expect(await read("/write?mode=daily")).toEqual({
       challenge:
         "Explain what an API is to someone with no programming background.",
+      initialChallenge: {
+        promptText:
+          "Explain what an API is to someone with no programming background.",
+        promptType: "DAILY_CHALLENGE",
+      },
       title: "Today’s challenge",
     });
   });
@@ -165,6 +179,36 @@ describe("/write practice writing", () => {
     expect(
       within(page).getByRole("link", { name: "Open the Evaluation" })
     ).toHaveAttribute("href", "/evaluations/practice-1");
+  });
+
+  it("notes a Finding the Enrichment left without an Occurrence", async () => {
+    const { page } = await renderWrite({
+      evaluation: {
+        ...evaluation,
+        findings: [
+          {
+            byteEnd: 6,
+            byteStart: 2,
+            category: "Clarity",
+            correction: "went",
+            explanation: "Say what happened plainly.",
+            originalText: "goed",
+            severity: "Minor",
+          },
+        ],
+      },
+      occurrences: [],
+      status: "evaluated",
+    });
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    const notes = await within(page).findByRole("region", { name: "Notes" });
+    expect(notes).toHaveTextContent(
+      "IncorrectClaritygoed → corrected towentSay what happened plainly."
+    );
+    expect(notes).not.toHaveTextContent("Nothing to correct here");
   });
 
   it("starts over on the same page with an empty sheet", async () => {

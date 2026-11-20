@@ -42,7 +42,12 @@
    summary in place of the four scores, one note per Occurrence as Grifando's `MistakeCard` (the
    correction, the Mistake Category, the L1 Transfer flag as "From Portuguese", the explanation,
    the example, and "Save to vocabulary" through history state, ADR 0025), the corrected version,
-   and a link to the Evaluation's own page. The natural version joins with the Naturalness Notes.
+   and a link to the Evaluation's own page. A Finding the Enrichment recorded no Occurrence for
+   (Clarity and Other have no Mistake Category) gets a note of its own, with its Error Category.
+   An interview turn's feedback (`TurnFeedback`) shows the answer's summary, its corrected
+   version when it differs from the answer, and the Overall Score with its band, where Grifando
+   showed its overall feedback, its natural version and five model scores. The natural version
+   joins both with the Naturalness Notes. (Completed on 2026-11-20, #193.)
 4. An unexpected failure of an Academy route, one its edge answers with the generic 500, logs one
    error-level line through Effect's logger: the route's context and the error's tag or name, never
    its message, code or other properties.

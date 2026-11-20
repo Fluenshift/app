@@ -3,12 +3,16 @@
 // localized marks replace Grifando's highlights (docs/adr/0004), the Overall Score and its band
 // replace the four model scores (docs/adr/0002), and the natural version waits for the
 // Naturalness Notes.
-import type { Evaluation, PracticeOccurrence } from "@fluenshift/contract";
+import type {
+  Evaluation,
+  EvaluationFinding,
+  PracticeOccurrence,
+} from "@fluenshift/contract";
 import { Button } from "@fluenshift/ui/components/button";
 import { Link } from "@tanstack/react-router";
 
 import { SpellChecker } from "../evaluations/spell-checker";
-import { MistakeCard } from "./mistake-card";
+import { FindingNote, MistakeCard } from "./mistake-card";
 
 export const WritingResults = ({
   evaluation,
@@ -23,6 +27,22 @@ export const WritingResults = ({
   readonly onWriteAnother: () => void;
 }) => {
   const markCount = evaluation.findings.length;
+  // One note per Finding, from its Occurrence when the Enrichment recorded one (Clarity and Other
+  // take no Mistake Category), then the Naturalness Notes, which have no Finding.
+  const notes: readonly (
+    | { readonly occurrence: PracticeOccurrence }
+    | { readonly finding: EvaluationFinding; readonly position: number }
+  )[] = [
+    ...evaluation.findings.map((finding, position) => {
+      const occurrence = occurrences.find(
+        (candidate) => candidate.findingPosition === position
+      );
+      return occurrence === undefined ? { finding, position } : { occurrence };
+    }),
+    ...occurrences
+      .filter((occurrence) => occurrence.findingPosition === null)
+      .map((occurrence) => ({ occurrence })),
+  ];
 
   return (
     <div className="space-y-20">
@@ -53,16 +73,25 @@ export const WritingResults = ({
           <h2 className="text-heading mb-6" id="notes-title">
             Notes
           </h2>
-          {occurrences.length > 0 ? (
+          {notes.length > 0 ? (
             <div className="border-border border-b">
-              {occurrences.map((mistake, index) => (
-                <MistakeCard
-                  evaluationId={evaluation.id}
-                  index={index}
-                  key={mistake.id}
-                  mistake={mistake}
-                />
-              ))}
+              {notes.map((note, index) =>
+                "occurrence" in note ? (
+                  <MistakeCard
+                    evaluationId={evaluation.id}
+                    index={index}
+                    key={note.occurrence.id}
+                    mistake={note.occurrence}
+                  />
+                ) : (
+                  <FindingNote
+                    evaluationId={evaluation.id}
+                    finding={note.finding}
+                    index={index}
+                    key={`finding-${String(note.position)}`}
+                  />
+                )
+              )}
             </div>
           ) : (
             <p className="prose-serif text-iron text-lg">

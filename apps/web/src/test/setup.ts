@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup, configure } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
 Object.defineProperty(window, "matchMedia", {
@@ -22,3 +22,8 @@ Object.defineProperty(window, "scrollTo", {
 });
 
 afterEach(cleanup);
+
+// A screen's first render loads its route's code-split chunk and runs its loader; with every
+// suite running in parallel that took past Testing Library's 1-second default for the find
+// queries, so they wait up to 5 seconds. No assertion changes.
+configure({ asyncUtilTimeout: 5000 });

@@ -83,11 +83,11 @@ const findingTrendOf = (
     .filter((sample) => sample.rubricVersion === CURRENT_RUBRIC_VERSION)
     .slice(0, TREND_LIMIT)
     .toReversed();
-  const words = samples.reduce(
+  const totalWords = samples.reduce(
     (total, sample) => total + sample.evaluatedEnglishWordCount,
     0
   );
-  const found = samples.reduce(
+  const totalFindings = samples.reduce(
     (total, sample) => total + sample.findingCount,
     0
   );
@@ -100,10 +100,10 @@ const findingTrendOf = (
         findingRate(sample.findingCount, sample.evaluatedEnglishWordCount) ?? 0,
     })),
     window: {
-      evaluatedEnglishWordCount: words,
+      evaluatedEnglishWordCount: totalWords,
       evaluationCount: samples.length,
-      findingCount: found,
-      findingRate: findingRate(found, words),
+      findingCount: totalFindings,
+      findingRate: findingRate(totalFindings, totalWords),
     },
   };
 };

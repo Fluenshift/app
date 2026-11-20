@@ -226,9 +226,9 @@ export const createHttpAcademyClient = ({
     async createVocabularyItem(request) {
       const response = await api.vocabulary.$post({ json: request });
       if (!response.ok) {
-        throw new EvaluationRequestError(
-          response,
-          failureOf(await parseJson(response))
+        throw new AcademyRequestError(
+          response.status,
+          Option.getOrUndefined(decodeAcademyFailure(await parseJson(response)))
         );
       }
     },
@@ -239,9 +239,9 @@ export const createHttpAcademyClient = ({
         param: { itemId: encodeURIComponent(itemId) },
       });
       if (!response.ok && response.status !== 404) {
-        throw new EvaluationRequestError(
-          response,
-          failureOf(await parseJson(response))
+        throw new AcademyRequestError(
+          response.status,
+          Option.getOrUndefined(decodeAcademyFailure(await parseJson(response)))
         );
       }
     },
@@ -277,21 +277,21 @@ export const createHttpAcademyClient = ({
     },
 
     async getAcademyDashboard() {
-      return requireJson(
+      return academyJson(
         await api.academy.dashboard.$get(),
         decodeAcademyDashboard
       );
     },
 
     async getDailyChallenge() {
-      return requireJson(
+      return academyJson(
         await api["daily-challenge"].$get(),
         decodeDailyChallenge
       );
     },
 
     async getMistakeNotebook() {
-      return requireJson(await api.mistakes.$get(), decodeMistakeNotebook);
+      return academyJson(await api.mistakes.$get(), decodeMistakeNotebook);
     },
 
     async listPendingExercises() {
@@ -303,7 +303,7 @@ export const createHttpAcademyClient = ({
     },
 
     async listVocabulary() {
-      const { items } = await requireJson(
+      const { items } = await academyJson(
         await api.vocabulary.$get(),
         decodeVocabularyList
       );
