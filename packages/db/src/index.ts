@@ -17,6 +17,7 @@ export {
   learners,
   mistakePatterns,
   occurrences,
+  rateLimitWindows,
   suggestions,
   vocabularyItems,
 } from "./schema";

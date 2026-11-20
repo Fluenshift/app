@@ -3,7 +3,7 @@
   "repository": "Fluenshift/grifando",
   "tag": "parity-baseline",
   "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
-  "ranAt": "2026-11-20T22:47:24.461Z",
+  "ranAt": "2026-11-20T23:06:08.960Z",
   "tools": [
     {
       "name": "node",
@@ -42,6 +42,7 @@
     "src/server/ai/aiErrorResponse.characterization.test.ts",
     "src/server/ai/client.characterization.test.ts",
     "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+    "src/server/clientIp.characterization.test.ts",
     "src/server/domain/exercises/answerChecking.characterization.test.ts",
     "src/server/domain/exercises/difficulty.characterization.test.ts",
     "src/server/domain/exercises/publicView.characterization.test.ts",
@@ -52,6 +53,7 @@
     "src/server/domain/progress/streak.characterization.test.ts",
     "src/server/domain/writing/dailyPrompt.characterization.test.ts",
     "src/server/domain/writing/technicalPrompts.characterization.test.ts",
+    "src/server/rateLimit.characterization.test.ts",
     "src/server/session/sessionSecret.characterization.test.ts",
     "src/server/session/sessionToken.characterization.test.ts"
   ],
@@ -80,6 +82,7 @@
         "src/server/ai/aiErrorResponse.characterization.test.ts",
         "src/server/ai/client.characterization.test.ts",
         "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
+        "src/server/clientIp.characterization.test.ts",
         "src/server/domain/exercises/answerChecking.characterization.test.ts",
         "src/server/domain/exercises/difficulty.characterization.test.ts",
         "src/server/domain/exercises/publicView.characterization.test.ts",
@@ -90,6 +93,7 @@
         "src/server/domain/progress/streak.characterization.test.ts",
         "src/server/domain/writing/dailyPrompt.characterization.test.ts",
         "src/server/domain/writing/technicalPrompts.characterization.test.ts",
+        "src/server/rateLimit.characterization.test.ts",
         "src/server/session/sessionSecret.characterization.test.ts",
         "src/server/session/sessionToken.characterization.test.ts",
         "--reporter=default",

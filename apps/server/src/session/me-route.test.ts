@@ -1,7 +1,7 @@
 // Ported from Grifando src/app/api/me/route.test.ts and the characterization of the cookie it
 // expires (74dbb9f), as contract tests through `app.request` in the hosted profile: the signed
 // session cookie names the Learner, and a fake deleteLearner boundary stands in for deleteUserData.
-// The rate limit in front of the route waits for the rate-limit unit.
+// A fake limitRequest boundary stands in for rateLimitResponse.
 import { DatabaseError } from "@fluenshift/db";
 import { ServerConfig, SessionConfig } from "@fluenshift/env";
 import {
@@ -16,6 +16,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createApp } from "../app";
 import type { AppBoundaries } from "../app";
 import { CurrentLearner, LearnerIdentity } from "../learner-identity";
+import { RateLimitedError } from "./rate-limit";
 import { SESSION_COOKIE, signSessionId } from "./session-token";
 
 const fromEnv = (env: Record<string, string>) =>
@@ -93,6 +94,16 @@ describe("DELETE /api/me", () => {
     const cookie = res.headers.get("set-cookie") ?? "";
     expect(cookie).toContain("ig_session=;");
     expect(cookie.toLowerCase()).toContain("max-age=0");
+  });
+
+  it("is rate limited", async () => {
+    const res = await hostedApp(session, {
+      deleteLearner,
+      limitRequest: () =>
+        Effect.fail(new RateLimitedError({ retryAfterSeconds: 60 })),
+    }).request(req());
+    expect(res.status).toBe(429);
+    expect(deleted).not.toHaveBeenCalled();
   });
 
   it("answers the generic 500 and keeps the cookie when the deletion fails", async () => {

@@ -24,6 +24,7 @@ import {
   integer,
   jsonb,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   unique,
@@ -502,6 +503,23 @@ export const interviewTurns = pgTable(
       "interview_turns_answer_check",
       sql`${table.evaluationId} is null or ${table.answeredAt} is not null`
     ),
+  ]
+);
+
+// A fixed-window counter of the calls one subject made under one rule, keyed `<rule>:<subject>`,
+// where the subject is a Learner or a hashed client IP (docs/adr/0033). Ported from Grifando's
+// RateLimitWindow (74dbb9f): a window belongs to no Learner, so it has no Learner reference, and
+// the hosted profile's cleanup deletes windows older than 2 days (docs/adr/0011).
+export const rateLimitWindows = pgTable(
+  "rate_limit_windows",
+  {
+    count: integer("count").notNull().default(0),
+    key: text("key").notNull(),
+    windowStart: moment("window_start").notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.key, table.windowStart] }),
+    index("rate_limit_windows_window_start_idx").on(table.windowStart),
   ]
 );
 

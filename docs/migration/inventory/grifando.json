@@ -428,6 +428,38 @@
       "baseline": "green"
     },
     {
+      "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::getIpHashSalt > falls back to a fixed development salt outside production",
+      "kind": "characterization",
+      "source": "src/server/clientIp.characterization.test.ts",
+      "title": "getIpHashSalt > falls back to a fixed development salt outside production",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::getIpHashSalt > refuses to run in production without IP_HASH_SALT",
+      "kind": "characterization",
+      "source": "src/server/clientIp.characterization.test.ts",
+      "title": "getIpHashSalt > refuses to run in production without IP_HASH_SALT",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::getIpHashSalt > returns IP_HASH_SALT whenever it is set",
+      "kind": "characterization",
+      "source": "src/server/clientIp.characterization.test.ts",
+      "title": "getIpHashSalt > returns IP_HASH_SALT whenever it is set",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::hashedClientIp > hashes the salt followed by the IP with SHA-256, keeping 32 hex digits",
+      "kind": "characterization",
+      "source": "src/server/clientIp.characterization.test.ts",
+      "title": "hashedClientIp > hashes the salt followed by the IP with SHA-256, keeping 32 hex digits",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:characterization:src/server/domain/exercises/answerChecking.characterization.test.ts::evaluateExerciseAnswer guards > grades rewrite and translation answers against their acceptable answers",
       "kind": "characterization",
       "source": "src/server/domain/exercises/answerChecking.characterization.test.ts",
@@ -600,6 +632,22 @@
       "kind": "characterization",
       "source": "src/server/domain/writing/technicalPrompts.characterization.test.ts",
       "title": "technical prompt guards > keeps the technical prompt bank as written",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/rateLimit.characterization.test.ts::rate limits > counts every call against the bucket's rules for the user and the client IP's daily ceiling",
+      "kind": "characterization",
+      "source": "src/server/rateLimit.characterization.test.ts",
+      "title": "rate limits > counts every call against the bucket's rules for the user and the client IP's daily ceiling",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/server/rateLimit.characterization.test.ts::rate limits > limits each bucket per minute, hour or day, and tells the visitor to slow down",
+      "kind": "characterization",
+      "source": "src/server/rateLimit.characterization.test.ts",
+      "title": "rate limits > limits each bucket per minute, hour or day, and tells the visitor to slow down",
       "suite": "vitest",
       "baseline": "green"
     },

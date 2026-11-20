@@ -10,6 +10,8 @@ export interface Tagged {
 export interface EdgeFailure {
   readonly status: ContentfulStatusCode;
   readonly body: Readonly<Record<string, JSONValue>>;
+  /** Headers the answer carries besides its JSON body, such as a 429's `Retry-After`. */
+  readonly headers?: Readonly<Record<string, string>>;
 }
 
 /**
@@ -112,6 +114,9 @@ export const makeEdge =
         return handlers.success(exit.value);
       }
       const failure = failureOf(exit.cause, handlers.errors, unexpected);
-      return Response.json(failure.body, { status: failure.status });
+      return Response.json(failure.body, {
+        ...(failure.headers === undefined ? {} : { headers: failure.headers }),
+        status: failure.status,
+      });
     });
   };
