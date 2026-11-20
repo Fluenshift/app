@@ -21,8 +21,8 @@ serves many Learners through sessions, with tighter input caps, rate limits and 
 (ADR 0003, ADR 0006).
 _Not: environment, mode, tenant._
 
-**Judge**: the model that produces Evaluations: one pinned model per Rubric Version, with no
-retry and no fallback, and the model that answered recorded (ADR 0012).
+**Judge**: the model that produces Evaluations, pinned per Rubric Version as `RUBRIC.md`
+states (ADR 0012).
 _Not: grader, evaluator, AI._
 
 **Trainer**: the model that serves the Academy. It enriches Findings, writes Exercises and

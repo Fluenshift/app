@@ -4,9 +4,10 @@ Evaluation policy: what gets assessed, how Findings are classified, how the
 score is derived, and when two Evaluations may be compared. Vocabulary is
 defined in `CONTEXT.md`.
 
-Status: the Judge applies this policy through one pinned model on OpenRouter, as a
-provisional, uncalibrated Rubric Version (ADR 0012), until live calibration, which the owners
-schedule after parity. New Evaluations record that version as `1-provisional` (ADR 0020).
+Status: the Judge applies this policy through one model on OpenRouter, pinned for the Rubric
+Version: no retry, no fallback to another model, and the model that answered recorded on each
+Evaluation (ADR 0012). This is a provisional, uncalibrated Rubric Version until live
+calibration, which the owners schedule after parity. New Evaluations record that version as `1-provisional` (ADR 0020).
 Progress never merges it with the Evaluations that Prompt Evolution made under its calibrated
 Rubric Version `1` and that the importer brings in (ADR 0018).
 

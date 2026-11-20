@@ -74,18 +74,18 @@ Grifando's `SPEC.md` it comes from and the ADRs that changed it.
 | AR-02 | Every text the Learner writes in the Academy, except an answer to an Exercise, is a practice-origin Writing Sample evaluated by the Judge, with the same Findings, score and band as any other. There is no other analysis and no other score; an Attempt is graded deterministically (AR-09). | §5.1; ADR 0002, ADR 0004 |
 | AR-03 | The Enrichment adds a Pattern Key, a Mistake Category, the L1 Transfer flag, a natural version, examples and Naturalness Notes to an Evaluation's Findings. It never changes the score, the corrected text or the finding rate. | §5.1; ADR 0004, ADR 0005 |
 | AR-04 | Every enriched Finding and Naturalness Note becomes an immutable Occurrence under the Learner's Mistake Pattern for its Mistake Category and Pattern Key; the pattern counts its Occurrences, records the first and last, and keeps a canonical example. | §6 |
-| AR-05 | A Pattern Key is normalized on write: lowercased, trimmed, other characters collapsed to hyphens, its length capped. | §6 |
+| AR-05 | Pattern Keys are normalized on write, as `CONTEXT.md` (Pattern Key) defines. | §6 |
 | AR-06 | The Mistake Notebook lists the Learner's Mistake Patterns with Mistake Category, canonical example, Occurrence count, last Occurrence and Mastery Level, ordered so frequent and recent patterns come first. | §5.2, §6 |
 | AR-07 | Mistake analytics break Occurrences down by Mistake Category over all time and the last 30 days, as a bar list. | §5.3 |
 | AR-08 | Exercises come from the Learner's own Mistake Patterns, favoring frequent, unmastered and low-Recall patterns, in four types: multiple choice, fill in the blank, rewrite and translation. | §5.4, §6.1 |
-| AR-09 | An Exercise never shows its answer before an Attempt. An Attempt is graded deterministically against the closest acceptable answer; an optional explanation never changes the grade. | §5.4, §6.1 |
-| AR-10 | Mastery Level moves only as `CONTEXT.md` defines it: by Attempts, with an unscaffolded Exercise required for Mastered, and by a Finding in new writing that maps to the pattern, whatever the sample's origin. Recall below its threshold shows a Mastered pattern as fading without moving it. Reading a Correction never moves it. | §5.4, §6, §6.1; ADR 0014 |
-| AR-11 | Recall is estimated for each pattern by simplified Half-Life Regression from its correct and incorrect counts only; practice reviews the lowest Recall first. | §6.1 |
-| AR-12 | Category Ability, an Elo-style estimate per Mistake Category, aims each Exercise at about 70% expected success. | §6.1 |
-| AR-13 | A Streak counts days with any practice activity, with limited rest days. No punishment, no leaderboard, no reminders. | §6.1 |
+| AR-09 | An Exercise never shows its answer before an Attempt, and an Attempt is graded as `CONTEXT.md` (Attempt) defines. | §5.4, §6.1 |
+| AR-10 | Mastery Level moves only as `CONTEXT.md` (Mastery Level) defines. | §5.4, §6, §6.1; ADR 0014 |
+| AR-11 | Recall is estimated for each pattern and orders review as `CONTEXT.md` (Recall) defines. | §6.1 |
+| AR-12 | Each Exercise is aimed through Category Ability as `CONTEXT.md` (Category Ability) defines. | §6.1 |
+| AR-13 | A Streak counts practice as `CONTEXT.md` (Streak) defines. | §6.1 |
 | AR-14 | Daily Writing offers one challenge a day from a curated bank, biased toward the Learner's weak categories. | §5.5 |
 | AR-15 | Technical English prompts carry one Technical Category from the fixed list. Explain Code asks the Learner to explain a pasted snippet in English, and its feedback concerns the English, never the code. | §5.6, §5.7 |
-| AR-16 | Interview Practice is text only and turn based: the Trainer asks a question and a follow-up, each answer is a practice-origin Writing Sample the Judge evaluates, and there is no separate interview score. | §5.8; ADR 0010 |
+| AR-16 | Interview Practice is text only and turn based, as `CONTEXT.md` (Interview) defines it. | §5.8; ADR 0010 |
 | AR-17 | The Academy dashboard keeps a small, fixed set of cards: today's challenge, recent writing, weak categories, recent Occurrences, one practice recommendation, and one Finding-based trend. | §5.9; ADR 0002 |
 | AR-18 | Mistake Patterns, Mastery Level and Recall span Rubric Versions; each Occurrence records the Rubric Version of its Finding. | ADR 0015 |
 | AR-19 | The Trainer may fall back to another model only on overload, and records the model that answered. | §4; ADR 0012 |
@@ -102,11 +102,11 @@ migration.
 | HR-02 | Writing is capped at 5,000 characters and never more than 32 KiB, prompt text at 1,000 characters, code at 2,000, and a request body at 256 KiB, at the edge and in the service. | ADR 0006 |
 | HR-03 | Every route that calls a model has fixed-window rate limits per Learner and per hashed IP, kept in PostgreSQL. | ADR 0003 |
 | HR-04 | The site serves a Content Security Policy for a static single-page application. | ADR 0003 |
-| HR-05 | Visitors bring their own AI keys, which travel only in request headers and are never stored or logged. | ADR 0012 |
-| HR-06 | Once a day, in process, the server deletes every Learner idle for 90 days with all their data. | ADR 0011 |
-| HR-07 | A Learner can delete themselves and all their data (`DELETE /api/me`). | ADR 0003 |
+| HR-05 | Visitors bring their own AI keys, handled as `DATA-POLICY.md` (Keys) states. | ADR 0012 |
+| HR-06 | The server deletes idle Learners in process, on the schedule `DATA-POLICY.md` (Cleanup and deletion) states. | ADR 0011 |
+| HR-07 | A Learner can delete themselves and all their data, as `DATA-POLICY.md` (Cleanup and deletion) states. | ADR 0003 |
 | HR-08 | A privacy page in English and Portuguese discloses what is stored, what the providers receive, the idle cleanup and how to delete everything. | ADR 0003 |
-| HR-09 | No telemetry or remote analytics. | ADR 0013 |
+| HR-09 | No telemetry or remote analytics, as `DATA-POLICY.md` states. | ADR 0013 |
 
 ## Out of scope
 
