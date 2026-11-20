@@ -350,12 +350,15 @@ export const PracticeOccurrence = Schema.Struct({
 export type PracticeOccurrence = typeof PracticeOccurrence.Type;
 
 /**
- * What POST /api/practice-writing answers with 201 (docs/adr/0026): the Evaluation and its
- * Occurrences, or the Evaluation's id with Grifando's message when the Enrichment failed.
+ * What POST /api/practice-writing answers with 201 (docs/adr/0026): the Evaluation, the natural
+ * version and the Occurrences its Enrichment recorded (docs/adr/0028), or the Evaluation's id with
+ * Grifando's message when the Enrichment failed. The natural version is null only for an
+ * Enrichment recorded before it had one.
  */
 export const PracticeWritingResult = Schema.Union([
   Schema.Struct({
     evaluation: Evaluation,
+    naturalVersion: Schema.NullOr(Schema.String),
     occurrences: Schema.Array(PracticeOccurrence),
     status: Schema.Literal("evaluated"),
   }),
@@ -384,17 +387,19 @@ export type StartedInterview = typeof StartedInterview.Type;
 
 /**
  * What answering an interview turn answers (docs/adr/0010, docs/adr/0024): the answer's
- * Evaluation and the next question, the Evaluation of the last answer, or the kept Evaluation's
- * id with Grifando's message when the Enrichment failed.
+ * Evaluation, its natural version (docs/adr/0028) and the next question, the same for the last
+ * answer, or the kept Evaluation's id with Grifando's message when the Enrichment failed.
  */
 export const InterviewAnswerResult = Schema.Union([
   Schema.Struct({
     evaluation: Evaluation,
+    naturalVersion: Schema.NullOr(Schema.String),
     nextTurn: InterviewTurnRef,
     status: Schema.Literal("answered"),
   }),
   Schema.Struct({
     evaluation: Evaluation,
+    naturalVersion: Schema.NullOr(Schema.String),
     status: Schema.Literal("ended"),
   }),
   Schema.Struct({

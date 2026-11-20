@@ -7,6 +7,8 @@ import type { Evaluation, InterviewTurnRef } from "@fluenshift/contract";
 export interface CompletedTurn {
   readonly answer: string;
   readonly evaluation: Evaluation;
+  // How a fluent speaker might phrase the answer; null when the Enrichment recorded none.
+  readonly naturalVersion: string | null;
   readonly question: InterviewTurnRef["question"];
 }
 

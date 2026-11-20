@@ -123,6 +123,7 @@ const evaluated: PracticeWritingResult = {
       severity: "ERROR",
     },
   ],
+  naturalVersion: "I went back home.",
   status: "evaluated",
 };
 
@@ -197,6 +198,7 @@ describe("/write practice writing", () => {
           },
         ],
       },
+      naturalVersion: null,
       occurrences: [],
       status: "evaluated",
     });
@@ -209,6 +211,63 @@ describe("/write practice writing", () => {
       "IncorrectClaritygoed → corrected towentSay what happened plainly."
     );
     expect(notes).not.toHaveTextContent("Nothing to correct here");
+  });
+
+  it("shows the natural version beside the corrected version, as Grifando did", async () => {
+    const { page } = await renderWrite(evaluated);
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    await within(page).findByRole("region", { name: "Corrected version" });
+    expect(
+      within(page).queryByRole("region", { name: "Natural version" })
+        ?.textContent
+    ).toBe(
+      "Natural versionHow a fluent speaker might phrase the same idea — one option, not the only correct way to say it.I went back home."
+    );
+  });
+
+  it("leaves out the natural version when the Enrichment recorded none", async () => {
+    const { page } = await renderWrite({ ...evaluated, naturalVersion: null });
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    expect(
+      await within(page).findByRole("region", { name: "Corrected version" })
+    ).toBeVisible();
+    expect(
+      within(page).queryByRole("region", { name: "Natural version" })
+    ).toBeNull();
+  });
+
+  it("notes each Naturalness Note as unnatural, after the Findings' notes", async () => {
+    const { page } = await renderWrite({
+      ...evaluated,
+      occurrences: [
+        ...evaluated.occurrences,
+        {
+          category: "UNNATURAL_PHRASING",
+          correctedSpan: "I got home",
+          example: "I got home late.",
+          explanation: "'Got home' is what a fluent speaker would say.",
+          findingPosition: null,
+          id: "note-1",
+          l1Transfer: false,
+          originalSpan: "I goed home",
+          severity: "UNNATURAL",
+        },
+      ],
+    });
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    const notes = await within(page).findByRole("region", { name: "Notes" });
+    expect(notes).toHaveTextContent(
+      "Save to vocabulary2UnnaturalUnnatural phrasingI goed home → corrected toI got home'Got home' is what a fluent speaker would say.“I got home late.”Save to vocabulary"
+    );
   });
 
   it("starts over on the same page with an empty sheet", async () => {

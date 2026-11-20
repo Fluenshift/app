@@ -56,12 +56,38 @@ const renderInterview = async (
 
 const answered = (
   answer: string,
-  next: { readonly id: string; readonly question: string }
+  next: { readonly id: string; readonly question: string },
+  naturalVersion: string | null = null
 ): InterviewAnswerResult => ({
   evaluation: evaluationOf(answer, "I worked on a payments API."),
+  naturalVersion,
   nextTurn: { ...next, order: 2 },
   status: "answered",
 });
+
+// Starts an interview, answers its first question with `answer`, and returns that turn's feedback.
+const feedbackOn = async (
+  answer: string,
+  result: InterviewAnswerResult
+): Promise<HTMLElement> => {
+  const { page } = await renderInterview({
+    answers: [result],
+    started: { sessionId: "session-1", turn: firstTurn },
+  });
+  await userEvent.click(
+    within(page).getByRole("button", { name: "Start interview" })
+  );
+  await userEvent.type(
+    await within(page).findByRole("textbox", { name: "Your answer" }),
+    answer
+  );
+  await userEvent.click(
+    within(page).getByRole("button", { name: "Submit answer" })
+  );
+  return within(page).findByRole("region", {
+    name: "Tell me about a project you worked on recently.",
+  });
+};
 
 describe("/interview", () => {
   it("starts an interview and asks its first question", async () => {
@@ -132,6 +158,7 @@ describe("/interview", () => {
       answers: [
         {
           evaluation: evaluationOf("I shipped it.", "I shipped it."),
+          naturalVersion: null,
           status: "ended",
         },
       ],
@@ -160,6 +187,43 @@ describe("/interview", () => {
     expect(
       within(page).getByRole("button", { name: "Start interview" })
     ).toBeVisible();
+  });
+
+  it("shows how a fluent speaker might phrase an answer, as Grifando did", async () => {
+    const feedback = await feedbackOn(
+      "I work in a payments API.",
+      answered(
+        "I work in a payments API.",
+        { id: "turn-2", question: "What was the hardest part?" },
+        "I'm working on a payments API."
+      )
+    );
+
+    expect(feedback).toHaveTextContent(
+      "More naturallyI'm working on a payments API."
+    );
+  });
+
+  it("leaves out a natural version that reads as the answer", async () => {
+    const feedback = await feedbackOn("I shipped it.", {
+      evaluation: evaluationOf("I shipped it.", "I shipped it."),
+      naturalVersion: "I shipped it.",
+      status: "ended",
+    });
+
+    expect(feedback).toHaveTextContent("I shipped it.");
+    expect(feedback).not.toHaveTextContent("More naturally");
+  });
+
+  it("leaves out the natural version the Enrichment did not record", async () => {
+    const feedback = await feedbackOn("I shipped it.", {
+      evaluation: evaluationOf("I shipped it.", "I shipped it."),
+      naturalVersion: null,
+      status: "ended",
+    });
+
+    expect(feedback).toHaveTextContent("I shipped it.");
+    expect(feedback).not.toHaveTextContent("More naturally");
   });
 
   it("keeps the answer and shows the route's message when the Enrichment fails", async () => {

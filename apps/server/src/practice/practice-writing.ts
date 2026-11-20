@@ -9,7 +9,10 @@ import { Effect, Schema } from "effect";
 
 import { trainerForRequest } from "../academy/academy-requests";
 import { answerTurn } from "../academy/interview-service";
-import type { AnswerTurnInput } from "../academy/interview-service";
+import type {
+  AnswerTurnInput,
+  AnswerTurnResult,
+} from "../academy/interview-service";
 import { listOccurrencesForEvaluation } from "../academy/occurrence-repository";
 import { foldEvaluation } from "../academy/pattern-folding";
 import type { TrainerMethods } from "../academy/trainer/trainer-model";
@@ -48,22 +51,36 @@ export const evaluatePractice = Effect.fn("PracticeWriting.evaluatePractice")(
   }
 );
 
+/** An answered interview turn, with the natural version of its answer (docs/adr/0028). */
+export type InterviewAnswer = AnswerTurnResult<Evaluation> & {
+  readonly naturalVersion: string | null;
+};
+
 // One answer to the Learner's interview turn, on the key the request carries. The key is
 // resolved before the session is read, as in Grifando.
 export const answerInterviewTurnFor = Effect.fn(
   "PracticeWriting.answerInterviewTurnFor"
 )(function* (headers: Headers, input: AnswerTurnInput) {
   const trainer = yield* trainerForRequest(headers);
-  return yield* answerTurn(
+  const answered = yield* answerTurn(
     (answer: string) => evaluatePractice(trainer, answer),
     trainer,
     input
   );
+  const withNaturalVersion: InterviewAnswer = {
+    ...answered,
+    naturalVersion: null,
+  };
+  return withNaturalVersion;
 });
 
-/** A practice Writing Sample's Evaluation and the Occurrences its Enrichment recorded. */
+/**
+ * A practice Writing Sample's Evaluation, its natural version and the Occurrences its Enrichment
+ * recorded.
+ */
 export interface PracticeWriting {
   readonly evaluation: Evaluation;
+  readonly naturalVersion: string | null;
   readonly occurrences: readonly PracticeOccurrence[];
 }
 
@@ -75,5 +92,9 @@ export const practiceWritingFor = Effect.fn(
   const trainer = yield* trainerForRequest(headers);
   const evaluation = yield* evaluatePractice(trainer, writingSample);
   const occurrences = yield* listOccurrencesForEvaluation(evaluation.id);
-  return { evaluation, occurrences } satisfies PracticeWriting;
+  return {
+    evaluation,
+    naturalVersion: null,
+    occurrences,
+  } satisfies PracticeWriting;
 });

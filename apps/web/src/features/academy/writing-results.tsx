@@ -21,6 +21,8 @@ export const WritingResults = ({
   onWriteAnother,
 }: {
   readonly evaluation: Evaluation;
+  // How a fluent speaker might phrase the text; null when the Enrichment recorded none.
+  readonly naturalVersion: string | null;
   // Extra primary action after the results (e.g. the daily session's review step).
   readonly nextStep?: { readonly label: string; readonly onClick: () => void };
   readonly occurrences: readonly PracticeOccurrence[];

@@ -313,7 +313,12 @@ export const createAiSdkTrainer = (model: LanguageModel): TrainerMethods => {
           enrichmentOf(answer.findings, finding, index + 1)
         )
       );
-      return { findings, model: answeredBy };
+      return {
+        findings,
+        model: answeredBy,
+        naturalVersion: "",
+        naturalnessNotes: [],
+      };
     }),
     explainAttempt: Effect.fn("Trainer.explainAttempt")(function* (input) {
       const { answer, model: answeredBy } = yield* ask({

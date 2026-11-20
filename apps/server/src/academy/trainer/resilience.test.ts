@@ -97,7 +97,12 @@ describe("withResilience", () => {
     const fallback = fakeProvider();
     primary.enrichFindings.mockReturnValue(Effect.fail(overloaded()));
     fallback.enrichFindings.mockReturnValue(
-      Effect.succeed({ findings: [], model: "fallback-model" })
+      Effect.succeed({
+        findings: [],
+        model: "fallback-model",
+        naturalVersion: "Hello.",
+        naturalnessNotes: [],
+      })
     );
     const wrapped = withResilience(primary, fallback, { timeout: 1000 });
 
@@ -105,7 +110,12 @@ describe("withResilience", () => {
       Effect.runPromise(
         wrapped.enrichFindings({ findings: [], writingSample: "Hi." })
       )
-    ).resolves.toEqual({ findings: [], model: "fallback-model" });
+    ).resolves.toEqual({
+      findings: [],
+      model: "fallback-model",
+      naturalVersion: "Hello.",
+      naturalnessNotes: [],
+    });
     expect(primary.enrichFindings).toHaveBeenCalledTimes(1);
     expect(fallback.enrichFindings).toHaveBeenCalledTimes(1);
   });

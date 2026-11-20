@@ -91,6 +91,7 @@ describe("/today review", () => {
           suggestions: [],
           summary: "No errors found.",
         },
+        naturalVersion: null,
         occurrences: [],
         status: "evaluated",
       },

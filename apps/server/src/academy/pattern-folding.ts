@@ -44,6 +44,7 @@ export interface Occurrence {
   readonly findingPosition: number | null;
   readonly id: string;
   readonly l1Transfer: boolean;
+  readonly notePosition: number | null;
   readonly originalSpan: string;
   readonly patternId: string;
   readonly rubricVersion: string;
@@ -57,6 +58,7 @@ export interface FoldEvaluationInput {
 }
 
 export interface FoldedEvaluation {
+  readonly naturalVersion: string | null;
   readonly occurrences: readonly Occurrence[];
 }
 
@@ -76,6 +78,7 @@ const toOccurrence = (row: typeof occurrences.$inferSelect): Occurrence => ({
   findingPosition: row.findingPosition,
   id: row.id,
   l1Transfer: row.l1Transfer,
+  notePosition: row.notePosition,
   originalSpan: row.originalSpan,
   patternId: row.patternId,
   rubricVersion: row.rubricVersion,
@@ -216,7 +219,8 @@ export const foldEvaluation = Effect.fn("PatternFolding.foldEvaluation")(
           : []
     );
     if (placed.length === 0) {
-      return { occurrences: [] };
+      const none: FoldedEvaluation = { naturalVersion: null, occurrences: [] };
+      return none;
     }
 
     const enrichment = yield* trainer.enrichFindings({
@@ -253,6 +257,10 @@ export const foldEvaluation = Effect.fn("PatternFolding.foldEvaluation")(
     const rows = yield* database.run((client) =>
       recordEnrichment(client, learner.id, evaluation, pairs, enrichment.model)
     );
-    return { occurrences: rows.map(toOccurrence) };
+    const folded: FoldedEvaluation = {
+      naturalVersion: null,
+      occurrences: rows.map(toOccurrence),
+    };
+    return folded;
   }
 );

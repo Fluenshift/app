@@ -90,6 +90,7 @@ const answerState = async (
       {
         answer,
         evaluation: result.evaluation,
+        naturalVersion: result.naturalVersion,
         question: interviewing.currentTurn.question,
       },
     ];

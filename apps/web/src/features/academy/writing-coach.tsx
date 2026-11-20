@@ -43,6 +43,7 @@ type ViewState =
   | {
       readonly evaluation: Evaluation;
       readonly kind: "result";
+      readonly naturalVersion: string | null;
       readonly occurrences: readonly PracticeOccurrence[];
     };
 
@@ -51,6 +52,7 @@ const submitState = async (
   request: Promise<
     | {
         readonly evaluation: Evaluation;
+        readonly naturalVersion: string | null;
         readonly occurrences: readonly PracticeOccurrence[];
         readonly status: "evaluated";
       }
@@ -64,6 +66,7 @@ const submitState = async (
       : {
           evaluation: result.evaluation,
           kind: "result",
+          naturalVersion: result.naturalVersion,
           occurrences: result.occurrences,
         };
   } catch (error) {
@@ -107,6 +110,7 @@ export const WritingCoach = ({
     return (
       <WritingResults
         evaluation={evaluation}
+        naturalVersion={view.naturalVersion}
         occurrences={view.occurrences}
         onWriteAnother={handleWriteAnother}
         {...(nextStep === undefined
