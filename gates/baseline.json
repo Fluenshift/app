@@ -573,6 +573,15 @@
                   ]
                 }
               ]
+            ],
+            "no-restricted-properties": [
+              "deny",
+              [
+                {
+                  "message": "The Academy queries through Drizzle's query builder, which keeps it off the Evaluation tables; raw SQL would not.",
+                  "property": "execute"
+                }
+              ]
             ]
           }
         },
@@ -592,7 +601,8 @@
                   ]
                 }
               ]
-            ]
+            ],
+            "no-restricted-properties": "allow"
           }
         },
         {

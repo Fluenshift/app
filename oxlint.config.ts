@@ -118,12 +118,24 @@ export default defineConfig({
             ],
           },
         ],
+        // Raw SQL would reach the Evaluation tables past the read-only views.
+        "no-restricted-properties": [
+          "error",
+          {
+            message:
+              "The Academy queries through Drizzle's query builder, which keeps it off the Evaluation tables; raw SQL would not.",
+            property: "execute",
+          },
+        ],
       },
     },
     {
       // Academy tests seed the Evaluations they read, as the Evaluation axis stores them.
       files: ["apps/server/src/academy/**/*.test.ts"],
-      rules: { "no-restricted-imports": ["error", { paths: [noZod] }] },
+      rules: {
+        "no-restricted-imports": ["error", { paths: [noZod] }],
+        "no-restricted-properties": "off",
+      },
     },
     {
       files: effectSources,
