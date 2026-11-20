@@ -84,3 +84,29 @@ describe("SpellChecker mark placement", () => {
     ]);
   });
 });
+
+// Grifando #78: its highlighter found each mistake with `indexOf`, so a short span landed inside
+// an earlier word and a repeated mistake lost its second mark. A stored Finding carries validated
+// byte offsets (docs/adr/0004), so each mark sits where its Finding is. These are the issue's two
+// texts; they are ASCII, so byte offsets are character offsets.
+describe("SpellChecker marks for Grifando #78", () => {
+  test("marks a short Finding at its own word, not inside an earlier one", () => {
+    expect(
+      spans("I have a idea for the API.", [
+        finding("a", { byteEnd: 8, byteStart: 7 }),
+      ])
+    ).toEqual([{ end: 8, id: "finding-0", start: 7 }]);
+  });
+
+  test("marks a repeated Finding at each of its own occurrences, in order", () => {
+    expect(
+      spans("This PR fix the login and fix the logout.", [
+        finding("fix", { byteEnd: 11, byteStart: 8 }),
+        finding("fix", { byteEnd: 29, byteStart: 26 }),
+      ])
+    ).toEqual([
+      { end: 11, id: "finding-0", start: 8 },
+      { end: 29, id: "finding-1", start: 26 },
+    ]);
+  });
+});
