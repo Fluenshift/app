@@ -41,17 +41,17 @@ const wordDistance = (a: string[], b: string[]): number =>
   a.length + b.length - 2 * cell(lcsTable(a, b), 0, 0);
 
 // Picks the acceptable answer needing the fewest word insertions/deletions to
-// reach from the user's answer, so a near-miss is compared against the version
+// reach from the Learner's answer, so a near-miss is compared against the version
 // it was actually close to.
 // Ties keep the generator's order.
 export const findClosestAnswer = (
-  userAnswer: string,
+  learnerAnswer: string,
   acceptableAnswers: string[]
 ): string | null => {
-  const userWords = tokenize(userAnswer);
+  const learnerWords = tokenize(learnerAnswer);
   let best: { answer: string; distance: number } | null = null;
   for (const answer of acceptableAnswers) {
-    const distance = wordDistance(userWords, tokenize(answer));
+    const distance = wordDistance(learnerWords, tokenize(answer));
     if (!best || distance < best.distance) {
       best = { answer, distance };
     }
@@ -59,14 +59,14 @@ export const findClosestAnswer = (
   return best?.answer ?? null;
 };
 
-// Word-level diff from the user's answer to the expected one: "removed" words
-// were in the user's answer but not expected, "added" words were missing.
+// Word-level diff from the Learner's answer to the expected one: "removed" words
+// were in the Learner's answer but not expected, "added" words were missing.
 // Adjacent words of the same kind are merged into one segment.
 export const diffWords = (
-  userAnswer: string,
+  learnerAnswer: string,
   expected: string
 ): DiffSegment[] => {
-  const a = tokenize(userAnswer);
+  const a = tokenize(learnerAnswer);
   const b = tokenize(expected);
   const table = lcsTable(a, b);
   const segments: DiffSegment[] = [];

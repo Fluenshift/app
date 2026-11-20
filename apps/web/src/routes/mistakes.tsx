@@ -23,11 +23,11 @@ const routeApi = getRouteApi("/mistakes");
 
 // The search of a /mistakes link, keeping the other filter when one is toggled.
 const mistakesSearch = (filters: {
-  readonly fromPortuguese: boolean;
+  readonly l1TransferOnly: boolean;
   readonly last30Days: boolean;
 }): MistakesSearch => ({
   ...(filters.last30Days ? { window: "30d" } : {}),
-  ...(filters.fromPortuguese ? { origin: "pt" } : {}),
+  ...(filters.l1TransferOnly ? { origin: "pt" } : {}),
 });
 
 // Tab-style filter link: the 2px ink underline marks the active option.
@@ -54,9 +54,9 @@ const MistakesPage = () => {
   const notebook = routeApi.useLoaderData();
   const search = routeApi.useSearch();
   const isLast30Days = search.window === "30d";
-  const isFromPortuguese = search.origin === "pt";
-  const patternList = isFromPortuguese
-    ? notebook.patterns.filter((pattern) => pattern.fromPortuguese)
+  const isL1TransferOnly = search.origin === "pt";
+  const patternList = isL1TransferOnly
+    ? notebook.patterns.filter((pattern) => pattern.l1Transfer)
     : notebook.patterns;
   const breakdown = isLast30Days
     ? notebook.breakdown.last30Days
@@ -92,7 +92,7 @@ const MistakesPage = () => {
             <FilterTab
               active={!isLast30Days}
               search={mistakesSearch({
-                fromPortuguese: isFromPortuguese,
+                l1TransferOnly: isL1TransferOnly,
                 last30Days: false,
               })}
             >
@@ -101,7 +101,7 @@ const MistakesPage = () => {
             <FilterTab
               active={isLast30Days}
               search={mistakesSearch({
-                fromPortuguese: isFromPortuguese,
+                l1TransferOnly: isL1TransferOnly,
                 last30Days: true,
               })}
             >
@@ -150,30 +150,30 @@ const MistakesPage = () => {
           </div>
           <nav aria-label="Origin" className="mb-6 flex gap-6">
             <FilterTab
-              active={!isFromPortuguese}
+              active={!isL1TransferOnly}
               search={mistakesSearch({
-                fromPortuguese: false,
+                l1TransferOnly: false,
                 last30Days: isLast30Days,
               })}
             >
               All patterns
             </FilterTab>
             <FilterTab
-              active={isFromPortuguese}
+              active={isL1TransferOnly}
               search={mistakesSearch({
-                fromPortuguese: true,
+                l1TransferOnly: true,
                 last30Days: isLast30Days,
               })}
             >
               From Portuguese
             </FilterTab>
           </nav>
-          {patternList.length === 0 && isFromPortuguese ? (
+          {patternList.length === 0 && isL1TransferOnly ? (
             <p className="prose-serif text-iron text-lg">
               No mistakes flagged as coming from Portuguese yet.
             </p>
           ) : null}
-          {patternList.length === 0 && !isFromPortuguese ? (
+          {patternList.length === 0 && !isL1TransferOnly ? (
             <p className="prose-serif text-iron text-lg">
               No mistakes yet.{" "}
               <Link className="underline" to="/write">

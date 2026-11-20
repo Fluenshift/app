@@ -39,7 +39,7 @@ export const ButtonSpinner = () => (
 
 // Rotates through honest steps and shows elapsed seconds. Mount it only while a request is in
 // flight (the timer starts on mount). Announced politely; the spinner is decorative.
-export const AnalyzingStatus = ({
+export const BusyStatus = ({
   className,
   steps,
 }: {

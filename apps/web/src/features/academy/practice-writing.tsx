@@ -12,14 +12,10 @@ import { Button } from "@fluenshift/ui/components/button";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 
-import { isKeyRequired, messageFor } from "./academy-client";
-import {
-  AnalyzingStatus,
-  ButtonSpinner,
-  WRITING_STEPS,
-} from "./analyzing-status";
+import { failureNotice } from "./academy-client";
+import { BusyStatus, ButtonSpinner, WRITING_STEPS } from "./busy-status";
 import { KeyRequiredNotice } from "./key-required-notice";
-import { WritingResults } from "./writing-results";
+import { PracticeEvaluation } from "./practice-evaluation";
 import { WritingSheet } from "./writing-sheet";
 
 const GENERIC_FAILURE_MESSAGE =
@@ -70,17 +66,14 @@ const submitState = async (
           occurrences: result.occurrences,
         };
   } catch (error) {
-    if (isKeyRequired(error)) {
-      return { keyRequired: true, kind: "editing" };
-    }
     return {
-      errorMessage: messageFor(error, GENERIC_FAILURE_MESSAGE),
+      ...failureNotice(error, GENERIC_FAILURE_MESSAGE),
       kind: "editing",
     };
   }
 };
 
-export const WritingCoach = ({
+export const PracticeWriting = ({
   initialChallenge,
   nextStep,
   sampleLimits,
@@ -111,7 +104,7 @@ export const WritingCoach = ({
   if (view.kind === "result") {
     const { evaluation } = view;
     return (
-      <WritingResults
+      <PracticeEvaluation
         evaluation={evaluation}
         naturalVersion={view.naturalVersion}
         occurrences={view.occurrences}
@@ -170,7 +163,7 @@ export const WritingCoach = ({
               "Get feedback"
             )}
           </Button>
-          {isSubmitting ? <AnalyzingStatus steps={WRITING_STEPS} /> : null}
+          {isSubmitting ? <BusyStatus steps={WRITING_STEPS} /> : null}
         </div>
       </div>
 

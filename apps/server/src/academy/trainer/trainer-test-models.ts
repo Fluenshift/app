@@ -74,7 +74,7 @@ export const explainInput = {
     template: "It depends ___ the config.",
     type: "FILL_BLANK" as const,
   },
-  userAnswer: "of",
+  learnerAnswer: "of",
 };
 
 // Two Findings for the Enrichment, and the entry a model returns for the first one.

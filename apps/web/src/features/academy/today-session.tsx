@@ -5,7 +5,7 @@ import type { DailyChallenge, SampleLimits } from "@fluenshift/contract";
 import { useState } from "react";
 
 import { ExercisePractice } from "./exercise-practice";
-import { WritingCoach } from "./writing-coach";
+import { PracticeWriting } from "./practice-writing";
 
 type Step =
   | { readonly kind: "write" }
@@ -38,7 +38,7 @@ export const TodaySession = ({
       </ol>
 
       {step.kind === "write" ? (
-        <WritingCoach
+        <PracticeWriting
           initialChallenge={challenge}
           sampleLimits={sampleLimits}
           nextStep={{

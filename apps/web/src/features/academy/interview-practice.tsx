@@ -19,12 +19,8 @@ import {
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 
-import { isKeyRequired, messageFor } from "./academy-client";
-import {
-  AnalyzingStatus,
-  ButtonSpinner,
-  INTERVIEW_STEPS,
-} from "./analyzing-status";
+import { failureNotice } from "./academy-client";
+import { BusyStatus, ButtonSpinner, INTERVIEW_STEPS } from "./busy-status";
 import { KeyRequiredNotice } from "./key-required-notice";
 import { TurnFeedback } from "./turn-feedback";
 import type { CompletedTurn } from "./turn-feedback";
@@ -61,9 +57,7 @@ const startState = async (
     const { sessionId, turn } = await request;
     return { currentTurn: turn, history: [], kind: "active", sessionId };
   } catch (error) {
-    return isKeyRequired(error)
-      ? { keyRequired: true, kind: "idle" }
-      : { errorMessage: messageFor(error, GENERIC_ERROR), kind: "idle" };
+    return { ...failureNotice(error, GENERIC_ERROR), kind: "idle" };
   }
 };
 
@@ -109,13 +103,11 @@ const answerState = async (
   } catch (error) {
     return {
       answered: false,
-      state: isKeyRequired(error)
-        ? { ...interviewing, keyRequired: true, kind: "active" }
-        : {
-            ...interviewing,
-            errorMessage: messageFor(error, GENERIC_ERROR),
-            kind: "active",
-          },
+      state: {
+        ...interviewing,
+        ...failureNotice(error, GENERIC_ERROR),
+        kind: "active",
+      },
     };
   }
 };
@@ -305,7 +297,7 @@ export const InterviewPractice = ({
               End interview
             </Button>
           </div>
-          {isSubmitting ? <AnalyzingStatus steps={INTERVIEW_STEPS} /> : null}
+          {isSubmitting ? <BusyStatus steps={INTERVIEW_STEPS} /> : null}
         </div>
       </section>
     </div>

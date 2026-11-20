@@ -38,7 +38,7 @@ const attemptInput: ExplainAttemptInput = {
     original: "I depend of this library.",
     type: "REWRITE",
   },
-  userAnswer: "I depend from this library.",
+  learnerAnswer: "I depend from this library.",
 };
 
 // A call that never answers, and records whether it was interrupted.

@@ -11,18 +11,18 @@ import { Link } from "@tanstack/react-router";
 import { MISTAKE_CATEGORY_LABELS } from "./mistake-category-labels";
 import "./vocabulary-prefill";
 
-export const MistakeCard = ({
+export const OccurrenceNote = ({
   evaluationId,
   index,
-  mistake,
+  occurrence,
 }: {
   readonly evaluationId: string;
   readonly index: number;
-  readonly mistake: PracticeOccurrence;
+  readonly occurrence: PracticeOccurrence;
 }) => (
   <article
     className="border-border target:bg-linen grid scroll-mt-8 grid-cols-[2rem_minmax(0,1fr)] gap-x-3 border-t py-6"
-    id={`mistake-${String(index)}`}
+    id={`note-${String(index)}`}
   >
     <span
       aria-label={`Mistake ${String(index + 1)}`}
@@ -33,36 +33,38 @@ export const MistakeCard = ({
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-1.5">
         <Badge
-          variant={mistake.severity === "ERROR" ? "destructive" : "secondary"}
+          variant={
+            occurrence.severity === "ERROR" ? "destructive" : "secondary"
+          }
         >
-          {mistake.severity === "ERROR" ? "Incorrect" : "Unnatural"}
+          {occurrence.severity === "ERROR" ? "Incorrect" : "Unnatural"}
         </Badge>
         <Badge variant="outline">
-          {MISTAKE_CATEGORY_LABELS[mistake.category]}
+          {MISTAKE_CATEGORY_LABELS[occurrence.category]}
         </Badge>
-        {mistake.l1Transfer ? (
+        {occurrence.l1Transfer ? (
           <Badge variant="outline">From Portuguese</Badge>
         ) : null}
       </div>
       <p className="prose-serif text-xl leading-snug">
         <span className="text-muted-foreground line-through decoration-1">
-          {mistake.originalSpan}
+          {occurrence.originalSpan}
         </span>{" "}
         <span aria-hidden="true">→</span>{" "}
         <span className="sr-only">corrected to</span>
-        <span>{mistake.correctedSpan}</span>
+        <span>{occurrence.correctedSpan}</span>
       </p>
-      <p className="text-iron">{mistake.explanation}</p>
+      <p className="text-iron">{occurrence.explanation}</p>
       <p className="prose-serif text-iron italic">
-        &ldquo;{mistake.example}&rdquo;
+        &ldquo;{occurrence.example}&rdquo;
       </p>
       <Link
         className="inline-block text-sm underline"
         state={{
           vocabularyPrefill: {
-            example: mistake.example,
+            example: occurrence.example,
             sourceEvaluationId: evaluationId,
-            term: mistake.correctedSpan,
+            term: occurrence.correctedSpan,
           },
         }}
         to="/vocabulary"
@@ -86,7 +88,7 @@ export const FindingNote = ({
 }) => (
   <article
     className="border-border target:bg-linen grid scroll-mt-8 grid-cols-[2rem_minmax(0,1fr)] gap-x-3 border-t py-6"
-    id={`mistake-${String(index)}`}
+    id={`note-${String(index)}`}
   >
     <span
       aria-label={`Mistake ${String(index + 1)}`}

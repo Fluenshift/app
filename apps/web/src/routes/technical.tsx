@@ -24,14 +24,16 @@ const TechnicalPage = () => (
             {TECHNICAL_CATEGORY_LABELS[category]}
           </h2>
           <ul className="border-border border-t">
-            {getTechnicalPromptsByCategory(category).map((prompt) => (
-              <li className="border-border border-b" key={prompt.id}>
+            {getTechnicalPromptsByCategory(category).map((practicePrompt) => (
+              <li className="border-border border-b" key={practicePrompt.id}>
                 <Link
                   className="group hover:bg-card flex items-baseline justify-between gap-6 py-4"
-                  search={{ promptId: prompt.id }}
+                  search={{ promptId: practicePrompt.id }}
                   to="/write"
                 >
-                  <span className="prose-serif text-lg">{prompt.text}</span>
+                  <span className="prose-serif text-lg">
+                    {practicePrompt.text}
+                  </span>
                   <span
                     aria-hidden="true"
                     className="text-muted-foreground group-hover:text-foreground shrink-0 text-sm"

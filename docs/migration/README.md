@@ -253,3 +253,4 @@ and the assertions stay as they are.
 | A secret compared as a plain string | the same comparison on `Redacted.value(secret)`, since the target holds it as a `Redacted` value |
 | A function that throws, checked with `toThrow` | an Effect run with `Effect.runSync`, which throws the same tagged error, checked with the same `toThrow` |
 | Grifando's mocked `createAIProvider`, whose provider methods resolve or throw | a fake `TrainerClient` layer whose `TrainerMethods` succeed, fail with the matching tagged error (`AIQuotaExceededError` as `TrainerQuotaExceededError`, `new AIResponseValidationError(message, issues)` as `new AIResponseValidationError({ issues, message })`), or die for any other error |
+| An identifier, a field or a fixture key named by a synonym `CONTEXT.md` forbids, such as `userAnswer` or `fromPortuguese` | its `CONTEXT.md` name (`learnerAnswer`, `l1Transfer`) in the test as in the code; the title and every expected value stay |

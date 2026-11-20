@@ -14,11 +14,7 @@ import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { AcademyRequestError, isKeyRequired } from "./academy-client";
-import {
-  AnalyzingStatus,
-  ButtonSpinner,
-  EXPLAIN_STEPS,
-} from "./analyzing-status";
+import { BusyStatus, ButtonSpinner, EXPLAIN_STEPS } from "./busy-status";
 import { KeyRequiredNotice } from "./key-required-notice";
 
 const correctAnswerText = (exercise: GradedAttempt["exercise"]): string =>
@@ -27,15 +23,15 @@ const correctAnswerText = (exercise: GradedAttempt["exercise"]): string =>
     : (exercise.acceptableAnswers[0] ?? "");
 
 // Free-text answers: compare against the acceptable answer closest to what the
-// user wrote, word by word, instead of always showing the first one.
+// Learner wrote, word by word, instead of always showing the first one.
 const AnswerDiff = ({
   acceptableAnswers,
-  userAnswer,
+  learnerAnswer,
 }: {
   readonly acceptableAnswers: readonly string[];
-  readonly userAnswer: string;
+  readonly learnerAnswer: string;
 }) => {
-  const expected = findClosestAnswer(userAnswer, [...acceptableAnswers]);
+  const expected = findClosestAnswer(learnerAnswer, [...acceptableAnswers]);
   if (expected === null) {
     return null;
   }
@@ -50,7 +46,7 @@ const AnswerDiff = ({
         aria-label="Differences between your answer and the closest answer"
         className="prose-serif text-lg"
       >
-        {diffWords(userAnswer, expected).map((segment, index) => (
+        {diffWords(learnerAnswer, expected).map((segment, index) => (
           <span key={`${String(index)}:${segment.kind}`}>
             {index > 0 ? " " : null}
             {segment.kind === "removed" ? (
@@ -143,9 +139,7 @@ const ExplainMyAnswer = ({
           "Explain my answer"
         )}
       </Button>
-      {state.kind === "loading" ? (
-        <AnalyzingStatus steps={EXPLAIN_STEPS} />
-      ) : null}
+      {state.kind === "loading" ? <BusyStatus steps={EXPLAIN_STEPS} /> : null}
       {state.kind === "error" ? (
         <p className="text-destructive text-sm">{state.message}</p>
       ) : null}
@@ -159,13 +153,13 @@ export const ExerciseResult = ({
   hasNext,
   onNext,
   result,
-  userAnswer,
+  learnerAnswer,
 }: {
   readonly exerciseId: string;
   readonly hasNext: boolean;
   readonly onNext: () => void;
   readonly result: GradedAttempt;
-  readonly userAnswer: string;
+  readonly learnerAnswer: string;
 }) => (
   <Card className="max-w-2xl">
     <CardHeader>
@@ -181,7 +175,7 @@ export const ExerciseResult = ({
         result.exercise.type === "TRANSLATION") ? (
         <AnswerDiff
           acceptableAnswers={result.exercise.acceptableAnswers}
-          userAnswer={userAnswer}
+          learnerAnswer={learnerAnswer}
         />
       ) : null}
       {!result.isCorrect &&

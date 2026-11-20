@@ -12,7 +12,7 @@ describe("buildAnswerExplanationUserMessage", () => {
         acceptableAnswers: ["I depend on this library."],
         explanation: "'Depend' takes 'on'.",
       },
-      userAnswer: "I depend from this library.",
+      learnerAnswer: "I depend from this library.",
     });
 
     expect(message).toContain("Learner answered: I depend from this library.");
@@ -29,7 +29,7 @@ describe("buildAnswerExplanationUserMessage", () => {
         correctOptionIndex: 1,
         explanation: "'Depend on'.",
       },
-      userAnswer: "0",
+      learnerAnswer: "0",
     });
 
     expect(message).toContain("Correct option: on");

@@ -266,7 +266,7 @@ describe("attemptExplanationService.explainAttempt", () => {
 
     expect(explanation).toBe("You picked the wrong preposition.");
     expect(explaining).toHaveBeenCalledWith(
-      expect.objectContaining({ userAnswer: "0" })
+      expect.objectContaining({ learnerAnswer: "0" })
     );
     const attempt = await findAttempt(graded.attemptId);
     expect(attempt.isCorrect).toBe(false);

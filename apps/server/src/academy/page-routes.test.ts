@@ -413,7 +413,7 @@ describe("/mistakes", () => {
           exampleCorrection: "depend-on correction",
           exampleOriginal: "depend-on original",
           fading: false,
-          fromPortuguese: true,
+          l1Transfer: true,
           id: due,
           lastSeenAt: daysAgo(5).toISOString(),
           masteryLevel: "ACTIVE",
@@ -425,7 +425,7 @@ describe("/mistakes", () => {
           exampleCorrection: "a-an correction",
           exampleOriginal: "a-an original",
           fading: true,
-          fromPortuguese: false,
+          l1Transfer: false,
           id: fading,
           lastSeenAt: daysAgo(40).toISOString(),
           masteryLevel: "MASTERED",
@@ -464,7 +464,7 @@ describe("/mistakes", () => {
         readonly last30Days: readonly unknown[];
       };
       readonly patterns: readonly {
-        readonly fromPortuguese: boolean;
+        readonly l1Transfer: boolean;
         readonly id: string;
       }[];
     };
@@ -479,11 +479,9 @@ describe("/mistakes", () => {
     expect(breakdown.last30Days).toEqual([
       { category: "PREPOSITIONS", count: 1, percentage: 100 },
     ]);
-    expect(
-      patterns.map(({ fromPortuguese, id }) => ({ fromPortuguese, id }))
-    ).toEqual([
-      { fromPortuguese: true, id: recent },
-      { fromPortuguese: false, id: old },
+    expect(patterns.map(({ l1Transfer, id }) => ({ l1Transfer, id }))).toEqual([
+      { l1Transfer: true, id: recent },
+      { l1Transfer: false, id: old },
     ]);
 
     await query((client) =>
@@ -491,9 +489,9 @@ describe("/mistakes", () => {
     );
     const unflagged = await GET("/api/mistakes");
     const after = (await unflagged.json()) as {
-      readonly patterns: readonly { readonly fromPortuguese: boolean }[];
+      readonly patterns: readonly { readonly l1Transfer: boolean }[];
     };
-    expect(after.patterns.map(({ fromPortuguese }) => fromPortuguese)).toEqual([
+    expect(after.patterns.map(({ l1Transfer }) => l1Transfer)).toEqual([
       false,
       false,
     ]);

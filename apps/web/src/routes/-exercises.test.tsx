@@ -78,7 +78,7 @@ const renderExercises = async (
 };
 
 describe("/exercises", () => {
-  it("asks the pending set one question at a time and grades each answer", async () => {
+  it("asks the pending set one Exercise at a time and grades each answer", async () => {
     const { client, page } = await renderExercises({
       graded: { choice: gradedChoice, rewrite: gradedRewrite },
       pending: [multipleChoice, rewrite],
