@@ -5,6 +5,7 @@
 import type {
   InterviewAnswerResult,
   InterviewTurnRef,
+  SampleLimits,
   StartedInterview,
 } from "@fluenshift/contract";
 import { Button } from "@fluenshift/ui/components/button";
@@ -29,7 +30,6 @@ import { TurnFeedback } from "./turn-feedback";
 import type { CompletedTurn } from "./turn-feedback";
 import { WritingSheet } from "./writing-sheet";
 
-const MAX_LENGTH = 5000;
 const GENERIC_ERROR = "Something went wrong. Please try again.";
 
 interface Interviewing {
@@ -129,7 +129,12 @@ const endQuietly = async (request: Promise<void>) => {
   }
 };
 
-export const InterviewPractice = () => {
+export const InterviewPractice = ({
+  sampleLimits,
+}: {
+  // The Deploy Profile's caps, which size the answer sheet (docs/adr/0006).
+  readonly sampleLimits: SampleLimits;
+}) => {
   const { academyClient } = useRouteContext({ from: "__root__" });
   const [state, setState] = useState<State>({ kind: "idle" });
   const [answer, setAnswer] = useState("");
@@ -258,7 +263,7 @@ export const InterviewPractice = () => {
           <WritingSheet
             disabled={isSubmitting}
             label="Your answer"
-            maxLength={MAX_LENGTH}
+            maxLength={sampleLimits.sampleMaxCharacters}
             minHeight="min-h-[240px]"
             onChange={setAnswer}
             placeholder="Answer in English..."

@@ -6,6 +6,7 @@ import { findTechnicalPromptById } from "@fluenshift/core/technical-prompts";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 import { PageHeader, PageShell } from "../features/academy/page-header";
+import { sampleLimitsFor } from "../features/academy/sample-limits";
 import { WritingCoach } from "../features/academy/writing-coach";
 import type { InitialChallenge } from "../features/academy/writing-coach";
 
@@ -40,12 +41,16 @@ const headingFor = (challenge: InitialChallenge | undefined) => {
 
 const WritePage = () => {
   const initialChallenge = routeApi.useLoaderData();
+  const { sampleLimits } = routeApi.useRouteContext();
   const heading = headingFor(initialChallenge);
 
   return (
     <PageShell>
       <PageHeader description={heading.description} title={heading.title} />
-      <WritingCoach initialChallenge={initialChallenge} />
+      <WritingCoach
+        initialChallenge={initialChallenge}
+        sampleLimits={sampleLimits}
+      />
     </PageShell>
   );
 };
@@ -58,6 +63,7 @@ export const Route = createFileRoute("/write")({
       : {}),
   }),
   loaderDeps: ({ search }) => search,
+  beforeLoad: ({ context }) => sampleLimitsFor(context.academyClient),
   loader: ({ context, deps }): Promise<InitialChallenge | undefined> => {
     const technicalPrompt =
       deps.promptId === undefined

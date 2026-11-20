@@ -9,6 +9,7 @@ import type {
   MistakeNotebook,
   PendingExercise,
   PracticeWritingResult,
+  SampleLimits,
   StartedInterview,
   VocabularyItem,
   VocabularyItemRequest,
@@ -40,6 +41,8 @@ export interface AcademyClient {
   readonly getAcademyDashboard: () => Promise<AcademyDashboard>;
   readonly getDailyChallenge: () => Promise<DailyChallenge>;
   readonly getMistakeNotebook: () => Promise<MistakeNotebook>;
+  /** The Deploy Profile's caps on one Writing Sample, which size the writing sheets (ADR 0006). */
+  readonly getSampleLimits: () => Promise<SampleLimits>;
   readonly listPendingExercises: () => Promise<readonly PendingExercise[]>;
   readonly listVocabulary: () => Promise<readonly VocabularyItem[]>;
   readonly startInterview: () => Promise<StartedInterview>;
@@ -119,6 +122,7 @@ export const unavailableAcademyClient: AcademyClient = {
   getAcademyDashboard: unavailable,
   getDailyChallenge: unavailable,
   getMistakeNotebook: unavailable,
+  getSampleLimits: unavailable,
   listPendingExercises: unavailable,
   listVocabulary: unavailable,
   startInterview: unavailable,

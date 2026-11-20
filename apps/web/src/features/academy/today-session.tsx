@@ -1,7 +1,7 @@
 // The daily session: write today's challenge, then review a practice set that interleaves the
 // mistakes just made with the patterns most due for review. One page, no navigation in between.
 // Ported from Grifando src/components/today/TodaySession.tsx (74dbb9f).
-import type { DailyChallenge } from "@fluenshift/contract";
+import type { DailyChallenge, SampleLimits } from "@fluenshift/contract";
 import { useState } from "react";
 
 import { ExercisePractice } from "./exercise-practice";
@@ -15,8 +15,10 @@ const STEPS = ["write", "review"] as const;
 
 export const TodaySession = ({
   challenge,
+  sampleLimits,
 }: {
   readonly challenge: DailyChallenge;
+  readonly sampleLimits: SampleLimits;
 }) => {
   const [step, setStep] = useState<Step>({ kind: "write" });
 
@@ -38,6 +40,7 @@ export const TodaySession = ({
       {step.kind === "write" ? (
         <WritingCoach
           initialChallenge={challenge}
+          sampleLimits={sampleLimits}
           nextStep={{
             label: "Continue to review",
             onClick: (evaluationId) => {

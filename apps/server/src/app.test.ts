@@ -1247,6 +1247,34 @@ describe("POST /api/ai-key/test", () => {
   });
 });
 
+// The Deploy Profile's caps on one Writing Sample, which size the Academy's writing sheets
+// (docs/adr/0006, #196).
+describe("Sample limits endpoint", () => {
+  it("answers the local profile's 32 KiB and no character cap", async () => {
+    const response = await appWith().request(
+      get("http://localhost/api/sample-limits")
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toStrictEqual({
+      sampleMaxBytes: 32_768,
+      sampleMaxCharacters: null,
+    });
+  });
+
+  it("answers the hosted profile's 5000 characters within the same 32 KiB", async () => {
+    const response = await hostedApp({ serveWeb: false, webDistPath }).request(
+      get("https://fluenshift.example/api/sample-limits")
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toStrictEqual({
+      sampleMaxBytes: 32_768,
+      sampleMaxCharacters: 5000,
+    });
+  });
+});
+
 describe("Setup endpoint", () => {
   it("answers 503 not-ready without a setup status", async () => {
     const response = await appWith().request(get("http://localhost/api/setup"));

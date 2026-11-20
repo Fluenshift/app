@@ -5,6 +5,7 @@
 import type {
   Evaluation,
   PracticeOccurrence,
+  SampleLimits,
   TechnicalCategory,
 } from "@fluenshift/contract";
 import { Button } from "@fluenshift/ui/components/button";
@@ -21,7 +22,6 @@ import { KeyRequiredNotice } from "./key-required-notice";
 import { WritingResults } from "./writing-results";
 import { WritingSheet } from "./writing-sheet";
 
-const MAX_LENGTH = 5000;
 const GENERIC_FAILURE_MESSAGE =
   "We couldn't analyze this writing right now. Your text has not been lost.";
 
@@ -83,6 +83,7 @@ const submitState = async (
 export const WritingCoach = ({
   initialChallenge,
   nextStep,
+  sampleLimits,
 }: {
   readonly initialChallenge?: InitialChallenge;
   // Shown after a successful Evaluation; receives the Evaluation's id.
@@ -90,6 +91,8 @@ export const WritingCoach = ({
     readonly label: string;
     readonly onClick: (evaluationId: string) => void;
   };
+  // The Deploy Profile's caps, which size the sheet (docs/adr/0006).
+  readonly sampleLimits: SampleLimits;
 }) => {
   const { academyClient } = useRouteContext({ from: "__root__" });
   const [text, setText] = useState("");
@@ -135,7 +138,7 @@ export const WritingCoach = ({
         <WritingSheet
           disabled={isSubmitting}
           label={initialChallenge === undefined ? "Your text" : "Your answer"}
-          maxLength={MAX_LENGTH}
+          maxLength={sampleLimits.sampleMaxCharacters}
           onChange={setText}
           placeholder={
             initialChallenge === undefined

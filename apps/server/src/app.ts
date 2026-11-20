@@ -71,6 +71,7 @@ import type {
   InterviewAnswer,
   PracticeWriting,
 } from "./practice/practice-writing";
+import { sampleLimitsOf } from "./sample-limits";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -1197,6 +1198,11 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           }
         );
       }
+    )
+    // The Deploy Profile's caps on one Writing Sample, which size the Academy's writing sheets
+    // (docs/adr/0006).
+    .get("/api/sample-limits", (context) =>
+      context.json(sampleLimitsOf(options.limits))
     )
     .get("/api/setup", (context) =>
       options.setup === undefined

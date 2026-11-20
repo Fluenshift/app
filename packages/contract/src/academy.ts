@@ -432,11 +432,23 @@ export const AttemptRequest = Schema.Struct({
 export type AttemptRequest = typeof AttemptRequest.Type;
 
 /**
+ * The Deploy Profile's caps on one Writing Sample, which size the Academy's writing sheets
+ * (GET /api/sample-limits, docs/adr/0006): UTF-8 bytes always, and characters when the profile
+ * caps them, null otherwise.
+ */
+export const SampleLimits = Schema.Struct({
+  sampleMaxBytes: Schema.Int,
+  sampleMaxCharacters: Schema.NullOr(Schema.Int),
+});
+export type SampleLimits = typeof SampleLimits.Type;
+
+/**
  * One answer to an interview turn (Grifando's POST /api/interview/[id]/turns/[turnId]/answer,
- * 74dbb9f): trimmed, then 1 to 5000 characters. Grifando's retrySessionId is gone
- * (docs/adr/0024).
+ * 74dbb9f): trimmed, then at least 1 character. Grifando's 5000 characters were its public site's
+ * cap: the answer is a Writing Sample, so the Deploy Profile's caps bound it where the Judge
+ * evaluates it (docs/adr/0006). Grifando's retrySessionId is gone (docs/adr/0024).
  */
 export const InterviewAnswerRequest = Schema.Struct({
-  answer: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(5000)),
+  answer: Schema.Trim.check(Schema.isMinLength(1)),
 });
 export type InterviewAnswerRequest = typeof InterviewAnswerRequest.Type;
