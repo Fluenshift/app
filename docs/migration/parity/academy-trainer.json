@@ -130,7 +130,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/practice/practice-writing-routes.test.ts::the visitor's AI key never reaches the logs > when building the provider throws a generic error that reaches the route's log"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/noKeyInLogs.test.ts::the visitor's AI key never reaches the logs > when the provider call throws a generic error",
@@ -139,7 +141,9 @@
       "slice": "academy-trainer",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/practice/practice-writing-routes.test.ts::the visitor's AI key never reaches the logs > when the provider call throws a generic error"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/prompts/answerExplanation.test.ts::buildAnswerExplanationUserMessage > includes the learner's answer and the accepted answers for free-text exercises",
