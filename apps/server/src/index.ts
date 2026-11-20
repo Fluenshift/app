@@ -29,6 +29,7 @@ import {
   listEvaluations,
 } from "./history/learning-history";
 import { LearnerIdentity } from "./learner-identity";
+import { answerInterviewTurnFor } from "./practice/practice-writing";
 import {
   getProgressEvidence,
   getProgressSummary,
@@ -59,6 +60,7 @@ const HttpServer = Layer.effectDiscard(
       () => storedAt
     );
     const app = createApp({
+      answerInterviewTurn: answerInterviewTurnFor,
       createVocabularyItem,
       deleteEvaluation,
       deleteVocabularyItem,
