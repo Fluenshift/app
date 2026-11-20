@@ -136,11 +136,20 @@ interface SeededOccurrence {
 
 // A practice Evaluation of the Learner at `evaluatedAt`, with one Finding per Occurrence, as
 // Grifando's analyzed writing session with its mistake occurrences (docs/adr/0004).
+// The shape of a seeded Evaluation beyond its Occurrences: its Finding count (at least one per
+// Occurrence), its evaluated English words and its Rubric Version.
+interface SeededShape {
+  readonly findingCount?: number;
+  readonly rubricVersion?: string;
+  readonly words?: number;
+}
+
 const seedEvaluation = async (
   learnerId: string,
   evaluatedAt: Date,
   seeded: readonly SeededOccurrence[] = [],
-  origin: "practice" | "work" = "practice"
+  origin: "practice" | "work" = "practice",
+  shape: SeededShape = {}
 ) => {
   const evaluationId = randomUUID();
   await runtime.runPromise(
@@ -150,21 +159,24 @@ const seedEvaluation = async (
         band: "Clear",
         correctedText: "Corrected.",
         evaluatedAt: evaluatedAt.toISOString(),
-        evaluatedEnglishWordCount: 4,
-        findings: seeded.map(() => ({
-          byteEnd: 1,
-          byteStart: 0,
-          category: "Preposition" as const,
-          correction: "y",
-          explanation: "z",
-          originalText: "x",
-          severity: "Minor" as const,
-        })),
+        evaluatedEnglishWordCount: shape.words ?? 4,
+        findings: Array.from(
+          { length: Math.max(shape.findingCount ?? 0, seeded.length) },
+          () => ({
+            byteEnd: 1,
+            byteStart: 0,
+            category: "Preposition" as const,
+            correction: "y",
+            explanation: "z",
+            originalText: "x",
+            severity: "Minor" as const,
+          })
+        ),
         id: evaluationId,
         model: "judge-model",
         originalText: `Text written ${evaluatedAt.toISOString()}.`,
         provider: "test",
-        rubricVersion: "1-provisional",
+        rubricVersion: shape.rubricVersion ?? "1-provisional",
         score: 80,
         suggestions: [],
         summary: "Feedback.",
@@ -554,6 +566,15 @@ describe("/academy", () => {
       recentPatterns: [],
       recentWriting: [],
       recommendation: null,
+      findingTrend: {
+        samples: [],
+        window: {
+          evaluatedEnglishWordCount: 0,
+          evaluationCount: 0,
+          findingCount: 0,
+          findingRate: null,
+        },
+      },
       streak: { activeToday: false, current: 0, longest: 0 },
       weakAreas: [],
     });
@@ -626,6 +647,59 @@ describe("/academy", () => {
       promptText:
         "Describe a bug you recently solved and how you found the root cause.",
       promptType: "DAILY_CHALLENGE",
+    });
+  });
+});
+
+// docs/adr/0027: the dashboard's Finding-based trend, in the place of Grifando's averaged scores.
+describe("GET /api/academy/dashboard trend", () => {
+  it("rates the last ten practice samples under the current Rubric Version, oldest first", async () => {
+    await Promise.all(
+      Array.from({ length: 11 }, (_, index) =>
+        seedEvaluation("visitor-1", daysAgo(11 - index), [], "practice", {
+          findingCount: index % 3,
+          words: 20,
+        })
+      )
+    );
+    await seedEvaluation("visitor-1", daysAgo(0), [], "practice", {
+      findingCount: 5,
+      rubricVersion: "0-retired",
+      words: 20,
+    });
+    await seedEvaluation("visitor-1", daysAgo(0), [], "work", {
+      findingCount: 5,
+      words: 20,
+    });
+    await seedEvaluation("other-user", daysAgo(0), [], "practice", {
+      findingCount: 5,
+      words: 20,
+    });
+
+    const response = await GET("/api/academy/dashboard");
+    const { findingTrend } = (await response.json()) as {
+      readonly findingTrend: {
+        readonly samples: readonly Record<string, unknown>[];
+        readonly window: unknown;
+      };
+    };
+
+    // The oldest of the eleven practice samples falls out of the window.
+    expect(findingTrend.samples).toHaveLength(10);
+    expect(findingTrend.samples[0]).toEqual({
+      evaluatedAt: daysAgo(10).toISOString(),
+      evaluatedEnglishWordCount: 20,
+      findingCount: 1,
+      findingRate: 5,
+    });
+    expect(
+      findingTrend.samples.map(({ findingCount }) => findingCount)
+    ).toEqual([1, 2, 0, 1, 2, 0, 1, 2, 0, 1]);
+    expect(findingTrend.window).toEqual({
+      evaluatedEnglishWordCount: 200,
+      evaluationCount: 10,
+      findingCount: 10,
+      findingRate: 5,
     });
   });
 });

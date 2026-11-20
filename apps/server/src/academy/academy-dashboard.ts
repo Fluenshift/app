@@ -119,6 +119,15 @@ export const academyDashboard = Effect.fn("AcademyDashboard.academyDashboard")(
         now
       ),
       weakAreas: computeCategoryBreakdown(categoryCounts),
+      findingTrend: {
+        samples: [],
+        window: {
+          evaluatedEnglishWordCount: 0,
+          evaluationCount: 0,
+          findingCount: 0,
+          findingRate: null,
+        },
+      },
     } satisfies AcademyDashboard;
   }
 );
