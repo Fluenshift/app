@@ -78,6 +78,7 @@ describe("/mistakes", () => {
       ],
     });
     expect(text).toContain("2 patterns are due for review.");
+    expect(text).toContain("Practice due patterns");
     expect(text).toContain("Prepositions66.7%");
     expect(text).toContain("Articles33.3%");
     expect(text).toContain("2 patterns");

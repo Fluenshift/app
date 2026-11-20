@@ -133,7 +133,10 @@ describe("/academy", () => {
   });
 
   it("joins the primary navigation", async () => {
-    await renderDashboard(empty);
+    const { page } = await renderDashboard(empty);
+    expect(
+      within(page).getByRole("link", { name: "Go to exercises" })
+    ).toHaveAttribute("href", "/exercises");
     const navigation = screen.getByRole("navigation", {
       name: "Primary navigation",
     });

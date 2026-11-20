@@ -3,7 +3,10 @@
 import type {
   AcademyDashboard,
   DailyChallenge,
+  ExerciseGenerationRequest,
+  GradedAttempt,
   MistakeNotebook,
+  PendingExercise,
   VocabularyItem,
   VocabularyItemRequest,
 } from "@fluenshift/contract";
@@ -14,11 +17,51 @@ export interface AcademyClient {
   ) => Promise<void>;
   /** Resolves once the item is gone, also when it was already gone. */
   readonly deleteVocabularyItem: (itemId: string) => Promise<void>;
+  /** The Trainer's explanation of one graded Attempt; it never changes the grade. */
+  readonly explainAttempt: (
+    exerciseId: string,
+    attemptId: string
+  ) => Promise<string>;
+  /** A new practice set from the Learner's patterns, written by the Trainer. */
+  readonly generateExercises: (
+    request: ExerciseGenerationRequest
+  ) => Promise<readonly PendingExercise[]>;
   readonly getAcademyDashboard: () => Promise<AcademyDashboard>;
   readonly getDailyChallenge: () => Promise<DailyChallenge>;
   readonly getMistakeNotebook: () => Promise<MistakeNotebook>;
+  readonly listPendingExercises: () => Promise<readonly PendingExercise[]>;
   readonly listVocabulary: () => Promise<readonly VocabularyItem[]>;
+  readonly submitAttempt: (
+    exerciseId: string,
+    answer: string
+  ) => Promise<GradedAttempt>;
 }
+
+/**
+ * A failed Academy request: its status, its code, and the message the server wrote for the
+ * Learner. The Academy's routes answer fixed messages, never text a Learner wrote, and Grifando's
+ * screens show them.
+ */
+export class AcademyRequestError extends Error {
+  readonly code: string | undefined;
+  readonly serverMessage: string | undefined;
+  readonly status: number;
+
+  constructor(
+    status: number,
+    failure: { readonly code?: string; readonly error?: string } = {}
+  ) {
+    super("Academy request could not be completed");
+    this.name = "AcademyRequestError";
+    this.code = failure.code;
+    this.serverMessage = failure.error;
+    this.status = status;
+  }
+}
+
+/** Whether a failure asks the Learner to set up a Trainer key. */
+export const isKeyRequired = (error: unknown): boolean =>
+  error instanceof AcademyRequestError && error.code === "AI_KEY_REQUIRED";
 
 const unavailable = () =>
   Promise.reject(new Error("The Academy client is not available"));
@@ -30,8 +73,12 @@ const unavailable = () =>
 export const unavailableAcademyClient: AcademyClient = {
   createVocabularyItem: unavailable,
   deleteVocabularyItem: unavailable,
+  explainAttempt: unavailable,
+  generateExercises: unavailable,
   getAcademyDashboard: unavailable,
   getDailyChallenge: unavailable,
   getMistakeNotebook: unavailable,
+  listPendingExercises: unavailable,
   listVocabulary: unavailable,
+  submitAttempt: unavailable,
 };

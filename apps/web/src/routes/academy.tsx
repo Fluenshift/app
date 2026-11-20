@@ -129,6 +129,14 @@ const AcademyPage = () => {
                 </p>
               </>
             )}
+            <div className="pt-2">
+              <Link
+                className={buttonVariants({ variant: "outline" })}
+                to="/exercises"
+              >
+                Go to exercises
+              </Link>
+            </div>
           </div>
         </section>
 

@@ -5,11 +5,14 @@
 // the URL (docs/adr/0008).
 import {
   AcademyDashboard,
+  AttemptExplanation,
   DailyChallenge,
   Evaluation,
   EvaluationSubmissionResult,
   EvaluationSummary,
+  GradedAttempt,
   MistakeNotebook,
+  PendingExerciseList,
   ProgressEvidence,
   ProgressSummary,
   SetupStatus,
@@ -19,6 +22,7 @@ import { Option, Schema } from "effect";
 import { hc } from "hono/client";
 import type { AppType } from "server/app";
 
+import { AcademyRequestError } from "./features/academy/academy-client";
 import type { AcademyClient } from "./features/academy/academy-client";
 import { EvaluationRequestError } from "./features/evaluations/evaluation-client";
 import type {
@@ -55,6 +59,33 @@ const decodeDailyChallenge = Schema.decodeUnknownOption(DailyChallenge);
 const decodeAcademyDashboard = Schema.decodeUnknownOption(AcademyDashboard);
 const decodeVocabularyList = Schema.decodeUnknownOption(VocabularyList);
 const decodeMistakeNotebook = Schema.decodeUnknownOption(MistakeNotebook);
+const decodePendingExercises = Schema.decodeUnknownOption(PendingExerciseList);
+const decodeGradedAttempt = Schema.decodeUnknownOption(GradedAttempt);
+const decodeAttemptExplanation = Schema.decodeUnknownOption(AttemptExplanation);
+
+/** What a failed Academy answer says: its code and the message its route wrote for the Learner. */
+const AcademyFailureBody = Schema.Struct({
+  code: Schema.optionalKey(Schema.String),
+  error: Schema.optionalKey(Schema.String),
+});
+const decodeAcademyFailure = Schema.decodeUnknownOption(AcademyFailureBody);
+
+const academyJson = async <A>(
+  response: ApiResponse,
+  decode: (payload: unknown) => Option.Option<A>
+): Promise<A> => {
+  const payload = await parseJson(response);
+  if (!response.ok) {
+    throw new AcademyRequestError(
+      response.status,
+      Option.getOrUndefined(decodeAcademyFailure(payload))
+    );
+  }
+  return Option.getOrThrowWith(
+    decode(payload),
+    () => new AcademyRequestError(response.status)
+  );
+};
 
 const parseJson = async (response: ApiResponse): Promise<unknown> => {
   try {
@@ -188,6 +219,29 @@ export const createHttpAcademyClient = ({
       }
     },
 
+    async explainAttempt(exerciseId, attemptId) {
+      const { explanation } = await academyJson(
+        await api.exercises[":exerciseId"].attempts[
+          ":attemptId"
+        ].explanation.$post({
+          param: {
+            attemptId: encodeURIComponent(attemptId),
+            exerciseId: encodeURIComponent(exerciseId),
+          },
+        }),
+        decodeAttemptExplanation
+      );
+      return explanation;
+    },
+
+    async generateExercises(request) {
+      const { exercises } = await academyJson(
+        await api.exercises.$post({ json: request }),
+        decodePendingExercises
+      );
+      return exercises;
+    },
+
     async getAcademyDashboard() {
       return requireJson(
         await api.academy.dashboard.$get(),
@@ -206,12 +260,36 @@ export const createHttpAcademyClient = ({
       return requireJson(await api.mistakes.$get(), decodeMistakeNotebook);
     },
 
+    async listPendingExercises() {
+      const { exercises } = await academyJson(
+        await api.exercises.$get(),
+        decodePendingExercises
+      );
+      return exercises;
+    },
+
     async listVocabulary() {
       const { items } = await requireJson(
         await api.vocabulary.$get(),
         decodeVocabularyList
       );
       return items;
+    },
+
+    async submitAttempt(exerciseId, answer) {
+      return academyJson(
+        // The route reads its body itself, so the typed client takes no JSON for it.
+        await api.exercises[":exerciseId"].attempts.$post(
+          { param: { exerciseId: encodeURIComponent(exerciseId) } },
+          {
+            init: {
+              body: JSON.stringify({ answer }),
+              headers: { "content-type": "application/json" },
+            },
+          }
+        ),
+        decodeGradedAttempt
+      );
     },
   };
 };
