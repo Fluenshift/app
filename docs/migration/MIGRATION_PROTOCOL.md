@@ -116,9 +116,9 @@ Goal: port the remaining Grifando features and the hosted-deployment behavior.
    endpoint and `noKeyInLogs.test.ts`.
 3. Hosted profile, as one serial unit for the request pipeline: signed anonymous session, its
    cookie `HttpOnly`, `Secure` and `SameSite=Lax`, with the attributes characterized at the
-   Grifando baseline; an Origin check on every state-changing request; the trusted-proxy
-   setting that decides which header carries the client IP; a documented rotation of the
-   session secret; rate limits in Postgres fixed windows per Learner and per hashed IP;
+   Grifando baseline, and no Origin check (ADR 0032); the trusted-proxy setting that decides
+   which header carries the client IP; a documented rotation of the session secret (ADR 0032);
+   rate limits in Postgres fixed windows per Learner and per hashed IP;
    `DELETE /api/me`; 90-day idle cleanup run by the scheduler of ADR 0011; CSP for a static
    SPA; privacy page in EN and PT; landing page and OG image generated at build time; robots
    and sitemap.

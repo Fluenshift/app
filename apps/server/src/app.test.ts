@@ -5,7 +5,13 @@ import path from "node:path";
 
 import type { SetupStatus } from "@fluenshift/contract";
 import { ServerConfig } from "@fluenshift/env";
-import { ConfigProvider, Effect, Layer, ManagedRuntime } from "effect";
+import {
+  ConfigProvider,
+  Effect,
+  Layer,
+  ManagedRuntime,
+  Redacted,
+} from "effect";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import type {
@@ -16,6 +22,7 @@ import { createApp, serveApp } from "./app";
 import type { AppBoundaries } from "./app";
 import type { EvaluationEndpointResult } from "./evaluation/evaluation-endpoint";
 import { LearnerIdentity } from "./learner-identity";
+import { SESSION_COOKIE, signSessionId } from "./session/session-token";
 
 let webDistPath = "";
 let emptyWebDistPath = "";
@@ -68,16 +75,28 @@ const runtime = ManagedRuntime.make(LearnerIdentity.local);
 const localApp = (options: WebOptions & AppBoundaries) =>
   createApp({
     limits: local.limits,
-    profile: local.profile,
+    profile: "local",
     runtime,
     ...options,
   });
 
+// The hosted profile's session, signed with a secret of these tests (docs/adr/0032).
+const hostedSession = {
+  secret: Redacted.make("app-test-secret-xxxxxxxxxxxxxxxxxxxxxxxx"),
+  secureCookie: false,
+};
+
+// The cookie of a hosted Learner's session, which every API route but the health check needs.
+const hostedSessionCookie = {
+  cookie: `${SESSION_COOKIE}=${signSessionId("visitor-1", Redacted.value(hostedSession.secret))}`,
+};
+
 const hostedApp = (options: WebOptions) =>
   createApp({
     limits: hosted.limits,
-    profile: hosted.profile,
+    profile: "hosted",
     runtime,
+    session: hostedSession,
     ...options,
   });
 
@@ -1264,7 +1283,7 @@ describe("Sample limits endpoint", () => {
 
   it("answers the hosted profile's 5000 characters within the same 32 KiB", async () => {
     const response = await hostedApp({ serveWeb: false, webDistPath }).request(
-      get("https://fluenshift.example/api/sample-limits")
+      get("https://fluenshift.example/api/sample-limits", hostedSessionCookie)
     );
 
     expect(response.status).toBe(200);

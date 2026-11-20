@@ -1,22 +1,64 @@
-import type { LearnerId } from "@fluenshift/contract";
-import { Context, Effect, Layer } from "effect";
+import { LearnerId } from "@fluenshift/contract";
+import { SessionConfig } from "@fluenshift/env";
+import { Context, Effect, Layer, Option, Redacted, Schema } from "effect";
+import { parse } from "hono/utils/cookie";
+
+import { SESSION_COOKIE, verifySessionToken } from "./session/session-token";
 
 /** The one implicit Learner of the local profile (docs/adr/0003). */
 export const LOCAL_LEARNER_ID = "local" as LearnerId;
 
 /**
+ * A hosted request without a valid signed session cookie. Ported from Grifando
+ * src/server/session/currentUser.ts (74dbb9f): the session gate refuses such an API request
+ * before any route runs, so a route never meets one (docs/adr/0032).
+ */
+export class MissingSessionError extends Schema.TaggedError<
+  MissingSessionError,
+  { readonly brand: unique symbol }
+>()("MissingSessionError", {}) {}
+
+const decodeLearnerId = Schema.decodeOption(LearnerId);
+
+/**
  * Tells which Learner a request belongs to. Every stored row is scoped by that Learner. The
- * local profile has no session: every request is the implicit Learner. The hosted profile adds
- * a layer that reads the signed session cookie (Phase 6).
+ * local profile has no session: every request is the implicit Learner. The hosted profile reads
+ * the Learner from the signed session cookie.
  */
 export class LearnerIdentity extends Context.Service<
   LearnerIdentity,
-  { identify(request: Request): Effect.Effect<LearnerId> }
+  {
+    identify(request: Request): Effect.Effect<LearnerId, MissingSessionError>;
+  }
 >()("server/LearnerIdentity") {
   static readonly local = Layer.succeed(
     LearnerIdentity,
     LearnerIdentity.of({
       identify: () => Effect.succeed(LOCAL_LEARNER_ID),
+    })
+  );
+
+  /**
+   * One Learner per signed session cookie, ported from getCurrentUserId in Grifando
+   * src/server/session/currentUser.ts (74dbb9f): read-only, it never creates a row.
+   */
+  static readonly hosted = Layer.effect(
+    LearnerIdentity,
+    Effect.gen(function* () {
+      const { secret } = yield* SessionConfig;
+      return LearnerIdentity.of({
+        identify: (request) => {
+          const token = parse(
+            request.headers.get("cookie") ?? "",
+            SESSION_COOKIE
+          )[SESSION_COOKIE];
+          const id = verifySessionToken(token, Redacted.value(secret));
+          const learner = id === null ? Option.none() : decodeLearnerId(id);
+          return Effect.fromOption(learner).pipe(
+            Effect.mapError(() => new MissingSessionError())
+          );
+        },
+      });
     })
   );
 }

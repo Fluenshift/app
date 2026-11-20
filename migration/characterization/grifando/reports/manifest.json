@@ -3,7 +3,7 @@
   "repository": "Fluenshift/grifando",
   "tag": "parity-baseline",
   "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
-  "ranAt": "2026-11-16T03:23:43.089Z",
+  "ranAt": "2026-11-20T22:47:24.461Z",
   "tools": [
     {
       "name": "node",
@@ -37,6 +37,8 @@
     "src/app/pages.characterization.test.ts",
     "src/lib/answerDiff.characterization.test.ts",
     "src/lib/responseError.characterization.test.ts",
+    "src/nextConfig.characterization.test.ts",
+    "src/proxy.characterization.test.ts",
     "src/server/ai/aiErrorResponse.characterization.test.ts",
     "src/server/ai/client.characterization.test.ts",
     "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
@@ -49,7 +51,9 @@
     "src/server/domain/mistakes/recall.characterization.test.ts",
     "src/server/domain/progress/streak.characterization.test.ts",
     "src/server/domain/writing/dailyPrompt.characterization.test.ts",
-    "src/server/domain/writing/technicalPrompts.characterization.test.ts"
+    "src/server/domain/writing/technicalPrompts.characterization.test.ts",
+    "src/server/session/sessionSecret.characterization.test.ts",
+    "src/server/session/sessionToken.characterization.test.ts"
   ],
   "suites": [
     {
@@ -71,6 +75,8 @@
         "src/app/pages.characterization.test.ts",
         "src/lib/answerDiff.characterization.test.ts",
         "src/lib/responseError.characterization.test.ts",
+        "src/nextConfig.characterization.test.ts",
+        "src/proxy.characterization.test.ts",
         "src/server/ai/aiErrorResponse.characterization.test.ts",
         "src/server/ai/client.characterization.test.ts",
         "src/server/ai/schemas/exerciseGeneration.characterization.test.ts",
@@ -84,6 +90,8 @@
         "src/server/domain/progress/streak.characterization.test.ts",
         "src/server/domain/writing/dailyPrompt.characterization.test.ts",
         "src/server/domain/writing/technicalPrompts.characterization.test.ts",
+        "src/server/session/sessionSecret.characterization.test.ts",
+        "src/server/session/sessionToken.characterization.test.ts",
         "--reporter=default",
         "--reporter=json",
         "--outputFile.json=vitest.json"

@@ -29,7 +29,7 @@ import {
 } from "@fluenshift/core/evaluation-request-policy";
 import { toPublicExercise } from "@fluenshift/core/public-view";
 import type { DatabaseError } from "@fluenshift/db";
-import type { DeployProfile, InputLimits } from "@fluenshift/env";
+import type { InputLimits, SessionSettings } from "@fluenshift/env";
 import { getRequestListener } from "@hono/node-server";
 import { Effect, Option, Schema } from "effect";
 import { Hono } from "hono";
@@ -72,6 +72,7 @@ import type {
   PracticeWriting,
 } from "./practice/practice-writing";
 import { sampleLimitsOf } from "./sample-limits";
+import { securityHeaders, sessionGate } from "./session/hosted-pipeline";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -246,16 +247,24 @@ export interface PendingExercise {
   readonly type: string;
 }
 
-export interface AppOptions<R = never> extends AppBoundaries<R> {
-  /** The input caps of the deploy profile (docs/adr/0006). */
-  readonly limits: InputLimits;
-  readonly profile: DeployProfile;
-  /** Runs the boundaries; it provides what they need besides the Learner of the request. */
-  readonly runtime: EdgeRuntime<R | LearnerIdentity>;
-  /** Whether this process also serves the web build, as it does in production. */
-  readonly serveWeb: boolean;
-  readonly webDistPath: string;
-}
+/**
+ * The deploy profile, with what the hosted profile's request pipeline needs: the session it
+ * signs and checks (docs/adr/0003, docs/adr/0032).
+ */
+export type ProfileOptions =
+  | { readonly profile: "local" }
+  | { readonly profile: "hosted"; readonly session: SessionSettings };
+
+export type AppOptions<R = never> = AppBoundaries<R> &
+  ProfileOptions & {
+    /** The input caps of the deploy profile (docs/adr/0006). */
+    readonly limits: InputLimits;
+    /** Runs the boundaries; it provides what they need besides the Learner of the request. */
+    readonly runtime: EdgeRuntime<R | LearnerIdentity>;
+    /** Whether this process also serves the web build, as it does in production. */
+    readonly serveWeb: boolean;
+    readonly webDistPath: string;
+  };
 
 const LOOPBACK_HOSTNAMES = new Set(["localhost", "127.0.0.1", "[::1]"]);
 
@@ -299,6 +308,9 @@ const refusalOf = (
   const contentLength = Number(request.headers.get("content-length") ?? 0);
   return contentLength > limits.bodyMaxBytes ? SAMPLE_TOO_LARGE : undefined;
 };
+
+// What a profile without a step of the pipeline runs in its place.
+const passThrough: MiddlewareHandler = (_context, next) => next();
 
 /**
  * Runs before every route: it refuses a foreign request and a declared body over the cap, and
@@ -555,7 +567,9 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         CurrentLearner,
         Effect.gen(function* () {
           const identity = yield* LearnerIdentity;
-          const id = yield* identity.identify(request);
+          // The session gate refuses an API request without a valid session before any route
+          // runs, so a route that meets one has a defect (docs/adr/0032).
+          const id = yield* identity.identify(request).pipe(Effect.orDie);
           return CurrentLearner.of({ id });
         })
       )
@@ -623,7 +637,11 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
   };
 
   const app = new Hono()
+    .use(options.profile === "hosted" ? securityHeaders : passThrough)
     .use(guard(options))
+    .use(
+      options.profile === "hosted" ? sessionGate(options.session) : passThrough
+    )
     .get("/api/health", (context) =>
       context.json({ status: "ok" } satisfies HealthResponse)
     )
