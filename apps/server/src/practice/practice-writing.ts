@@ -8,6 +8,7 @@ import type {
 import { Effect, Schema } from "effect";
 
 import { trainerForRequest } from "../academy/academy-requests";
+import { getNaturalVersion } from "../academy/enrichment-repository";
 import { answerTurn } from "../academy/interview-service";
 import type {
   AnswerTurnInput,
@@ -69,7 +70,7 @@ export const answerInterviewTurnFor = Effect.fn(
   );
   const withNaturalVersion: InterviewAnswer = {
     ...answered,
-    naturalVersion: null,
+    naturalVersion: yield* getNaturalVersion(answered.evaluation.id),
   };
   return withNaturalVersion;
 });
@@ -94,7 +95,7 @@ export const practiceWritingFor = Effect.fn(
   const occurrences = yield* listOccurrencesForEvaluation(evaluation.id);
   return {
     evaluation,
-    naturalVersion: null,
+    naturalVersion: yield* getNaturalVersion(evaluation.id),
     occurrences,
   } satisfies PracticeWriting;
 });

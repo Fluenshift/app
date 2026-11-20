@@ -1,7 +1,7 @@
 // The Learner's Mistake Patterns. Ported from Grifando
 // src/server/domain/mistakes/mistakePattern.repository.ts (74dbb9f): a repeated occurrence of one
-// concept grows one pattern instead of adding a row (Grifando SPEC.md §6), and each occurrence in
-// writing is a failed recall for the half-life model.
+// concept grows one pattern instead of adding a row (Grifando SPEC.md §6), and each error in
+// writing is a failed recall for the half-life model. A Naturalness Note is not (docs/adr/0028).
 import { randomUUID } from "node:crypto";
 
 import type {
@@ -64,12 +64,15 @@ export const toPattern = (
 });
 
 // One more occurrence of a concept for the Learner: a new pattern, or the existing one grown,
-// with its examples replaced by the latest. Runs on a client or inside a transaction.
+// with its examples replaced by the latest. An error is a failed recall, which counts as incorrect
+// and resets the recall clock; a Naturalness Note leaves both as they were (docs/adr/0028). Runs on
+// a client or inside a transaction.
 export const upsertPatternRow = (
   client: DrizzleClient,
   learnerId: LearnerId,
   input: UpsertPatternInput,
-  now: Date
+  now: Date,
+  failedRecall: boolean
 ) =>
   client
     .insert(mistakePatterns)
@@ -79,7 +82,7 @@ export const upsertPatternRow = (
       exampleOriginal: input.exampleOriginal,
       firstSeenAt: now,
       id: randomUUID(),
-      incorrectCount: 1,
+      incorrectCount: failedRecall ? 1 : 0,
       lastPracticedAt: now,
       lastSeenAt: now,
       learnerId,
@@ -90,10 +93,14 @@ export const upsertPatternRow = (
       set: {
         exampleCorrection: input.exampleCorrection,
         exampleOriginal: input.exampleOriginal,
-        incorrectCount: sql`${mistakePatterns.incorrectCount} + 1`,
-        lastPracticedAt: now,
         lastSeenAt: now,
         occurrenceCount: sql`${mistakePatterns.occurrenceCount} + 1`,
+        ...(failedRecall
+          ? {
+              incorrectCount: sql`${mistakePatterns.incorrectCount} + 1`,
+              lastPracticedAt: now,
+            }
+          : {}),
       },
       target: [
         mistakePatterns.learnerId,
@@ -116,7 +123,7 @@ export const upsertPattern = Effect.fn(
         .insert(learners)
         .values({ id: learner.id })
         .onConflictDoNothing()
-        .then(() => upsertPatternRow(transaction, learner.id, input, now))
+        .then(() => upsertPatternRow(transaction, learner.id, input, now, true))
     )
   );
   if (row === undefined) {

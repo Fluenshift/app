@@ -40,3 +40,4 @@ ADR 0019 deleted; commit `39fbb46` holds them.
 | [0025](./0025-academy-pages.md) | Each Academy page ports as a Hono read and an SPA route; the Academy dashboard moves to `/academy` | Accepted |
 | [0026](./0026-practice-writing.md) | Practice writing's route and results; Academy routes log an unexpected failure by its tag or name only | Accepted |
 | [0027](./0027-academy-finding-trend.md) | The Academy dashboard's trend: the Finding Rate of the last 10 practice Writing Samples, with counts and no direction | Accepted |
+| [0028](./0028-naturalness-notes.md) | The Enrichment adds the natural version and the Naturalness Notes on every folded Evaluation; a note grows its pattern without a recall | Accepted |

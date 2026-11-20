@@ -1,8 +1,8 @@
 // A practice Writing Sample's results. Ported from Grifando
 // src/components/writing/WritingResults.tsx (74dbb9f) onto its Evaluation (docs/adr/0026): PE's
 // localized marks replace Grifando's highlights (docs/adr/0004), the Overall Score and its band
-// replace the four model scores (docs/adr/0002), and the natural version waits for the
-// Naturalness Notes.
+// replace the four model scores (docs/adr/0002), and the natural version comes from the
+// Enrichment (docs/adr/0028).
 import type {
   Evaluation,
   EvaluationFinding,
@@ -16,6 +16,7 @@ import { FindingNote, MistakeCard } from "./mistake-card";
 
 export const WritingResults = ({
   evaluation,
+  naturalVersion,
   nextStep,
   occurrences,
   onWriteAnother,
@@ -115,6 +116,23 @@ export const WritingResults = ({
             {evaluation.correctedText}
           </p>
         </section>
+        {naturalVersion === null ? null : (
+          <section
+            aria-labelledby="natural-title"
+            className="rounded-card bg-linen space-y-4 p-6 md:p-10"
+          >
+            <h2 className="text-heading-sm" id="natural-title">
+              Natural version
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              How a fluent speaker might phrase the same idea — one option, not
+              the only correct way to say it.
+            </p>
+            <p className="prose-serif text-lg leading-relaxed whitespace-pre-wrap">
+              {naturalVersion}
+            </p>
+          </section>
+        )}
         <section
           aria-labelledby="score-title"
           className="rounded-card bg-linen space-y-4 p-6 md:p-10"

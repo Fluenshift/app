@@ -47,7 +47,7 @@
    An interview turn's feedback (`TurnFeedback`) shows the answer's summary, its corrected
    version when it differs from the answer, and the Overall Score with its band, where Grifando
    showed its overall feedback, its natural version and five model scores. The natural version
-   joins both with the Naturalness Notes. (Completed on 2026-11-20, #193.)
+   joins both with the Naturalness Notes (ADR 0028). (Completed on 2026-11-20, #193.)
 4. An unexpected failure of an Academy route, one its edge answers with the generic 500, logs one
    error-level line through Effect's logger: the route's context and the error's tag or name, never
    its message, code or other properties.
