@@ -13,6 +13,7 @@ import {
   VocabularyItemRequest,
 } from "@fluenshift/contract";
 import type {
+  AcademyDashboard,
   DailyChallenge,
   MistakeNotebook,
   HealthResponse,
@@ -100,6 +101,12 @@ export interface AppBoundaries<R = never> {
     | NotFoundError
     | TrainerAccessError
     | WritingEvaluationFailure,
+    R | CurrentLearner
+  >;
+  /** The Academy dashboard: practice state, recent work and today's challenge. */
+  readonly getAcademyDashboard?: () => Effect.Effect<
+    AcademyDashboard,
+    DatabaseError,
     R | CurrentLearner
   >;
   /** Today's Practice Prompt from the daily bank, biased toward the Learner's weak categories. */
@@ -999,6 +1006,17 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           );
       }
     )
+    // The Academy dashboard (Grifando's / page read it in a Server Component; docs/adr/0025).
+    .get("/api/academy/dashboard", (context): Response | Promise<Response> => {
+      const { getAcademyDashboard } = options;
+      if (getAcademyDashboard === undefined) {
+        return context.json(notReady("The Academy is not available"), 503);
+      }
+      return edge(forLearner(context.req.raw, getAcademyDashboard()), {
+        errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        success: (dashboard) => Response.json(dashboard),
+      });
+    })
     // Today's Practice Prompt (Grifando's resolveDailyChallenge, which its /today and
     // /write?mode=daily pages read), biased toward the categories the Learner has not mastered.
     .get("/api/daily-challenge", (context): Response | Promise<Response> => {

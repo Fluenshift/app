@@ -1,4 +1,5 @@
 export {
+  AcademyDashboard,
   AttemptRequest,
   CategoryBreakdownEntry,
   DailyChallenge,

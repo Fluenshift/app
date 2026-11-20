@@ -1,6 +1,7 @@
 // A fake Academy client for the screen tests: it answers from explicit fixtures, keeps the
 // vocabulary it is given and saves, and records each save request. A read with no fixture fails.
 import type {
+  AcademyDashboard,
   DailyChallenge,
   MistakeNotebook,
   VocabularyItem,
@@ -11,6 +12,7 @@ import { unavailableAcademyClient } from "./academy-client";
 import type { AcademyClient } from "./academy-client";
 
 interface InMemoryAcademyClientOptions {
+  readonly academyDashboard?: AcademyDashboard;
   readonly dailyChallenge?: DailyChallenge;
   /** Every save fails, as a refused or failed request does. */
   readonly failVocabularySaves?: boolean;
@@ -24,6 +26,7 @@ export type InMemoryAcademyClient = AcademyClient & {
 };
 
 export const createInMemoryAcademyClient = ({
+  academyDashboard,
   dailyChallenge,
   failVocabularySaves = false,
   mistakeNotebook,
@@ -58,6 +61,10 @@ export const createInMemoryAcademyClient = ({
       items = items.filter((item) => item.id !== itemId);
       return Promise.resolve();
     },
+    getAcademyDashboard: () =>
+      academyDashboard === undefined
+        ? unavailableAcademyClient.getAcademyDashboard()
+        : Promise.resolve(academyDashboard),
     getDailyChallenge: () =>
       dailyChallenge === undefined
         ? unavailableAcademyClient.getDailyChallenge()

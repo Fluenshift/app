@@ -11,6 +11,8 @@ import type { LearnerId, MistakeCategory } from "@fluenshift/contract";
 import {
   Database,
   DatabaseError,
+  exerciseAttempts,
+  exercises,
   learners,
   mistakePatterns,
   occurrences,
@@ -25,6 +27,7 @@ import type { AppBoundaries } from "../app";
 import { persistEvaluation } from "../history/learning-history";
 import { CurrentLearner, LearnerIdentity } from "../learner-identity";
 import { makeTemporaryDatabase } from "../test/database";
+import { academyDashboard } from "./academy-dashboard";
 import { dailyChallenge } from "./daily-challenge";
 import { mistakeNotebook } from "./mistake-notebook";
 import { listVocabularyItems } from "./vocabulary-repository";
@@ -64,6 +67,7 @@ afterEach(async () => {
 
 const appOf = (boundaries: AppBoundaries = {}) =>
   createApp({
+    getAcademyDashboard: academyDashboard,
     getDailyChallenge: dailyChallenge,
     getMistakeNotebook: mistakeNotebook,
     limits: {
@@ -135,7 +139,8 @@ interface SeededOccurrence {
 const seedEvaluation = async (
   learnerId: string,
   evaluatedAt: Date,
-  seeded: readonly SeededOccurrence[] = []
+  seeded: readonly SeededOccurrence[] = [],
+  origin: "practice" | "work" = "practice"
 ) => {
   const evaluationId = randomUUID();
   await runtime.runPromise(
@@ -165,7 +170,7 @@ const seedEvaluation = async (
         summary: "Feedback.",
       },
       latencyMilliseconds: 1,
-      origin: "practice",
+      origin,
       submittedAt: evaluatedAt.toISOString(),
     }).pipe(
       Effect.provideService(
@@ -489,6 +494,148 @@ describe("GET /api/mistakes", () => {
       getMistakeNotebook: () =>
         Effect.fail(new DatabaseError({ cause: new Error("down") })),
     }).request(new Request("http://localhost/api/mistakes"));
+
+    expect(response.status).toBe(500);
+    expect(await response.json()).toEqual({
+      error: "Something went wrong. Please try again.",
+    });
+  });
+});
+
+// An Exercise of the Learner on `patternId`, answered once per outcome at `attemptedAt`.
+const seedAttempts = (
+  learnerId: string,
+  patternId: string,
+  attemptedAt: Date,
+  outcomes: readonly boolean[]
+) =>
+  query(async (client) => {
+    const exerciseId = randomUUID();
+    await client.insert(exercises).values({
+      id: exerciseId,
+      learnerId,
+      model: "test-model",
+      promptData: {},
+      sourcePatternId: patternId,
+      type: "MULTIPLE_CHOICE",
+    });
+    await client.insert(exerciseAttempts).values(
+      outcomes.map((isCorrect) => ({
+        attemptedAt,
+        exerciseId,
+        feedback: "f",
+        id: randomUUID(),
+        isCorrect,
+        learnerAnswer: "1",
+        learnerId,
+      }))
+    );
+  });
+
+// Grifando's / page under docs/adr/0025: the dashboard moves to /academy. A writing session is a
+// practice-origin Writing Sample (docs/adr/0004), so work-origin Evaluations count for none of it,
+// and the averaged model scores are gone (docs/adr/0002).
+describe("/academy", () => {
+  it("feeds the dashboard's streak, progress, weak areas and recent lists", async () => {
+    const empty = await GET("/api/academy/dashboard");
+    expect(empty.status).toBe(200);
+    expect(await empty.json()).toEqual({
+      dailyChallenge: {
+        promptText:
+          "Explain what an API is to someone with no programming background.",
+        promptType: "DAILY_CHALLENGE",
+      },
+      dueCount: 0,
+      progress: {
+        exerciseAccuracy: null,
+        exercisesCompleted: 0,
+        writingSamplesCompleted: 0,
+      },
+      recentPatterns: [],
+      recentWriting: [],
+      recommendation: null,
+      streak: { activeToday: false, current: 0, longest: 0 },
+      weakAreas: [],
+    });
+
+    const pattern = await seedPattern("visitor-1", {
+      category: "PREPOSITIONS",
+      lastPracticedAt: daysAgo(5),
+      lastSeenAt: daysAgo(1),
+      occurrenceCount: 3,
+      patternKey: "depend-on",
+    });
+    const written = await Promise.all(
+      [3, 2, 1, 0].map((days) =>
+        seedEvaluation(
+          "visitor-1",
+          new Date(daysAgo(days).getTime() - 2 * 60 * 60 * 1000),
+          [{ category: "PREPOSITIONS", patternId: pattern }]
+        )
+      )
+    );
+    await seedAttempts("visitor-1", pattern, daysAgo(0), [true, false, true]);
+    await seedEvaluation(
+      "visitor-1",
+      new Date(NOW.getTime() - 60 * 60 * 1000),
+      [],
+      "work"
+    );
+    const foreign = await seedPattern("other-user", {
+      category: "ARTICLES",
+      lastPracticedAt: daysAgo(5),
+      lastSeenAt: NOW,
+      occurrenceCount: 9,
+      patternKey: "a-an",
+    });
+    await seedEvaluation("other-user", NOW, [
+      { category: "ARTICLES", patternId: foreign },
+    ]);
+    await seedAttempts("other-user", foreign, NOW, [false]);
+
+    const response = await GET("/api/academy/dashboard");
+    const dashboard = (await response.json()) as {
+      readonly recentPatterns: readonly { readonly id: string }[];
+      readonly recentWriting: readonly { readonly id: string }[];
+    } & Record<string, unknown>;
+    expect(dashboard["streak"]).toEqual({
+      activeToday: true,
+      current: 4,
+      longest: 4,
+    });
+    expect(dashboard["progress"]).toEqual({
+      exerciseAccuracy: { correct: 2, total: 3 },
+      exercisesCompleted: 3,
+      writingSamplesCompleted: 4,
+    });
+    expect(dashboard["weakAreas"]).toEqual([
+      { category: "PREPOSITIONS", count: 4, percentage: 100 },
+    ]);
+    expect(dashboard.recentPatterns.map(({ id }) => id)).toEqual([pattern]);
+    expect(dashboard.recentWriting.map(({ id }) => id)).toEqual(
+      written.toReversed().slice(0, 3)
+    );
+    expect(dashboard["dueCount"]).toBe(1);
+    expect(dashboard["recommendation"]).toEqual({
+      category: "PREPOSITIONS",
+      exampleCorrection: "depend-on correction",
+      exampleOriginal: "depend-on original",
+      occurrenceCount: 3,
+    });
+    expect(dashboard["dailyChallenge"]).toEqual({
+      promptText:
+        "Describe a bug you recently solved and how you found the root cause.",
+      promptType: "DAILY_CHALLENGE",
+    });
+  });
+});
+
+describe("GET /api/academy/dashboard", () => {
+  it("answers the generic 500 when the database fails", async () => {
+    const response = await appOf({
+      getAcademyDashboard: () =>
+        Effect.fail(new DatabaseError({ cause: new Error("down") })),
+    }).request(new Request("http://localhost/api/academy/dashboard"));
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({
