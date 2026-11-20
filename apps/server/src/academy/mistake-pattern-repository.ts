@@ -215,6 +215,8 @@ export const findPattern = Effect.fn("MistakePatternRepository.findPattern")(
 );
 
 export interface RecordAttemptInput {
+  // When the Attempt was made, which is when the pattern was last practiced.
+  readonly at: Date;
   readonly consecutiveCorrectCount: number;
   readonly isCorrect: boolean;
   readonly masteryLevel: MasteryLevel;
@@ -224,7 +226,7 @@ export interface RecordAttemptInput {
 // counters.
 export const recordAttempt = Effect.fn(
   "MistakePatternRepository.recordAttempt"
-)(function* (id: string, { isCorrect, ...mastery }: RecordAttemptInput) {
+)(function* (id: string, { at, isCorrect, ...mastery }: RecordAttemptInput) {
   const database = yield* Database;
   const learner = yield* CurrentLearner;
   yield* database.run((client) =>
@@ -235,7 +237,7 @@ export const recordAttempt = Effect.fn(
         ...(isCorrect
           ? { correctCount: sql`${mistakePatterns.correctCount} + 1` }
           : { incorrectCount: sql`${mistakePatterns.incorrectCount} + 1` }),
-        lastPracticedAt: new Date(),
+        lastPracticedAt: at,
       })
       .where(
         and(

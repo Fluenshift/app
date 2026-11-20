@@ -40,6 +40,7 @@ export interface CreateExerciseInput {
 }
 
 export interface CreateAttemptInput {
+  readonly attemptedAt: Date;
   readonly exerciseId: string;
   readonly feedback: string;
   readonly isCorrect: boolean;
