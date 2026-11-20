@@ -303,7 +303,10 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0005",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/page-routes.test.ts::/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese",
+        "apps/web/src/routes/-mistakes.test.tsx::/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > shows each pattern once with its mastery, the category breakdown and the due count",
@@ -312,7 +315,10 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0005",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/page-routes.test.ts::/mistakes > shows each pattern once with its mastery, the category breakdown and the due count",
+        "apps/web/src/routes/-mistakes.test.tsx::/mistakes > shows each pattern once with its mastery, the category breakdown and the due count"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/pages.characterization.test.ts::/today > hands TodaySession today's challenge, biased toward the visitor's active categories",

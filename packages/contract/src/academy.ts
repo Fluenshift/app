@@ -172,6 +172,43 @@ export const VocabularyList = Schema.Struct({
 });
 export type VocabularyList = typeof VocabularyList.Type;
 
+/** One Mistake Category's share of the Learner's Occurrences (Grifando's analytics, 74dbb9f). */
+export const CategoryBreakdownEntry = Schema.Struct({
+  category: MistakeCategorySchema,
+  count: Schema.Int,
+  percentage: Schema.Finite,
+});
+export type CategoryBreakdownEntry = typeof CategoryBreakdownEntry.Type;
+
+/** A Mistake Pattern as the Mistake Notebook shows it, with the state derived when it is read. */
+export const NotebookPattern = Schema.Struct({
+  category: MistakeCategorySchema,
+  due: Schema.Boolean,
+  exampleCorrection: Schema.String,
+  exampleOriginal: Schema.String,
+  fading: Schema.Boolean,
+  fromPortuguese: Schema.Boolean,
+  id: Schema.String,
+  lastSeenAt: Schema.String,
+  masteryLevel: MasteryLevelSchema,
+  occurrenceCount: Schema.Int,
+});
+export type NotebookPattern = typeof NotebookPattern.Type;
+
+/**
+ * The Mistake Notebook (Grifando's /mistakes page, 74dbb9f): every pattern, most frequent then
+ * most recent, and the breakdowns of all time and of the last 30 days. The page applies its
+ * filters itself (docs/adr/0025).
+ */
+export const MistakeNotebook = Schema.Struct({
+  breakdown: Schema.Struct({
+    allTime: Schema.Array(CategoryBreakdownEntry),
+    last30Days: Schema.Array(CategoryBreakdownEntry),
+  }),
+  patterns: Schema.Array(NotebookPattern),
+});
+export type MistakeNotebook = typeof MistakeNotebook.Type;
+
 /**
  * A request for a practice set (Grifando's POST /api/exercises, 74dbb9f). With an Evaluation,
  * the daily session's set opens with the patterns of that Evaluation's Occurrences; Evaluations

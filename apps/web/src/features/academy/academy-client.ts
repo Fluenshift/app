@@ -2,6 +2,7 @@
 // the screen tests on the in-memory client (docs/adr/0025); the types are the Academy contract's.
 import type {
   DailyChallenge,
+  MistakeNotebook,
   VocabularyItem,
   VocabularyItemRequest,
 } from "@fluenshift/contract";
@@ -13,6 +14,7 @@ export interface AcademyClient {
   /** Resolves once the item is gone, also when it was already gone. */
   readonly deleteVocabularyItem: (itemId: string) => Promise<void>;
   readonly getDailyChallenge: () => Promise<DailyChallenge>;
+  readonly getMistakeNotebook: () => Promise<MistakeNotebook>;
   readonly listVocabulary: () => Promise<readonly VocabularyItem[]>;
 }
 
@@ -27,5 +29,6 @@ export const unavailableAcademyClient: AcademyClient = {
   createVocabularyItem: unavailable,
   deleteVocabularyItem: unavailable,
   getDailyChallenge: unavailable,
+  getMistakeNotebook: unavailable,
   listVocabulary: unavailable,
 };

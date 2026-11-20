@@ -14,6 +14,7 @@ import {
 } from "@fluenshift/contract";
 import type {
   DailyChallenge,
+  MistakeNotebook,
   HealthResponse,
   ProgressEvidenceSelection,
   SetupStatus,
@@ -136,6 +137,12 @@ export interface AppBoundaries<R = never> {
   /** The Learner's vocabulary items, newest first. */
   readonly listVocabularyItems?: () => Effect.Effect<
     readonly unknown[],
+    DatabaseError,
+    R | CurrentLearner
+  >;
+  /** The Learner's Mistake Notebook: every pattern with its derived state, and the breakdowns. */
+  readonly getMistakeNotebook?: () => Effect.Effect<
+    MistakeNotebook,
     DatabaseError,
     R | CurrentLearner
   >;
@@ -1002,6 +1009,18 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       return edge(forLearner(context.req.raw, getDailyChallenge()), {
         errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
         success: (challenge) => Response.json(challenge),
+      });
+    })
+    // The Learner's Mistake Notebook (Grifando's /mistakes page read it in a Server Component):
+    // the page applies its time range and origin filters itself (docs/adr/0025).
+    .get("/api/mistakes", (context): Response | Promise<Response> => {
+      const { getMistakeNotebook } = options;
+      if (getMistakeNotebook === undefined) {
+        return context.json(notReady("Mistakes are not available"), 503);
+      }
+      return edge(forLearner(context.req.raw, getMistakeNotebook()), {
+        errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+        success: (notebook) => Response.json(notebook),
       });
     })
     // The Learner's vocabulary, newest first (Grifando's /vocabulary page read it in a Server
