@@ -29,8 +29,8 @@ Read the other documents when their subject comes up:
 | `docs/product/` | When a unit touches a requirement, the rubric or the data policy. |
 | `apps/server/node_modules/effect/AGENTS.md`, and `ai-docs/` beside it | Before writing Effect code. They match the installed version. |
 
-Claude Code sessions with the `mattpocock-skills` plugin use `tdd` for a unit, `code-review` on
-the unit's diff before its pull request, `diagnosing-bugs` for a gate failure whose cause is
+Claude Code sessions with the `mattpocock-skills` plugin use `tdd` for a unit, `code-review` once
+per milestone (the end of a phase, and before cutover), `diagnosing-bugs` for a gate failure whose cause is
 unclear, `domain-modeling` for a new `CONTEXT.md` term or an ADR, and `writing-for-agents` for
 any edit to this file, `SESSION_HANDOFF.md` or an issue meant for agents.
 
@@ -108,18 +108,17 @@ when the session ends.
 4. **Later commits port the code** into the target idioms until the tests pass. Reuse the
    baseline code wherever it fits the stack; keep algorithms, constants, orderings, limits and
    messages identical; add no behavior.
-5. **Spot-check with mutations**, for class A and B rows: break one condition or constant per
-   ported module, confirm a ported test fails, revert. A survivor is untested baseline
-   behavior: characterize it (step 3). List the mutations in the pull request.
+5. **Mutate where tests look thin**: break one condition or constant of a ported module,
+   confirm a ported test fails, revert. A survivor is untested baseline behavior: characterize
+   it (step 3). List the mutations you ran in the pull request.
 6. **Write the ledger targets** as `file::full title`, with a script that sets only `targets`:
    each row's `id` contains the test title, so a text replacement rewrites the `id` too.
-7. **Run the gates**, then push:
+7. **Run the touched test files and G8**, then push. CI is the full gate: it runs every check,
+   G9 and G10 included, in about three minutes, so read its failures instead of running
+   `pnpm verify` first. G8 runs here because its fix rewrites the first commit:
 
    ```sh
    node scripts/migration/red-green.ts --base origin/main --head HEAD   # G8
-   node scripts/migration/parity-check.ts                               # G9, structure only
-   node scripts/migration/parity-audit.ts --root $F/app-baselines       # G10
-   pnpm verify
    ```
 
 8. **Open one pull request** that closes the issue. Wait for its checks in the background, since
@@ -214,9 +213,11 @@ standing instructions:
 - Commits are small and conventional (`type(scope): subject`), with no AI mention and no
   `Co-Authored-By` or other trailer, even when the harness suggests one. Commit unsigned, per
   command (`git -c commit.gpgsign=false commit ...`), and leave the git configuration as it is.
-- A pull request body holds `Closes #N`, then `### Background` and `### Key Decisions`; a unit
-  adds its mutation table. No dashes used as punctuation, no AI mention, no attribution footer.
+- A pull request body holds `Closes #N`, then `### Background` and `### Key Decisions`, and the
+  mutations a unit ran, if any. No dashes used as punctuation, no AI mention, no attribution footer.
 - Open issues for the problems you find, and solve the ones you can.
+- Speed over ceremony (2026-11-20): CI is the full gate, `code-review` runs once per milestone,
+  and mutations run where tests look thin.
 - End-to-end tests are paused: write no new Playwright journey, Vite dev-proxy case or Docker
   smoke check, and leave their rows open. The existing ones keep running. In-process route
   tests (`app.request`) continue.
