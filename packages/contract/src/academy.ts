@@ -347,6 +347,44 @@ export const PracticeWritingResult = Schema.Union([
 ]);
 export type PracticeWritingResult = typeof PracticeWritingResult.Type;
 
+/** One interview question as the browser sees it before it is answered. */
+export const InterviewTurnRef = Schema.Struct({
+  id: Schema.String,
+  order: Schema.Int,
+  question: Schema.String,
+});
+export type InterviewTurnRef = typeof InterviewTurnRef.Type;
+
+/** A new interview with its opening question (Grifando's POST /api/interview, 74dbb9f). */
+export const StartedInterview = Schema.Struct({
+  sessionId: Schema.String,
+  turn: InterviewTurnRef,
+});
+export type StartedInterview = typeof StartedInterview.Type;
+
+/**
+ * What answering an interview turn answers (docs/adr/0010, docs/adr/0024): the answer's
+ * Evaluation and the next question, the Evaluation of the last answer, or the kept Evaluation's
+ * id with Grifando's message when the Enrichment failed.
+ */
+export const InterviewAnswerResult = Schema.Union([
+  Schema.Struct({
+    evaluation: Evaluation,
+    nextTurn: InterviewTurnRef,
+    status: Schema.Literal("answered"),
+  }),
+  Schema.Struct({
+    evaluation: Evaluation,
+    status: Schema.Literal("ended"),
+  }),
+  Schema.Struct({
+    evaluationId: Schema.String,
+    message: Schema.String,
+    status: Schema.Literal("failed"),
+  }),
+]);
+export type InterviewAnswerResult = typeof InterviewAnswerResult.Type;
+
 /**
  * A request for a practice set (Grifando's POST /api/exercises, 74dbb9f). With an Evaluation,
  * the daily session's set opens with the patterns of that Evaluation's Occurrences; Evaluations

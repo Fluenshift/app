@@ -6,9 +6,11 @@ import type {
   DailyChallenge,
   ExerciseGenerationRequest,
   GradedAttempt,
+  InterviewAnswerResult,
   MistakeNotebook,
   PendingExercise,
   PracticeWritingResult,
+  StartedInterview,
   VocabularyItem,
   VocabularyItemRequest,
 } from "@fluenshift/contract";
@@ -29,12 +31,20 @@ interface InMemoryExercises {
   readonly pending?: readonly PendingExercise[];
 }
 
+interface InMemoryInterview {
+  /** What each answer answers, in order, or the failure of its request. */
+  readonly answers?: readonly (InterviewAnswerResult | AcademyRequestError)[];
+  /** The new interview, or the failure of the start request. */
+  readonly started?: StartedInterview | AcademyRequestError;
+}
+
 interface InMemoryAcademyClientOptions {
   readonly academyDashboard?: AcademyDashboard;
   readonly dailyChallenge?: DailyChallenge;
   readonly exercises?: InMemoryExercises;
   /** Every save fails, as a refused or failed request does. */
   readonly failVocabularySaves?: boolean;
+  readonly interview?: InMemoryInterview;
   readonly mistakeNotebook?: MistakeNotebook;
   /** What practice writing answers, or the failure of its request. */
   readonly practiceWriting?: PracticeWritingResult | AcademyRequestError;
@@ -43,6 +53,12 @@ interface InMemoryAcademyClientOptions {
 }
 
 export type InMemoryAcademyClient = AcademyClient & {
+  readonly answerRequests: readonly {
+    readonly answer: string;
+    readonly sessionId: string;
+    readonly turnId: string;
+  }[];
+  readonly endRequests: readonly string[];
   readonly attemptRequests: readonly {
     readonly answer: string;
     readonly exerciseId: string;
@@ -66,6 +82,7 @@ export const createInMemoryAcademyClient = ({
   dailyChallenge,
   exercises = {},
   failVocabularySaves = false,
+  interview = {},
   mistakeNotebook,
   practiceWriting,
   vocabulary,
@@ -75,8 +92,19 @@ export const createInMemoryAcademyClient = ({
   const generationRequests: ExerciseGenerationRequest[] = [];
   const attemptRequests: { answer: string; exerciseId: string }[] = [];
   const writeRequests: string[] = [];
+  const answerRequests: {
+    answer: string;
+    sessionId: string;
+    turnId: string;
+  }[] = [];
+  const endRequests: string[] = [];
 
   return {
+    answerInterviewTurn: (sessionId, turnId, answer) => {
+      answerRequests.push({ answer, sessionId, turnId });
+      return settle(interview.answers?.[answerRequests.length - 1]);
+    },
+    answerRequests,
     attemptRequests,
     createVocabularyItem: (request) => {
       vocabularyRequests.push(request);
@@ -103,6 +131,11 @@ export const createInMemoryAcademyClient = ({
       items = items.filter((item) => item.id !== itemId);
       return Promise.resolve();
     },
+    endInterview: (sessionId) => {
+      endRequests.push(sessionId);
+      return Promise.resolve();
+    },
+    endRequests,
     explainAttempt: () => settle(exercises.explanation),
     generateExercises: (request) => {
       generationRequests.push(request);
@@ -126,6 +159,7 @@ export const createInMemoryAcademyClient = ({
       items === undefined
         ? unavailableAcademyClient.listVocabulary()
         : Promise.resolve(items),
+    startInterview: () => settle(interview.started),
     submitAttempt: (exerciseId, answer) => {
       attemptRequests.push({ answer, exerciseId });
       return settle(exercises.graded?.[exerciseId]);
