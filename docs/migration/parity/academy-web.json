@@ -27,7 +27,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Code review comment > has three marks"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Code review comment > lets the highlighter mark every mistake, in order",
@@ -36,7 +38,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Code review comment > lets the highlighter mark every mistake, in order"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Code review comment > quotes every mistake span verbatim in the paragraph",
@@ -45,7 +49,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Code review comment > quotes every mistake span verbatim in the paragraph"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Email to a client > has three marks",
@@ -54,7 +60,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Email to a client > has three marks"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Email to a client > lets the highlighter mark every mistake, in order",
@@ -63,7 +71,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Email to a client > lets the highlighter mark every mistake, in order"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Email to a client > quotes every mistake span verbatim in the paragraph",
@@ -72,7 +82,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Email to a client > quotes every mistake span verbatim in the paragraph"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Standup update > has three marks",
@@ -81,7 +93,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Standup update > has three marks"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Standup update > lets the highlighter mark every mistake, in order",
@@ -90,7 +104,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Standup update > lets the highlighter mark every mistake, in order"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > Standup update > quotes every mistake span verbatim in the paragraph",
@@ -99,7 +115,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > Standup update > quotes every mistake span verbatim in the paragraph"
+      ]
     },
     {
       "id": "grifando:test:src/components/home/specimenData.test.ts::live specimen data > has three scenarios with unique ids",
@@ -108,7 +126,9 @@
       "slice": "academy-web",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/academy/specimen-data.test.ts::live specimen data > has three scenarios with unique ids"
+      ]
     },
     {
       "id": "grifando:test:src/lib/highlightSegments.test.ts::buildHighlightSegments > handles multiple non-overlapping matches in order",
