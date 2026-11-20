@@ -138,7 +138,11 @@ export const submitAttempt = Effect.fn("ExerciseService.submitAttempt")(
         isCorrect,
         exercise.type
       );
-      yield* recordAttempt(pattern.id, { ...nextState, at: now, isCorrect });
+      yield* recordAttempt(pattern.id, {
+        ...nextState,
+        attemptedAt: now,
+        isCorrect,
+      });
 
       if (exercise.difficulty !== null) {
         const ratings = yield* getRatings();

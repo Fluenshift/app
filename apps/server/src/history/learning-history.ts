@@ -18,7 +18,7 @@ import {
 import { and, asc, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 
-import { forgetEvaluation } from "../academy/pattern-forgetting";
+import { unfoldEvaluation } from "../academy/pattern-unfolding";
 import { CurrentLearner } from "../learner-identity";
 
 export interface EvaluationFinding {
@@ -271,16 +271,16 @@ export const getEvaluation = Effect.fn("LearningHistory.getEvaluation")(
   }
 );
 
-// Deletes one of the Learner's Evaluations. In the same transaction the Academy forgets what it
-// built from it (docs/adr/0031), so a Mistake Pattern never keeps a deleted Evaluation's counts,
-// example or recalls.
+// Deletes one of the Learner's Evaluations. In the same transaction the Academy unfolds it
+// (docs/adr/0031), so a Mistake Pattern never keeps a deleted Evaluation's counts, example or
+// recalls.
 export const deleteEvaluation = Effect.fn("LearningHistory.deleteEvaluation")(
   function* (evaluationId: string) {
     const database = yield* Database;
     const learner = yield* CurrentLearner;
     yield* database.run((client) =>
       client.transaction((transaction) =>
-        forgetEvaluation(transaction, learner.id, evaluationId).then(() =>
+        unfoldEvaluation(transaction, learner.id, evaluationId).then(() =>
           transaction
             .delete(evaluations)
             .where(

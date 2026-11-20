@@ -40,9 +40,9 @@ const UNPRACTICED: MasteryState = {
   masteryLevel: MasteryLevel.ACTIVE,
 };
 
-// One recall, in time order: an Occurrence comes before an Attempt of the same moment, and each
-// keeps its place in its own list.
-interface Recall {
+// One recall event, a failed recall in writing or an Attempt, in time order: an Occurrence comes
+// before an Attempt of the same moment, and each keeps its place in its own list.
+interface RecallEvent {
   readonly at: Date;
   readonly exerciseType?: ExerciseType;
   readonly isCorrect: boolean;
@@ -66,7 +66,7 @@ export const replayPattern = (
   const failedInWriting = occurrences.filter(
     (occurrence) => occurrence.isFinding
   );
-  const recalls: readonly Recall[] = [
+  const recalls: readonly RecallEvent[] = [
     ...failedInWriting.map((occurrence, index) => ({
       at: occurrence.at,
       isCorrect: false,

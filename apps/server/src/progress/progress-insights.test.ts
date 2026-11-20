@@ -349,28 +349,6 @@ const retainedEvaluation = (
   summary: `${id} summary`,
 });
 
-// Retains the Evaluations in order, then reads what Progress makes of them.
-const afterRetaining = async <A, E>(
-  retained: readonly Evaluation[],
-  read: Effect.Effect<A, E, Database | CurrentLearner>
-) => {
-  const database = await makeTemporaryDatabase();
-  directories.push(database.directory);
-  return Effect.runPromise(
-    Effect.gen(function* () {
-      for (const value of retained) {
-        yield* persistEvaluation({
-          contentHash: `${value.id}-hash`,
-          evaluation: value,
-          latencyMilliseconds: 1,
-          submittedAt: value.evaluatedAt,
-        });
-      }
-      return yield* read;
-    }).pipe(Effect.provide(database.layer))
-  );
-};
-
 // Retains each Evaluation with the origin of its Writing Sample, in order, then reads what
 // Progress makes of them.
 const afterRetainingWithOrigins = async <A, E>(
@@ -394,6 +372,16 @@ const afterRetainingWithOrigins = async <A, E>(
     }).pipe(Effect.provide(database.layer))
   );
 };
+
+// Retains the Evaluations of work in order, then reads what Progress makes of them.
+const afterRetaining = <A, E>(
+  retained: readonly Evaluation[],
+  read: Effect.Effect<A, E, Database | CurrentLearner>
+) =>
+  afterRetainingWithOrigins(
+    retained.map((value) => [value, "work"] as const),
+    read
+  );
 
 describe("Progress Insights guards", () => {
   it("rounds the average score to one decimal place", async () => {
