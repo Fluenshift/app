@@ -1,10 +1,10 @@
 # Session handoff
 
-Last updated 2026-11-20, at the end of the ninth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Last updated 2026-11-20, at the end of the tenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
 
 ## Work in flight
 
-Nothing besides this handoff, and no issue is open. This session built the natural version and the Naturalness Notes of the Enrichment (#198, PR #199, ADR 0028), sized the Academy's writing sheets by the Deploy Profile's caps (#196, PR #200), and renamed the Academy's code in the `CONTEXT.md` vocabulary (#195, PR #201). Phase 5e and its review findings are done.
+Nothing besides this handoff, and no issue is open. Phase 5 is done. This session finished Phase 5f: it closed the `academy-spec` rows earlier units built and pinned Grifando #77 and #78 with regression tests (#203, ADR 0029), added the seam gate that keeps the Academy from writing Evaluations (#204), kept practice writing out of Progress (#205, ADR 0030), made deleting an Evaluation rebuild the Mistake Patterns it touched (#206, ADR 0031), and fixed what the phase's `code-review` found (#211).
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -12,20 +12,29 @@ Merged work: `git log --first-parent --oneline main`. The rows that still wait f
 node -e 'const fs=require("fs");const d="docs/migration/parity/";for(const f of fs.readdirSync(d))for(const r of JSON.parse(fs.readFileSync(d+f)).rows)if(r.disposition.startsWith("port")&&r.targets.length===0)console.log(f,r.id)'
 ```
 
-On 2026-11-20 there were 71: `academy-spec` 9, `hosted` 52, and 10 paused end-to-end rows (the 4 dev-proxy cases of `evaluation-http`, the 6 rows of `evaluation-e2e`), which stay open.
+On 2026-11-20 there were 64: `hosted` 52, `academy-spec` 2, and 10 paused end-to-end rows (the 4 dev-proxy cases of `evaluation-http`, the 6 rows of `evaluation-e2e`), which stay open.
 
 ## Next steps
 
-1. **Phase 5f** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases): the seam invariants under "Phase 5f" below, then the 9 `academy-spec` rows: Grifando fix commits `2a86084`, `8b80767` and `0083c7f` (`port`), `9ba8040` (ADR 0003), `9f5e47e` and `397b0b4` (ADR 0009), `80957b6` (ADR 0012), and Grifando issues 77 (ADR 0012) and 78 (ADR 0004). Run `code-review` at the end of the phase.
-2. **Phase 6** (`hosted`, 52 rows, which matter once the owners want a public deploy, and Grifando's remaining pages: `/explain-code`, `/settings` with BYOK, `/privacy`), then **Phase 7**. Run `code-review` at the end of each phase.
+1. **Phase 6** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), which matters once the owners want a public deploy; run `code-review` at its end. The open rows group into these units, each an issue with its rows (`hosted.json` unless named):
+   - The hosted request pipeline, one serial unit: `src/server/session/sessionToken.test.ts`, `currentUser.test.ts`, `getCurrentUserId.test.ts` and `src/proxy.test.ts` (`port-changed`, ADR 0003: the API sets the cookie, and the CSP is a static SPA's).
+   - Rate limits: `src/server/rateLimit.test.ts`, `src/server/clientIp.test.ts`, `src/app/api/rateLimitFirst.characterization.test.ts`, and `academy-spec`'s `grifando:fix-commit:9ba8040` (rate-limit before creating a Learner, fail fast on missing production secrets).
+   - `DELETE /api/me`: `src/app/api/me/route.test.ts` and `me.characterization.test.ts`.
+   - Idle cleanup on the scheduler of ADR 0011: `src/server/domain/privacy/cleanup.test.ts`.
+   - BYOK: `src/lib/aiKeyStore.test.ts`, `src/app/api/ai-key/test/route.test.ts`, `academy-spec`'s `grifando:fix-commit:2a86084` (same-origin `aiFetch`, blocked key storage reported), and the `/settings` page.
+   - Robots and sitemap: `src/app/sitemap.test.ts`.
+   - Grifando's remaining pages: `/explain-code` and `/privacy`.
+   - `docs/deploy.md` (8 rows) is the hosted Docker smoke, paused with the end-to-end tests.
+2. **Phase 7**, then its `code-review`.
 
 ## Facts no issue records
 
-### Phase 5f
+### Seams
 
-- Progress stops counting practice-origin Writing Samples in the finding rate by default (ADR 0010).
-- A Mistake Pattern loses the counts and example of a deleted Evaluation (`DATA-POLICY.md`, Deletion). A pattern now grows from Naturalness Notes too: a note adds an Occurrence and moves the last seen time and the example, never the incorrect count or the last recall (ADR 0028), so undoing a deleted Evaluation's notes must not touch the recall counters either.
-- The lint rule against Academy imports of Evaluation write services names the functions (`persistEvaluation`, `deleteEvaluation`, `evaluateWriting`), because Academy code reads through `getEvaluation`, which shares a module with `persistEvaluation`. The dashboard reads `evaluations` and `findings` directly (`listPracticeWriting` and the trend in `apps/server/src/academy/academy-dashboard.ts`), which the rule must keep allowing; #195 left those queries there for this unit to place.
+- The Academy (`apps/server/src/academy/**`, tests aside) reads the Evaluation tables only through `evaluationsView`, `findingsView` and `suggestionsView`; lint refuses the tables, `persistEvaluation`, `deleteEvaluation`, the `evaluation/` and `practice/` modules, and raw SQL (`execute`). Code that writes both axes composes them outside the Academy (`AGENTS.md`, Code).
+- A Mistake Pattern's state is what `replayPattern` (`@fluenshift/core/pattern-replay`) builds from its Occurrences and the Attempts on its Exercises: deleting an Evaluation rebuilds each pattern it touched that way (`unfoldEvaluation`, called by Learning History's `deleteEvaluation`, ADR 0031). A new path that changes a pattern must be one the replay reproduces, and must stamp its Occurrence or Attempt with the moment it writes on the pattern (`now` in `pattern-folding.ts`, `submitAttempt`), or the next deletion undoes it.
+- Progress reads `listEvaluations({ origin: "work" })`: practice writing stays out of every insight and its evidence (ADR 0030). The Academy dashboard's trend reads practice (ADR 0027).
+- A fix-commit or issue row takes as targets the tests that pin its fix, which may already be targets of the rows that ported them (`docs/migration/README.md`, `targets`).
 
 ### Academy, server
 
@@ -36,7 +45,6 @@ On 2026-11-20 there were 71: `academy-spec` 9, `hosted` 52, and 10 paused end-to
 - A route's error entries need a case when no source test covers them, or a remapped answer passes every gate. `POST /api/exercises` still maps a refused Trainer answer to the generic 500 with no case.
 - Academy route tests follow `exercise-routes.test.ts` or `interview-routes.test.ts`: a real PGlite database, the `x-test-learner` header picks the Learner, a fake `TrainerClient` layer, and `TrainerConfig` read from an empty environment. Page read route tests live in `page-routes.test.ts`, with seed helpers and the clock fixed by `vi.useFakeTimers({ now, toFake: ["Date"] })`; each route's `DatabaseError` entry has its own "answers the generic 500" case.
 - The server's persistence tests copy one migrated PGlite template per test (#112), keyed by a hash of the migrations and the lockfile; a new migration builds a new template on the next run.
-- The rate limiter rows wait for the hosted request pipeline (Phase 6), with Grifando's `ensureUser` (`hosted`, `rateLimitFirst`).
 
 ### Academy, web
 
@@ -45,7 +53,7 @@ On 2026-11-20 there were 71: `academy-spec` 9, `hosted` 52, and 10 paused end-to
 - Academy screens show a practice Evaluation through `PracticeEvaluation` (with one `OccurrenceNote` or `FindingNote` per note) and an interview turn through `TurnFeedback`.
 - Grifando's client components port from source (ADR 0025, decision 5): no baseline test renders them, so screen tests assert Grifando's copy, roles and calls. Copy stays Grifando's; names follow `CONTEXT.md`, in ported tests too (`docs/migration/README.md`, Mechanical mapping).
 - Find queries wait 5 seconds (`apps/web/src/test/setup.ts`): a screen's first render loads its route chunk and runs its loader.
-- No key travels from the browser in the local profile: the server uses its configured Trainer key or answers 401 `AI_KEY_REQUIRED`, which shows Grifando's key notice. The browser key store arrives with BYOK in Phase 6.
+- No key travels from the browser in the local profile: the server uses its configured Trainer key or answers 401 `AI_KEY_REQUIRED`, which shows Grifando's key notice.
 - Lint shapes React code: the React Compiler rule refuses `try`/`finally` in a component; the promise rules refuse `.then(onOk, onError)` and callbacks inside `.then`, so a component awaits a module-level async helper that catches; `<output>` replaces `role="status"` and `<fieldset>` replaces `role="group"`; wrap a handler passed as `onClick={props.onX}` in an arrow; no nested ternaries; regular expressions take the `u` flag; no member access on an `await` expression. TanStack route options go in the order `validateSearch`, `loaderDeps`, `beforeLoad`, `loader`, `component`.
 - Hono's typed client takes no `json` for a route with path parameters that reads its body itself: send the body through `init` (`submitAttempt` in `api.ts`). A typed `Link` needs an existing route.
 - Grifando's category breakdown orders by count only: a tie keeps no order, and tests do not assert one.
