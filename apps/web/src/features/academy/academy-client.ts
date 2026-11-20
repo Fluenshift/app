@@ -75,6 +75,29 @@ export class AcademyRequestError extends Error {
   }
 }
 
+// The statuses whose message a route writes for the Learner (Grifando's errorMessageFor).
+const SHOWN_STATUSES = new Set([400, 401, 429, 503]);
+
+/**
+ * The message to show for a failed request, as Grifando's errorMessageFor chose it: a rate
+ * limit's message, or a coded key failure's (`AI_…`); the caller's own message otherwise.
+ */
+export const messageFor = (error: unknown, fallback: string): string => {
+  if (
+    !(error instanceof AcademyRequestError) ||
+    !SHOWN_STATUSES.has(error.status) ||
+    error.serverMessage === undefined
+  ) {
+    return fallback;
+  }
+  if (error.status === 429) {
+    return error.serverMessage;
+  }
+  return error.code?.startsWith("AI_") === true
+    ? error.serverMessage
+    : fallback;
+};
+
 /** Whether a failure asks the Learner to set up a Trainer key. */
 export const isKeyRequired = (error: unknown): boolean =>
   error instanceof AcademyRequestError && error.code === "AI_KEY_REQUIRED";
