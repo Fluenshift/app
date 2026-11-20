@@ -56,6 +56,8 @@ const trainer: TrainerMethods = {
         },
       ],
       model: "test-model",
+      naturalVersion: "I'm working on a payments API.",
+      naturalnessNotes: [],
     })
   ),
   explainAttempt: vi.fn<TrainerMethods["explainAttempt"]>(),
@@ -211,6 +213,25 @@ const answer = (
     )
   );
 
+interface AnswerBody {
+  readonly nextTurn?: { readonly id: string };
+  readonly status: string;
+}
+
+// Answers each turn from `turnId` on until the session ends, with every answer's body.
+const answerUntilEnded = async (
+  sessionId: string,
+  turnId: string,
+  bodies: readonly AnswerBody[] = []
+): Promise<readonly AnswerBody[]> => {
+  const response = await answer({ sessionId, turn: { id: turnId } }, ANSWER);
+  const body = (await response.json()) as AnswerBody;
+  const answered = [...bodies, body];
+  return body.status === "answered" && body.nextTurn !== undefined
+    ? answerUntilEnded(sessionId, body.nextTurn.id, answered)
+    : answered;
+};
+
 const keys = (value: unknown) =>
   Object.keys(value as object)
     .toSorted()
@@ -299,6 +320,21 @@ describe("interview routes", () => {
     expect(keys(answered.evaluation)).toBe(
       "band, correctedText, evaluatedAt, evaluatedEnglishWordCount, findings, id, model, originalText, provider, rubricVersion, score, suggestions, summary"
     );
+  });
+
+  it("answers each turn with the natural version of its answer, the last one too", async () => {
+    const { body } = await start();
+
+    const turns = await answerUntilEnded(body.sessionId, body.turn.id);
+
+    expect(turns[0]).toMatchObject({
+      naturalVersion: "I'm working on a payments API.",
+      status: "answered",
+    });
+    expect(turns.at(-1)).toMatchObject({
+      naturalVersion: "I'm working on a payments API.",
+      status: "ended",
+    });
   });
 
   it("returns the FAILED writing session when the analysis fails, and validates the answer", async () => {

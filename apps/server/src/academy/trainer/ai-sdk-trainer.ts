@@ -43,7 +43,11 @@ import {
   TrainerUnavailableError,
 } from "./trainer-errors";
 import type { TrainerError } from "./trainer-errors";
-import type { FindingEnrichment, TrainerMethods } from "./trainer-model";
+import type {
+  FindingEnrichment,
+  NaturalnessNote,
+  TrainerMethods,
+} from "./trainer-model";
 
 // Grifando's limit for the writing analysis, which the Enrichment replaces.
 const ENRICHMENT_MAX_TOKENS = 4096;
@@ -68,8 +72,35 @@ const FINDING_MISTAKE_CATEGORIES = MISTAKE_CATEGORIES.filter(
   (category) => errorCategoryOf(category) !== undefined
 );
 
+// A span of correct but unnatural English, with the bounds of Grifando's mistake schema
+// (src/server/ai/schemas/writingAnalysis.ts, 74dbb9f). Its Mistake Category is always
+// UNNATURAL_PHRASING, so the model is never offered one (docs/adr/0005).
+const naturalnessNoteSchema = Schema.Struct({
+  example: Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(500)),
+  explanation: Schema.String.check(
+    Schema.isMinLength(1),
+    Schema.isMaxLength(1000)
+  ),
+  // Optional, as in Grifando: a note without it reads as no transfer.
+  l1Transfer: Schema.optionalKey(Schema.Boolean),
+  naturalSpan: Schema.String.check(
+    Schema.isMinLength(1),
+    Schema.isMaxLength(500)
+  ),
+  originalSpan: Schema.String.check(
+    Schema.isMinLength(1),
+    Schema.isMaxLength(500)
+  ),
+  patternKey: Schema.String.check(
+    Schema.isMinLength(1),
+    Schema.isMaxLength(80)
+  ),
+});
+
 // The Academy fields of Grifando's mistake schema (src/server/ai/schemas/writingAnalysis.ts,
-// 74dbb9f), with their bounds, for the numbered Finding each entry enriches.
+// 74dbb9f), with their bounds, for the numbered Finding each entry enriches; then Grifando's
+// natural text and its unnatural mistakes, at most 50 as Grifando's mistakes were
+// (docs/adr/0028).
 export const enrichmentResultSchema = Schema.Struct({
   findings: Schema.Array(
     Schema.Struct({
@@ -86,6 +117,13 @@ export const enrichmentResultSchema = Schema.Struct({
         Schema.isMaxLength(80)
       ),
     })
+  ),
+  naturalVersion: Schema.String.check(
+    Schema.isMinLength(1),
+    Schema.isMaxLength(10_000)
+  ),
+  naturalnessNotes: Schema.Array(naturalnessNoteSchema).check(
+    Schema.isMaxLength(50)
   ),
 });
 
@@ -313,7 +351,21 @@ export const createAiSdkTrainer = (model: LanguageModel): TrainerMethods => {
           enrichmentOf(answer.findings, finding, index + 1)
         )
       );
-      return { findings, model: answeredBy };
+      return {
+        findings,
+        model: answeredBy,
+        naturalVersion: answer.naturalVersion,
+        naturalnessNotes: answer.naturalnessNotes.map(
+          (note): NaturalnessNote => ({
+            example: note.example,
+            explanation: note.explanation,
+            l1Transfer: note.l1Transfer ?? false,
+            naturalSpan: note.naturalSpan,
+            originalSpan: note.originalSpan,
+            patternKey: note.patternKey,
+          })
+        ),
+      };
     }),
     explainAttempt: Effect.fn("Trainer.explainAttempt")(function* (input) {
       const { answer, model: answeredBy } = yield* ask({

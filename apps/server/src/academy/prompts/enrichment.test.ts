@@ -53,6 +53,33 @@ describe("buildEnrichmentSystemPrompt", () => {
     expect(prompt).toContain("Return exactly one entry per Finding.");
   });
 
+  it("asks for a natural version of the whole Writing Sample, as one option", () => {
+    const prompt = buildEnrichmentSystemPrompt();
+
+    expect(prompt).toContain('"naturalVersion"');
+    expect(prompt).toContain(
+      "a separate, more natural rendering of the same idea, as a fluent speaker might phrase it"
+    );
+    expect(prompt).toContain(
+      "It is an alternative, not the one correct answer."
+    );
+  });
+
+  it("asks for Naturalness Notes on correct but unnatural spans only, never on a Finding", () => {
+    const prompt = buildEnrichmentSystemPrompt();
+
+    expect(prompt).toContain('"naturalnessNotes"');
+    expect(prompt).toContain(
+      "Correct but unnatural English: grammatically valid, but not how a fluent speaker would phrase it."
+    );
+    expect(prompt).toContain('"originalSpan"');
+    expect(prompt).toContain('"naturalSpan"');
+    expect(prompt).toContain("Never repeat a Finding as a note");
+    expect(prompt).toContain(
+      "Never invent notes to pad the response: if the writing already reads naturally, return an empty list."
+    );
+  });
+
   it("instructs the model not to evaluate code it is given as context", () => {
     expect(buildEnrichmentSystemPrompt()).toContain(
       "never comment on whether the code itself is correct"
@@ -70,6 +97,16 @@ describe("buildEnrichmentUserMessage", () => {
     expect(message).toContain(
       '2. "the it" -> "it"\n   Error category: Article\n   Explanation: No article before a pronoun.'
     );
+  });
+
+  it("says so when the evaluator found no Finding", () => {
+    const message = buildEnrichmentUserMessage({
+      findings: [],
+      writingSample: "I depend on it.",
+    });
+
+    expect(message).toContain("Findings: none.");
+    expect(message).not.toContain("Findings:\n");
   });
 
   it("includes the Writing Sample verbatim", () => {

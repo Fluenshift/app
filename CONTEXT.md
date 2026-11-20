@@ -137,7 +137,8 @@ unnatural-phrasing category a Naturalness Note. The Judge never sees it.
 _Not: Error Category, error type._
 
 **Naturalness Note**: the Enrichment's note that a span is correct but unnatural. It never
-changes the Overall Score, the corrected text or the finding rate (ADR 0004).
+changes the Overall Score, the corrected text or the finding rate (ADR 0004). It grows its
+Mistake Pattern's Occurrences but is never a failed recall (ADR 0020, ADR 0028).
 _Not: Finding, Suggestion, unnatural-phrasing error._
 
 **L1 Transfer**: the flag on an Occurrence whose error carries a pattern over from the

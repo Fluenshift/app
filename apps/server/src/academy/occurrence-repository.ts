@@ -45,7 +45,8 @@ export const countOccurrencesByCategory = Effect.fn(
 });
 
 // The Learner's Occurrences from one Evaluation, in the order of its Findings; Naturalness Notes,
-// which have no Finding, come last (Grifando's listByAnalysis).
+// which have no Finding, come last, in the Trainer's order (Grifando's listByAnalysis,
+// docs/adr/0028).
 export const listOccurrencesForEvaluation = Effect.fn(
   "OccurrenceRepository.listOccurrencesForEvaluation"
 )(function* (evaluationId: string) {
@@ -61,7 +62,7 @@ export const listOccurrencesForEvaluation = Effect.fn(
           eq(occurrences.evaluationId, evaluationId)
         )
       )
-      .orderBy(asc(occurrences.findingPosition), asc(occurrences.createdAt))
+      .orderBy(asc(occurrences.findingPosition), asc(occurrences.notePosition))
   );
   return rows.map((row): PracticeOccurrence => ({
     category: row.category as MistakeCategory,

@@ -27,7 +27,10 @@ When the Learner uses the Academy, it also stores:
 - an Occurrence for each Finding folded into a pattern: the Finding's original and corrected
   span, category, severity, explanation, an example, the L1 Transfer flag and the Rubric
   Version;
-- for each enriched Evaluation, the model that enriched it;
+- an Occurrence for each Naturalness Note: its original and natural span, its explanation, an
+  example, the L1 Transfer flag, its place among the notes and the Rubric Version;
+- for each enriched Evaluation, the model that enriched it and the natural version of its
+  Writing Sample;
 - Exercises (type, difficulty, the generated prompt and the model that wrote it) and their
   Attempts (the Learner's answer, whether it was correct, and the feedback);
 - a Category Ability rating for each Mistake Category;

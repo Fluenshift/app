@@ -14,11 +14,13 @@ import {
 } from "./trainer-errors";
 import {
   answering,
+  enrichmentAnswer,
   enrichmentInput,
   explainInput,
   fakeArticleEnrichment,
   fakeFindingEnrichment,
   fakeMultipleChoiceExercise,
+  fakeNaturalnessNote,
   oneTarget,
   refusing,
 } from "./trainer-test-models";
@@ -118,9 +120,9 @@ describe("createAnthropicProvider.explainAttempt", () => {
 
 describe("createAnthropicProvider.enrichFindings", () => {
   it("returns each Finding's enrichment and the model that answered", async () => {
-    const provider = anthropicAnswering({
-      findings: [fakeFindingEnrichment(), fakeArticleEnrichment()],
-    });
+    const provider = anthropicAnswering(
+      enrichmentAnswer([fakeFindingEnrichment(), fakeArticleEnrichment()])
+    );
 
     const result = await Effect.runPromise(
       provider.enrichFindings(enrichmentInput)
@@ -142,13 +144,15 @@ describe("createAnthropicProvider.enrichFindings", () => {
         },
       ],
       model: "test-model",
+      naturalVersion: "I rely on it.",
+      naturalnessNotes: [],
     });
   });
 
   it("orders the enrichments by Finding, whatever order the model answers in", async () => {
-    const provider = anthropicAnswering({
-      findings: [fakeArticleEnrichment(), fakeFindingEnrichment()],
-    });
+    const provider = anthropicAnswering(
+      enrichmentAnswer([fakeArticleEnrichment(), fakeFindingEnrichment()])
+    );
 
     const result = await Effect.runPromise(
       provider.enrichFindings(enrichmentInput)
@@ -162,12 +166,12 @@ describe("createAnthropicProvider.enrichFindings", () => {
 
   it("reads a missing L1 Transfer flag as false", async () => {
     const { category, example, finding, patternKey } = fakeFindingEnrichment();
-    const provider = anthropicAnswering({
-      findings: [
+    const provider = anthropicAnswering(
+      enrichmentAnswer([
         { category, example, finding, patternKey },
         fakeArticleEnrichment(),
-      ],
-    });
+      ])
+    );
 
     const result = await Effect.runPromise(
       provider.enrichFindings(enrichmentInput)
@@ -177,9 +181,9 @@ describe("createAnthropicProvider.enrichFindings", () => {
   });
 
   it("throws AIResponseValidationError when a Finding gets no enrichment", async () => {
-    const provider = anthropicAnswering({
-      findings: [fakeFindingEnrichment()],
-    });
+    const provider = anthropicAnswering(
+      enrichmentAnswer([fakeFindingEnrichment()])
+    );
 
     await expect(
       Effect.runPromise(provider.enrichFindings(enrichmentInput))
@@ -187,12 +191,12 @@ describe("createAnthropicProvider.enrichFindings", () => {
   });
 
   it("throws AIResponseValidationError when a Mistake Category does not map onto its Finding's Error Category", async () => {
-    const provider = anthropicAnswering({
-      findings: [
+    const provider = anthropicAnswering(
+      enrichmentAnswer([
         { ...fakeFindingEnrichment(), category: "VOCABULARY" },
         fakeArticleEnrichment(),
-      ],
-    });
+      ])
+    );
 
     await expect(
       Effect.runPromise(provider.enrichFindings(enrichmentInput))
@@ -200,12 +204,114 @@ describe("createAnthropicProvider.enrichFindings", () => {
   });
 
   it("throws AIResponseValidationError for a Mistake Category no Finding can take", async () => {
-    const provider = anthropicAnswering({
-      findings: [
+    const provider = anthropicAnswering(
+      enrichmentAnswer([
         { ...fakeFindingEnrichment(), category: "LITERAL_TRANSLATION" },
         fakeArticleEnrichment(),
-      ],
-    });
+      ])
+    );
+
+    await expect(
+      Effect.runPromise(provider.enrichFindings(enrichmentInput))
+    ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+});
+
+describe("createAnthropicProvider.enrichFindings natural version and Naturalness Notes", () => {
+  it("returns the natural version and the Naturalness Notes in the model's order", async () => {
+    const provider = anthropicAnswering(
+      enrichmentAnswer(
+        [fakeFindingEnrichment(), fakeArticleEnrichment()],
+        [
+          fakeNaturalnessNote(),
+          {
+            ...fakeNaturalnessNote(),
+            l1Transfer: false,
+            naturalSpan: "it",
+            originalSpan: "the it",
+            patternKey: "bare-pronoun",
+          },
+        ]
+      )
+    );
+
+    const result = await Effect.runPromise(
+      provider.enrichFindings(enrichmentInput)
+    );
+
+    expect(result.naturalVersion).toBe("I rely on it.");
+    expect(result.naturalnessNotes).toStrictEqual([
+      {
+        example: "I rely on my team.",
+        explanation: "'Rely on' is what a fluent speaker would say here.",
+        l1Transfer: true,
+        naturalSpan: "I rely",
+        originalSpan: "I depend",
+        patternKey: "rely-on",
+      },
+      {
+        example: "I rely on my team.",
+        explanation: "'Rely on' is what a fluent speaker would say here.",
+        l1Transfer: false,
+        naturalSpan: "it",
+        originalSpan: "the it",
+        patternKey: "bare-pronoun",
+      },
+    ]);
+  });
+
+  it("reads a Naturalness Note's missing L1 Transfer flag as false", async () => {
+    const { l1Transfer: _omitted, ...note } = fakeNaturalnessNote();
+    const provider = anthropicAnswering(
+      enrichmentAnswer(
+        [fakeFindingEnrichment(), fakeArticleEnrichment()],
+        [note]
+      )
+    );
+
+    const result = await Effect.runPromise(
+      provider.enrichFindings(enrichmentInput)
+    );
+
+    expect(result.naturalnessNotes[0]?.l1Transfer).toBe(false);
+  });
+
+  it("enriches a Writing Sample without Findings", async () => {
+    const provider = anthropicAnswering(
+      enrichmentAnswer([], [fakeNaturalnessNote()])
+    );
+
+    const result = await Effect.runPromise(
+      provider.enrichFindings({
+        findings: [],
+        writingSample: "I depend on it.",
+      })
+    );
+
+    expect(result.findings).toStrictEqual([]);
+    expect(result.naturalVersion).toBe("I rely on it.");
+    expect(result.naturalnessNotes).toHaveLength(1);
+  });
+
+  it("throws AIResponseValidationError without a natural version", async () => {
+    const { naturalVersion: _omitted, ...answer } = enrichmentAnswer([
+      fakeFindingEnrichment(),
+      fakeArticleEnrichment(),
+    ]);
+    const provider = anthropicAnswering(answer);
+
+    await expect(
+      Effect.runPromise(provider.enrichFindings(enrichmentInput))
+    ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+
+  it("throws AIResponseValidationError for more than 50 Naturalness Notes", async () => {
+    const provider = anthropicAnswering(
+      enrichmentAnswer(
+        [fakeFindingEnrichment(), fakeArticleEnrichment()],
+        Array.from({ length: 51 }, fakeNaturalnessNote)
+      )
+    );
 
     await expect(
       Effect.runPromise(provider.enrichFindings(enrichmentInput))

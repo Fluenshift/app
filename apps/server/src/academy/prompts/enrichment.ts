@@ -1,6 +1,7 @@
 // The Enrichment: the Trainer's pass over one Evaluation's Findings, which adds what practice
 // needs (docs/adr/0004). Derived from Grifando src/server/ai/prompts/writingAnalysis.ts
-// (74dbb9f), keeping only the Academy fields: the Judge has already found the errors.
+// (74dbb9f), keeping only the Academy fields, the natural version and the "correct but unnatural"
+// tier: the Judge has already found the errors (docs/adr/0028).
 import { ERROR_CATEGORIES, mistakeCategoriesOf } from "@fluenshift/contract";
 import type { ErrorCategory } from "@fluenshift/contract";
 
@@ -30,7 +31,16 @@ const CATEGORY_LINES = ERROR_CATEGORIES.flatMap((category) => {
 export const buildEnrichmentSystemPrompt = (): string =>
   `You are an English writing coach for a Brazilian Portuguese-speaking software developer learning English.
 
-An evaluator has already assessed the learner's writing. Each numbered Finding is one English error it found: the original span, its Correction, an error category and an explanation. Do not assess the writing again: never add, drop or change a Finding. Call the provided tool with one entry per Finding:
+An evaluator has already assessed the learner's writing. Each numbered Finding is one English error it found: the original span, its Correction, an error category and an explanation. Do not assess the errors again: never add, drop or change a Finding.
+
+Writing quality has three tiers:
+   - Incorrect English: a real grammar, vocabulary, or mechanics error. The Findings are this tier.
+   - Correct but unnatural English: grammatically valid, but not how a fluent speaker would phrase it.
+   - Correct and natural English: no change needed.
+
+Call the provided tool with "findings", "naturalVersion" and "naturalnessNotes".
+
+"findings" holds one entry per Finding:
 
 1. "finding": the Finding's number.
 
@@ -44,6 +54,15 @@ ${CATEGORY_LINES}
 5. "example": an example sentence demonstrating the correct pattern.
 
 Return exactly one entry per Finding.
+
+"naturalVersion" is a separate, more natural rendering of the same idea, as a fluent speaker might phrase it. It may diverge more from the original. It is an alternative, not the one correct answer.
+
+"naturalnessNotes" holds one entry per span of correct but unnatural English worth flagging. Never repeat a Finding as a note: a span the evaluator found is an error, not a note. Never invent notes to pad the response: if the writing already reads naturally, return an empty list. Each note gives:
+   - "originalSpan": the exact span of the writing.
+   - "naturalSpan": how a fluent speaker would phrase that span.
+   - "explanation": a plain-language explanation (a little Portuguese is fine if it clarifies a contrast with the literal Portuguese phrasing).
+   - "example": an example sentence demonstrating the natural phrasing.
+   - "patternKey" and "l1Transfer", as for a Finding.
 
 When a code snippet is given as context, it is there only so you understand what the learner is describing: never comment on whether the code itself is correct, well-written, or could be improved.`;
 
@@ -64,6 +83,8 @@ export const buildEnrichmentUserMessage = (input: EnrichmentInput): string => {
   return [
     ...context,
     `Writing:\n"""\n${input.writingSample}\n"""`,
-    `Findings:\n\n${findingLines(input.findings).join("\n\n")}`,
+    input.findings.length === 0
+      ? "Findings: none."
+      : `Findings:\n\n${findingLines(input.findings).join("\n\n")}`,
   ].join("\n\n");
 };

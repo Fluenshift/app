@@ -111,3 +111,24 @@ export const fakeArticleEnrichment = () => ({
   l1Transfer: false,
   patternKey: "no-article-before-pronoun",
 });
+
+// A span the model finds correct but unnatural, as it answers it.
+export const fakeNaturalnessNote = () => ({
+  example: "I rely on my team.",
+  explanation: "'Rely on' is what a fluent speaker would say here.",
+  l1Transfer: true,
+  naturalSpan: "I rely",
+  originalSpan: "I depend",
+  patternKey: "rely-on",
+});
+
+// What a model answers for the Enrichment: these Finding entries, the natural version of the
+// Writing Sample and these Naturalness Notes.
+export const enrichmentAnswer = (
+  findings: readonly unknown[],
+  naturalnessNotes: readonly unknown[] = []
+) => ({
+  findings,
+  naturalVersion: "I rely on it.",
+  naturalnessNotes,
+});

@@ -189,8 +189,9 @@ export const mistakePatterns = pgTable(
     consecutiveCorrectCount: integer("consecutive_correct_count")
       .notNull()
       .default(0),
-    // Recall history for the half-life model: every Attempt and every new Occurrence in
-    // writing is a recall event, and lastPracticedAt is the time of the latest one.
+    // Recall history for the half-life model: every Attempt and every new Occurrence of a
+    // Finding is a recall event, and lastPracticedAt is the time of the latest one. A
+    // Naturalness Note is none (docs/adr/0028).
     correctCount: integer("correct_count").notNull().default(0),
     exampleCorrection: text("example_correction").notNull(),
     exampleOriginal: text("example_original").notNull(),
@@ -238,8 +239,9 @@ export const mistakePatterns = pgTable(
 
 // One Finding, or one Naturalness Note, as the Academy records it under a Mistake Pattern
 // (docs/adr/0004). It belongs to the Evaluation it came from, and goes when that Evaluation is
-// deleted; an error points at its Finding by position, and records the Rubric Version of its
-// Evaluation (docs/adr/0015).
+// deleted; an error points at its Finding by position, a note keeps its place among the
+// Enrichment's notes (docs/adr/0028), and each records the Rubric Version of its Evaluation
+// (docs/adr/0015).
 export const occurrences = pgTable(
   "occurrences",
   {
@@ -254,6 +256,7 @@ export const occurrences = pgTable(
     // The mistake carries a pattern over from the Learner's first language (docs/adr/0005).
     l1Transfer: boolean("l1_transfer").notNull().default(false),
     learnerId: text("learner_id").notNull(),
+    notePosition: integer("note_position"),
     originalSpan: text("original_span").notNull(),
     patternId: text("pattern_id").notNull(),
     rubricVersion: text("rubric_version").notNull(),
@@ -288,6 +291,12 @@ export const occurrences = pgTable(
       "occurrences_finding_check",
       sql`(${table.severity} = 'ERROR') = (${table.findingPosition} is not null)`
     ),
+    // A Naturalness Note has its place among the notes, and its Mistake Category is always the
+    // unnatural-phrasing one (docs/adr/0005); an error has neither.
+    check(
+      "occurrences_note_check",
+      sql`(${table.severity} = 'UNNATURAL') = (${table.notePosition} is not null) and (${table.severity} = 'UNNATURAL') = (${table.category} = 'UNNATURAL_PHRASING')`
+    ),
     index("occurrences_learner_pattern_idx").on(
       table.learnerId,
       table.patternId
@@ -297,8 +306,8 @@ export const occurrences = pgTable(
 );
 
 // The Trainer's Enrichment of one Evaluation's Findings (docs/adr/0004), which records the model
-// that answered (docs/adr/0012), as Grifando's writing analysis did. One per Evaluation; it goes
-// when that Evaluation is deleted.
+// that answered (docs/adr/0012) and the natural version, as Grifando's writing analysis did. One
+// per Evaluation; it goes when that Evaluation is deleted.
 export const enrichments = pgTable(
   "enrichments",
   {
@@ -306,6 +315,8 @@ export const enrichments = pgTable(
     evaluationId: text("evaluation_id").primaryKey(),
     learnerId: text("learner_id").notNull(),
     model: text("model").notNull(),
+    // Null for an Enrichment recorded before it had one (docs/adr/0028).
+    naturalVersion: text("natural_version"),
   },
   (table) => [
     foreignKey({

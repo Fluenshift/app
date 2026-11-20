@@ -41,7 +41,6 @@ import type { NotFoundError } from "./academy/errors";
 import type { SubmitAttemptResult } from "./academy/exercise-service";
 import type {
   AnswerTurnInput,
-  AnswerTurnResult,
   InterviewSession,
   InterviewTurn,
   NextTurn,
@@ -66,10 +65,10 @@ import type {
   EvaluationFailureCode,
   WritingEvaluationFailure,
 } from "./evaluation/evaluation-endpoint";
-import type { Evaluation } from "./history/learning-history";
 import { CurrentLearner, LearnerIdentity } from "./learner-identity";
 import type {
   EnrichmentFailedError,
+  InterviewAnswer,
   PracticeWriting,
 } from "./practice/practice-writing";
 
@@ -98,7 +97,7 @@ export interface AppBoundaries<R = never> {
     headers: Headers,
     input: AnswerTurnInput
   ) => Effect.Effect<
-    AnswerTurnResult<Evaluation>,
+    InterviewAnswer,
     | AIResponseValidationError
     | DatabaseError
     | EnrichmentFailedError
@@ -1132,9 +1131,14 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                     UnsafeCorrectionError: judgeFailure,
                   },
                   log: "Failed to evaluate practice writing",
-                  success: ({ evaluation, occurrences }) =>
+                  success: ({ evaluation, naturalVersion, occurrences }) =>
                     Response.json(
-                      { evaluation, occurrences, status: "evaluated" },
+                      {
+                        evaluation,
+                        naturalVersion,
+                        occurrences,
+                        status: "evaluated",
+                      },
                       { status: 201 }
                     ),
                   unexpected: SOMETHING_WENT_WRONG,

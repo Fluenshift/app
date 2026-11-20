@@ -13,11 +13,13 @@ import {
 } from "./trainer-errors";
 import {
   answering,
+  enrichmentAnswer,
   enrichmentInput,
   explainInput,
   fakeArticleEnrichment,
   fakeFindingEnrichment,
   fakeMultipleChoiceExercise,
+  fakeNaturalnessNote,
   oneTarget,
   refusing,
 } from "./trainer-test-models";
@@ -86,9 +88,9 @@ describe("createGeminiProvider.explainAttempt", () => {
 
 describe("createGeminiProvider.enrichFindings", () => {
   it("returns each Finding's enrichment for well-formed JSON", async () => {
-    const provider = geminiAnswering({
-      findings: [fakeFindingEnrichment(), fakeArticleEnrichment()],
-    });
+    const provider = geminiAnswering(
+      enrichmentAnswer([fakeFindingEnrichment(), fakeArticleEnrichment()])
+    );
 
     const result = await Effect.runPromise(
       provider.enrichFindings(enrichmentInput)
@@ -105,9 +107,9 @@ describe("createGeminiProvider.enrichFindings", () => {
     const model = answering(
       "google.generative-ai",
       "test-model",
-      JSON.stringify({
-        findings: [fakeFindingEnrichment(), fakeArticleEnrichment()],
-      })
+      JSON.stringify(
+        enrichmentAnswer([fakeFindingEnrichment(), fakeArticleEnrichment()])
+      )
     );
 
     await Effect.runPromise(
@@ -122,16 +124,44 @@ describe("createGeminiProvider.enrichFindings", () => {
   });
 
   it("throws AIResponseValidationError when two entries name the same Finding", async () => {
-    const provider = geminiAnswering({
-      findings: [
+    const provider = geminiAnswering(
+      enrichmentAnswer([
         fakeFindingEnrichment(),
         { ...fakeFindingEnrichment(), example: "We depend on you." },
-      ],
-    });
+      ])
+    );
 
     await expect(
       Effect.runPromise(provider.enrichFindings(enrichmentInput))
     ).rejects.toBeInstanceOf(AIResponseValidationError);
+  });
+});
+
+describe("createGeminiProvider.enrichFindings natural version and Naturalness Notes", () => {
+  it("asks the model for the natural version and the Naturalness Notes", async () => {
+    const model = answering(
+      "google.generative-ai",
+      "test-model",
+      JSON.stringify(
+        enrichmentAnswer(
+          [fakeFindingEnrichment(), fakeArticleEnrichment()],
+          [fakeNaturalnessNote()]
+        )
+      )
+    );
+
+    const result = await Effect.runPromise(
+      createAiSdkTrainer(model).enrichFindings(enrichmentInput)
+    );
+
+    const sent = JSON.stringify(model.doGenerateCalls[0]?.responseFormat);
+    expect(sent).toContain('"naturalVersion"');
+    expect(sent).toContain('"naturalnessNotes"');
+    expect(sent).toContain('"naturalSpan"');
+    expect(sent).not.toContain("UNNATURAL_PHRASING");
+    expect(
+      result.naturalnessNotes.map((note) => note.patternKey)
+    ).toStrictEqual(["rely-on"]);
   });
 });
 

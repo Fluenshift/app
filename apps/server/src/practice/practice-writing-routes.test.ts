@@ -64,6 +64,8 @@ const enriched: TrainerMethods["enrichFindings"] = () =>
       },
     ],
     model: "test-model",
+    naturalVersion: "I went back home.",
+    naturalnessNotes: [],
   });
 
 // The Trainer of every request, and how the client builds it; a case swaps either before it
@@ -264,6 +266,58 @@ describe("POST /api/practice-writing", () => {
         originalSpan: "goed",
         severity: "ERROR",
       },
+    ]);
+  });
+
+  it("answers the natural version, and the Naturalness Notes after the Findings' Occurrences", async () => {
+    trainer = {
+      ...trainer,
+      enrichFindings: vi.fn<TrainerMethods["enrichFindings"]>((input) =>
+        enriched(input).pipe(
+          Effect.map((enrichment) => ({
+            ...enrichment,
+            naturalnessNotes: [
+              {
+                example: "I got home late.",
+                explanation: "'Got home' is how a fluent speaker says it.",
+                l1Transfer: false,
+                naturalSpan: "got home",
+                originalSpan: "goed home",
+                patternKey: "get-home",
+              },
+              {
+                example: "I went back early.",
+                explanation: "'Went back' says you returned.",
+                l1Transfer: true,
+                naturalSpan: "went back",
+                originalSpan: "I goed",
+                patternKey: "go-back",
+              },
+            ],
+          }))
+        )
+      ),
+    };
+
+    const response = await post({ writingSample: "I goed home." });
+    expect(response.status).toBe(201);
+    const body = (await response.json()) as {
+      readonly naturalVersion: unknown;
+      readonly occurrences: readonly Record<string, unknown>[];
+    };
+    expect(body.naturalVersion).toBe("I went back home.");
+    expect(
+      body.occurrences.map((occurrence) => [
+        occurrence["severity"],
+        occurrence["category"],
+        occurrence["findingPosition"],
+        occurrence["originalSpan"],
+        occurrence["correctedSpan"],
+      ])
+    ).toStrictEqual([
+      ["ERROR", "VERB_TENSE", 0, "goed", "went"],
+      ["UNNATURAL", "UNNATURAL_PHRASING", null, "goed home", "got home"],
+      ["UNNATURAL", "UNNATURAL_PHRASING", null, "I goed", "went back"],
     ]);
   });
 

@@ -37,10 +37,25 @@ export interface FindingEnrichment {
   readonly patternKey: string;
 }
 
-// One FindingEnrichment per Finding of the input, in the same order.
+// One span the Trainer finds correct but unnatural (docs/adr/0004): what a fluent speaker would
+// write instead, why, an example, its Pattern Key and the L1 Transfer flag. Its Mistake Category
+// is always UNNATURAL_PHRASING (docs/adr/0005).
+export interface NaturalnessNote {
+  readonly example: string;
+  readonly explanation: string;
+  readonly l1Transfer: boolean;
+  readonly naturalSpan: string;
+  readonly originalSpan: string;
+  readonly patternKey: string;
+}
+
+// One FindingEnrichment per Finding of the input, in the same order, then the natural version of
+// the whole Writing Sample and its Naturalness Notes, in the Trainer's order (docs/adr/0028).
 export interface Enrichment {
   readonly findings: readonly FindingEnrichment[];
   readonly model: string;
+  readonly naturalVersion: string;
+  readonly naturalnessNotes: readonly NaturalnessNote[];
 }
 
 export interface TrainerMethods {

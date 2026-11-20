@@ -36,6 +36,7 @@ import { listPatterns } from "./mistake-pattern-repository";
 import { foldEvaluation } from "./pattern-folding";
 import type {
   FindingEnrichment,
+  NaturalnessNote,
   TrainerMethods,
 } from "./trainer/trainer-model";
 
@@ -113,14 +114,23 @@ const storeEvaluation = (
   ).then(() => evaluation);
 };
 
-// A Trainer whose Enrichment answers these Academy fields.
+const NATURAL_VERSION = "I rely on this library.";
+
+// A Trainer whose Enrichment answers these Academy fields, the natural version and these
+// Naturalness Notes.
 const trainerAnswering = (
   findings: readonly FindingEnrichment[],
-  model = "test-model"
+  model = "test-model",
+  naturalnessNotes: readonly NaturalnessNote[] = []
 ) => ({
   continueInterview: vi.fn<TrainerMethods["continueInterview"]>(),
   enrichFindings: vi.fn<TrainerMethods["enrichFindings"]>(() =>
-    Effect.succeed({ findings, model })
+    Effect.succeed({
+      findings,
+      model,
+      naturalVersion: NATURAL_VERSION,
+      naturalnessNotes,
+    })
   ),
   explainAttempt: vi.fn<TrainerMethods["explainAttempt"]>(),
   generateExercises: vi.fn<TrainerMethods["generateExercises"]>(),
@@ -150,6 +160,16 @@ const dependOn = (): FindingEnrichment => ({
 const dependOnAgain = (): FindingEnrichment => ({
   ...dependOn(),
   example: "This depends on the config.",
+});
+
+// Correct but unnatural: "make a meeting" for "have a meeting".
+const makeAMeeting = (): NaturalnessNote => ({
+  example: "We have a meeting every Monday.",
+  explanation: "Fluent speakers 'have' a meeting.",
+  l1Transfer: true,
+  naturalSpan: "have a meeting",
+  originalSpan: "make a meeting",
+  patternKey: "have-a-meeting",
 });
 
 const storedOccurrences = () =>
@@ -407,7 +427,7 @@ describe("PatternFolding.foldEvaluation", () => {
     ).toStrictEqual([1]);
   });
 
-  it("asks the Trainer nothing when no Finding can form a Mistake Pattern", async () => {
+  it("enriches an Evaluation whose Findings form no Mistake Pattern, for its natural version and Naturalness Notes", async () => {
     const evaluation = await storeEvaluation(
       "Ship it, the thing.",
       "Ship the release.",
@@ -426,9 +446,166 @@ describe("PatternFolding.foldEvaluation", () => {
       foldEvaluation(trainer, { evaluationId: evaluation.id })
     );
 
-    expect(trainer.enrichFindings).not.toHaveBeenCalled();
-    expect(result).toStrictEqual({ occurrences: [] });
-    expect(await storedEnrichments()).toHaveLength(0);
+    expect(trainer.enrichFindings).toHaveBeenCalledWith({
+      findings: [],
+      writingSample: "Ship it, the thing.",
+    });
+    expect(result).toStrictEqual({
+      naturalVersion: NATURAL_VERSION,
+      occurrences: [],
+    });
+    expect(await storedEnrichments()).toHaveLength(1);
+  });
+
+  it("keeps the natural version on the Enrichment record", async () => {
+    const evaluation = await storeEvaluation(
+      "I depend of this library.",
+      "I depend on this library.",
+      [dependOf]
+    );
+
+    const result = await run(
+      foldEvaluation(trainerAnswering([dependOn()]), {
+        evaluationId: evaluation.id,
+      })
+    );
+
+    expect(result?.naturalVersion).toBe(NATURAL_VERSION);
+    const [enrichment] = await storedEnrichments();
+    expect(enrichment?.naturalVersion).toBe(NATURAL_VERSION);
+  });
+
+  it("records each Naturalness Note as an Occurrence of its unnatural-phrasing pattern, after the Findings", async () => {
+    const evaluation = await storeEvaluation(
+      "I depend of it, so we make a meeting and do a decision.",
+      "I depend on it, so we make a meeting and do a decision.",
+      [dependOf],
+      "2"
+    );
+    const trainer = trainerAnswering([dependOn()], "test-model", [
+      makeAMeeting(),
+      {
+        example: "We made a decision yesterday.",
+        explanation: "Fluent speakers 'make' a decision.",
+        l1Transfer: false,
+        naturalSpan: "make a decision",
+        originalSpan: "do a decision",
+        patternKey: "make-a-decision",
+      },
+    ]);
+
+    const result = await run(
+      foldEvaluation(trainer, { evaluationId: evaluation.id })
+    );
+
+    expect(result?.occurrences).toMatchObject([
+      { findingPosition: 0, notePosition: null, severity: "ERROR" },
+      {
+        category: "UNNATURAL_PHRASING",
+        correctedSpan: "have a meeting",
+        evaluationId: evaluation.id,
+        example: "We have a meeting every Monday.",
+        explanation: "Fluent speakers 'have' a meeting.",
+        findingPosition: null,
+        l1Transfer: true,
+        notePosition: 0,
+        originalSpan: "make a meeting",
+        rubricVersion: "2",
+        severity: "UNNATURAL",
+      },
+      {
+        category: "UNNATURAL_PHRASING",
+        correctedSpan: "make a decision",
+        findingPosition: null,
+        l1Transfer: false,
+        notePosition: 1,
+        originalSpan: "do a decision",
+        severity: "UNNATURAL",
+      },
+    ]);
+    const patterns = await run(listPatterns());
+    expect(patterns).toHaveLength(3);
+    expect(
+      patterns.filter((pattern) => pattern.category === "UNNATURAL_PHRASING")
+    ).toHaveLength(2);
+  });
+
+  it("starts a pattern from a first Naturalness Note with no failed recall", async () => {
+    const evaluation = await storeEvaluation(
+      "We make a meeting.",
+      "We make a meeting.",
+      []
+    );
+
+    await run(
+      foldEvaluation(trainerAnswering([], "test-model", [makeAMeeting()]), {
+        evaluationId: evaluation.id,
+      })
+    );
+
+    const [pattern] = await run(listPatterns());
+    expect(pattern).toMatchObject({
+      category: "UNNATURAL_PHRASING",
+      correctCount: 0,
+      exampleCorrection: "have a meeting",
+      exampleOriginal: "make a meeting",
+      incorrectCount: 0,
+      masteryLevel: "ACTIVE",
+      occurrenceCount: 1,
+      patternKey: "have-a-meeting",
+    });
+  });
+
+  it("grows a pattern's occurrence count for a Naturalness Note, never as a failed recall", async () => {
+    const practicedAt = new Date("2026-11-01T09:00:00.000Z");
+    await query((client) =>
+      client
+        .insert(learners)
+        .values({ id: LOCAL_LEARNER_ID })
+        .then(() =>
+          client.insert(mistakePatterns).values({
+            category: MistakeCategory.UNNATURAL_PHRASING,
+            consecutiveCorrectCount: 4,
+            correctCount: 4,
+            exampleCorrection: "have a call",
+            exampleOriginal: "make a call",
+            id: randomUUID(),
+            incorrectCount: 1,
+            lastPracticedAt: practicedAt,
+            lastSeenAt: practicedAt,
+            learnerId: LOCAL_LEARNER_ID,
+            masteryLevel: "MASTERED",
+            occurrenceCount: 1,
+            patternKey: "have-a-meeting",
+          })
+        )
+    );
+    const evaluation = await storeEvaluation(
+      "We make a meeting.",
+      "We make a meeting.",
+      []
+    );
+
+    await run(
+      foldEvaluation(trainerAnswering([], "test-model", [makeAMeeting()]), {
+        evaluationId: evaluation.id,
+      })
+    );
+
+    const [pattern] = await run(listPatterns());
+    expect(pattern).toMatchObject({
+      consecutiveCorrectCount: 4,
+      correctCount: 4,
+      exampleCorrection: "have a meeting",
+      exampleOriginal: "make a meeting",
+      incorrectCount: 1,
+      lastPracticedAt: practicedAt,
+      masteryLevel: "MASTERED",
+      occurrenceCount: 2,
+    });
+    expect(pattern?.lastSeenAt.getTime()).toBeGreaterThan(
+      practicedAt.getTime()
+    );
   });
 
   it("answers null and asks the Trainer nothing for an Evaluation the Learner does not have", async () => {

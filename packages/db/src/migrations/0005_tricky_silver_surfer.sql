@@ -1,0 +1,3 @@
+ALTER TABLE "enrichments" ADD COLUMN "natural_version" text;--> statement-breakpoint
+ALTER TABLE "occurrences" ADD COLUMN "note_position" integer;--> statement-breakpoint
+ALTER TABLE "occurrences" ADD CONSTRAINT "occurrences_note_check" CHECK (("occurrences"."severity" = 'UNNATURAL') = ("occurrences"."note_position" is not null) and ("occurrences"."severity" = 'UNNATURAL') = ("occurrences"."category" = 'UNNATURAL_PHRASING'));
