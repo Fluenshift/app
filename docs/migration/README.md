@@ -103,8 +103,8 @@ tests that carry it in this repository. Each file is one object: `slice`, `lane`
 | `class` | Test rows only: `A` ports nearly verbatim (pure code), `B` keeps its assertions on new persistence fixtures (SQLite or Postgres to PGlite), `C` is re-expressed as a contract test (SDK, Elysia, Next.js or Bun bound). `null` for other rows. |
 | `slice` | The slice, also the file name. |
 | `disposition` | `port`, `port-changed`, `superseded`, `drop`, `informative` or `pending-decision` (below). |
-| `decision` | `adr:NNNN` (`docs/adr/NNNN-*.md`) or `issue:N` (an issue in this repo). Required for `pending-decision`, `port-changed`, `superseded` and `drop`; kept on rows that ADR 0001 made `informative`; `null` otherwise. |
-| `targets` | Target tests as `file::full title`, written by the unit that ports the row. |
+| `decision` | `adr:NNNN` (`docs/adr/NNNN-*.md`) or `issue:N` (an issue in this repo). Required for `pending-decision`, `port-changed`, `superseded` and `drop`; kept on rows that ADR 0001 or ADR 0029 made `informative`; `null` otherwise. |
+| `targets` | Target tests as `file::full title`, written by the unit that ports the row. A fix-commit or issue row takes the tests that pin its fix (ADR 0022, decision 2), which may already be targets of the rows that ported them: G8 checks only targets new to the ledger, and G9 checks that every target passes. |
 
 Dispositions:
 
@@ -205,8 +205,10 @@ intended gate rejects it while a control gate still accepts it: a focused, a ski
 `packages/env` (G2, the built-in also G1); a floating Effect (G1); a lowered oxlint severity and
 a lowered Effect diagnostic severity (G11); a ledger row pointing at a missing test and a `port`
 target with a changed title (G9); a weakened matcher (G10); a first commit whose tests already
-pass (G8); a route that reads user text from a query string (G7). A tagged error with no entry
-at the edge is a type error, so its case is rejected by G1. CI runs the self-tests in their own
+pass (G8); a route that reads user text from a query string (G7); in Academy code, an import of
+an Evaluation write service, of a writable Evaluation table or of the Judge, and raw SQL (G2),
+and a write through a read-only Evaluation view (G1). A tagged error with no entry at the edge is
+a type error, so its case is rejected by G1. CI runs the self-tests in their own
 job when a gate changes: a script, a gate's configuration, the toolchain, or a file that a case
 edits or runs (`scripts/ci-changes.ts`, ADR 0019). Run them yourself after changing a gate:
 

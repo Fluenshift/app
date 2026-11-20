@@ -354,6 +354,60 @@ describe("Deleting an Evaluation", () => {
     expect(deleted).toStrictEqual(neverFolded);
   });
 
+  it("rebuilds a pattern from its later Occurrences when the Evaluation that created it goes, and keeps the Attempts made before them", async () => {
+    const session = await openDatabase();
+    at("10:00");
+    const first = await foldFirst(session);
+    const preposition = await patternIdOf(
+      session,
+      MistakeCategory.PREPOSITIONS
+    );
+    at("10:05");
+    await answer(session, preposition, true);
+    at("10:10");
+    await answer(session, preposition, true);
+    at("10:20");
+    await foldSecond(session);
+    at("10:25");
+    await answer(session, preposition, true);
+    at("10:30");
+
+    await session.run(deleteEvaluation(first.id));
+
+    const secondFold = new Date("2026-11-20T10:20:00.000Z");
+    const patterns = await patternsOf(session);
+    expect(
+      patterns.map(({ category, patternKey }) => [category, patternKey])
+    ).toStrictEqual([
+      [MistakeCategory.UNNATURAL_PHRASING, "collocation-make"],
+      [MistakeCategory.PREPOSITIONS, "preposition-depend"],
+      [MistakeCategory.SPELLING, "spelling-the"],
+    ]);
+    expect(patterns[0]).toMatchObject({
+      exampleCorrection: "draw up a plan",
+      exampleOriginal: "make a plan",
+      firstSeenAt: secondFold,
+      incorrectCount: 0,
+      lastPracticedAt: secondFold,
+      lastSeenAt: secondFold,
+      occurrenceCount: 1,
+    });
+    // The three Attempts count, the two made before the pattern's only Occurrence too, and replay
+    // with it in the order they happened: right, right, the Finding, right.
+    expect(patterns[1]).toMatchObject({
+      consecutiveCorrectCount: 1,
+      correctCount: 3,
+      exampleCorrection: "depended on",
+      exampleOriginal: "depended of",
+      firstSeenAt: secondFold,
+      incorrectCount: 1,
+      lastPracticedAt: new Date("2026-11-20T10:25:00.000Z"),
+      lastSeenAt: secondFold,
+      masteryLevel: "ACTIVE",
+      occurrenceCount: 1,
+    });
+  });
+
   it("removes its Occurrences, its Enrichment and a pattern left without an Occurrence, and keeps the Exercises and Attempts", async () => {
     const session = await openDatabase();
     const first = await foldFirst(session);

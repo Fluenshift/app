@@ -276,6 +276,37 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
       acceptedBy: [["types", types("apps/server")]],
     },
     {
+      gate: "G2",
+      name: "an Academy import of the Judge",
+      apply: (tree) =>
+        write(
+          tree,
+          ACADEMY_FILE,
+          'import { evaluateWriting } from "../evaluation/writing-evaluation";\n\nexport const judge = evaluateWriting;\n'
+        ),
+      rejectedBy: [["lint", lint(ACADEMY_FILE)]],
+      acceptedBy: [["types", types("apps/server")]],
+    },
+    {
+      gate: "G2",
+      name: "raw SQL in Academy code",
+      apply: (tree) =>
+        write(
+          tree,
+          ACADEMY_FILE,
+          [
+            'import type { DrizzleClient } from "@fluenshift/db";',
+            'import { sql } from "drizzle-orm";',
+            "",
+            "export const erase = (client: DrizzleClient) =>",
+            "  client.execute(sql`delete from evaluations`);",
+            "",
+          ].join("\n")
+        ),
+      rejectedBy: [["lint", lint(ACADEMY_FILE)]],
+      acceptedBy: [["types", types("apps/server")]],
+    },
+    {
       gate: "G1",
       name: "an Academy write through a read-only Evaluation view",
       apply: (tree) =>

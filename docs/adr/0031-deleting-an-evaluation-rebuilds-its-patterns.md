@@ -1,6 +1,8 @@
 # 0031. Deleting an Evaluation rebuilds the Mistake Patterns it touched
 
-- Status: Accepted on 2026-11-20 by the session (ADR 0020).
+- Status: Accepted on 2026-11-20 by the session (ADR 0020). Decision 1 amended the same day after
+  the Phase 5f review (#211), to state what a rebuild keeps when the deleted Evaluation created the
+  pattern.
 - Phase 5f, the seam invariant "deleting an Evaluation removes the Academy state derived from
   it". No ledger row changes: PE deletes Evaluations but has no Academy, and Grifando never
   deletes a single writing session.
@@ -24,8 +26,11 @@
 1. In the transaction that deletes the Evaluation, the Academy removes its Occurrences and
    rebuilds each pattern they belonged to by replaying what remains, in the order it happened:
    the pattern's other Occurrences and the Attempts on its Exercises. The counts, the canonical
-   example, the first and last seen times, the time of the last recall and the Mastery Level come
-   out as if the Evaluation had never been folded.
+   example, the first and last seen times, the time of the last recall and the Mastery Level are
+   what that evidence builds. When the pattern was first seen before the deleted Evaluation, that
+   is the pattern as if the Evaluation had never been folded. When the deleted Evaluation created
+   it, the pattern is first seen at its earliest remaining Occurrence, and the Attempts made
+   before that still count (decision 3).
 2. A pattern left without an Occurrence is removed: nothing the Learner still keeps shows the
    mistake.
 3. Exercises and Attempts stay, and so do Category Ability and the Streak: they record practice

@@ -85,8 +85,8 @@ describe("SpellChecker mark placement", () => {
   });
 });
 
-// Grifando #78: its highlighter found each mistake with `indexOf`, so a short span landed inside
-// an earlier word and a repeated mistake lost its second mark. A stored Finding carries validated
+// Grifando #78: its highlighter placed each span with `indexOf`, so a short span landed inside an
+// earlier word and a repeated Finding lost its second mark. A stored Finding carries validated
 // byte offsets (docs/adr/0004), so each mark sits where its Finding is. These are the issue's two
 // texts; they are ASCII, so byte offsets are character offsets.
 describe("SpellChecker marks for Grifando #78", () => {

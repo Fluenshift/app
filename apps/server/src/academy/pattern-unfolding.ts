@@ -1,8 +1,7 @@
-// What the Academy built from one Evaluation, forgotten when the Learner deletes it
-// (docs/adr/0031, DATA-POLICY.md § Deletion). The Evaluation's Occurrences and Enrichment go, and
-// each Mistake Pattern they touched is rebuilt from the Occurrences and Attempts that remain, as if
-// the Evaluation had never been folded. A pattern left without an Occurrence goes too; the
-// Learner's Exercises and Attempts stay.
+// Unfolding an Evaluation, the inverse of folding it (pattern-folding.ts), when the Learner deletes
+// it (docs/adr/0031, DATA-POLICY.md § Deletion). The Evaluation's Occurrences go, and each Mistake
+// Pattern they touched is rebuilt from the Occurrences and the Attempts that remain. A pattern left
+// without an Occurrence goes too; the Learner's Exercises and Attempts stay.
 import type { ExerciseType, LearnerId } from "@fluenshift/contract";
 import { replayPattern } from "@fluenshift/core/pattern-replay";
 import {
@@ -120,7 +119,7 @@ const rebuildInOrder = (
 // Removes the Evaluation's Occurrences and rebuilds each Mistake Pattern they touched from what
 // remains. Runs inside the transaction that deletes the Evaluation, whose Enrichment goes with it
 // (its foreign key cascades); another Learner's Evaluation touches nothing.
-export const forgetEvaluation = (
+export const unfoldEvaluation = (
   client: DrizzleClient,
   learnerId: LearnerId,
   evaluationId: string
