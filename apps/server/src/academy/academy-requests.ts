@@ -47,3 +47,6 @@ export const explainAttemptFor = Effect.fn("AcademyRequests.explainAttemptFor")(
     return yield* explainAttempt(trainer, input);
   }
 );
+
+export const startInterviewFor = (_headers: Headers) =>
+  Effect.succeed({ sessionId: "", turn: { id: "", order: -1, question: "" } });

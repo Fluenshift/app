@@ -35,6 +35,7 @@ import { getMimeType } from "hono/utils/mime";
 
 import type { NotFoundError } from "./academy/errors";
 import type { SubmitAttemptResult } from "./academy/exercise-service";
+import type { InterviewSession } from "./academy/interview-service";
 import {
   readTrainerCredentials,
   TRAINER_FAILURES,
@@ -104,6 +105,10 @@ export interface AppBoundaries<R = never> {
   readonly deleteVocabularyItem?: (
     id: string
   ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
+  /** Ends the Learner's interview session; false when the Learner has no such session. */
+  readonly endInterview?: (
+    sessionId: string
+  ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
   /** An explanation of one graded Attempt on the key the request carries, or null for none. */
   readonly explainAttempt?: (
     headers: Headers,
@@ -122,10 +127,26 @@ export interface AppBoundaries<R = never> {
     AIResponseValidationError | DatabaseError | TrainerAccessError,
     R | CurrentLearner
   >;
+  /** The Learner's interview session with its turns in order, or null for none. */
+  readonly getInterviewSession?: (
+    sessionId: string
+  ) => Effect.Effect<
+    InterviewSession | null,
+    DatabaseError,
+    R | CurrentLearner
+  >;
   /** The Learner's Exercises without an Attempt, oldest first. */
   readonly listPendingExercises?: () => Effect.Effect<
     readonly PendingExercise[],
     DatabaseError,
+    R | CurrentLearner
+  >;
+  /** A new interview session and its opening question, asked on the key the request carries. */
+  readonly startInterview?: (
+    headers: Headers
+  ) => Effect.Effect<
+    StartedInterview,
+    AIResponseValidationError | DatabaseError | TrainerAccessError,
     R | CurrentLearner
   >;
   /** Grades one answer to the Learner's Exercise; no Trainer takes part. */
@@ -141,6 +162,16 @@ export interface AppBoundaries<R = never> {
   readonly testTrainerKey?: (
     credentials: TrainerCredentials
   ) => Effect.Effect<KeyTestStatus, never, R>;
+}
+
+/** A new interview session and the turn that asks its opening question. */
+export interface StartedInterview {
+  readonly sessionId: string;
+  readonly turn: {
+    readonly id: string;
+    readonly order: number;
+    readonly question: string;
+  };
 }
 
 /** What a route needs of an Exercise to show it. */
