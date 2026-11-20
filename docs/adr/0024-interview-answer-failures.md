@@ -19,8 +19,10 @@ cannot be evaluated again in place.
 - A Judge failure answers as the Evaluation route does (`FAILURE_STATUS`, `{ kind, code,
   retryable }`, or 422 for no English) and records nothing.
 - An access error of the Trainer answers by its code, as in Grifando.
-- Any other Enrichment failure keeps the Evaluation and answers 200 `{ status: "failed",
-  evaluationId, message }` with Grifando's message: the Evaluation is the FAILED writing session.
+- Any other failure of the Trainer during the Enrichment, a refused answer or a crash, keeps the
+  Evaluation and answers 200 `{ status: "failed", evaluationId, message }` with Grifando's
+  message: the Evaluation is the FAILED writing session.
+- A database failure answers Grifando's generic 500, as in Grifando.
 - In each case the turn stays open, and the Learner posts the answer again. `retrySessionId` is
   gone; the retried answer is a new Evaluation.
 
