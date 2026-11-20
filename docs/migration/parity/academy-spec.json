@@ -646,7 +646,6 @@
       "disposition": "port-changed",
       "decision": "adr:0004",
       "targets": [
-        "apps/web/src/features/evaluations/spell-checker.placement.test.ts::SpellChecker mark placement > places a mark at UTF-8 byte offsets that hold its text, otherwise at an occurrence of the text",
         "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text",
         "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8",
         "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate"
