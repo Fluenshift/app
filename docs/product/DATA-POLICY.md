@@ -47,7 +47,7 @@ Writing Sample text and provider bodies, and no URL carries text the Learner wro
 ### External transmission
 
 Evaluating sends the full current Writing Sample to OpenRouter, through the AI SDK provider,
-routed to the one model pinned for the Rubric Version with `store: false`, no tools, and no
+routed to the Judge's pinned model (`RUBRIC.md`) with `store: false`, no tools, and no
 conversation state (ADR 0012). The provider receives only that sample, the rubric
 instructions, and structural annotations.
 
@@ -109,9 +109,8 @@ The server deletes, once a day, every Learner idle for 90 days, with all their d
 
 ### Limits and boundary
 
-Every route that calls a model has fixed-window rate limits per Learner and per hashed IP,
-kept in PostgreSQL. The site serves a Content Security Policy for a static single-page
-application. A privacy page in English and Portuguese states this policy (ADR 0003).
+The rate limits, the Content Security Policy and the privacy page that states this policy are
+requirements HR-03, HR-04 and HR-08 in `REQUIREMENTS.md`.
 
 ### Cutover from Grifando
 
