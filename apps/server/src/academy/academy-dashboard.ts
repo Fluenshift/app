@@ -10,10 +10,11 @@ import {
   selectDailyPrompt,
 } from "@fluenshift/core/daily-prompt";
 import { isDueForReview } from "@fluenshift/core/recall";
+import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import { selectPatternsForPractice } from "@fluenshift/core/selection";
 import { computeStreak } from "@fluenshift/core/streak";
-import { Database, evaluations } from "@fluenshift/db";
-import { and, desc, eq } from "drizzle-orm";
+import { Database, evaluations, findings } from "@fluenshift/db";
+import { and, count, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 
 import { CurrentLearner } from "../learner-identity";
@@ -23,6 +24,8 @@ import { countOccurrencesByCategory } from "./occurrence-repository";
 
 const RECENT_LIMIT = 3;
 const ACCURACY_WINDOW = 50;
+// As many samples as Grifando's score trend averaged (SCORE_TREND_LIMIT, docs/adr/0027).
+const TREND_LIMIT = 10;
 
 // The Learner's practice-origin Writing Samples, newest first. The Academy only reads them.
 const listPracticeWriting = Effect.fn("AcademyDashboard.listPracticeWriting")(
@@ -33,16 +36,27 @@ const listPracticeWriting = Effect.fn("AcademyDashboard.listPracticeWriting")(
       client
         .select({
           evaluatedAt: evaluations.evaluatedAt,
+          evaluatedEnglishWordCount: evaluations.evaluatedEnglishWordCount,
+          findingCount: count(findings.id),
           id: evaluations.id,
           originalText: evaluations.originalText,
+          rubricVersion: evaluations.rubricVersion,
         })
         .from(evaluations)
+        .leftJoin(
+          findings,
+          and(
+            eq(findings.learnerId, evaluations.learnerId),
+            eq(findings.evaluationId, evaluations.id)
+          )
+        )
         .where(
           and(
             eq(evaluations.learnerId, learner.id),
             eq(evaluations.origin, "practice")
           )
         )
+        .groupBy(evaluations.id)
         .orderBy(
           desc(evaluations.evaluatedAt),
           desc(evaluations.insertionOrder)
@@ -50,6 +64,49 @@ const listPracticeWriting = Effect.fn("AcademyDashboard.listPracticeWriting")(
     );
   }
 );
+
+// Findings per 100 evaluated English words (RUBRIC.md, Progress Insights).
+const findingRate = (findingCount: number, words: number) =>
+  words === 0 ? null : (findingCount / words) * 100;
+
+// The Finding Rate of the last practice samples under the current Rubric Version, oldest first,
+// and of the window (docs/adr/0027).
+const findingTrendOf = (
+  writing: readonly {
+    readonly evaluatedAt: Date;
+    readonly evaluatedEnglishWordCount: number;
+    readonly findingCount: number;
+    readonly rubricVersion: string;
+  }[]
+): AcademyDashboard["findingTrend"] => {
+  const samples = writing
+    .filter((sample) => sample.rubricVersion === CURRENT_RUBRIC_VERSION)
+    .slice(0, TREND_LIMIT)
+    .toReversed();
+  const words = samples.reduce(
+    (total, sample) => total + sample.evaluatedEnglishWordCount,
+    0
+  );
+  const found = samples.reduce(
+    (total, sample) => total + sample.findingCount,
+    0
+  );
+  return {
+    samples: samples.map((sample) => ({
+      evaluatedAt: sample.evaluatedAt.toISOString(),
+      evaluatedEnglishWordCount: sample.evaluatedEnglishWordCount,
+      findingCount: sample.findingCount,
+      findingRate:
+        findingRate(sample.findingCount, sample.evaluatedEnglishWordCount) ?? 0,
+    })),
+    window: {
+      evaluatedEnglishWordCount: words,
+      evaluationCount: samples.length,
+      findingCount: found,
+      findingRate: findingRate(found, words),
+    },
+  };
+};
 
 export const academyDashboard = Effect.fn("AcademyDashboard.academyDashboard")(
   function* () {
@@ -119,6 +176,7 @@ export const academyDashboard = Effect.fn("AcademyDashboard.academyDashboard")(
         now
       ),
       weakAreas: computeCategoryBreakdown(categoryCounts),
+      findingTrend: findingTrendOf(writing),
     } satisfies AcademyDashboard;
   }
 );

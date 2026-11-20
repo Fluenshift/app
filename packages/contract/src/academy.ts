@@ -254,6 +254,26 @@ export const AcademyDashboard = Schema.Struct({
     longest: Schema.Int,
   }),
   weakAreas: Schema.Array(CategoryBreakdownEntry),
+  /**
+   * The Finding Rate of the last 10 practice-origin Writing Samples under the current Rubric
+   * Version, oldest first, and of the window, each with its counts (docs/adr/0027).
+   */
+  findingTrend: Schema.Struct({
+    samples: Schema.Array(
+      Schema.Struct({
+        evaluatedAt: Schema.String,
+        evaluatedEnglishWordCount: Schema.Int,
+        findingCount: Schema.Int,
+        findingRate: Schema.Finite,
+      })
+    ),
+    window: Schema.Struct({
+      evaluatedEnglishWordCount: Schema.Int,
+      evaluationCount: Schema.Int,
+      findingCount: Schema.Int,
+      findingRate: Schema.NullOr(Schema.Finite),
+    }),
+  }),
 });
 export type AcademyDashboard = typeof AcademyDashboard.Type;
 

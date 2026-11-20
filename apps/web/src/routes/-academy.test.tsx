@@ -45,6 +45,15 @@ const empty: AcademyDashboard = {
   },
   recentPatterns: [],
   recentWriting: [],
+  findingTrend: {
+    samples: [],
+    window: {
+      evaluatedEnglishWordCount: 0,
+      evaluationCount: 0,
+      findingCount: 0,
+      findingRate: null,
+    },
+  },
   recommendation: null,
   streak: { activeToday: false, current: 0, longest: 0 },
   weakAreas: [],
@@ -101,6 +110,7 @@ describe("/academy", () => {
         exampleOriginal: "depend-on original",
         occurrenceCount: 3,
       },
+      findingTrend: empty.findingTrend,
       streak: { activeToday: true, current: 4, longest: 4 },
       weakAreas: [{ category: "PREPOSITIONS", count: 4, percentage: 100 }],
     });
@@ -173,5 +183,65 @@ describe("/academy specimen", () => {
     expect(page).toHaveTextContent(
       '"too much things" should be "too many things".'
     );
+  });
+});
+
+// docs/adr/0027: the Finding Rate of the last practice samples, in the place of Grifando's
+// averaged scores, as values and counts with no direction.
+describe("/academy finding trend", () => {
+  it("waits for the first practice sample", async () => {
+    const { text } = await renderDashboard(empty);
+    expect(text).toContain(
+      "Your finding rate will show up after your first practice writing."
+    );
+  });
+
+  it("shows the rate of the recent practice samples and of each one, with counts", async () => {
+    const { page } = await renderDashboard({
+      ...empty,
+      findingTrend: {
+        samples: [
+          {
+            evaluatedAt: "2026-03-03T10:00:00.000Z",
+            evaluatedEnglishWordCount: 20,
+            findingCount: 2,
+            findingRate: 10,
+          },
+          {
+            evaluatedAt: "2026-03-04T10:00:00.000Z",
+            evaluatedEnglishWordCount: 40,
+            findingCount: 1,
+            findingRate: 2.5,
+          },
+        ],
+        window: {
+          evaluatedEnglishWordCount: 60,
+          evaluationCount: 2,
+          findingCount: 3,
+          findingRate: 5,
+        },
+      },
+    });
+    const trend = within(page).getByRole("region", {
+      name: "Finding rate",
+    });
+    expect(trend).toHaveTextContent(
+      "5 per 100 words over your last 2 practice samples"
+    );
+    expect(trend).toHaveTextContent("2 practice samples");
+    expect(trend).toHaveTextContent("60 English words");
+    expect(trend).toHaveTextContent("3 findings");
+    const samples = within(
+      within(trend).getByRole("list", { name: "Each practice sample" })
+    ).getAllByRole("listitem");
+    expect(samples.map((sample) => sample.textContent)).toEqual([
+      expect.stringContaining(
+        "10 per 100 words (2 findings in 20 English words)"
+      ),
+      expect.stringContaining(
+        "2.5 per 100 words (1 finding in 40 English words)"
+      ),
+    ]);
+    expect(trend).not.toHaveTextContent(/improv|better|worse/iu);
   });
 });
