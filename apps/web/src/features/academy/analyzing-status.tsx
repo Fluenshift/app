@@ -3,6 +3,13 @@
 import { cn } from "@fluenshift/ui/utils";
 import { useEffect, useState } from "react";
 
+export const WRITING_STEPS = [
+  "Reading your text…",
+  "Marking mistakes…",
+  "Writing explanations…",
+  "Almost there — long texts take up to a minute",
+];
+
 export const EXERCISE_STEPS = [
   "Looking through your mistakes…",
   "Picking what to practice…",
