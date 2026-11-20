@@ -1,5 +1,6 @@
 export {
   AttemptRequest,
+  DailyChallenge,
   errorCategoryOf,
   EXERCISE_TYPES,
   ExerciseType,

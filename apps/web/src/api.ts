@@ -1,8 +1,10 @@
-// The only module that talks to the server: the HTTP Evaluation client, over Hono's typed client.
-// Ported from PE apps/web/src/features/evaluations/http-evaluation-client.ts (5e831bb). Every
-// answer is decoded with the Evaluation contract (docs/adr/0007), and a Progress selection travels
-// in a request body, never in the URL (docs/adr/0008).
+// The only module that talks to the server: the HTTP Evaluation client, over Hono's typed client,
+// and the HTTP Academy client beside it (docs/adr/0025). The Evaluation client is ported from PE
+// apps/web/src/features/evaluations/http-evaluation-client.ts (5e831bb). Every answer is decoded
+// with its contract (docs/adr/0007), and a Progress selection travels in a request body, never in
+// the URL (docs/adr/0008).
 import {
+  DailyChallenge,
   Evaluation,
   EvaluationSubmissionResult,
   EvaluationSummary,
@@ -14,6 +16,7 @@ import { Option, Schema } from "effect";
 import { hc } from "hono/client";
 import type { AppType } from "server/app";
 
+import type { AcademyClient } from "./features/academy/academy-client";
 import { EvaluationRequestError } from "./features/evaluations/evaluation-client";
 import type {
   ApiFailure,
@@ -45,6 +48,7 @@ const decodeSummaries = Schema.decodeUnknownOption(
 const decodeProgressSummary = Schema.decodeUnknownOption(ProgressSummary);
 const decodeProgressEvidence = Schema.decodeUnknownOption(ProgressEvidence);
 const decodeSetupStatus = Schema.decodeUnknownOption(SetupStatus);
+const decodeDailyChallenge = Schema.decodeUnknownOption(DailyChallenge);
 
 const parseJson = async (response: ApiResponse): Promise<unknown> => {
   try {
@@ -145,6 +149,21 @@ export const createHttpEvaluationClient = ({
 
     async listEvaluations() {
       return requireJson(await api.evaluations.$get(), decodeSummaries);
+    },
+  };
+};
+
+export const createHttpAcademyClient = ({
+  fetch,
+}: HttpEvaluationClientOptions = {}): AcademyClient => {
+  const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
+
+  return {
+    async getDailyChallenge() {
+      return requireJson(
+        await api["daily-challenge"].$get(),
+        decodeDailyChallenge
+      );
     },
   };
 };
