@@ -210,6 +210,52 @@ export const MistakeNotebook = Schema.Struct({
 export type MistakeNotebook = typeof MistakeNotebook.Type;
 
 /**
+ * The Academy dashboard (Grifando's / page, 74dbb9f, at /academy under docs/adr/0025). A writing
+ * session becomes a practice-origin Writing Sample (docs/adr/0004), and the averaged model scores
+ * are gone (docs/adr/0002).
+ */
+export const AcademyDashboard = Schema.Struct({
+  dailyChallenge: DailyChallenge,
+  dueCount: Schema.Int,
+  progress: Schema.Struct({
+    exerciseAccuracy: Schema.NullOr(
+      Schema.Struct({ correct: Schema.Int, total: Schema.Int })
+    ),
+    exercisesCompleted: Schema.Int,
+    writingSamplesCompleted: Schema.Int,
+  }),
+  recentPatterns: Schema.Array(
+    Schema.Struct({
+      exampleCorrection: Schema.String,
+      exampleOriginal: Schema.String,
+      id: Schema.String,
+    })
+  ),
+  recentWriting: Schema.Array(
+    Schema.Struct({
+      evaluatedAt: Schema.String,
+      id: Schema.String,
+      originalText: Schema.String,
+    })
+  ),
+  recommendation: Schema.NullOr(
+    Schema.Struct({
+      category: MistakeCategorySchema,
+      exampleCorrection: Schema.String,
+      exampleOriginal: Schema.String,
+      occurrenceCount: Schema.Int,
+    })
+  ),
+  streak: Schema.Struct({
+    activeToday: Schema.Boolean,
+    current: Schema.Int,
+    longest: Schema.Int,
+  }),
+  weakAreas: Schema.Array(CategoryBreakdownEntry),
+});
+export type AcademyDashboard = typeof AcademyDashboard.Type;
+
+/**
  * A request for a practice set (Grifando's POST /api/exercises, 74dbb9f). With an Evaluation,
  * the daily session's set opens with the patterns of that Evaluation's Occurrences; Evaluations
  * replace Grifando's writing sessions (docs/adr/0004).

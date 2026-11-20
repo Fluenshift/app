@@ -294,7 +294,10 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/page-routes.test.ts::/academy > feeds the dashboard's streak, progress, weak areas and recent lists",
+        "apps/web/src/routes/-academy.test.tsx::/academy > feeds the dashboard's streak, progress, weak areas and recent lists"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/pages.characterization.test.ts::/mistakes > narrows the breakdown to 30 days and the patterns to those from Portuguese",

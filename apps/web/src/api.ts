@@ -4,6 +4,7 @@
 // with its contract (docs/adr/0007), and a Progress selection travels in a request body, never in
 // the URL (docs/adr/0008).
 import {
+  AcademyDashboard,
   DailyChallenge,
   Evaluation,
   EvaluationSubmissionResult,
@@ -51,6 +52,7 @@ const decodeProgressSummary = Schema.decodeUnknownOption(ProgressSummary);
 const decodeProgressEvidence = Schema.decodeUnknownOption(ProgressEvidence);
 const decodeSetupStatus = Schema.decodeUnknownOption(SetupStatus);
 const decodeDailyChallenge = Schema.decodeUnknownOption(DailyChallenge);
+const decodeAcademyDashboard = Schema.decodeUnknownOption(AcademyDashboard);
 const decodeVocabularyList = Schema.decodeUnknownOption(VocabularyList);
 const decodeMistakeNotebook = Schema.decodeUnknownOption(MistakeNotebook);
 
@@ -184,6 +186,13 @@ export const createHttpAcademyClient = ({
           failureOf(await parseJson(response))
         );
       }
+    },
+
+    async getAcademyDashboard() {
+      return requireJson(
+        await api.academy.dashboard.$get(),
+        decodeAcademyDashboard
+      );
     },
 
     async getDailyChallenge() {

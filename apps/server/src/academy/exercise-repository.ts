@@ -5,7 +5,7 @@ import { randomUUID } from "node:crypto";
 
 import type { ExerciseType, GeneratedExercise } from "@fluenshift/contract";
 import { Database, exerciseAttempts, exercises } from "@fluenshift/db";
-import { and, asc, eq, notExists } from "drizzle-orm";
+import { and, asc, desc, eq, notExists } from "drizzle-orm";
 import { Effect } from "effect";
 
 import { CurrentLearner } from "../learner-identity";
@@ -91,6 +91,25 @@ export const createExercises = Effect.fn("ExerciseRepository.createExercises")(
 );
 
 // The Learner's Exercises without an Attempt, oldest first (Grifando's listPending).
+// When the Learner answered and whether each answer was right, newest first: the dashboard's
+// streak and accuracy need no more (Grifando's listAttemptDates, countByUser and recentAccuracy).
+export const listAttemptOutcomes = Effect.fn(
+  "ExerciseRepository.listAttemptOutcomes"
+)(function* () {
+  const database = yield* Database;
+  const learner = yield* CurrentLearner;
+  return yield* database.run((client) =>
+    client
+      .select({
+        attemptedAt: exerciseAttempts.attemptedAt,
+        isCorrect: exerciseAttempts.isCorrect,
+      })
+      .from(exerciseAttempts)
+      .where(eq(exerciseAttempts.learnerId, learner.id))
+      .orderBy(desc(exerciseAttempts.attemptedAt))
+  );
+});
+
 export const listPendingExercises = Effect.fn(
   "ExerciseRepository.listPendingExercises"
 )(function* () {
