@@ -225,7 +225,14 @@
       "slice": "academy-spec",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/exercise-routes.test.ts::POST /api/exercises/[id]/attempts > answers 404 for an unknown exercise and for another user's",
+        "apps/server/src/academy/exercise-service.test.ts::exerciseAttemptService ownership > rejects another user's exercise and leaves the owner's data untouched",
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > answers 404 to another user's turn",
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > ends a session once, and 404s for an unknown or another user's session",
+        "apps/server/src/academy/interview-routes.test.ts::interview routes > reads a session with its turns, and 404s for an unknown or another user's session",
+        "apps/server/src/academy/interview-service.test.ts::interview ownership > hides, refuses to answer and refuses to end another user's session"
+      ]
     },
     {
       "id": "grifando:fix-commit:8dc1a06",
@@ -259,8 +266,8 @@
       "source": "git",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0009",
+      "disposition": "informative",
+      "decision": "adr:0029",
       "targets": []
     },
     {
@@ -288,7 +295,9 @@
       "slice": "academy-spec",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/ai-sdk-trainer.gemini.test.ts::toGeminiSchema > drops array bounds and $schema that Gemini rejects, keeping the rest"
+      ]
     },
     {
       "id": "grifando:fix-commit:218b7b7",
@@ -304,8 +313,8 @@
       "source": "git",
       "class": null,
       "slice": "academy-spec",
-      "disposition": "port-changed",
-      "decision": "adr:0009",
+      "disposition": "drop",
+      "decision": "adr:0029",
       "targets": []
     },
     {
@@ -324,7 +333,10 @@
       "slice": "academy-spec",
       "disposition": "port-changed",
       "decision": "adr:0012",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/trainer-client.test.ts::AI client model choice > answers with gemini-3.5-flash and claude-sonnet-5 unless the environment names a model",
+        "apps/server/src/academy/trainer/trainer-client.test.ts::AI client model choice > tests a key on the light fallback model, not the primary one"
+      ]
     },
     {
       "id": "grifando:fix-commit:cf0c6b6",
@@ -621,7 +633,10 @@
       "slice": "academy-spec",
       "disposition": "port-changed",
       "decision": "adr:0012",
-      "targets": []
+      "targets": [
+        "apps/server/src/academy/trainer/resilience.test.ts::withResilience > retries once on the fallback when the primary is overloaded",
+        "apps/server/src/academy/trainer/resilience.test.ts::withResilience > times out a hanging call and then uses the fallback"
+      ]
     },
     {
       "id": "grifando:issue:78",
@@ -630,7 +645,12 @@
       "slice": "academy-spec",
       "disposition": "port-changed",
       "decision": "adr:0004",
-      "targets": []
+      "targets": [
+        "apps/web/src/features/evaluations/spell-checker.placement.test.ts::SpellChecker mark placement > places a mark at UTF-8 byte offsets that hold its text, otherwise at an occurrence of the text",
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > does not guess an ambiguous occurrence or manufacture absent source text",
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > expands partial words while preserving the exact edit, including UTF-8",
+        "packages/core/src/assessment-localization.test.ts::deterministic assessment localization > never relocates a valid edit to an unrelated adjacent duplicate"
+      ]
     },
     {
       "id": "grifando:spec:1",

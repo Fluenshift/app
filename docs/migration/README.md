@@ -114,7 +114,8 @@ Dispositions:
 - `superseded`: replaced by other rows under an accepted ADR.
 - `drop`: removed under an accepted ADR.
 - `informative`: a row with no behavior to port: a non-normative clause, or, under ADR 0001, an
-  issue or a commit that changes only the build, tests or tooling.
+  issue or a commit that changes only the build, tests or tooling, or, under ADR 0029, a commit
+  that changes only layout, which ADR 0009 keeps out of tests.
 - `pending-decision`: blocked by the open question named in `decision`, until a session
   decides it (ADR 0020). Only these rows may have skipped tests.
 
