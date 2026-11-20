@@ -1,4 +1,4 @@
-import { Context, Effect, Layer, ManagedRuntime, Schema } from "effect";
+import { Context, Effect, Layer, Logger, ManagedRuntime, Schema } from "effect";
 import { Hono } from "hono";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
@@ -135,6 +135,40 @@ describe("Effect edge", () => {
     expect(response.status).toBe(500);
     expect(JSON.parse(text)).toStrictEqual({ error: "Something went wrong." });
     expect(text).not.toContain("private-cause");
+  });
+
+  it("logs an unexpected failure once, with the route's context and the error's name only", async () => {
+    const lines: unknown[] = [];
+    const keepLogs = Logger.layer([
+      Logger.make((options) => {
+        lines.push(Logger.formatStructured.log(options));
+      }),
+    ]);
+    const edge = makeEdge(
+      ManagedRuntime.make(Layer.mergeAll(greeter, keepLogs))
+    );
+    const route = new Hono().get("/greet/:name", (context) =>
+      edge(
+        Greeter.use((service) => service.greet(context.req.param("name"))),
+        {
+          errors,
+          log: "Failed to greet",
+          success: (greeting) => Response.json({ greeting }),
+        }
+      )
+    );
+
+    const failed = await route.request("/greet/defect");
+    const missing = await route.request("/greet/missing");
+
+    expect([failed.status, missing.status]).toEqual([500, 404]);
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toMatchObject({
+      annotations: { error: "Error" },
+      logLevel: "ERROR",
+      message: "Failed to greet",
+    });
+    expect(JSON.stringify(lines)).not.toContain("private-cause");
   });
 
   it("answers an interrupted Effect with a safe internal error", async () => {

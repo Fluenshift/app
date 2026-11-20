@@ -72,6 +72,11 @@ export const makeEdge =
     handlers: {
       readonly errors: EdgeErrors<E>;
       readonly success: (value: A) => Response | Promise<Response>;
+      /**
+       * The context of the one error-level line an unexpected failure logs, with the error's tag
+       * or name only (docs/adr/0026). A route without one logs nothing.
+       */
+      readonly log?: string;
       /** The answer to anything unexpected, when a route keeps its source's; `INTERNAL_ERROR` otherwise. */
       readonly unexpected?: EdgeFailure;
     }
