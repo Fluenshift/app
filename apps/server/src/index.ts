@@ -15,6 +15,7 @@ import { dailyChallenge } from "./academy/daily-challenge";
 import { listPendingExercises } from "./academy/exercise-repository";
 import { submitAttempt } from "./academy/exercise-service";
 import { endInterview, getSession } from "./academy/interview-service";
+import { mistakeNotebook } from "./academy/mistake-notebook";
 import { TrainerClient } from "./academy/trainer/trainer-client";
 import {
   createVocabularyItem,
@@ -70,6 +71,7 @@ const HttpServer = Layer.effectDiscard(
       explainAttempt: explainAttemptFor,
       generateExercises: generateExercisesFor,
       getDailyChallenge: dailyChallenge,
+      getMistakeNotebook: mistakeNotebook,
       evaluateWriting: (writingSample) =>
         evaluateWritingForEndpoint(writingSample, new Date()),
       getEvaluation,
