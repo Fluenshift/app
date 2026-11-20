@@ -109,10 +109,12 @@ when the session ends.
    baseline code wherever it fits the stack; keep algorithms, constants, orderings, limits and
    messages identical; add no behavior.
 5. **Mutate where tests look thin**: break one condition or constant of a ported module,
-   confirm a ported test fails, revert. A survivor is untested baseline behavior: characterize
-   it (step 3). List the mutations you ran in the pull request.
-6. **Write the ledger targets** as `file::full title`, with a script that sets only `targets`:
-   each row's `id` contains the test title, so a text replacement rewrites the `id` too.
+   confirm a ported test fails, revert; `node scripts/migration/mutate.ts` runs a list of them.
+   A survivor is untested baseline behavior: characterize it (step 3). List the mutations you
+   ran in the pull request.
+6. **Write the ledger targets** as `file::full title` with `node scripts/migration/ledger-targets.ts`,
+   which sets only `targets` and only for tests that passed: each row's `id` contains the test
+   title, so a text replacement rewrites the `id` too.
 7. **Run the touched test files and G8**, then push. CI is the full gate: it runs every check,
    G9 and G10 included, in about three minutes, so read its failures instead of running
    `pnpm verify` first. G8 runs here because its fix rewrites the first commit:
@@ -154,8 +156,8 @@ Traps that earlier units paid for:
   after it merges. Until a migration merges, delete its folder and regenerate it after a schema
   change; after, add a new one.
 - Generated files conflict between sibling units. Ledger: keep the union of both sides' rows
-  and targets. Reports and inventories: take theirs, then rerun the scripts. Tables of
-  `docs/migration/BASELINES.md`: edit by hand.
+  and targets (`node scripts/migration/ledger-union.ts <file>...`). Reports and inventories:
+  take theirs, then rerun the scripts. Tables of `docs/migration/BASELINES.md`: edit by hand.
 - Retarget dependent pull requests to `main` before their base branch is deleted
   (`gh api -X PATCH repos/Fluenshift/app/pulls/<pr> -f base=main`): GitHub closes them otherwise.
 - `gh pr edit` fails on gh 2.46. Edit a body with
