@@ -1,4 +1,4 @@
-// A practice set, one question at a time. Ported from Grifando
+// A practice set, one Exercise at a time. Ported from Grifando
 // src/components/exercises/ExercisePractice.tsx (74dbb9f). The Academy client replaces Grifando's
 // fetch and aiFetch; in the local profile no key travels from the browser, so a missing key is
 // the server's AI_KEY_REQUIRED answer.
@@ -16,12 +16,8 @@ import { useEffect, useState } from "react";
 
 import { AcademyRequestError, isKeyRequired } from "./academy-client";
 import type { AcademyClient } from "./academy-client";
-import {
-  AnalyzingStatus,
-  ButtonSpinner,
-  EXERCISE_STEPS,
-} from "./analyzing-status";
-import { ExerciseQuestion } from "./exercise-question";
+import { AttemptForm } from "./attempt-form";
+import { BusyStatus, ButtonSpinner, EXERCISE_STEPS } from "./busy-status";
 import { ExerciseResult } from "./exercise-result";
 import { KeyRequiredNotice } from "./key-required-notice";
 
@@ -190,7 +186,7 @@ export const ExercisePractice = ({
         hasNext={state.queue.length > 0}
         onNext={handleNext}
         result={state.result}
-        userAnswer={answer}
+        learnerAnswer={answer}
       />
     );
   }
@@ -225,7 +221,7 @@ export const ExercisePractice = ({
             )}
           </Button>
           {isGenerating ? (
-            <AnalyzingStatus className="ml-4" steps={EXERCISE_STEPS} />
+            <BusyStatus className="ml-4" steps={EXERCISE_STEPS} />
           ) : null}
         </CardFooter>
       </Card>
@@ -243,7 +239,7 @@ export const ExercisePractice = ({
       </CardHeader>
       <CardContent>
         {current === undefined ? null : (
-          <ExerciseQuestion
+          <AttemptForm
             answer={answer}
             exercise={current.prompt}
             onAnswerChange={setAnswer}

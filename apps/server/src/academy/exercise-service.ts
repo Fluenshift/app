@@ -171,7 +171,7 @@ export const explainAttempt = Effect.fn("ExerciseService.explainAttempt")(
 
     const { explanation } = yield* trainer.explainAttempt({
       exercise: attempt.exercise.promptData,
-      userAnswer: attempt.learnerAnswer,
+      learnerAnswer: attempt.learnerAnswer,
     });
     return explanation;
   }

@@ -35,7 +35,7 @@ const pattern = (
   exampleCorrection: `${overrides.id} correction`,
   exampleOriginal: `${overrides.id} original`,
   fading: false,
-  fromPortuguese: false,
+  l1Transfer: false,
   lastSeenAt: "2026-02-28T12:00:00.000Z",
   masteryLevel: "ACTIVE",
   occurrenceCount: 1,
@@ -64,7 +64,7 @@ describe("/mistakes", () => {
         pattern({
           category: "PREPOSITIONS",
           due: true,
-          fromPortuguese: true,
+          l1Transfer: true,
           id: "depend-on",
           occurrenceCount: 2,
         }),
@@ -101,7 +101,7 @@ describe("/mistakes", () => {
       patterns: [
         pattern({
           category: "PREPOSITIONS",
-          fromPortuguese: true,
+          l1Transfer: true,
           id: "depend-on",
         }),
         pattern({ category: "ARTICLES", id: "a-an" }),
@@ -112,10 +112,10 @@ describe("/mistakes", () => {
     expect(lastMonth).toContain("Prepositions100%");
     expect(lastMonth).not.toContain("Articles50%");
 
-    const fromPortuguese = await textOf("/mistakes?origin=pt", notebook);
-    expect(fromPortuguese).toContain("1 pattern");
-    expect(fromPortuguese).toContain("depend-on original");
-    expect(fromPortuguese).not.toContain("a-an original");
+    const l1TransferOnly = await textOf("/mistakes?origin=pt", notebook);
+    expect(l1TransferOnly).toContain("1 pattern");
+    expect(l1TransferOnly).toContain("depend-on original");
+    expect(l1TransferOnly).not.toContain("a-an original");
 
     expect(await textOf("/mistakes?origin=pt&window=30d", notebook)).toContain(
       "Prepositions100%"
@@ -125,7 +125,7 @@ describe("/mistakes", () => {
         ...notebook,
         patterns: notebook.patterns.map((entry) => ({
           ...entry,
-          fromPortuguese: false,
+          l1Transfer: false,
         })),
       })
     ).toContain("No mistakes flagged as coming from Portuguese yet.");

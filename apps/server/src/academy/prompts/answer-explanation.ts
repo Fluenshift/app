@@ -3,7 +3,7 @@ import type { GeneratedExercise } from "@fluenshift/contract";
 
 export interface ExplainAttemptInput {
   readonly exercise: GeneratedExercise;
-  readonly userAnswer: string;
+  readonly learnerAnswer: string;
 }
 
 export const buildAnswerExplanationSystemPrompt = (): string =>
@@ -20,19 +20,19 @@ Write in English. A short Portuguese contrast is fine when the mistake comes fro
 // `Number.parseInt(answer, 10)` reads it.
 const LEADING_INTEGER = /^\s*[+-]?\d+/u;
 
-const chosenOption = (options: readonly string[], userAnswer: string) => {
-  const index = LEADING_INTEGER.exec(userAnswer)?.[0];
+const chosenOption = (options: readonly string[], learnerAnswer: string) => {
+  const index = LEADING_INTEGER.exec(learnerAnswer)?.[0];
   return index === undefined ? undefined : options[Number(index)];
 };
 
 const describeExercise = (
   exercise: GeneratedExercise,
-  userAnswer: string
+  learnerAnswer: string
 ): string[] => {
   switch (exercise.type) {
     case "MULTIPLE_CHOICE": {
       const chosen =
-        chosenOption(exercise.options, userAnswer) ?? "(no valid option)";
+        chosenOption(exercise.options, learnerAnswer) ?? "(no valid option)";
       return [
         `Options: ${exercise.options.map((option, index) => `${index + 1}. ${option}`).join(" | ")}`,
         `Correct option: ${exercise.options[exercise.correctOptionIndex]}`,
@@ -43,21 +43,21 @@ const describeExercise = (
       return [
         `Sentence: ${exercise.template}`,
         `Accepted answers: ${exercise.acceptableAnswers.join(" | ")}`,
-        `Learner answered: ${userAnswer}`,
+        `Learner answered: ${learnerAnswer}`,
       ];
     }
     case "REWRITE": {
       return [
         `Sentence to rewrite: ${exercise.original}`,
         `Accepted answers: ${exercise.acceptableAnswers.join(" | ")}`,
-        `Learner answered: ${userAnswer}`,
+        `Learner answered: ${learnerAnswer}`,
       ];
     }
     case "TRANSLATION": {
       return [
         `Text to translate: ${exercise.sourceText}`,
         `Accepted answers: ${exercise.acceptableAnswers.join(" | ")}`,
-        `Learner answered: ${userAnswer}`,
+        `Learner answered: ${learnerAnswer}`,
       ];
     }
     default: {
@@ -69,11 +69,11 @@ const describeExercise = (
 
 export const buildAnswerExplanationUserMessage = ({
   exercise,
-  userAnswer,
+  learnerAnswer,
 }: ExplainAttemptInput): string =>
   [
     `Exercise type: ${exercise.type}`,
     `Instruction: ${exercise.instruction}`,
-    ...describeExercise(exercise, userAnswer),
+    ...describeExercise(exercise, learnerAnswer),
     `Answer key note: ${exercise.explanation}`,
   ].join("\n");

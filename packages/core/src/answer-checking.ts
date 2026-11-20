@@ -15,19 +15,19 @@ const normalizeAnswer = (value: string): string =>
 // generator provided. Known tradeoff: a valid rephrasing the generator didn't anticipate reads
 // as incorrect.
 export const isTextAnswerAcceptable = (
-  userAnswer: string,
+  learnerAnswer: string,
   acceptableAnswers: readonly string[]
 ): boolean => {
-  const normalizedUserAnswer = normalizeAnswer(userAnswer);
+  const normalizedLearnerAnswer = normalizeAnswer(learnerAnswer);
   return acceptableAnswers.some(
-    (answer) => normalizeAnswer(answer) === normalizedUserAnswer
+    (answer) => normalizeAnswer(answer) === normalizedLearnerAnswer
   );
 };
 
 // Grifando reads the answer with `Number.parseInt(userAnswer, 10)`, which lint rejects. This
 // reads it the same way: skip leading whitespace, then take an optional sign and the longest
 // run of decimal digits; no digit gives NaN. The replacement lint suggests,
-// `Math.trunc(Number(userAnswer))`, differs: it reads "" as 0, so a blank answer would grade as
+// `Math.trunc(Number(learnerAnswer))`, differs: it reads "" as 0, so a blank answer would grade as
 // option 0, and "1abc" as NaN.
 const parseDecimalInteger = (value: string): number => {
   const digits = /^[+-]?\d+/u.exec(value.trimStart());
@@ -42,11 +42,11 @@ export const isMultipleChoiceCorrect = (
 // Central dispatch so callers never need a type-by-type switch of their own.
 export const evaluateExerciseAnswer = (
   exercise: GeneratedExercise,
-  userAnswer: string
+  learnerAnswer: string
 ): boolean => {
   switch (exercise.type) {
     case "MULTIPLE_CHOICE": {
-      const selectedIndex = parseDecimalInteger(userAnswer);
+      const selectedIndex = parseDecimalInteger(learnerAnswer);
       return isMultipleChoiceCorrect(
         selectedIndex,
         exercise.correctOptionIndex
@@ -55,7 +55,7 @@ export const evaluateExerciseAnswer = (
     case "FILL_BLANK":
     case "REWRITE":
     case "TRANSLATION": {
-      return isTextAnswerAcceptable(userAnswer, exercise.acceptableAnswers);
+      return isTextAnswerAcceptable(learnerAnswer, exercise.acceptableAnswers);
     }
     // Lint requires a default; the cases above are exhaustive, so it cannot be reached.
     default: {

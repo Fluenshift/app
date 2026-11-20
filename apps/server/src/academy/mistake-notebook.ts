@@ -17,12 +17,14 @@ export const mistakeNotebook = Effect.fn("MistakeNotebook.mistakeNotebook")(
   function* () {
     const now = new Date();
     const patterns = yield* listPatterns();
-    const fromPortuguese = yield* listPatterns({ l1TransferOnly: true });
+    const l1TransferPatterns = yield* listPatterns({ l1TransferOnly: true });
     const allTime = yield* countOccurrencesByCategory();
     const last30Days = yield* countOccurrencesByCategory({
       since: new Date(now.getTime() - THIRTY_DAYS_MS),
     });
-    const portuguese = new Set(fromPortuguese.map((pattern) => pattern.id));
+    const l1TransferIds = new Set(
+      l1TransferPatterns.map((pattern) => pattern.id)
+    );
     return {
       breakdown: {
         allTime: computeCategoryBreakdown(allTime),
@@ -34,8 +36,8 @@ export const mistakeNotebook = Effect.fn("MistakeNotebook.mistakeNotebook")(
         exampleCorrection: pattern.exampleCorrection,
         exampleOriginal: pattern.exampleOriginal,
         fading: isFading(pattern, now),
-        fromPortuguese: portuguese.has(pattern.id),
         id: pattern.id,
+        l1Transfer: l1TransferIds.has(pattern.id),
         lastSeenAt: pattern.lastSeenAt.toISOString(),
         masteryLevel: pattern.masteryLevel,
         occurrenceCount: pattern.occurrenceCount,

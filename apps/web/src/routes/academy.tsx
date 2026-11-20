@@ -7,7 +7,7 @@ import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 import {
   FindingTrend,
   ProgressSummary,
-  RecentMistakes,
+  RecentPatterns,
   RecentWriting,
   StreakStatus,
   WeakAreas,
@@ -168,7 +168,7 @@ const AcademyPage = () => {
           >
             Recent mistakes
           </SectionTitle>
-          <RecentMistakes patterns={dashboard.recentPatterns} />
+          <RecentPatterns patterns={dashboard.recentPatterns} />
         </section>
 
         <section>

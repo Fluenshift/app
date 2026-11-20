@@ -189,7 +189,7 @@ export const NotebookPattern = Schema.Struct({
   exampleCorrection: Schema.String,
   exampleOriginal: Schema.String,
   fading: Schema.Boolean,
-  fromPortuguese: Schema.Boolean,
+  l1Transfer: Schema.Boolean,
   id: Schema.String,
   lastSeenAt: Schema.String,
   masteryLevel: MasteryLevelSchema,

@@ -235,8 +235,8 @@ describe("PatternFolding.foldEvaluation", () => {
     expect(flagged).toHaveLength(1);
 
     expect(await run(listPatterns())).toHaveLength(2);
-    const fromPortuguese = await run(listPatterns({ l1TransferOnly: true }));
-    expect(fromPortuguese.map((pattern) => pattern.patternKey)).toEqual([
+    const l1TransferOnly = await run(listPatterns({ l1TransferOnly: true }));
+    expect(l1TransferOnly.map((pattern) => pattern.patternKey)).toEqual([
       "depend-on",
     ]);
   });

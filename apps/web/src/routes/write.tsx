@@ -6,9 +6,9 @@ import { findTechnicalPromptById } from "@fluenshift/core/technical-prompts";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 import { PageHeader, PageShell } from "../features/academy/page-header";
+import { PracticeWriting } from "../features/academy/practice-writing";
+import type { InitialChallenge } from "../features/academy/practice-writing";
 import { sampleLimitsFor } from "../features/academy/sample-limits";
-import { WritingCoach } from "../features/academy/writing-coach";
-import type { InitialChallenge } from "../features/academy/writing-coach";
 
 interface WriteSearch {
   readonly mode?: "daily";
@@ -47,7 +47,7 @@ const WritePage = () => {
   return (
     <PageShell>
       <PageHeader description={heading.description} title={heading.title} />
-      <WritingCoach
+      <PracticeWriting
         initialChallenge={initialChallenge}
         sampleLimits={sampleLimits}
       />

@@ -137,7 +137,7 @@ export const WeakAreas = ({
   );
 };
 
-export const RecentMistakes = ({
+export const RecentPatterns = ({
   patterns,
 }: {
   readonly patterns: AcademyDashboard["recentPatterns"];

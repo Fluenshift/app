@@ -105,6 +105,18 @@ export const messageFor = (error: unknown, fallback: string): string => {
 export const isKeyRequired = (error: unknown): boolean =>
   error instanceof AcademyRequestError && error.code === "AI_KEY_REQUIRED";
 
+/**
+ * What a screen shows for a failed Academy request: Grifando's key notice when the Trainer has no
+ * key, otherwise the route's message or the screen's own fallback.
+ */
+export const failureNotice = (
+  error: unknown,
+  fallback: string
+): { readonly keyRequired: true } | { readonly errorMessage: string } =>
+  isKeyRequired(error)
+    ? { keyRequired: true }
+    : { errorMessage: messageFor(error, fallback) };
+
 const unavailable = () =>
   Promise.reject(new Error("The Academy client is not available"));
 

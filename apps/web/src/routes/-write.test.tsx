@@ -19,7 +19,7 @@ import { createInMemoryEvaluationClient } from "../features/evaluations/in-memor
 import { createAppRouter } from "../router";
 
 // The page's heading, what its sheet's aside shows, and the challenge the route hands
-// WritingCoach (the characterization's initialChallenge prop).
+// PracticeWriting (the characterization's initialChallenge prop).
 const read = async (url: string) => {
   const router = createAppRouter({
     academyClient: createInMemoryAcademyClient({
@@ -288,7 +288,7 @@ describe("/write practice writing", () => {
     ).toHaveValue("");
   });
 
-  it("saves a mistake to vocabulary through the history state", async () => {
+  it("saves an Occurrence to vocabulary through the history state", async () => {
     const { page } = await renderWrite(evaluated);
     await userEvent.click(
       within(page).getByRole("button", { name: "Get feedback" })

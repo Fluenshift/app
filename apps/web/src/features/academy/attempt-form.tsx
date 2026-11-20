@@ -9,7 +9,7 @@ import {
 } from "@fluenshift/ui/components/radio-group";
 import { Textarea } from "@fluenshift/ui/components/textarea";
 
-export const ExerciseQuestion = ({
+export const AttemptForm = ({
   answer,
   exercise,
   onAnswerChange,

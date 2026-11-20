@@ -12,9 +12,9 @@ import { Button } from "@fluenshift/ui/components/button";
 import { Link } from "@tanstack/react-router";
 
 import { SpellChecker } from "../evaluations/spell-checker";
-import { FindingNote, MistakeCard } from "./mistake-card";
+import { FindingNote, OccurrenceNote } from "./occurrence-note";
 
-export const WritingResults = ({
+export const PracticeEvaluation = ({
   evaluation,
   naturalVersion,
   nextStep,
@@ -80,11 +80,11 @@ export const WritingResults = ({
             <div className="border-border border-b">
               {notes.map((note, index) =>
                 "occurrence" in note ? (
-                  <MistakeCard
+                  <OccurrenceNote
                     evaluationId={evaluation.id}
                     index={index}
                     key={note.occurrence.id}
-                    mistake={note.occurrence}
+                    occurrence={note.occurrence}
                   />
                 ) : (
                   <FindingNote
