@@ -355,6 +355,22 @@ const publicView = ({ id, promptData, type }: PendingExercise) => ({
   type,
 });
 
+// What the browser sees of an interview turn: its answer and Evaluation, both null until it is
+// answered, instead of Grifando's writing analysis (docs/adr/0010).
+const interviewTurnView = ({
+  answer,
+  evaluationId,
+  id,
+  order,
+  question,
+}: InterviewSession["turns"][number]) => ({
+  answer,
+  evaluationId,
+  id,
+  order,
+  question,
+});
+
 const decodePeriod = Schema.decodeUnknownOption(ProgressPeriod);
 const decodeCategory = Schema.decodeUnknownOption(ErrorCategory);
 const decodeEvidenceRequest = Schema.decodeUnknownOption(
@@ -773,6 +789,91 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
                 : Response.json({ explanation }),
             unexpected: EXPLANATION_FAILED,
+          }
+        );
+      }
+    )
+    // A new interview with its opening question, asked on the key the request carries
+    // (Grifando's POST /api/interview): the key is resolved before the session is created.
+    .post("/api/interview", (context): Response | Promise<Response> => {
+      const { startInterview } = options;
+      if (startInterview === undefined) {
+        return context.json(notReady("Interviews are not available"), 503);
+      }
+      return edge(
+        forLearner(context.req.raw, startInterview(context.req.raw.headers)),
+        {
+          errors: {
+            ...TRAINER_FAILURES,
+            AIResponseValidationError: () => SOMETHING_WENT_WRONG,
+            DatabaseError: () => SOMETHING_WENT_WRONG,
+          },
+          success: ({ sessionId, turn }) =>
+            Response.json(
+              {
+                sessionId,
+                turn: {
+                  id: turn.id,
+                  order: turn.order,
+                  question: turn.question,
+                },
+              },
+              { status: 201 }
+            ),
+          unexpected: SOMETHING_WENT_WRONG,
+        }
+      );
+    })
+    // The Learner's interview session with its turns in order (Grifando's
+    // GET /api/interview/[id]); another Learner's session reads as missing.
+    .get(
+      "/api/interview/:sessionId",
+      (context): Response | Promise<Response> => {
+        const { getInterviewSession } = options;
+        if (getInterviewSession === undefined) {
+          return context.json(notReady("Interviews are not available"), 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            getInterviewSession(context.req.param("sessionId"))
+          ),
+          {
+            errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            success: (session) =>
+              session === null
+                ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
+                : Response.json({
+                    id: session.id,
+                    status: session.status,
+                    turns: session.turns.map(interviewTurnView),
+                  }),
+            unexpected: SOMETHING_WENT_WRONG,
+          }
+        );
+      }
+    )
+    // Ends the Learner's interview session (Grifando's POST /api/interview/[id]/end). No
+    // Trainer takes part.
+    .post(
+      "/api/interview/:sessionId/end",
+      (context): Response | Promise<Response> => {
+        const { endInterview } = options;
+        if (endInterview === undefined) {
+          return context.json(notReady("Interviews are not available"), 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            endInterview(context.req.param("sessionId"))
+          ),
+          {
+            errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
+            success: (ended) =>
+              ended
+                ? Response.json({ status: "ended" })
+                : Response.json(NOT_FOUND.body, { status: NOT_FOUND.status }),
+            unexpected: SOMETHING_WENT_WRONG,
           }
         );
       }

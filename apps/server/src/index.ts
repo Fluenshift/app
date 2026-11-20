@@ -9,9 +9,11 @@ import { Effect, Layer, Option } from "effect";
 import {
   explainAttemptFor,
   generateExercisesFor,
+  startInterviewFor,
 } from "./academy/academy-requests";
 import { listPendingExercises } from "./academy/exercise-repository";
 import { submitAttempt } from "./academy/exercise-service";
+import { endInterview, getSession } from "./academy/interview-service";
 import { TrainerClient } from "./academy/trainer/trainer-client";
 import {
   createVocabularyItem,
@@ -60,11 +62,13 @@ const HttpServer = Layer.effectDiscard(
       createVocabularyItem,
       deleteEvaluation,
       deleteVocabularyItem,
+      endInterview,
       explainAttempt: explainAttemptFor,
       generateExercises: generateExercisesFor,
       evaluateWriting: (writingSample) =>
         evaluateWritingForEndpoint(writingSample, new Date()),
       getEvaluation,
+      getInterviewSession: getSession,
       getProgressEvidence,
       getProgressSummary,
       limits: config.limits,
@@ -88,6 +92,7 @@ const HttpServer = Layer.effectDiscard(
         provider: model.provider,
         rubricVersion: CURRENT_RUBRIC_VERSION,
       },
+      startInterview: startInterviewFor,
       submitAttempt,
       testTrainerKey: (credentials) =>
         TrainerClient.pipe(
