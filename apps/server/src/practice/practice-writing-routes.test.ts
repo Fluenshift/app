@@ -342,5 +342,11 @@ describe("POST /api/practice-writing", () => {
     expect(await response.json()).toEqual({
       error: "Something went wrong. Please try again.",
     });
+    expect(logged).toContainEqual([
+      expect.objectContaining({
+        annotations: { error: "DatabaseError" },
+        message: "Failed to evaluate practice writing",
+      }),
+    ]);
   });
 });
