@@ -6,8 +6,12 @@ import { Database } from "@fluenshift/db";
 import { ServerConfig, TrainerConfig } from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
 
-import { generateExercisesFor } from "./academy/academy-requests";
+import {
+  explainAttemptFor,
+  generateExercisesFor,
+} from "./academy/academy-requests";
 import { listPendingExercises } from "./academy/exercise-repository";
+import { submitAttempt } from "./academy/exercise-service";
 import { TrainerClient } from "./academy/trainer/trainer-client";
 import {
   createVocabularyItem,
@@ -56,6 +60,7 @@ const HttpServer = Layer.effectDiscard(
       createVocabularyItem,
       deleteEvaluation,
       deleteVocabularyItem,
+      explainAttempt: explainAttemptFor,
       generateExercises: generateExercisesFor,
       evaluateWriting: (writingSample) =>
         evaluateWritingForEndpoint(writingSample, new Date()),
@@ -83,6 +88,7 @@ const HttpServer = Layer.effectDiscard(
         provider: model.provider,
         rubricVersion: CURRENT_RUBRIC_VERSION,
       },
+      submitAttempt,
       testTrainerKey: (credentials) =>
         TrainerClient.pipe(
           Effect.flatMap((client) => client.testKey(credentials))

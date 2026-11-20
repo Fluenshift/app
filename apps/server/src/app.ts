@@ -4,6 +4,7 @@ import { createServer } from "node:http";
 import path from "node:path";
 
 import {
+  AttemptRequest,
   ErrorCategory,
   ExerciseGenerationRequest,
   ProgressEvidenceRequest,
@@ -296,6 +297,20 @@ const EXERCISE_REQUEST = Schema.toStandardSchemaV1(ExerciseGenerationRequest, {
 const NO_PATTERNS = {
   error:
     "No mistake patterns yet \u2014 write something first to get personalized exercises.",
+};
+
+// Grifando's attempt route refuses a body without a valid answer before it reads the Exercise;
+// a body that is not JSON is refused too.
+const ATTEMPT_REQUEST = Schema.toStandardSchemaV1(AttemptRequest, {
+  parseOptions: { errors: "all" },
+});
+// Another Learner's Exercise or Attempt reads as one that does not exist.
+const NOT_FOUND: EdgeFailure = { body: { error: "Not found" }, status: 404 };
+// Grifando's answer when an explanation fails: 502 for an answer the Trainer's schema refuses,
+// 500 for anything else. The grade stays as it was.
+const EXPLANATION_FAILED = {
+  error:
+    "We couldn't explain this answer right now. Your grade is unaffected \u2014 try again.",
 };
 
 // What the browser may see of an Exercise before its Attempt: never the answer or the
@@ -654,6 +669,80 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
               )
         );
     })
+    // Grades one answer to the Learner's Exercise and answers with the whole Exercise, its
+    // answer key included (Grifando's POST /api/exercises/[id]/attempts). No Trainer takes part.
+    .post(
+      "/api/exercises/:exerciseId/attempts",
+      (context): Response | Promise<Response> => {
+        const { submitAttempt } = options;
+        if (submitAttempt === undefined) {
+          return context.json(notReady("Exercises are not available"), 503);
+        }
+        return context.req
+          .json<unknown>()
+          .catch(() => null)
+          .then((body) => ATTEMPT_REQUEST["~standard"].validate(body))
+          .then((result) =>
+            result.issues === undefined
+              ? edge(
+                  forLearner(
+                    context.req.raw,
+                    submitAttempt(
+                      context.req.param("exerciseId"),
+                      result.value.answer
+                    )
+                  ),
+                  {
+                    errors: {
+                      DatabaseError: () => SOMETHING_WENT_WRONG,
+                      NotFoundError: () => NOT_FOUND,
+                    },
+                    success: (graded) => Response.json(graded),
+                    unexpected: SOMETHING_WENT_WRONG,
+                  }
+                )
+              : Response.json(
+                  { error: "Invalid request body", issues: result.issues },
+                  { status: 400 }
+                )
+          );
+      }
+    )
+    // "Explain my answer" on the key the request carries (Grifando's explanation route): the
+    // key is resolved before the Attempt is read, and the explanation never changes the grade.
+    .post(
+      "/api/exercises/:exerciseId/attempts/:attemptId/explanation",
+      (context): Response | Promise<Response> => {
+        const { explainAttempt } = options;
+        if (explainAttempt === undefined) {
+          return context.json(notReady("Exercises are not available"), 503);
+        }
+        return edge(
+          forLearner(
+            context.req.raw,
+            explainAttempt(context.req.raw.headers, {
+              attemptId: context.req.param("attemptId"),
+              exerciseId: context.req.param("exerciseId"),
+            })
+          ),
+          {
+            errors: {
+              ...TRAINER_FAILURES,
+              AIResponseValidationError: () => ({
+                body: EXPLANATION_FAILED,
+                status: 502,
+              }),
+              DatabaseError: () => ({ body: EXPLANATION_FAILED, status: 500 }),
+            },
+            success: (explanation) =>
+              explanation === null
+                ? Response.json(NOT_FOUND.body, { status: NOT_FOUND.status })
+                : Response.json({ explanation }),
+            unexpected: { body: EXPLANATION_FAILED, status: 500 },
+          }
+        );
+      }
+    )
     .post("/api/vocabulary", (context): Response | Promise<Response> => {
       const { createVocabularyItem } = options;
       if (createVocabularyItem === undefined) {

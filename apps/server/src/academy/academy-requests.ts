@@ -3,7 +3,7 @@
 import type { ExerciseGenerationRequest } from "@fluenshift/contract";
 import { Effect } from "effect";
 
-import { generatePracticeSet } from "./exercise-service";
+import { explainAttempt, generatePracticeSet } from "./exercise-service";
 import { resolveTrainerCredentials } from "./trainer/credentials";
 import { TrainerClient } from "./trainer/trainer-client";
 import { TrainerKeyRequiredError } from "./trainer/trainer-errors";
@@ -36,7 +36,14 @@ export const generateExercisesFor = Effect.fn(
   );
 });
 
-export const explainAttemptFor = (
-  _headers: Headers,
-  _input: { readonly attemptId: string; readonly exerciseId: string }
-) => Effect.succeed<string | null>(null);
+// "Explain my answer" on the Learner's key, or null when the Learner has no such Attempt. The key
+// is resolved before the Attempt is read, so a missing key answers first, as in Grifando.
+export const explainAttemptFor = Effect.fn("AcademyRequests.explainAttemptFor")(
+  function* (
+    headers: Headers,
+    input: { readonly attemptId: string; readonly exerciseId: string }
+  ) {
+    const trainer = yield* trainerForRequest(headers);
+    return yield* explainAttempt(trainer, input);
+  }
+);
