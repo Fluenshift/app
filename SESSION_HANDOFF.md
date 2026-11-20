@@ -1,10 +1,10 @@
 # Session handoff
 
-Last updated 2026-11-20, at the end of the tenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Last updated 2026-11-20, at the end of the eleventh agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
 
 ## Work in flight
 
-Nothing besides this handoff, and no issue is open. Phase 5 is done. This session finished Phase 5f: it closed the `academy-spec` rows earlier units built and pinned Grifando #77 and #78 with regression tests (#203, ADR 0029), added the seam gate that keeps the Academy from writing Evaluations (#204), kept practice writing out of Progress (#205, ADR 0030), made deleting an Evaluation rebuild the Mistake Patterns it touched (#206, ADR 0031), and fixed what the phase's `code-review` found (#211).
+Phase 6 started. This session merged the hosted request pipeline (#214, ADR 0032: signed session, `LearnerIdentity.hosted`, `ensureLearner`, the session gate, the static CSP and Grifando's security headers) and `DELETE /api/me` (#216). #218, rate limits, is written and free (`ready-for-agent`): take it first.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -12,18 +12,16 @@ Merged work: `git log --first-parent --oneline main`. The rows that still wait f
 node -e 'const fs=require("fs");const d="docs/migration/parity/";for(const f of fs.readdirSync(d))for(const r of JSON.parse(fs.readFileSync(d+f)).rows)if(r.disposition.startsWith("port")&&r.targets.length===0)console.log(f,r.id)'
 ```
 
-On 2026-11-20 there were 64: `hosted` 52, `academy-spec` 2, and 10 paused end-to-end rows (the 4 dev-proxy cases of `evaluation-http`, the 6 rows of `evaluation-e2e`), which stay open.
+On 2026-11-20 there were 46: `hosted` 34, `academy-spec` 2, and 10 paused end-to-end rows (the 4 dev-proxy cases of `evaluation-http`, the 6 rows of `evaluation-e2e`), which stay open.
 
 ## Next steps
 
-1. **Phase 6** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), which matters once the owners want a public deploy; run `code-review` at its end. The open rows group into these units, each an issue with its rows (`hosted.json` unless named):
-   - The hosted request pipeline, one serial unit: `src/server/session/sessionToken.test.ts`, `currentUser.test.ts`, `getCurrentUserId.test.ts` and `src/proxy.test.ts` (`port-changed`, ADR 0003: the API sets the cookie, and the CSP is a static SPA's).
-   - Rate limits: `src/server/rateLimit.test.ts`, `src/server/clientIp.test.ts`, `src/app/api/rateLimitFirst.characterization.test.ts`, and `academy-spec`'s `grifando:fix-commit:9ba8040` (rate-limit before creating a Learner, fail fast on missing production secrets).
-   - `DELETE /api/me`: `src/app/api/me/route.test.ts` and `me.characterization.test.ts`.
-   - Idle cleanup on the scheduler of ADR 0011: `src/server/domain/privacy/cleanup.test.ts`.
-   - BYOK: `src/lib/aiKeyStore.test.ts`, `src/app/api/ai-key/test/route.test.ts`, `academy-spec`'s `grifando:fix-commit:2a86084` (same-origin `aiFetch`, blocked key storage reported), and the `/settings` page.
-   - Robots and sitemap: `src/app/sitemap.test.ts`.
-   - Grifando's remaining pages: `/explain-code` and `/privacy`.
+1. **Phase 6** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), which matters once the owners want a public deploy; run `code-review` at its end. The open rows group into these units, in this order, each an issue with its rows (`hosted.json` unless named):
+   - Rate limits, #218: `src/server/rateLimit.test.ts`, `src/server/clientIp.test.ts`, the `rateLimitFirst` characterization, the 429 rows of `ai-key/test` and `me`, and `academy-spec`'s `grifando:fix-commit:9ba8040`. It wires `ensureLearner` behind the limiter (Facts, Hosted profile).
+   - Idle cleanup on the scheduler of ADR 0011: `cleanupIdleData` in `src/server/domain/privacy/cleanup.test.ts`, which needs #218's `rate_limit_windows`.
+   - BYOK: `src/lib/aiKeyStore.test.ts`, `academy-spec`'s `grifando:fix-commit:2a86084` (same-origin `aiFetch`, blocked key storage reported), and the `/settings` page.
+   - Grifando's remaining pages: `/privacy`, with its "Delete my data" button (`src/components/privacy/DeleteMyDataButton.tsx`, which calls `DELETE /api/me` and clears the stored key), and `/explain-code`.
+   - Robots and sitemap: `src/app/sitemap.test.ts` (`port-changed`, ADR 0003), once `/privacy` and `/settings` exist, since the sitemap lists them.
    - `docs/deploy.md` (8 rows) is the hosted Docker smoke, paused with the end-to-end tests.
 2. **Phase 7**, then its `code-review`.
 
@@ -35,6 +33,14 @@ On 2026-11-20 there were 64: `hosted` 52, `academy-spec` 2, and 10 paused end-to
 - A Mistake Pattern's state is what `replayPattern` (`@fluenshift/core/pattern-replay`) builds from its Occurrences and the Attempts on its Exercises: deleting an Evaluation rebuilds each pattern it touched that way (`unfoldEvaluation`, called by Learning History's `deleteEvaluation`, ADR 0031). A new path that changes a pattern must be one the replay reproduces, and must stamp its Occurrence or Attempt with the moment it writes on the pattern (`now` in `pattern-folding.ts`, `submitAttempt`), or the next deletion undoes it.
 - Progress reads `listEvaluations({ origin: "work" })`: practice writing stays out of every insight and its evidence (ADR 0030). The Academy dashboard's trend reads practice (ADR 0027).
 - A fix-commit or issue row takes as targets the tests that pin its fix, which may already be targets of the rows that ported them (`docs/migration/README.md`, `targets`).
+
+### Hosted profile
+
+- `createApp` takes `profile: "hosted"` only with its `session` (`SessionSettings` of `@fluenshift/env`). In that profile `securityHeaders` sets the CSP and Grifando's four headers on every answer, `guard` refuses a body over 256 KiB, then `sessionGate` refuses an API request without a valid `ig_session` cookie (401 `SESSION_REQUIRED`), except `GET /api/health`, and mints a cookie on any other answer but `/assets/` (ADR 0032). `index.ts` builds the server per profile with `Layer.unwrap`; the hosted branch provides `LearnerIdentity.hosted` and `SessionConfig.layer`.
+- A hosted test signs its cookie with the secret it gives `SessionConfig`: `hosted-pipeline.test.ts` and `me-route.test.ts` show the setup. Every hosted API request in a test carries that cookie, the health check aside.
+- `sessionCookie(value, maxAgeSeconds, secure)` writes a cookie as Grifando's Next.js did, attribute order included, because characterizations pin the exact strings.
+- `ensureLearner` (`apps/server/src/session/ensure-learner.ts`) creates the Learner's row and moves `last_active_at` at most once an hour; nothing calls it yet. #218 must put it after the rate limit and before the service, in Grifando's order for each write: body validation, the AI key, the limit with its bucket, `ensureUser`, the service. The Trainer routes resolve the key inside their helpers (`academy-requests.ts`, `practice-writing.ts`), and the other write boundaries take no headers, so the limit cannot sit in `app.ts` alone. One design: a per-request `Admission` service that `forLearner` provides beside `CurrentLearner`, backed by an `admit(headers, bucket)` boundary from `index.ts`; the helpers call it after the key and `app.ts` calls it before the other boundaries. A 429 carries `Retry-After`, which `EdgeFailure` cannot hold yet (`edge.ts` is a self-test fixture).
+- The `rate_limit_windows` table is keyed by subject, a Learner or a hashed IP, with no Learner reference, as Grifando's `RateLimitWindow`: say so in #218's ADR, since ADR 0003 scopes every table by Learner.
 
 ### Academy, server
 
@@ -60,9 +66,13 @@ On 2026-11-20 there were 64: `hosted` 52, `academy-spec` 2, and 10 paused end-to
 
 ### Gates and CI
 
+- G10 checks class A and B rows strictly: a port keeps the source's matcher (`toBeNull` stays `toBeNull`, not a count). Run `node scripts/migration/parity-audit.ts --root ../app-baselines` before pushing a class B port.
+- A characterization run (`node scripts/migration/characterization-run.ts grifando`) takes about 3 minutes and needs Docker. A mutation spot-check that survives in pure code usually means a gap the baseline tests leave: characterize it, then fold the new tests into the unit's first commit (reset to it, amend, cherry-pick the later commits), so G8 still sees them red.
+- `node scripts/migration/mutate.ts` matches `from` against the formatted file: oxfmt splits long conditions over lines.
+- Hono middleware: lint refuses `await next()` (`node/callback-return`) and an inline `.then` callback that returns nothing (`promise/always-return`); pass a named arrow to `next().then`, as `guard` does.
 - Run `pnpm lint:effect` before pushing a test that decodes: it warns on `Schema.decodeUnknown*` over a value already typed as the schema's encoded side (use `Schema.decodeExit`), and warnings fail CI.
 - G7 accepts only the path parameters ADR 0023 lists (`PATH_PARAMETERS` in `scripts/check-url-text.ts`); a new one needs an ADR. Filters and prompt choices stay in the SPA's own URL (ADR 0025).
-- G10 audits `port` rows only; a `port-changed` row's differences go in the pull request. A run reports 14 standing class C differences on the Trainer, resilience, key test and OpenRouter rows (listed in #199); say so in the pull request body.
+- G10 audits `port` rows only; a `port-changed` row's differences go in the pull request. A run reports 15 standing class C differences: 14 on the Trainer, resilience, key test and OpenRouter rows (listed in #199), and the route pattern `/:path*` of the `next.config` characterization (#215); say so in the pull request body.
 - CI runs the gate self-tests, about 2 more minutes, when a pull request changes a gate, a file in `SELF_TEST_FIXTURES` (`scripts/gate-selftest.ts`, `apps/server/src/edge.ts` among them), a `package.json`, a `tsconfig` or the lockfile (`GATE_PATHS` in `scripts/ci-changes.ts`).
 - CI flake seen once (PR #157): the end-to-end job hung on "Install the Playwright browser" for over nine minutes. Cancel the run and rerun its failed jobs (`gh run cancel <run>`, then `gh run rerun <run> --failed`).
 - CI, measured on 2026-11-16: a pull request that changes product code takes about 2.3 minutes, one that changes a gate about 2.8, and one that changes only Markdown outside the workspaces runs the static checks and G7 alone. Measure before changing CI again.
