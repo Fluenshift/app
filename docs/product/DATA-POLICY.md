@@ -99,7 +99,13 @@ and this section records what the accepted ADRs decided for it.
 Each Learner is one signed anonymous session cookie: there is no sign-up, login, email or
 profile. Every row belongs to that Learner, in PostgreSQL (ADR 0003, ADR 0017). The same
 fields as in the local profile are stored, under the hosted input caps (ADR 0006), plus the
-rate-limit windows below, kept per Learner and per hashed IP for 2 days (ADR 0011).
+time of each Learner's last write, which the idle cleanup reads, and the rate-limit windows
+below, kept per Learner and per hashed IP for 2 days (ADR 0011).
+
+The cookie is `HttpOnly`, `SameSite=Lax` and, in production, `Secure`, and lasts a year. It is
+signed with the server's `SESSION_SECRET`: changing that secret starts every browser over as a
+new, empty Learner, and the idle cleanup deletes the old Learners' data 90 days after their
+last write (ADR 0032).
 
 ### Keys
 

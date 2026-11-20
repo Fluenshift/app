@@ -27,7 +27,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::next.config security headers > adds nosniff, the referrer policy, the permissions policy and HSTS to every path, without X-Powered-By"
+      ]
     },
     {
       "id": "grifando:characterization:src/proxy.characterization.test.ts::proxy session cookie > mints the session cookie site-wide for a year, Secure in production only",
@@ -36,7 +38,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::proxy session cookie > mints the session cookie site-wide for a year, Secure in production only"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > falls back to an insecure development secret, with a warning, outside production",
@@ -45,7 +49,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/env/src/session.test.ts::getSessionSecret > falls back to an insecure development secret, with a warning, outside production"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > refuses to run in production without SESSION_SECRET",
@@ -54,7 +60,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/env/src/session.test.ts::getSessionSecret > refuses to run in production without SESSION_SECRET"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/session/sessionSecret.characterization.test.ts::getSessionSecret > returns SESSION_SECRET whenever it is set",
@@ -63,7 +71,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "packages/env/src/session.test.ts::getSessionSecret > returns SESSION_SECRET whenever it is set"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/session/sessionToken.characterization.test.ts::sessionToken > rejects a signed token with an extra part, and a signature of another length, without throwing",
@@ -72,7 +82,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/session-token.test.ts::sessionToken > rejects a signed token with an extra part, and a signature of another length, without throwing"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/session/sessionToken.characterization.test.ts::sessionToken > signs an id with the base64url HMAC-SHA256 of the secret",
@@ -81,7 +93,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/session-token.test.ts::sessionToken > signs an id with the base64url HMAC-SHA256 of the secret"
+      ]
     },
     {
       "id": "grifando:deploy-smoke:01",
@@ -417,7 +431,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::hosted request pipeline > answers 401 SESSION_REQUIRED to an /api request without a valid cookie and mints nothing"
+      ]
     },
     {
       "id": "grifando:test:src/proxy.test.ts::proxy > builds the exact production policy, adding 'unsafe-eval' only in dev",
@@ -426,7 +442,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::hosted request pipeline > builds the exact policy of the static single-page application"
+      ]
     },
     {
       "id": "grifando:test:src/proxy.test.ts::proxy > leaves a valid cookie untouched",
@@ -435,7 +453,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::hosted request pipeline > leaves a valid cookie untouched"
+      ]
     },
     {
       "id": "grifando:test:src/proxy.test.ts::proxy > lets /api/cron requests through without a session or a new cookie",
@@ -453,7 +473,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::hosted request pipeline > lets an /api request with a valid cookie through"
+      ]
     },
     {
       "id": "grifando:test:src/proxy.test.ts::proxy > mints a cookie when none is present and forwards it to the same render",
@@ -462,7 +484,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::hosted request pipeline > mints a cookie when none is present, on the answer that serves the application shell"
+      ]
     },
     {
       "id": "grifando:test:src/proxy.test.ts::proxy > replaces tampered and wrong-secret cookies, keeping other cookies",
@@ -471,7 +495,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::hosted request pipeline > replaces tampered and wrong-secret cookies, keeping other cookies"
+      ]
     },
     {
       "id": "grifando:test:src/proxy.test.ts::proxy > sets a nonce CSP on the response and forwards it to the render",
@@ -480,7 +506,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::hosted request pipeline > sets the static CSP on every response, with or without a session"
+      ]
     },
     {
       "id": "grifando:test:src/server/ai/credentials.test.ts::accessErrorForStatus > classifies provider statuses",
@@ -740,7 +768,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/ensure-learner.test.ts::ensureUser > bumps lastActiveAt at most once per hour"
+      ]
     },
     {
       "id": "grifando:test:src/server/session/currentUser.test.ts::ensureUser > creates the user on first write and isolates two sessions",
@@ -749,7 +779,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/ensure-learner.test.ts::ensureUser > creates the user on first write and isolates two sessions"
+      ]
     },
     {
       "id": "grifando:test:src/server/session/currentUser.test.ts::ensureUser > recreates a deleted user on the next write",
@@ -758,7 +790,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/ensure-learner.test.ts::ensureUser > recreates a deleted user on the next write"
+      ]
     },
     {
       "id": "grifando:test:src/server/session/getCurrentUserId.test.ts::getCurrentUserId > returns the id from a valid signed cookie",
@@ -767,7 +801,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/learner-identity.hosted.test.ts::getCurrentUserId > returns the id from a valid signed cookie"
+      ]
     },
     {
       "id": "grifando:test:src/server/session/getCurrentUserId.test.ts::getCurrentUserId > throws MissingSessionError for a missing, tampered or wrong-secret cookie",
@@ -776,7 +812,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/learner-identity.hosted.test.ts::getCurrentUserId > throws MissingSessionError for a missing, tampered or wrong-secret cookie"
+      ]
     },
     {
       "id": "grifando:test:src/server/session/sessionToken.test.ts::sessionToken > mints distinct ids",
@@ -785,7 +823,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/session-token.test.ts::sessionToken > mints distinct ids"
+      ]
     },
     {
       "id": "grifando:test:src/server/session/sessionToken.test.ts::sessionToken > rejects a tampered id, a wrong secret, and junk",
@@ -794,7 +834,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/session-token.test.ts::sessionToken > rejects a tampered id, a wrong secret, and junk"
+      ]
     },
     {
       "id": "grifando:test:src/server/session/sessionToken.test.ts::sessionToken > round-trips a signed id",
@@ -803,7 +845,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/session-token.test.ts::sessionToken > round-trips a signed id"
+      ]
     }
   ]
 }
