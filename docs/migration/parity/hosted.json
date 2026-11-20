@@ -97,7 +97,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/idle-cleanup.test.ts::cleanupIdleData bounds > keeps a user idle exactly 90 days and a rate-limit window exactly 2 days old"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/rateLimit.characterization.test.ts::rate limits > counts every call against the bucket's rules for the user and the client IP's daily ceiling",
@@ -778,7 +780,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/idle-cleanup.test.ts::cleanupIdleData > removes rate-limit windows older than 2 days only"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/privacy/cleanup.test.ts::cleanupIdleData > removes users idle 91 days with their data, keeps 89-day ones",
@@ -787,7 +791,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/server/src/session/idle-cleanup.test.ts::cleanupIdleData > removes users idle 91 days with their data, keeps 89-day ones"
+      ]
     },
     {
       "id": "grifando:test:src/server/domain/privacy/cleanup.test.ts::deleteUserData > deletes the user and their data but not others",
