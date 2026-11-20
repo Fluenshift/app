@@ -342,7 +342,9 @@
       "slice": "academy-http",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/routes/-write.test.tsx::/write > takes its challenge and heading from the query"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/ai/aiErrorResponse.characterization.test.ts::aiErrorResponse guards > carries the FAILED session id of a typed AI error, and only when there is one",

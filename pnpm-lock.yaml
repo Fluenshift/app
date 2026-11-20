@@ -416,6 +416,9 @@ importers:
       '@fluenshift/contract':
         specifier: workspace:*
         version: link:../../packages/contract
+      '@fluenshift/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@fluenshift/ui':
         specifier: workspace:*
         version: link:../../packages/ui

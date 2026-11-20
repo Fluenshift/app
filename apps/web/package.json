@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fluenshift/contract": "workspace:*",
+    "@fluenshift/core": "workspace:*",
     "@fluenshift/ui": "workspace:*",
     "@tanstack/react-router": "catalog:",
     "effect": "catalog:",
