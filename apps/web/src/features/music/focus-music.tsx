@@ -1,6 +1,6 @@
 // Focus Music: a Spotify or YouTube player behind a header button, with the Learner's saved
-// playlists. Ported from Grifando src/components/layout/FocusMusic.tsx (74dbb9f); it ends the
-// primary navigation of both profiles (docs/adr/0039).
+// playlists. Ported from Grifando src/components/layout/FocusMusic.tsx (74dbb9f); it sits in the
+// header of both profiles, beside the primary navigation (docs/adr/0039).
 import { Button } from "@fluenshift/ui/components/button";
 import { Input } from "@fluenshift/ui/components/input";
 import { cn } from "@fluenshift/ui/utils";

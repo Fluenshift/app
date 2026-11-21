@@ -1,7 +1,8 @@
-# 0039. Focus Music ends the primary navigation of both profiles, in a sandboxed frame
+# 0039. Focus Music sits in the header of both profiles, in a sandboxed frame
 
 - Status: Accepted on 2026-11-21 by the session (ADR 0020), with the Phase 6 Focus Music unit
-  (#252).
+  (#252). Decision 1 amended the same day after the pre-cutover review (#267), to say where the
+  player sits: the code kept Grifando's placement, which the first wording did not describe.
 - Phase 6, item 1 (`docs/migration/MIGRATION_PROTOCOL.md`). Grifando's
   `src/components/layout/FocusMusic.tsx` (74dbb9f) has no test at the baseline and ports from
   source (ADR 0025, decision 5); the rows of its link parsers, in `academy-web.json`, were
@@ -31,8 +32,9 @@
 
 ## Decision
 
-1. Focus Music ends the primary navigation in both Deploy Profiles. The root route keeps it
-   mounted, so closing it or changing pages never stops the music, as Grifando #22 required. It
+1. Focus Music sits in the root route's header in both Deploy Profiles, beside the primary
+   navigation and outside it, as Grifando's sat in its site header: on the brand's row on narrow
+   screens, and after the navigation from the `sm` width up. The root route keeps it mounted, so closing it or changing pages never stops the music, as Grifando #22 required. It
    loads no player until the Learner first opens it.
 2. It ports Grifando's component as it was: its copy and roles, Deep Focus as the first
    playlist, the storage keys `focus-music:last-link` and `focus-music:playlists`, and a player
