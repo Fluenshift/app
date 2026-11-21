@@ -4,7 +4,7 @@ Last updated 2026-11-21, at the end of the fifteenth agent session, resumed. Thi
 
 ## Work in flight
 
-This session ran Phase 7, items 1 and 3 (#262: parity 603 verified, 268 terminal, 18 open, 0 blocked; the final audit found no gap), the `code-review` milestone before cutover on the diff since #256 (fixed in #264, #266 and #268), and the audit of item 6 of the definition of done (#270): five auditors read the merged documents against the code. #279 fixed every stale document. Where a document was right and the code wrong, the document stays and an issue holds the fix: #271 to #278. #280 fixed #272, a body over the cap that declares no length.
+This session ran Phase 7, items 1 and 3 (#262: parity 603 verified, 268 terminal, 18 open, 0 blocked; the final audit found no gap), the `code-review` milestone before cutover on the diff since #256 (fixed in #264, #266 and #268), and the audit of item 6 of the definition of done (#270): five auditors read the merged documents against the code. #279 fixed every stale document. Where a document was right and the code wrong, the document stays and an issue holds the fix: #271 to #278. #280 fixed #272, a body over the cap that declares no length, and #282 fixed #271: the Writing Desk folds its Evaluations into the Academy once the Learner has practiced (ADR 0041).
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -17,11 +17,10 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 ## Next steps
 
 1. The issues the audit of #270 opened, each labeled `ready-for-agent`, in this order:
-   - #271: Writing Desk Evaluations never reach the Academy, against ADR 0004, ADR 0014 and ADR 0020. Decide in an ADR what "the Academy is in use" means and what the Writing Desk answers when the Enrichment fails; the issue gives the recommended options.
-   - #273: `/setup` never names the local Trainer's key, and `docker-compose.yml` lost PE's `env_file`.
+   - #273: `/setup` never names the local Trainer's key, and `docker-compose.yml` lost PE's `env_file`. `/setup` and its first test are PE's ported page and test: add the Trainer beside them, as an optional field of `SetupStatus` and its own section, without changing what the ported test asserts. Its comment adds what ADR 0041 changed.
    - #274: the importer of ADR 0018, decision 2. Building it is session work; running it at cutover is the owners'.
    - #275 (fonts and the `hand-note` style), #276 (Mistake Notebook search), #277 (request validation with the contract's schemas), #278 (names against `CONTEXT.md`).
-2. When they are closed, item 6 of the definition of done holds; run the `code-review` milestone again on the diff since the merge of #280.
+2. When they are closed, item 6 of the definition of done holds; run the `code-review` milestone again on the diff since the merge of #281.
 3. Items 2, 4 and 6 of Phase 7, the import run of item 5, and sign-off wait for the owners (Owner steps). The 18 open rows stay open until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
 
 ## Facts no issue records
@@ -58,6 +57,7 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 ### Academy, server
 
 - Explain code is practice writing with a `codeSnippet` (ADR 0038): the route checks it against the Deploy Profile's code cap (2,000 characters hosted, none locally), `evaluatePractice` checks it again before the Judge runs, and only `foldEvaluation` receives it, for the Trainer. `SampleLimits` carries `codeMaxCharacters` for the code sheet. A service test that needs the hosted cap provides a changed `ServerConfig` around the call (`withHostedCodeCap` in `practice-writing-routes.test.ts`).
+- Once the Learner has a practice-origin Evaluation, the Writing Desk folds each Evaluation it stores, on the request's Trainer key or the local profile's configured one, before it answers; with no key it does not, and a failed fold keeps the 201 and logs one `work-enrichment` line (ADR 0041, `apps/server/src/practice/work-enrichment.ts`). The Writing Desk boundary is `evaluateWriting(writingSample, headers)`.
 - Practice writing composes outside the Academy, in `apps/server/src/practice/practice-writing.ts`: `evaluatePractice` runs the Judge with the practice origin, then `foldEvaluation`; ADR 0024 and ADR 0026 set the failure answers. `foldEvaluation` runs in one transaction and refuses a second fold of the same Evaluation, so a failed Enrichment can be retried alone; no route retries it yet. A practice Writing Sample records no Practice Prompt (ADR 0026).
 - The Enrichment runs on every practice Evaluation, even one whose Findings form no Mistake Pattern (ADR 0028). It answers the Findings' entries, the natural version, which the `enrichments` row keeps (`getNaturalVersion` in `enrichment-repository.ts`), and the notes, each an `UNNATURAL` Occurrence of an `UNNATURAL_PHRASING` pattern with a `note_position` and no Finding. The practice writing and interview answers carry `naturalVersion`.
 - A route that calls the Trainer takes it from `trainerForRequest(headers)` (`apps/server/src/academy/academy-requests.ts`): the request headers, else the local profile's configured key, else `TrainerKeyRequiredError`. Each such route has a helper that resolves the key before it reads anything (`generateExercisesFor`, `explainAttemptFor`, `startInterviewFor`, `answerInterviewTurnFor`, `practiceWritingFor`). Its edge answers access errors through `TRAINER_FAILURES` and takes an `unexpected` failure when it keeps its source's 500 message (`SOMETHING_WENT_WRONG`, `EXPLANATION_FAILED`). `NOT_FOUND` is Grifando's 404 body.
