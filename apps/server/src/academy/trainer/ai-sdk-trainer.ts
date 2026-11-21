@@ -173,7 +173,8 @@ export const accessErrorForStatus = (
   if (status === 400 && INVALID_KEY_MESSAGE.test(message)) {
     return new TrainerKeyRejectedError();
   }
-  if (status === 429) {
+  // OpenRouter answers 402 when the key's credits or spending limit run out.
+  if (status === 429 || status === 402) {
     return new TrainerQuotaExceededError();
   }
   if (UNAVAILABLE_STATUSES.has(status)) {
@@ -194,6 +195,11 @@ class UnmappedTrainerFailure extends Schema.TaggedError<
   { readonly brand: unique symbol }
 >()("UnmappedTrainerFailure", { cause: Schema.Unknown }) {}
 
+const inBodyErrorCode = (data: unknown): unknown =>
+  typeof data === "object" && data !== null && "code" in data
+    ? data.code
+    : undefined;
+
 // A failed AI SDK call as the Trainer reports it.
 const trainerFailure = (
   cause: unknown
@@ -207,6 +213,15 @@ const trainerFailure = (
   if (APICallError.isInstance(cause)) {
     if (cause.statusCode === undefined) {
       return new TrainerUnavailableError();
+    }
+    // OpenRouter also reports a failure inside a 200 answer, with its status as the error's
+    // code; one it does not name is the provider's own trouble.
+    if (cause.statusCode === 200) {
+      const code = inBodyErrorCode(cause.data);
+      return (
+        (typeof code === "number" ? accessErrorForStatus(code) : null) ??
+        new TrainerUnavailableError()
+      );
     }
     return (
       accessErrorForStatus(cause.statusCode, cause.message) ??
@@ -239,8 +254,10 @@ export const toGeminiSchema = (schema: Schema.Top): unknown =>
     )
   );
 
+// Gemini's own provider, or a Gemini model through OpenRouter (docs/adr/0035).
 const isGemini = (model: LanguageModel) =>
-  typeof model !== "string" && model.provider.startsWith("google");
+  typeof model !== "string" &&
+  (model.provider.startsWith("google") || model.modelId.startsWith("google/"));
 
 // The structured answer a call asks for: the schema as JSON Schema for the provider, and the
 // schema itself to decode what comes back.

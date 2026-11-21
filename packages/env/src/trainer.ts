@@ -23,12 +23,16 @@ const DEFAULT_GEMINI_MODEL = "gemini-3.5-flash";
 const ANTHROPIC_FALLBACK_MODEL = "claude-haiku-5-5";
 // Lightest current Flash text model; no 3.8 Flash-Lite exists (Google model docs).
 const GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite";
+// Gemini's pins under their OpenRouter ids, so an OpenRouter key runs the same Trainer
+// (docs/adr/0035). Both support structured outputs in OpenRouter's public model list (Nov 2026).
+const OPENROUTER_MODEL = "google/gemini-3.5-flash";
+const OPENROUTER_FALLBACK_MODEL = "google/gemini-3.5-flash-lite";
 
 /**
  * The Trainer's model pins, moved here from Grifando src/server/ai/client.ts (74dbb9f) by
  * docs/adr/0012. Each provider has a primary model, which `ANTHROPIC_MODEL` or `GEMINI_MODEL`
  * may name, and a light fallback model, which the environment never changes. An empty variable
- * names no model.
+ * names no model. OpenRouter's pins, for a visitor's OpenRouter key, are fixed (docs/adr/0035).
  */
 export class TrainerConfig extends Context.Service<
   TrainerConfig,
@@ -70,8 +74,10 @@ export class TrainerConfig extends Context.Service<
         models: {
           anthropic: { fallback: ANTHROPIC_FALLBACK_MODEL, primary: anthropic },
           gemini: { fallback: GEMINI_FALLBACK_MODEL, primary: gemini },
-          // Stub until the OpenRouter pins land.
-          openrouter: { fallback: "", primary: "" },
+          openrouter: {
+            fallback: OPENROUTER_FALLBACK_MODEL,
+            primary: OPENROUTER_MODEL,
+          },
         },
       });
     })

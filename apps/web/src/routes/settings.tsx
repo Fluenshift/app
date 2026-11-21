@@ -1,12 +1,14 @@
 // The visitor's AI key. Ported from Grifando src/app/settings/page.tsx (74dbb9f), in the hosted
 // profile only: the local profile's key lives in the server's configuration, which Setup &
-// privacy explains, so the browser never stores one there (docs/adr/0034).
+// privacy explains, so the browser never stores one there (docs/adr/0034). Only an OpenRouter key
+// runs the Judge, so the page leads with it, and its guide comes first (docs/adr/0035).
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 import { PageHeader, PageShell } from "../features/academy/page-header";
 import { AIKeyForm } from "../features/settings/ai-key-form";
 
+const OPENROUTER_KEYS_URL = "https://openrouter.ai/settings/keys";
 const AI_STUDIO_URL = "https://aistudio.google.com/apikey";
 const ANTHROPIC_CONSOLE_URL = "https://console.anthropic.com/settings/keys";
 
@@ -30,7 +32,7 @@ const ExternalLink = ({
 const SettingsPage = () => (
   <PageShell>
     <PageHeader
-      description="Feedback comes from an AI model you choose, using your own key. A free Gemini key takes about two minutes to get."
+      description="Feedback comes from AI models that run on your own key. An OpenRouter key runs everything; a Gemini or Anthropic key runs only the Academy’s exercises, explanations and interview questions."
       title="Your AI key"
     />
 
@@ -66,6 +68,46 @@ const SettingsPage = () => (
       </div>
 
       <aside className="rounded-card bg-linen space-y-10 px-6 py-8 md:px-8">
+        <section aria-labelledby="openrouter-guide-title" className="space-y-4">
+          <h2 className="text-heading-sm" id="openrouter-guide-title">
+            Get an OpenRouter key
+          </h2>
+          <ol className="text-iron list-decimal space-y-2 pl-5">
+            <li>
+              Open{" "}
+              <ExternalLink href={OPENROUTER_KEYS_URL}>OpenRouter</ExternalLink>{" "}
+              and sign in.
+            </li>
+            <li>Add credits: OpenRouter charges for each request.</li>
+            <li>
+              Create a key, paste it here, choose OpenRouter and press Save
+              &amp; test.
+            </li>
+          </ol>
+        </section>
+
+        <section
+          aria-labelledby="openrouter-guide-pt-title"
+          className="space-y-4"
+          lang="pt-BR"
+        >
+          <h2 className="text-heading-sm" id="openrouter-guide-pt-title">
+            Como pegar uma chave do OpenRouter
+          </h2>
+          <ol className="text-iron list-decimal space-y-2 pl-5">
+            <li>
+              Abra o{" "}
+              <ExternalLink href={OPENROUTER_KEYS_URL}>OpenRouter</ExternalLink>{" "}
+              e entre na sua conta.
+            </li>
+            <li>Adicione créditos: o OpenRouter cobra por pedido.</li>
+            <li>
+              Crie uma chave, cole aqui, escolha OpenRouter e clique em Save
+              &amp; test.
+            </li>
+          </ol>
+        </section>
+
         <section aria-labelledby="gemini-guide-title" className="space-y-4">
           <h2 className="text-heading-sm" id="gemini-guide-title">
             Get a free Gemini key

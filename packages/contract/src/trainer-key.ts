@@ -3,8 +3,15 @@
 // the key, and the server, which reads it. Ported from Grifando src/lib/aiCredentials.ts (74dbb9f).
 import { Schema } from "effect";
 
-/** The providers a visitor's key may be for. */
-export const TRAINER_KEY_PROVIDERS = ["gemini", "anthropic"] as const;
+/**
+ * The providers a visitor's key may be for. Only an OpenRouter key runs the Judge, so it comes
+ * first (docs/adr/0035).
+ */
+export const TRAINER_KEY_PROVIDERS = [
+  "openrouter",
+  "gemini",
+  "anthropic",
+] as const;
 
 export type TrainerKeyProvider = (typeof TRAINER_KEY_PROVIDERS)[number];
 
@@ -13,7 +20,8 @@ export const TRAINER_KEY_HEADER = "x-ai-key";
 
 export const isTrainerKeyProvider = (
   value: unknown
-): value is TrainerKeyProvider => value === "gemini" || value === "anthropic";
+): value is TrainerKeyProvider =>
+  value === "openrouter" || value === "gemini" || value === "anthropic";
 
 /**
  * Body of `POST /api/ai-key/test` (Grifando's src/app/api/ai-key/test/route.ts): a key the

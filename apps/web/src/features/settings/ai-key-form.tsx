@@ -2,7 +2,12 @@
 // src/components/settings/AIKeyForm.tsx (74dbb9f), with its fix 2a86084: a browser that blocks
 // storage gets its own message. The SPA renders nothing on a server, so the form reads the stored
 // key when it mounts; the key test goes through the Academy client, which sends the stored key in
-// the hosted profile (docs/adr/0034).
+// the hosted profile (docs/adr/0034). OpenRouter comes first, since only its key runs the Judge
+// (docs/adr/0035); Grifando offered Gemini first, as its free key ran everything there.
+import {
+  isTrainerKeyProvider,
+  TRAINER_KEY_PROVIDERS,
+} from "@fluenshift/contract";
 import type { TrainerKeyProvider } from "@fluenshift/contract";
 import { Button } from "@fluenshift/ui/components/button";
 import { Card, CardContent, CardFooter } from "@fluenshift/ui/components/card";
@@ -21,9 +26,26 @@ import type { AcademyClient } from "../academy/academy-client";
 import { clearAIKey, getStoredAIKey, saveAIKey } from "./ai-key-store";
 import type { AICredentials } from "./ai-key-store";
 
-const PROVIDER_LABELS: Record<TrainerKeyProvider, string> = {
-  anthropic: "Anthropic",
-  gemini: "Gemini",
+// Each provider's choice, and the line that names a saved key of it.
+const PROVIDER_COPY: Record<
+  TrainerKeyProvider,
+  { readonly label: string; readonly note: string; readonly saved: string }
+> = {
+  anthropic: {
+    label: "Anthropic",
+    note: "— Academy only",
+    saved: "An Anthropic key is saved in this browser.",
+  },
+  gemini: {
+    label: "Gemini",
+    note: "— free key, Academy only",
+    saved: "A Gemini key is saved in this browser.",
+  },
+  openrouter: {
+    label: "OpenRouter",
+    note: "— recommended, runs everything",
+    saved: "An OpenRouter key is saved in this browser.",
+  },
 };
 
 type Status =
@@ -62,7 +84,7 @@ export const AIKeyForm = () => {
     getStoredAIKey()
   );
   const [chosenProvider, setChosenProvider] = useState<TrainerKeyProvider>();
-  const provider = chosenProvider ?? saved?.provider ?? "gemini";
+  const provider = chosenProvider ?? saved?.provider ?? "openrouter";
   const [apiKey, setApiKey] = useState("");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
 
@@ -104,29 +126,25 @@ export const AIKeyForm = () => {
             <RadioGroup
               disabled={testing}
               onValueChange={(value) => {
-                setChosenProvider(
-                  value === "anthropic" ? "anthropic" : "gemini"
-                );
+                if (isTrainerKeyProvider(value)) {
+                  setChosenProvider(value);
+                }
               }}
               value={provider}
             >
-              <Label
-                className="text-foreground cursor-pointer gap-3 text-base"
-                htmlFor="ai-provider-gemini"
-              >
-                <RadioGroupItem id="ai-provider-gemini" value="gemini" />
-                Gemini{" "}
-                <span className="text-muted-foreground">
-                  — recommended, free key
-                </span>
-              </Label>
-              <Label
-                className="text-foreground cursor-pointer gap-3 text-base"
-                htmlFor="ai-provider-anthropic"
-              >
-                <RadioGroupItem id="ai-provider-anthropic" value="anthropic" />
-                Anthropic
-              </Label>
+              {TRAINER_KEY_PROVIDERS.map((id) => (
+                <Label
+                  className="text-foreground cursor-pointer gap-3 text-base"
+                  htmlFor={`ai-provider-${id}`}
+                  key={id}
+                >
+                  <RadioGroupItem id={`ai-provider-${id}`} value={id} />
+                  {PROVIDER_COPY[id].label}{" "}
+                  <span className="text-muted-foreground">
+                    {PROVIDER_COPY[id].note}
+                  </span>
+                </Label>
+              ))}
             </RadioGroup>
           </fieldset>
 
@@ -151,8 +169,7 @@ export const AIKeyForm = () => {
             />
             {saved === null ? null : (
               <p className="text-muted-foreground text-sm">
-                A {PROVIDER_LABELS[saved.provider]} key is saved in this
-                browser.
+                {PROVIDER_COPY[saved.provider].saved}
               </p>
             )}
           </div>
