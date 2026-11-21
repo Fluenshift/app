@@ -321,12 +321,14 @@ const FORBIDDEN: EdgeFailure = {
   status: 403,
 };
 
-// What a hosted route that runs the Judge answers without an OpenRouter key (docs/adr/0035). The
-// Learner reads the message, which names the key the Judge needs.
+// What a hosted route that runs the Judge answers without an OpenRouter key (docs/adr/0035,
+// decision 4). The Learner reads the message, which names the key the Judge needs and where it
+// goes.
 const JUDGE_KEY_REQUIRED: EdgeFailure = {
   body: {
     code: "AI_JUDGE_KEY_REQUIRED",
-    error: "Set up an OpenRouter key to get feedback on your writing.",
+    error:
+      "Set up an OpenRouter key in Settings to get feedback on your writing.",
   },
   status: 401,
 };
@@ -739,16 +741,20 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           })
         );
 
-  // A route that runs the Trainer and the Judge checks the Trainer's key, then, in the hosted
-  // profile, the Judge's: one OpenRouter key serves both (docs/adr/0035).
+  // A route that runs the Trainer and the Judge needs, in the hosted profile, the one key that
+  // serves both: an OpenRouter key (docs/adr/0035). A request without a usable key asks for it,
+  // as an Evaluation does, rather than for any Trainer key (#251). The local profile's Judge runs
+  // on its configured key, and its Trainer key is checked as any Trainer route's.
   const admittedWithKeys = <A, E>(
     request: Request,
     bucket: RateLimitBucket,
     effect: Effect.Effect<A, E, R | CurrentLearner>
-  ) => {
-    const work = admittedWithKey(request, bucket, effect);
-    return withJudgeKey(request, work, work);
-  };
+  ) =>
+    withJudgeKey(
+      request,
+      admittedWithKey(request, bucket, effect),
+      Effect.fail(new JudgeKeyRequiredError())
+    );
 
   // Both evidence routes answer here once they have read a selection, or failed to.
   const evidence = (

@@ -403,6 +403,12 @@ describe("POST /api/ai-key/test", () => {
 // runs it answers for the key before its rate limit, as a Trainer route does.
 describe("the hosted Judge's key", () => {
   const GEMINI_HEADERS = { "x-ai-key": "test-key", "x-ai-provider": "gemini" };
+  // ADR 0035, decision 4: the answer asks for an OpenRouter key in Settings.
+  const JUDGE_KEY_REQUIRED = {
+    code: "AI_JUDGE_KEY_REQUIRED",
+    error:
+      "Set up an OpenRouter key in Settings to get feedback on your writing.",
+  };
   const sample = { writingSample: "I depend of this library." };
   const answer = { answer: "I would split the service." };
   const ANSWER_PATH = "/api/interview/interview-1/turns/turn-1/answer";
@@ -418,12 +424,27 @@ describe("the hosted Judge's key", () => {
     );
 
     expect(keyless.status).toBe(401);
-    expect(await keyless.json()).toStrictEqual({
-      code: "AI_JUDGE_KEY_REQUIRED",
-      error: "Set up an OpenRouter key to get feedback on your writing.",
-    });
+    expect(await keyless.json()).toStrictEqual(JUDGE_KEY_REQUIRED);
     expect(gemini.status).toBe(401);
     expect(keyless.headers.get("x-correlation-id")).not.toBeNull();
+    expect(limitedFor).not.toHaveBeenCalled();
+    expect(reached).not.toHaveBeenCalled();
+  });
+
+  // One OpenRouter key runs both models, so a call that runs both and carries no key asks for
+  // that key, not for any Trainer key (docs/adr/0035, decision 4; #251).
+  it("answers AI_JUDGE_KEY_REQUIRED, uncounted, to practice writing and an interview answer without a key", async () => {
+    const app = hostedApp({ limitRequest: limitWith(Effect.void) });
+
+    const practice = await app.request(
+      request("POST", "/api/practice-writing", sample)
+    );
+    const interview = await app.request(request("POST", ANSWER_PATH, answer));
+
+    expect(practice.status).toBe(401);
+    expect(await practice.json()).toStrictEqual(JUDGE_KEY_REQUIRED);
+    expect(interview.status).toBe(401);
+    expect(await interview.json()).toStrictEqual(JUDGE_KEY_REQUIRED);
     expect(limitedFor).not.toHaveBeenCalled();
     expect(reached).not.toHaveBeenCalled();
   });
