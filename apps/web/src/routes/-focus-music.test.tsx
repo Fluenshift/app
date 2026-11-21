@@ -1,7 +1,7 @@
 // Grifando's Focus Music player, src/components/layout/FocusMusic.tsx (74dbb9f), ported from
 // source under docs/adr/0025, decision 5: no baseline test renders it, so these assert Grifando's
-// copy, roles, storage keys and embed URLs. It ends the primary navigation of both profiles, which
-// the root route keeps mounted, so closing it or changing pages never stops the music (Grifando
+// copy, roles, storage keys and embed URLs. It sits in the header of both profiles, beside the
+// primary navigation, which the root route keeps mounted, so closing it or changing pages never stops the music (Grifando
 // #22), and its player is sandboxed, where Grifando's was not (docs/adr/0039).
 import type { DeployProfile } from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
@@ -95,7 +95,7 @@ afterEach(() => {
 });
 
 describe("Focus Music", () => {
-  it("ends the primary navigation and loads no player until opened", async () => {
+  it("sits in the header beside the primary navigation and loads no player until opened", async () => {
     renderAt("/");
     const button = await screen.findByRole("button", { name: "Focus music" });
 

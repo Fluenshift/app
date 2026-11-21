@@ -6,7 +6,10 @@ import { Config, Context, Effect, Layer, Option } from "effect";
 
 const LOCAL_SITE_URL = "http://localhost:3000";
 
-/** The public origin of the hosted profile, which its robots.txt and sitemap.xml name. */
+/**
+ * The public origin of the hosted profile, which its robots.txt, sitemap.xml and link preview name
+ * (docs/adr/0037, docs/adr/0040).
+ */
 export interface SiteSettings {
   readonly siteUrl: string;
 }
