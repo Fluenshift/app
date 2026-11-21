@@ -2,7 +2,7 @@
 
 One product from two: Prompt Evolution's reproducible evaluation of the English in real text, and Grifando's practice loop built from a learner's own mistakes. `app` is a working name.
 
-The merge is in progress. The plan lives in [`docs/migration/`](./docs/migration/), the seam decisions in [`docs/adr/`](./docs/adr/), and the rules for agents in [`AGENTS.md`](./AGENTS.md).
+The merge is done (ADR 0044): its plan, ledger and characterization tests stay in git history, at 8a379e2. The decisions live in [`docs/adr/`](./docs/adr/), the product documents in [`docs/product/`](./docs/product/), and the rules for agents in [`AGENTS.md`](./AGENTS.md).
 
 ## Requirements
 

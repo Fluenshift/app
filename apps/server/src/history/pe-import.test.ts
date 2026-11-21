@@ -1,6 +1,7 @@
 // The one-time import of PE's local Learning History (docs/adr/0018, decision 2). Its input,
 // fixtures/pe-local.db, is what PE's own code wrote at its pin: four Evaluations, six Findings and
-// two Suggestions, after a fifth Evaluation was deleted (migration/fixtures/pe/local-database.ts).
+// two Suggestions, after a fifth Evaluation was deleted. The script that wrote it, and how to run
+// it again, stay in git history: `git show 8a379e2:migration/fixtures/pe/local-database.ts`.
 import { copyFile, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";

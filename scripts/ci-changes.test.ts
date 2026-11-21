@@ -24,21 +24,12 @@ describe("ci-changes", () => {
     );
   });
 
-  it("treats the ledger as code, since G9 reads it", () => {
-    assert.deepEqual(classify(["docs/migration/parity/academy-http.json"]), {
-      code: true,
-      gates: false,
-    });
-  });
-
   it("runs the gate self-tests when a gate, its configuration or the toolchain changes", () => {
     for (const file of [
       ".github/workflows/ci.yml",
       ".husky/pre-commit",
       ".node-version",
       ".oxlintrc.json",
-      "docs/migration/baselines.json",
-      "docs/migration/inventory/pe.json",
       "mise.toml",
       "apps/server/package.json",
       "apps/server/vitest.config.ts",
@@ -54,7 +45,7 @@ describe("ci-changes", () => {
       "pnpm-lock.yaml",
       "pnpm-workspace.yaml",
       "scripts/check-gates.ts",
-      "scripts/migration/parity-check.ts",
+      "scripts/check-url-text.ts",
     ])
       assert.deepEqual(classify([file]), { code: true, gates: true }, file);
   });
