@@ -1,12 +1,14 @@
 # Session handoff
 
-Last updated 2026-11-21, at the end of the seventeenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Last updated 2026-11-21, at the end of the eighteenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
 
 ## Work in flight
 
-This session ran the `code-review` milestone before cutover on the diff since 0025877, the six pull requests that closed the previous review's issues, and closed what it found: the ported `/write` test keeps its expected key `initialChallenge`, and `headingFor`'s parameter and ADR 0006's status say what #300 changed (#307, #311); a type test pins that `readBody` itself refuses a body schema that differs from the declared body (#308, #312); and the PE importer refuses a file with no Evaluations, so a wrong file cannot use up the one import (#309, #313). It also found three CodeQL `js/redos` alerts, open since 2026-11-14, on patterns ported from PE. Two of them took exponential time on a crafted Writing Sample before the Judge runs, which in the hosted profile would let one request hold the server's only process. #310 removed the backtracking without changing a result (#306). No issue or pull request is open.
+This session ran the `code-review` milestone on the diff since 5f0fae7, the four pull requests that closed the previous review's issues (#310 to #313). Neither axis found wrong behavior: a differential test of `readShellLine` against PE's pattern found no mismatch on about 101.8 million generated lines, and both timing tests fail on the old patterns. #316 corrected a timing note and two names (#315). No issue or pull request is open.
 
-The review's judgement calls that no unit took, so that the next review need not raise them again: one shared rate formatter for the copies in `dashboard.tsx`, `writing-desk.tsx` and `progress.tsx`; one shared `InputLimits` fixture for the seven copies in the server's route tests; named types for the Trainer shape of `setup-status.ts` and the counts of `pe-import.ts`; the daily challenge member of `InitialPracticePrompt` derived from the contract's `DailyChallenge`; and a test that `index.ts` passes its profile to `setupStatusOf`.
+On 2026-11-21 Jhefferson said that the owners, Jhefferson and Levy, now try the product and give feedback. Next steps, item 1, says how a session takes it.
+
+The reviews' judgement calls that no unit took, so that the next review need not raise them again: one shared rate formatter for the copies in `dashboard.tsx`, `writing-desk.tsx` and `progress.tsx`; one shared `InputLimits` fixture for the seven copies in the server's route tests; named types for the Trainer shape of `setup-status.ts` and the counts of `pe-import.ts`; the daily challenge member of `InitialPracticePrompt` derived from the contract's `DailyChallenge`; a test that `index.ts` passes its profile to `setupStatusOf`; the names `commandAt`, `afterValue` and `afterAssignment` in `shell-line.ts`, and its seven `new Int32Array(length + 2).fill(...)` lines; the name `SchemaParameter` in `request-body.test.ts`; and a timing test for the `env` pattern, which no crafted input reaches through `hasCommandEvidence`.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -18,8 +20,9 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 
 ## Next steps
 
-1. Before cutover, run the `code-review` milestone again on what changed since 5f0fae7, the end of the range this session's review covered, and list the open CodeQL alerts (`gh api 'repos/Fluenshift/app/code-scanning/alerts?state=open'`); none was open after #310.
-2. Items 2, 4 and 6 of Phase 7, the import run of item 5, and sign-off wait for the owners (Owner steps). The 18 open rows stay open until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
+1. **Owner feedback.** It arrives as issues labeled `needs-triage` in `Fluenshift/app`, or in a session's chat, which the session files as such an issue first. Triage every open `needs-triage` issue before other work, oldest first: edit it into a unit (the rows and files it touches, a `lane:` label), remove `needs-triage`, and take it or label it `ready-for-agent`; or close it with the reason. Decide what the feedback leaves open, as any other question (ADR 0020). A change to product behavior, to scope or to a ported test's expected value gets an ADR whose status line names the owner who asked, and the rows it changes become `port-changed` under it. Done when no open issue carries `needs-triage`.
+2. Before cutover, run the `code-review` milestone again on what changed since dbfb563, the end of the range this session's review covered, and list the open CodeQL alerts (`gh api 'repos/Fluenshift/app/code-scanning/alerts?state=open'`); none was open on 2026-11-21.
+3. Items 2, 4 and 6 of Phase 7, the import run of item 5, and sign-off wait for the owners (Owner steps). Sign-off needs every row terminal, so the 18 open rows hold it up until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
 
 ## Facts no issue records
 
@@ -35,11 +38,12 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 - tsdown builds two entries, so `dist/` holds `index.mjs`, the importer's `import-pe.mjs` and a shared chunk; whatever copies the server copies the whole directory.
 - The import records itself in `pe_imports`, one row per Learner, written in the import's transaction, and every later run, dry or not, refuses once the row exists (#296). Only deleting that row lets the import run again.
 - The importer refuses a PE file with no Evaluations, dry run or not, before it records anything (#309).
+- An owner who tries the importer before cutover points `DATA_DIRECTORY` at a scratch directory: a real import into `./.data` makes the import at cutover refuse.
 - The importer's fixture, `apps/server/src/history/fixtures/pe-local.db`, was written by PE's own code at the pin: `migration/fixtures/pe/local-database.ts` holds the script and how to rerun it. Tests copy it into a temporary directory first: SQLite writes `-shm` and `-wal` files beside a WAL database even when it opens it read-only.
 
 ### Protected Technical Content
 
-- `packages/core/src/shell-line.ts` reads the command and arguments of a line as PE's shell-line pattern matched them, in linear time (#306); its header gives the pattern and the order in which the pattern tries its choices. `shell-line.test.ts` pins 42 lines whose expected values PE's pattern computed. To pin another line, run the pattern from that header outside the repository: in a test file, CodeQL would raise `js/redos` again.
+- `packages/core/src/shell-line.ts` reads the command and arguments of a line as PE's shell-line pattern matched them, in linear time (#306); its header gives the pattern and the order in which the pattern tries its choices. `shell-line.test.ts` pins 42 lines whose expected values PE's pattern computed. To pin another line, run the pattern from that header outside the repository: in a test file, CodeQL would raise `js/redos` again. Check a change to the reader the same way, against the pattern on millions of generated lines over names, `=`, both quotes, backslashes, whitespace and line terminators, as the review of #315 did.
 - `protected-content.test.ts` times `findProtectedTechnicalContent` on two crafted lines, with a budget of one second. A new pattern that repeats a group whose characters its neighbor also matches needs the same check.
 
 ### Hosted profile
