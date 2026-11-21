@@ -1,8 +1,10 @@
 // The Academy's own navigation on its screens. Ported from Grifando
-// src/components/layout/NavLinks.tsx (74dbb9f): Overview opens /academy (docs/adr/0025), and the
-// entries whose screens wait for Phase 6 (Explain code, Key) are left out until they exist.
+// src/components/layout/NavLinks.tsx (74dbb9f): Overview opens /academy (docs/adr/0025), Explain
+// code is left out until its screen exists, and Key shows in the hosted profile only, where the
+// browser holds the key (docs/adr/0034).
+import type { DeployProfile } from "@fluenshift/contract";
 import { cn } from "@fluenshift/ui/utils";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useRouteContext } from "@tanstack/react-router";
 import { ChevronDown } from "lucide-react";
 import { useId, useState } from "react";
 
@@ -17,22 +19,33 @@ const NAV_LINKS = [
   { label: "Vocabulary", to: "/vocabulary" },
 ] as const;
 
+const KEY_LINK = { label: "Key", to: "/settings" } as const;
+
+const linksOf = (deployProfile: DeployProfile) =>
+  deployProfile === "hosted" ? [...NAV_LINKS, KEY_LINK] : NAV_LINKS;
+
 const isActive = (pathname: string, to: string): boolean =>
   pathname === to || pathname.startsWith(`${to}/`);
 
 // Desktop: a row of pills where the linen pill marks the active route.
-// Mobile: eight tabs don't fit, so the row collapses into a disclosure that names
+// Mobile: the tabs don't fit, so the row collapses into a disclosure that names
 // the current page and opens the full list.
 export const AcademyNav = () => {
   const pathname = useLocation({ select: (location) => location.pathname });
+  const links = linksOf(
+    useRouteContext({
+      from: "__root__",
+      select: (context) => context.deployProfile,
+    })
+  );
   const [open, setOpen] = useState(false);
   const listId = useId();
-  const current = NAV_LINKS.find((link) => isActive(pathname, link.to));
+  const current = links.find((link) => isActive(pathname, link.to));
 
   return (
     <nav aria-label="Academy">
       <ul className="hidden flex-wrap gap-1 pt-5 pb-1 md:flex">
-        {NAV_LINKS.map((link) => {
+        {links.map((link) => {
           const active = isActive(pathname, link.to);
           return (
             <li key={link.to}>
@@ -77,7 +90,7 @@ export const AcademyNav = () => {
           hidden={!open}
           id={listId}
         >
-          {NAV_LINKS.map((link) => {
+          {links.map((link) => {
             const active = isActive(pathname, link.to);
             return (
               <li

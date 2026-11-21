@@ -1,5 +1,6 @@
 // The only module that talks to the server: the HTTP Evaluation client, over Hono's typed client,
-// and the HTTP Academy client beside it (docs/adr/0025). The Evaluation client is ported from PE
+// the HTTP Academy client beside it (docs/adr/0025), and the Deploy Profile the SPA reads at
+// startup (docs/adr/0034). The Evaluation client is ported from PE
 // apps/web/src/features/evaluations/http-evaluation-client.ts (5e831bb). Every answer is decoded
 // with its contract (docs/adr/0007), and a Progress selection travels in a request body, never in
 // the URL (docs/adr/0008).
@@ -9,11 +10,13 @@ import {
   AcademyDashboard,
   AttemptExplanation,
   DailyChallenge,
+  DeployProfileStatus,
   Evaluation,
   EvaluationSubmissionResult,
   EvaluationSummary,
   GradedAttempt,
   InterviewAnswerResult,
+  KeyTestResult,
   MistakeNotebook,
   PendingExerciseList,
   PracticeWritingResult,
@@ -45,11 +48,13 @@ import {
  * fetch for the routes that call the Trainer in the hosted profile: it attaches the stored key in
  * its two headers, and nowhere else, never in a URL, a body or a log (docs/adr/0012). Ported from
  * Grifando src/lib/aiFetch.ts (74dbb9f), with its fix 2a86084: same-origin paths only, so the key
- * never reaches another host.
+ * never reaches another host. `send` is the fetch that sends the request, the browser's unless a
+ * client was given its own.
  */
 export const aiFetch = (
   input: string,
-  init?: RequestInit
+  init?: RequestInit,
+  send: typeof globalThis.fetch = globalThis.fetch
 ): Promise<Response> => {
   if (!input.startsWith("/") || input.startsWith("//")) {
     return Promise.reject(
@@ -63,8 +68,19 @@ export const aiFetch = (
   const headers = new Headers(init?.headers);
   headers.set(TRAINER_PROVIDER_HEADER, credentials.provider);
   headers.set(TRAINER_KEY_HEADER, credentials.apiKey);
-  return fetch(input, { ...init, headers });
+  return send(input, { ...init, headers });
 };
+
+// The fetch of the Trainer's calls in the hosted profile. Hono's client hands fetch a path, which
+// aiFetch checks; anything else is refused as another origin would be.
+const keyedFetch =
+  (send?: typeof globalThis.fetch): typeof globalThis.fetch =>
+  (input, init) =>
+    typeof input === "string"
+      ? aiFetch(input, init, send)
+      : Promise.reject(
+          new Error("aiFetch only accepts same-origin paths like /api/...")
+        );
 
 interface HttpEvaluationClientOptions {
   readonly fetch?: typeof globalThis.fetch;
@@ -74,11 +90,6 @@ interface HttpAcademyClientOptions extends HttpEvaluationClientOptions {
   /** In the hosted profile the Trainer calls carry the browser's AI key (docs/adr/0034). */
   readonly deployProfile?: DeployProfile;
 }
-
-/** The Deploy Profile the server runs in (docs/adr/0034). Stub until the route answers. */
-export const readDeployProfile = (
-  _options: HttpEvaluationClientOptions = {}
-): Promise<DeployProfile> => Promise.resolve("local");
 
 interface ApiResponse {
   readonly json: () => Promise<unknown>;
@@ -93,6 +104,7 @@ const ApiFailureBody = Schema.Struct({
 });
 
 const decodeFailure = Schema.decodeUnknownOption(ApiFailureBody);
+const decodeDeployProfile = Schema.decodeUnknownOption(DeployProfileStatus);
 const decodeEvaluation = Schema.decodeUnknownOption(Evaluation);
 const decodeSubmission = Schema.decodeUnknownOption(EvaluationSubmissionResult);
 const decodeSummaries = Schema.decodeUnknownOption(
@@ -112,6 +124,7 @@ const decodeAttemptExplanation = Schema.decodeUnknownOption(AttemptExplanation);
 const decodePracticeWriting = Schema.decodeUnknownOption(PracticeWritingResult);
 const decodeStartedInterview = Schema.decodeUnknownOption(StartedInterview);
 const decodeInterviewAnswer = Schema.decodeUnknownOption(InterviewAnswerResult);
+const decodeKeyTest = Schema.decodeUnknownOption(KeyTestResult);
 
 /** What a failed Academy answer says: its code and the message its route wrote for the Learner. */
 const AcademyFailureBody = Schema.Struct({
@@ -160,6 +173,25 @@ const requireJson = async <A>(
     decode(payload),
     () => new EvaluationRequestError(response)
   );
+};
+
+/**
+ * The Deploy Profile the server runs in, read once at startup (docs/adr/0034). An answer that
+ * fails or does not decode reads as the local profile, which never sends a key from the browser.
+ */
+export const readDeployProfile = async ({
+  fetch,
+}: HttpEvaluationClientOptions = {}): Promise<DeployProfile> => {
+  const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
+  try {
+    const response = await api["deploy-profile"].$get();
+    const status = response.ok
+      ? decodeDeployProfile(await parseJson(response))
+      : Option.none();
+    return Option.isSome(status) ? status.value.deployProfile : "local";
+  } catch {
+    return "local";
+  }
 };
 
 // Hono's client puts a path parameter into the URL as it is, so the identity is encoded here.
@@ -241,15 +273,22 @@ export const createHttpEvaluationClient = ({
 };
 
 export const createHttpAcademyClient = ({
+  deployProfile = "local",
   fetch,
 }: HttpAcademyClientOptions = {}): AcademyClient => {
   const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
+  // The calls that reach the Trainer, Grifando's aiFetch calls: in the hosted profile they carry
+  // the browser's key, and no other call does (docs/adr/0012, docs/adr/0034).
+  const trainer =
+    deployProfile === "hosted"
+      ? hc<AppType>("/", { fetch: keyedFetch(fetch) }).api
+      : api;
 
   return {
     async answerInterviewTurn(sessionId, turnId, answer) {
       // The route reads its body itself, so the typed client takes no JSON for it.
       return academyJson(
-        await api.interview[":sessionId"].turns[":turnId"].answer.$post(
+        await trainer.interview[":sessionId"].turns[":turnId"].answer.$post(
           {
             param: {
               sessionId: encodeURIComponent(sessionId),
@@ -299,7 +338,7 @@ export const createHttpAcademyClient = ({
 
     async explainAttempt(exerciseId, attemptId) {
       const { explanation } = await academyJson(
-        await api.exercises[":exerciseId"].attempts[
+        await trainer.exercises[":exerciseId"].attempts[
           ":attemptId"
         ].explanation.$post({
           param: {
@@ -314,7 +353,7 @@ export const createHttpAcademyClient = ({
 
     async generateExercises(request) {
       const { exercises } = await academyJson(
-        await api.exercises.$post({ json: request }),
+        await trainer.exercises.$post({ json: request }),
         decodePendingExercises
       );
       return exercises;
@@ -359,7 +398,10 @@ export const createHttpAcademyClient = ({
     },
 
     async startInterview() {
-      return academyJson(await api.interview.$post(), decodeStartedInterview);
+      return academyJson(
+        await trainer.interview.$post(),
+        decodeStartedInterview
+      );
     },
 
     async submitAttempt(exerciseId, answer) {
@@ -378,14 +420,17 @@ export const createHttpAcademyClient = ({
       );
     },
 
-    // Stub until the key test is wired.
-    testAIKey() {
-      return Promise.resolve("works");
+    async testAIKey() {
+      const { status } = await academyJson(
+        await trainer["ai-key"].test.$post(),
+        decodeKeyTest
+      );
+      return status;
     },
 
     async writePractice(writingSample) {
       return academyJson(
-        await api["practice-writing"].$post({ json: { writingSample } }),
+        await trainer["practice-writing"].$post({ json: { writingSample } }),
         decodePracticeWriting
       );
     },

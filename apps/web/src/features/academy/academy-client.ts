@@ -16,6 +16,8 @@ import type {
   VocabularyItemRequest,
 } from "@fluenshift/contract";
 
+import { MissingAIKeyError } from "../settings/ai-key-store";
+
 export interface AcademyClient {
   /** One answer to an interview turn, evaluated as practice writing (ADR 0010, ADR 0024). */
   readonly answerInterviewTurn: (
@@ -104,9 +106,13 @@ export const messageFor = (error: unknown, fallback: string): string => {
     : fallback;
 };
 
-/** Whether a failure asks the Learner to set up a Trainer key. */
+/**
+ * Whether a failure asks the Learner to set up a Trainer key: the hosted browser holds none to
+ * send, or the server found none (ADR 0034).
+ */
 export const isKeyRequired = (error: unknown): boolean =>
-  error instanceof AcademyRequestError && error.code === "AI_KEY_REQUIRED";
+  error instanceof MissingAIKeyError ||
+  (error instanceof AcademyRequestError && error.code === "AI_KEY_REQUIRED");
 
 /**
  * What a screen shows for a failed Academy request: Grifando's key notice when the Trainer has no
