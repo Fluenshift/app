@@ -93,7 +93,7 @@ Grifando's `SPEC.md` it comes from and the ADRs that changed it.
 
 ## Hosted profile
 
-The hosted profile replaces Grifando's public site (ADR 0003). It is built in Phase 6 of the
+The hosted profile replaces Grifando's public site (ADR 0003). It was built in Phase 6 of the
 migration.
 
 | ID | Requirement | Source |

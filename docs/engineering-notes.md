@@ -84,11 +84,10 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 
 ## Jhefferson's machine
 
-- `$F` is `/home/jheff/projects/personal/fluenshift`. `$F/app-verify/protocol-review` is an old checkout, outside the product.
+- `$F` is `/home/jheff/projects/personal/fluenshift`; `$F/app` is the only checkout of this repository.
 - Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-app/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
 - The interactive `grep` is ugrep, so one-liners call `/usr/bin/grep`.
 - `git rebase` signs by default and gpg times out: run `git -c commit.gpgsign=false rebase origin/main`, and abort a rebase that already stopped on a signature before rerunning it.
-- Outside the repository, `$F/app-baselines/worktrees/grifando-run/node_modules` holds Grifando's packages as its baseline run installed them, Next.js 16.4.5 included: read a framework's behavior there when a port depends on it, as #265 read how Next.js wrote metadata.
-- mise holds Bun 1.4.0, PE's pinned Bun, at `~/.local/share/mise/installs/bun/1.4.0/bin`; the default `bun` is newer. Rebuilding the PE import fixture uses it.
+- mise holds Bun 1.4.0, PE's pinned Bun, at `~/.local/share/mise/installs/bun/1.4.0/bin`; the default `bun` is newer. Rebuilding the PE import fixture needs it, with PE cloned at its pin (5e831bb).
 - Google Chrome is installed (`/usr/bin/google-chrome`): Playwright's `channel: "chrome"` can check a third-party player outside the repository, as #252 did for the sandbox.
-- A Postgres container from an earlier hand check, `fs-unit-pg`, listens on `127.0.0.1:55432` (user `app`, password `pw`, database `app`). Reuse it for hosted hand checks, or remove it with `docker rm -f fs-unit-pg`.
+- For a hosted hand check, start Postgres 17 on a loopback port: `docker run -d --name fs-unit-pg -e POSTGRES_USER=app -e POSTGRES_PASSWORD=pw -e POSTGRES_DB=app -p 127.0.0.1:55432:5432 postgres:17-alpine`, then remove it with `docker rm -f fs-unit-pg`.
