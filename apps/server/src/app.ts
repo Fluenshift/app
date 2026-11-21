@@ -393,6 +393,17 @@ const guard =
     return next().then(markApi);
   };
 
+// A file of the web build with its headers, or a 404 when it cannot be read.
+const serveFile = (
+  context: HonoContext,
+  file: string,
+  headers: Record<string, string>
+) =>
+  readFile(file).then(
+    (body) => context.body(body, 200, headers),
+    () => context.text("Not Found", 404)
+  );
+
 /**
  * Answers every GET that no API route took. Only files under `assets/` of the web build are
  * served, and the path is never decoded, so no request reaches a file outside that directory.
@@ -421,14 +432,10 @@ const webFallback = (
     if (!assetPath.startsWith(`${root}${path.sep}`)) {
       return context.text("Not Found", 404);
     }
-    return readFile(assetPath).then(
-      (asset) =>
-        context.body(asset, 200, {
-          "cache-control": "public, max-age=31536000, immutable",
-          "content-type": getMimeType(assetPath) ?? "application/octet-stream",
-        }),
-      () => context.text("Not Found", 404)
-    );
+    return serveFile(context, assetPath, {
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-type": getMimeType(assetPath) ?? "application/octet-stream",
+    });
   };
 };
 
@@ -437,14 +444,10 @@ const ogImage = (webDistPath: string): Handler => {
   const card = path.resolve(webDistPath, `.${OG_IMAGE_PATH}`);
 
   return (context) =>
-    readFile(card).then(
-      (image) =>
-        context.body(image, 200, {
-          "cache-control": "public, max-age=86400",
-          "content-type": "image/png",
-        }),
-      () => context.text("Not Found", 404)
-    );
+    serveFile(context, card, {
+      "cache-control": "public, max-age=86400",
+      "content-type": "image/png",
+    });
 };
 
 const asBuilt = (html: string) => html;
