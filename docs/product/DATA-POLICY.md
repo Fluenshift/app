@@ -57,8 +57,9 @@ routed to the Judge's pinned model (`RUBRIC.md`) with `store: false`, no tools, 
 conversation state (ADR 0012). The provider receives only that sample, the rubric
 instructions, and structural annotations.
 
-When the Learner uses the Academy, the Trainer's provider (Anthropic or Gemini, or OpenRouter
-in the hosted profile, which routes to Gemini's models; ADR 0012, ADR 0035) receives:
+Once the Learner uses the Academy, from their first practice-origin Writing Sample on (ADR 0041),
+the Trainer's provider (Anthropic or Gemini, or OpenRouter in the hosted profile, which routes to
+Gemini's models; ADR 0012, ADR 0035) receives:
 
 - to enrich an Evaluation: the whole Writing Sample, of either origin, its Findings, and any
   Explain Code snippet;
