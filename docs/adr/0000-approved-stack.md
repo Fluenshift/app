@@ -24,11 +24,11 @@ units.
 | Lint and format | oxlint (type-aware, Effect preset), oxlint-tsgolint and oxfmt. No ESLint: typescript-eslint requires TypeScript below 6.1 |
 | Backend | Hono on `@hono/node-server`; one process serves the API and the static SPA |
 | Server logic | Effect (services, Layer, Config, Redacted, tagged errors) with `@effect/platform-node` |
-| Validation and contract | Effect Schema everywhere, in a shared contract package; `@hono/standard-validator` at the edge. No Zod in code (it may remain as an AI SDK peer) |
+| Validation and contract | Effect Schema everywhere, in a shared contract package; at the edge each route checks its body with its contract schema and declares it to the typed client (ADR 0042 replaced `@hono/standard-validator`). No Zod in code (it may remain as an AI SDK peer) |
 | Front end | SPA: Vite, React and TanStack Router; the Hono `hc` client in one API module; landing page and OG image static at build |
 | UI | Tailwind, shadcn, Base UI and lucide |
 | Persistence | Postgres with Drizzle ORM and drizzle-kit inside an Effect service; PGlite for tests and local mode (ADR 0017) |
-| AI | AI SDK (`ai`, `@ai-sdk/google`, `@ai-sdk/anthropic`, `@ai-sdk/openai`, `@openrouter/ai-sdk-provider`) inside the Effect services `Judge` and `Trainer` (ADR 0012) |
+| AI | AI SDK (`ai`, `@ai-sdk/google`, `@ai-sdk/anthropic`, `@openrouter/ai-sdk-provider`) inside the Effect services `Judge` and `Trainer` (ADR 0012; ADR 0042 dropped the unused `@ai-sdk/openai`) |
 | Tests | Vitest with `@effect/vitest`; Playwright for E2E |
 | Container | A slim Node image pinned by digest, single process, non-root |
 | Git hooks | husky |
