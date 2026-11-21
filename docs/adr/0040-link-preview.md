@@ -1,7 +1,8 @@
 # 0040. The shell carries Grifando's link preview, and no landing page is prerendered
 
 - Status: Accepted on 2026-11-21 by the session (ADR 0020), with the Phase 6 landing page and
-  Open Graph image unit (#253).
+  Open Graph image unit (#253). Decision 4 amended the same day after the pre-cutover review
+  (#265), to add the tags Next.js wrote for the Twitter card.
 - Phase 6, item 3 (`docs/migration/MIGRATION_PROTOCOL.md`: "landing page and OG image generated
   at build time"), and ADR 0000 ("landing page and OG image static at build"). Grifando's
   metadata in `src/app/layout.tsx` and its card in `src/app/opengraph-image.tsx` (74dbb9f) have
@@ -38,8 +39,10 @@
    committed as `apps/web/public/og-image.png`, which every build copies to its root.
 4. The hosted server adds the card's tags before the `</head>` of the shell it serves, as
    Next.js wrote them: `og:image` at `SITE_URL` followed by `/og-image.png`, then its type, size
-   and alt text. It serves `/og-image.png` with no session cookie, as Grifando's matcher left the
-   card. The local profile, on loopback only, does neither.
+   and alt text; then the Twitter card's `twitter:image` at the same URL, its alt text, type and
+   size, because Grifando's Twitter card declared no image and Next.js 16.4.5 fills one from the
+   Open Graph images. It serves `/og-image.png` with no session cookie, as Grifando's matcher
+   left the card. The local profile, on loopback only, does neither.
 
 ## Consequences
 
