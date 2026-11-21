@@ -17,15 +17,15 @@ interface WriteSearch {
 
 const routeApi = getRouteApi("/write");
 
-const headingFor = (challenge: InitialPracticePrompt | undefined) => {
-  if (challenge?.promptType === "DAILY_CHALLENGE") {
+const headingFor = (practicePrompt: InitialPracticePrompt | undefined) => {
+  if (practicePrompt?.promptType === "DAILY_CHALLENGE") {
     return {
       description:
         "Answer the prompt in your own words. Mistakes you make here feed your review.",
       title: "Today’s challenge",
     };
   }
-  if (challenge?.promptType === "TECHNICAL") {
+  if (practicePrompt?.promptType === "TECHNICAL") {
     return {
       description:
         "Explain it the way you would to a teammate — clear beats fancy.",
