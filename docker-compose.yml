@@ -12,6 +12,11 @@ services:
     user: "${FLUENSHIFT_UID:-1000}:${FLUENSHIFT_GID:-1000}"
     ports:
       - "127.0.0.1:3001:3000"
+    # The keys of the Judge and the Trainer, as PE's compose read them; the file is optional and
+    # never part of the image.
+    env_file:
+      - path: apps/server/.env
+        required: false
     environment:
       DATA_DIRECTORY: /data/pglite
       DATA_DISPLAY_PATH: ${FLUENSHIFT_DATA_DIR:-./.data}/pglite
