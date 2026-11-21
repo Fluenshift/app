@@ -410,7 +410,8 @@ export const categoryAbilities = pgTable(
     category: text("category").notNull(),
     id: text("id").primaryKey(),
     learnerId: text("learner_id").notNull(),
-    rating: doublePrecision("rating").notNull().default(1000),
+    // Category Ability, whose column keeps Grifando's name (#278).
+    ability: doublePrecision("rating").notNull().default(1000),
     updatedAt: moment("updated_at").notNull().defaultNow(),
   },
   (table) => [
