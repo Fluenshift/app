@@ -1,14 +1,37 @@
-// Ported from PE apps/web/src/components/header.tsx (5e831bb).
-import { Link } from "@tanstack/react-router";
+// Ported from PE apps/web/src/components/header.tsx (5e831bb). Setup & privacy speaks for the
+// local profile only; in the hosted profile the "Key settings" and "Privacy" links of Grifando's
+// site footer (src/components/layout/SiteFooter.tsx, 74dbb9f) take its place (docs/adr/0036).
+import type { DeployProfile } from "@fluenshift/contract";
+import { Link, useRouteContext } from "@tanstack/react-router";
+
+const PRODUCT_LINKS = [
+  { exact: true, label: "Writing Desk", to: "/" },
+  { exact: false, label: "History", to: "/evaluations" },
+  { exact: true, label: "Progress", to: "/progress" },
+  { exact: false, label: "Academy", to: "/academy" },
+] as const;
+
+const LOCAL_LINKS = [
+  { exact: true, label: "Setup & privacy", to: "/setup" },
+] as const;
+
+const HOSTED_LINKS = [
+  { exact: true, label: "Key settings", to: "/settings" },
+  { exact: true, label: "Privacy", to: "/privacy" },
+] as const;
+
+const linksOf = (deployProfile: DeployProfile) => [
+  ...PRODUCT_LINKS,
+  ...(deployProfile === "hosted" ? HOSTED_LINKS : LOCAL_LINKS),
+];
 
 const Header = () => {
-  const links = [
-    { exact: true, label: "Writing Desk", to: "/" },
-    { exact: false, label: "History", to: "/evaluations" },
-    { exact: true, label: "Progress", to: "/progress" },
-    { exact: false, label: "Academy", to: "/academy" },
-    { exact: true, label: "Setup & privacy", to: "/setup" },
-  ] as const;
+  const links = linksOf(
+    useRouteContext({
+      from: "__root__",
+      select: (context) => context.deployProfile,
+    })
+  );
 
   return (
     <header className="bg-background/95 border-b">
