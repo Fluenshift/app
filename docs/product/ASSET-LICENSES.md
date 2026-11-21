@@ -1,9 +1,10 @@
 # Bundled asset licenses
 
 QR-08: every bundled font, icon and visual asset has a documented license. The production
-bundle contains no font files, images, logos or third-party runtime requests. Typography falls
-back to the system font stack until the faces of the visual system (ADR 0009) are bundled,
-each with its row here; graphs are CSS.
+bundle contains no font files, images or logos, and makes no third-party runtime request until
+the Learner opens Focus Music, which loads the Spotify or YouTube player they chose (ADR 0039).
+Typography falls back to the system font stack until the faces of the visual system (ADR 0009)
+are bundled, each with its row here; graphs are CSS.
 
 | Asset | Source | Version | License |
 | --- | --- | --- | --- |

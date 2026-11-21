@@ -139,3 +139,11 @@ redirects Setup & privacy, which states the local profile's facts, to it (ADR 00
 Grifando's data is not migrated. For at least 30 days before cutover the old site shows the
 date and what happens to the data, and its "Delete my data" keeps working; after cutover its
 database is kept read-only for 30 days, then deleted (ADR 0018).
+
+## Focus Music, in both profiles
+
+Focus Music sends nothing until the Learner opens it. Then the browser loads the Spotify or
+YouTube player the Learner chose straight from that service, which receives the request as it
+receives any embedded player's, with its own cookies when the Learner is logged in to it. The
+saved playlists and the last link played stay in the browser's storage; the server never
+receives or stores them (ADR 0039).
