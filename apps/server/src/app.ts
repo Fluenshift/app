@@ -626,7 +626,7 @@ const INTERVIEW_ANSWER_REQUEST = Schema.toStandardSchemaV1(
 );
 // Grifando's answer when the analysis of a writing fails for a reason the Learner cannot act on
 // (src/server/domain/writing/writingCoachService.ts, 74dbb9f).
-const ANALYSIS_FAILURE_MESSAGE =
+const ENRICHMENT_FAILURE_MESSAGE =
   "We couldn't analyze this writing right now. Your text has not been lost \u2014 you can try again.";
 
 const safelyLogEvaluation = (
@@ -1299,7 +1299,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                       EnrichmentFailedError: ({ evaluationId }) => ({
                         body: {
                           evaluationId,
-                          message: ANALYSIS_FAILURE_MESSAGE,
+                          message: ENRICHMENT_FAILURE_MESSAGE,
                           status: "failed",
                         },
                         status: 200,
@@ -1412,7 +1412,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                     EnrichmentFailedError: ({ evaluationId }) => ({
                       body: {
                         evaluationId,
-                        message: ANALYSIS_FAILURE_MESSAGE,
+                        message: ENRICHMENT_FAILURE_MESSAGE,
                         status: "failed",
                       },
                       status: 201,
