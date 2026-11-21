@@ -204,11 +204,27 @@ export const ProgressEvidence = Schema.Struct({
 });
 export type ProgressEvidence = typeof ProgressEvidence.Type;
 
+/**
+ * The local profile's Trainer as `/setup` shows it: the provider and model of the key the server
+ * holds, or that it holds none (docs/adr/0012, #273).
+ */
+export const TrainerSetup = Schema.Union([
+  Schema.Struct({
+    configured: Schema.Literal(true),
+    model: Schema.String,
+    provider: Schema.String,
+  }),
+  Schema.Struct({ configured: Schema.Literal(false) }),
+]);
+export type TrainerSetup = typeof TrainerSetup.Type;
+
 export const SetupStatus = Schema.Struct({
   configured: Schema.Boolean,
   dataLocation: Schema.String,
   model: Schema.String,
   provider: Schema.String,
   rubricVersion: Schema.String,
+  // The local profile's Trainer; the hosted profile takes the visitor's key instead.
+  trainer: Schema.optionalKey(TrainerSetup),
 });
 export type SetupStatus = typeof SetupStatus.Type;

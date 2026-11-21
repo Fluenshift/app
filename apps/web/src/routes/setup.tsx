@@ -15,25 +15,51 @@ const SetupPage = () => {
       </h1>
 
       <div className="mt-5 grid overflow-hidden rounded-2xl border md:grid-cols-[minmax(0,2fr)_minmax(18rem,3fr)]">
-        <section aria-labelledby="provider-heading" className="p-5 md:border-r">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-sm font-semibold" id="provider-heading">
-              Provider
-            </h2>
-            <p className="text-sm font-semibold">
-              {setup.configured ? "Ready" : "Needs setup"}
+        <div className="md:border-r">
+          <section aria-labelledby="provider-heading" className="p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-sm font-semibold" id="provider-heading">
+                Provider
+              </h2>
+              <p className="text-sm font-semibold">
+                {setup.configured ? "Ready" : "Needs setup"}
+              </p>
+            </div>
+            <p className="text-muted-foreground mt-2 text-sm">
+              {setup.provider} · {setup.model}
             </p>
-          </div>
-          <p className="text-muted-foreground mt-2 text-sm">
-            {setup.provider} · {setup.model}
-          </p>
-          {!setup.configured && (
-            <p className="text-muted-foreground mt-4 text-xs leading-5">
-              Set <code>OPENROUTER_API_KEY</code> in the server environment,
-              then restart.
-            </p>
+            {!setup.configured && (
+              <p className="text-muted-foreground mt-4 text-xs leading-5">
+                Set <code>OPENROUTER_API_KEY</code> in the server environment,
+                then restart.
+              </p>
+            )}
+          </section>
+          {setup.trainer !== undefined && (
+            <section aria-labelledby="trainer-heading" className="border-t p-5">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-sm font-semibold" id="trainer-heading">
+                  Trainer
+                </h2>
+                <p className="text-sm font-semibold">
+                  {setup.trainer.configured ? "Ready" : "Needs setup"}
+                </p>
+              </div>
+              {setup.trainer.configured ? (
+                <p className="text-muted-foreground mt-2 text-sm">
+                  {setup.trainer.provider} · {setup.trainer.model}
+                </p>
+              ) : (
+                <p className="text-muted-foreground mt-4 text-xs leading-5">
+                  Set <code>ANTHROPIC_API_KEY</code>, or{" "}
+                  <code>GEMINI_API_KEY</code> with{" "}
+                  <code>AI_PROVIDER=gemini</code>, in the server environment,
+                  then restart.
+                </p>
+              )}
+            </section>
           )}
-        </section>
+        </div>
 
         <section
           aria-labelledby="privacy-heading"
@@ -47,6 +73,12 @@ const SetupPage = () => {
               Nothing is sent while you type. Evaluating sends the full sample
               to {setup.provider}.
             </li>
+            {setup.trainer?.configured === true && (
+              <li>
+                The Academy sends practice writing to {setup.trainer.provider},
+                and once you have practiced, every Evaluation too.
+              </li>
+            )}
             <li>
               Evaluations stay on this device at{" "}
               <code>{setup.dataLocation}</code> until you delete them. Local
