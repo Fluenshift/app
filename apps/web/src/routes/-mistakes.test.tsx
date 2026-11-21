@@ -5,7 +5,8 @@
 // the time range and origin filters it applies from its own URL.
 import type { MistakeNotebook, NotebookPattern } from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import { createInMemoryAcademyClient } from "../features/academy/in-memory-academy-client";
@@ -129,5 +130,60 @@ describe("/mistakes", () => {
         })),
       })
     ).toContain("No mistakes flagged as coming from Portuguese yet.");
+  });
+});
+
+// The text of each pattern the page lists.
+const shown = () =>
+  within(screen.getByRole("region", { name: /Patterns/u }))
+    .getAllByRole("listitem")
+    .map((item) => item.textContent ?? "");
+
+// ADR 0020 keeps Grifando's searchable Mistake Notebook (SPEC §5.2), which Grifando's code never
+// built (#276). The query narrows the patterns the page shows and never enters its URL (ADR 0008).
+describe("Mistake Notebook search", () => {
+  it("narrows the patterns to those whose example or category matches, without touching the URL", async () => {
+    const history = createMemoryHistory({ initialEntries: ["/mistakes"] });
+    render(
+      <RouterProvider
+        router={createAppRouter({
+          academyClient: createInMemoryAcademyClient({
+            mistakeNotebook: {
+              breakdown: { allTime: [], last30Days: [] },
+              patterns: [
+                pattern({
+                  category: "PREPOSITIONS",
+                  exampleOriginal: "It depends of the release.",
+                  id: "depend-on",
+                }),
+                pattern({
+                  category: "VERB_TENSE",
+                  exampleOriginal: "Yesterday I goed home.",
+                  id: "past-tense-go",
+                }),
+              ],
+            },
+          }),
+          evaluationClient: createInMemoryEvaluationClient(),
+          history,
+        })}
+      />
+    );
+    const search = await screen.findByRole("searchbox", {
+      name: "Search patterns",
+    });
+    const user = userEvent.setup();
+
+    await user.type(search, "GOED");
+    const byExample = shown();
+    await user.clear(search);
+    await user.type(search, "preposition");
+    const byCategory = shown();
+
+    expect(byExample).toHaveLength(1);
+    expect(byExample[0]).toContain("Yesterday I goed home.");
+    expect(byCategory).toHaveLength(1);
+    expect(byCategory[0]).toContain("It depends of the release.");
+    expect(history.location.search).toBe("");
   });
 });
