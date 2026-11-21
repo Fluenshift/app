@@ -1,7 +1,6 @@
 import path from "node:path";
 
 import { NodeRuntime } from "@effect/platform-node";
-import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
 import { Database } from "@fluenshift/db";
 import {
   ClientIpConfig,
@@ -53,7 +52,7 @@ import { ensureLearner } from "./session/ensure-learner";
 import { IdleCleanup } from "./session/idle-cleanup";
 import { limitRequest } from "./session/rate-limit";
 import type { RateLimitBucket } from "./session/rate-limit";
-import { trainerSetupOf } from "./trainer-setup";
+import { setupStatusOf } from "./setup-status";
 
 // What one deploy profile gives the routes: its name, and the hosted profile's session, rate
 // limits and Learner rows (docs/adr/0032, docs/adr/0033).
@@ -120,17 +119,12 @@ const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
         },
         runtime: { runPromiseExit: Effect.runPromiseExitWith(services) },
         serveWeb: config.nodeEnv === "production",
-        setup: {
-          configured: model.configured,
+        setup: setupStatusOf({
           dataLocation,
-          model: model.model,
-          provider: model.provider,
-          rubricVersion: CURRENT_RUBRIC_VERSION,
-          // The hosted profile holds no Trainer key: the visitor brings one (docs/adr/0012).
-          ...(config.profile === "local"
-            ? { trainer: trainerSetupOf(trainerSettings) }
-            : {}),
-        },
+          judge: model,
+          profile: config.profile,
+          trainer: trainerSettings,
+        }),
         startInterview: startInterviewFor,
         submitAttempt,
         testTrainerKey: (credentials) =>
