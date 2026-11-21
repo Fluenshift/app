@@ -154,3 +154,11 @@
   letter-spacing: -0.01em;
   line-height: 1.55;
 }
+
+/* Hand-drawn note beside the hero call to action: slanted serif italic (Grifando, 74dbb9f). */
+.hand-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  transform: rotate(-4deg);
+}
