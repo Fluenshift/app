@@ -17,6 +17,7 @@ export {
   learners,
   mistakePatterns,
   occurrences,
+  peImports,
   rateLimitWindows,
   suggestions,
   vocabularyItems,

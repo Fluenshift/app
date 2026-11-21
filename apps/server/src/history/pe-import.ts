@@ -4,8 +4,10 @@
 // checks every row against what the product stores, then copies each Evaluation with its Findings
 // and Suggestions for the local Learner, in PE's insertion order and in one transaction, so a
 // failure imports nothing. A dry run reads and checks the same way and writes nothing. Both report
-// the same counts, and the import is accepted only when they match. A run refuses while the
-// product holds any Evaluation of the file, so the history is never imported twice.
+// the same counts, and the import is accepted only when they match. The import records itself in
+// the same transaction, and a run refuses once an import is recorded, or while the product holds
+// any Evaluation of the file: the history is never imported twice, even after the Learner deleted
+// what an import wrote.
 //
 // The import copies and runs no model: the Academy folds none of the imported Evaluations, and
 // Progress keeps them in Rubric Version 1's own segment, apart from the provisional version.
@@ -26,10 +28,12 @@ import {
   evaluations,
   findings,
   learners,
+  peImports,
   suggestions,
 } from "@fluenshift/db";
 import type { DatabaseError, DrizzleClient } from "@fluenshift/db";
 import { ServerConfig } from "@fluenshift/env";
+import { eq } from "drizzle-orm";
 import { Effect, Predicate, Result, Schema, SchemaIssue } from "effect";
 
 import { LOCAL_LEARNER_ID } from "../learner-identity";
@@ -353,6 +357,18 @@ const heldCount = (
 // The IDs of the rows an insert wrote, as the product answers them.
 type WrittenRows = Promise<readonly { readonly id: number }[]>;
 
+// What an earlier import of a PE database wrote for the local Learner, if one ran.
+const previousImport = (client: DrizzleClient) =>
+  client
+    .select({
+      evaluations: peImports.evaluationCount,
+      findings: peImports.findingCount,
+      suggestions: peImports.suggestionCount,
+    })
+    .from(peImports)
+    .where(eq(peImports.learnerId, LOCAL_LEARNER_ID))
+    .then(([row]) => row);
+
 const insertFindings = (
   client: DrizzleClient,
   rows: readonly PeFinding[]
@@ -478,6 +494,19 @@ const writeHistory = (
           suggestions: 0,
         })
       )
+      // The record of this import, so that no later run imports the history again.
+      .then((written) =>
+        Promise.all([
+          written,
+          transaction.insert(peImports).values({
+            evaluationCount: written.evaluations,
+            findingCount: written.findings,
+            learnerId: LOCAL_LEARNER_ID,
+            suggestionCount: written.suggestions,
+          }),
+        ] as const)
+      )
+      .then(([written]) => written)
   );
 
 /**
@@ -492,6 +521,12 @@ export const importPeHistory = Effect.fn("PeImport.importPeHistory")(
     if (held > 0) {
       return yield* new PeImportError({
         message: `the product already holds ${held} of the ${history.length} Evaluations of this PE database: the import ran before`,
+      });
+    }
+    const previous = yield* database.run(previousImport);
+    if (previous !== undefined) {
+      return yield* new PeImportError({
+        message: `the product imported a PE database before (${previous.evaluations} Evaluations, ${previous.findings} Findings and ${previous.suggestions} Suggestions): the import runs once`,
       });
     }
     if (options.dryRun) {
