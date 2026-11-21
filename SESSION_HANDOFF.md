@@ -1,10 +1,12 @@
 # Session handoff
 
-Last updated 2026-11-21, at the end of the sixteenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Last updated 2026-11-21, at the end of the seventeenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
 
 ## Work in flight
 
-This session closed the last two issues of the audit of item 6 of the definition of done (#270): #274, the one-time importer of PE's local Evaluations (#289, ADR 0018, decision 2), and #277, request bodies checked with the contract's schemas and declared to Hono's typed client (#290, ADR 0042). It then ran the `code-review` milestone before cutover on the diff since the merge of #281 (99b2318), opened an issue for each finding (#291 to #296), and closed all six: #291 (#298), #294 (#299), #292 (#300), #295 (#301), #293 (#302) and #296 (#304). No issue or pull request is open.
+This session ran the `code-review` milestone before cutover on the diff since 0025877, the six pull requests that closed the previous review's issues, and closed what it found: the ported `/write` test keeps its expected key `initialChallenge`, and `headingFor`'s parameter and ADR 0006's status say what #300 changed (#307, #311); a type test pins that `readBody` itself refuses a body schema that differs from the declared body (#308, #312); and the PE importer refuses a file with no Evaluations, so a wrong file cannot use up the one import (#309, #313). It also found three CodeQL `js/redos` alerts, open since 2026-11-14, on patterns ported from PE. Two of them took exponential time on a crafted Writing Sample before the Judge runs, which in the hosted profile would let one request hold the server's only process. #310 removed the backtracking without changing a result (#306). No issue or pull request is open.
+
+The review's judgement calls that no unit took, so that the next review need not raise them again: one shared rate formatter for the copies in `dashboard.tsx`, `writing-desk.tsx` and `progress.tsx`; one shared `InputLimits` fixture for the seven copies in the server's route tests; named types for the Trainer shape of `setup-status.ts` and the counts of `pe-import.ts`; the daily challenge member of `InitialPracticePrompt` derived from the contract's `DailyChallenge`; and a test that `index.ts` passes its profile to `setupStatusOf`.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -16,7 +18,7 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 
 ## Next steps
 
-1. The `code-review` milestone before cutover has run (this session). Before cutover, run it again on what changed since 0025877, the end of the range it reviewed.
+1. Before cutover, run the `code-review` milestone again on what changed since 5f0fae7, the end of the range this session's review covered, and list the open CodeQL alerts (`gh api 'repos/Fluenshift/app/code-scanning/alerts?state=open'`); none was open after #310.
 2. Items 2, 4 and 6 of Phase 7, the import run of item 5, and sign-off wait for the owners (Owner steps). The 18 open rows stay open until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
 
 ## Facts no issue records
@@ -32,7 +34,13 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 
 - tsdown builds two entries, so `dist/` holds `index.mjs`, the importer's `import-pe.mjs` and a shared chunk; whatever copies the server copies the whole directory.
 - The import records itself in `pe_imports`, one row per Learner, written in the import's transaction, and every later run, dry or not, refuses once the row exists (#296). Only deleting that row lets the import run again.
+- The importer refuses a PE file with no Evaluations, dry run or not, before it records anything (#309).
 - The importer's fixture, `apps/server/src/history/fixtures/pe-local.db`, was written by PE's own code at the pin: `migration/fixtures/pe/local-database.ts` holds the script and how to rerun it. Tests copy it into a temporary directory first: SQLite writes `-shm` and `-wal` files beside a WAL database even when it opens it read-only.
+
+### Protected Technical Content
+
+- `packages/core/src/shell-line.ts` reads the command and arguments of a line as PE's shell-line pattern matched them, in linear time (#306); its header gives the pattern and the order in which the pattern tries its choices. `shell-line.test.ts` pins 42 lines whose expected values PE's pattern computed. To pin another line, run the pattern from that header outside the repository: in a test file, CodeQL would raise `js/redos` again.
+- `protected-content.test.ts` times `findProtectedTechnicalContent` on two crafted lines, with a budget of one second. A new pattern that repeats a group whose characters its neighbor also matches needs the same check.
 
 ### Hosted profile
 
@@ -95,6 +103,8 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 - G7 accepts only the path parameters ADR 0023 lists (`PATH_PARAMETERS` in `scripts/check-url-text.ts`); a new one needs an ADR. Filters and prompt choices stay in the SPA's own URL (ADR 0025).
 - G10 audits `port` rows only; a `port-changed` row's differences go in the pull request. A run reports 15 standing class C differences: 14 on the Trainer, resilience, key test and OpenRouter rows (listed in #199), and the route pattern `/:path*` of the `next.config` characterization (#215); say so in the pull request body.
 - CI runs the gate self-tests, about 2 more minutes, when a pull request changes a gate, a file in `SELF_TEST_FIXTURES` (`scripts/gate-selftest.ts`, `apps/server/src/edge.ts` among them), a `package.json`, a `tsconfig` or the lockfile (`GATE_PATHS` in `scripts/ci-changes.ts`).
+- CodeQL's default setup analyzes every pull request (the checks "Analyze (javascript-typescript)" and "CodeQL") and `main`. An alert on `main` blocks nothing, so it can sit unseen, as #306's three did for a week: list the open alerts at the start of a session.
+- A `gh pr checks --watch` started seconds after `gh pr create` can exit 0 on CodeQL's two checks alone while CI is still queued (#310). Before merging, list the checks and see the CI jobs green.
 - CI flake seen once (PR #157): the end-to-end job hung on "Install the Playwright browser" for over nine minutes. Cancel the run and rerun its failed jobs (`gh run cancel <run>`, then `gh run rerun <run> --failed`).
 - CI, measured on 2026-11-16: a pull request that changes product code takes about 2.3 minutes, one that changes a gate about 2.8, and one that changes only Markdown outside the workspaces runs the static checks and G7 alone. Measure before changing CI again.
 
