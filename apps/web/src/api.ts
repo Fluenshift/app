@@ -51,15 +51,15 @@ import {
  * never reaches another host. `send` is the fetch that sends the request, the browser's unless a
  * client was given its own.
  */
+const SAME_ORIGIN_ONLY = "aiFetch only accepts same-origin paths like /api/...";
+
 export const aiFetch = (
   input: string,
   init?: RequestInit,
   send: typeof globalThis.fetch = globalThis.fetch
 ): Promise<Response> => {
   if (!input.startsWith("/") || input.startsWith("//")) {
-    return Promise.reject(
-      new Error("aiFetch only accepts same-origin paths like /api/...")
-    );
+    return Promise.reject(new Error(SAME_ORIGIN_ONLY));
   }
   const credentials = getStoredAIKey();
   if (credentials === null) {
@@ -78,9 +78,25 @@ const keyedFetch =
   (input, init) =>
     typeof input === "string"
       ? aiFetch(input, init, send)
-      : Promise.reject(
-          new Error("aiFetch only accepts same-origin paths like /api/...")
-        );
+      : Promise.reject(new Error(SAME_ORIGIN_ONLY));
+
+// The server's API through the given fetch, the browser's when none is given.
+const apiOf = (fetch?: typeof globalThis.fetch) =>
+  hc<AppType>("/", fetch === undefined ? {} : { fetch }).api;
+
+type Api = ReturnType<typeof apiOf>;
+
+// The API of the calls that carry the browser's AI key: in the hosted profile they go through
+// aiFetch, and no other call does; the local profile sends no key from the browser
+// (docs/adr/0012, docs/adr/0034, docs/adr/0035).
+const keyedApiOf = (
+  deployProfile: DeployProfile,
+  api: Api,
+  fetch?: typeof globalThis.fetch
+): Api =>
+  deployProfile === "hosted"
+    ? hc<AppType>("/", { fetch: keyedFetch(fetch) }).api
+    : api;
 
 interface HttpEvaluationClientOptions {
   readonly fetch?: typeof globalThis.fetch;
@@ -185,7 +201,7 @@ const requireJson = async <A>(
 export const readDeployProfile = async ({
   fetch,
 }: HttpEvaluationClientOptions = {}): Promise<DeployProfile> => {
-  const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
+  const api = apiOf(fetch);
   try {
     const response = await api["deploy-profile"].$get();
     const status = response.ok
@@ -206,13 +222,10 @@ export const createHttpEvaluationClient = ({
   deployProfile = "local",
   fetch,
 }: HttpClientOptions = {}): EvaluationClient => {
-  const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
+  const api = apiOf(fetch);
   // The one call that reaches the Judge: in the hosted profile it carries the browser's
   // OpenRouter key (docs/adr/0035).
-  const judge =
-    deployProfile === "hosted"
-      ? hc<AppType>("/", { fetch: keyedFetch(fetch) }).api
-      : api;
+  const judge = keyedApiOf(deployProfile, api, fetch);
 
   return {
     async deleteEvaluation(evaluationId) {
@@ -288,13 +301,10 @@ export const createHttpAcademyClient = ({
   deployProfile = "local",
   fetch,
 }: HttpClientOptions = {}): AcademyClient => {
-  const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
+  const api = apiOf(fetch);
   // The calls that reach the Trainer, Grifando's aiFetch calls: in the hosted profile they carry
   // the browser's key, and no other call does (docs/adr/0012, docs/adr/0034).
-  const trainer =
-    deployProfile === "hosted"
-      ? hc<AppType>("/", { fetch: keyedFetch(fetch) }).api
-      : api;
+  const trainer = keyedApiOf(deployProfile, api, fetch);
 
   return {
     async answerInterviewTurn(sessionId, turnId, answer) {
