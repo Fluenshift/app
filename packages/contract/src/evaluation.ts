@@ -39,6 +39,12 @@ export const WRITING_SAMPLE_ORIGINS = ["work", "practice"] as const;
 export const WritingSampleOrigin = Schema.Literals(WRITING_SAMPLE_ORIGINS);
 export type WritingSampleOrigin = typeof WritingSampleOrigin.Type;
 
+/** The body of `POST /api/evaluations`: one Writing Sample of the Learner's work. */
+export const WritingSampleRequest = Schema.Struct({
+  writingSample: Schema.String,
+});
+export type WritingSampleRequest = typeof WritingSampleRequest.Type;
+
 /** An Overall Score: an integer from 0 to 100. */
 const Score = Schema.Int.check(Schema.isBetween({ maximum: 100, minimum: 0 }));
 

@@ -345,6 +345,22 @@ export const PracticeOccurrence = Schema.Struct({
 export type PracticeOccurrence = typeof PracticeOccurrence.Type;
 
 /**
+ * Explain code's snippet: trimmed, never blank (docs/adr/0038). The server adds the Deploy
+ * Profile's code cap, which only the hosted profile sets (docs/adr/0006).
+ */
+export const CodeSnippet = Schema.Trim.check(Schema.isMinLength(1));
+
+/**
+ * The body of `POST /api/practice-writing` (Grifando's writing route, 74dbb9f): the Writing
+ * Sample, and Explain code's snippet when the Learner explains code.
+ */
+export const PracticeWritingRequest = Schema.Struct({
+  codeSnippet: Schema.optionalKey(CodeSnippet),
+  writingSample: Schema.String,
+});
+export type PracticeWritingRequest = typeof PracticeWritingRequest.Type;
+
+/**
  * What POST /api/practice-writing answers with 201 (docs/adr/0026): the Evaluation, the natural
  * version and the Occurrences its Enrichment recorded (docs/adr/0028), or the Evaluation's id with
  * Grifando's message when the Enrichment failed. The natural version is null only for an

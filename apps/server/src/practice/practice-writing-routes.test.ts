@@ -349,6 +349,27 @@ describe("POST /api/practice-writing", () => {
     });
   });
 
+  // Grifando's route read a body that is not JSON as null (src/app/api/writing-sessions/route.ts,
+  // 74dbb9f).
+  it("refuses a body that is not JSON with the issue of a null body", async () => {
+    const response = await appOf().request(
+      new Request("http://localhost/api/practice-writing", {
+        body: "{",
+        headers: {
+          "content-type": "application/json",
+          "x-ai-key": SECRET,
+          "x-ai-provider": "anthropic",
+        },
+        method: "POST",
+      })
+    );
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      error: "Invalid request body",
+      issues: [{ message: "Expected object", path: [] }],
+    });
+  });
+
   it("answers 401 AI_KEY_REQUIRED without a key, before the Judge runs", async () => {
     const judging = vi.fn(oneFinding);
     judge = judging;
