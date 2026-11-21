@@ -24,6 +24,24 @@ describe("JudgeConfig", () => {
     }).pipe(Effect.provide(withEnv({ OPENROUTER_API_KEY: "private-test-key" })))
   );
 
+  // The hosted profile's Judge runs on each visitor's key (docs/adr/0035).
+  it.effect(
+    "has no key in the hosted profile, even when the variable is set",
+    () =>
+      Effect.gen(function* () {
+        const { apiKey } = yield* JudgeConfig;
+
+        assert.isTrue(Option.isNone(apiKey));
+      }).pipe(
+        Effect.provide(
+          withEnv({
+            DEPLOY_PROFILE: "hosted",
+            OPENROUTER_API_KEY: "private-test-key",
+          })
+        )
+      )
+  );
+
   it.effect("has no key when the variable is missing or empty", () =>
     Effect.gen(function* () {
       const missing = yield* Effect.provide(JudgeConfig, withEnv({}));

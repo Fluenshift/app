@@ -4,7 +4,7 @@
 // packages/core. The Judge on the AI SDK implements this service in Phase 4c.
 import type { AssessmentSpan } from "@fluenshift/core/model-assessment";
 import { Context, Layer, Schema } from "effect";
-import type { Effect } from "effect";
+import type { Effect, Redacted } from "effect";
 
 export interface ModelEvaluation {
   readonly assessment: unknown;
@@ -32,6 +32,21 @@ export class EvaluationModelError extends Schema.TaggedError<
   reason: Schema.String,
   recoverable: Schema.Boolean,
 }) {}
+
+/**
+ * The visitor's OpenRouter key for one request, on which the hosted profile's Judge runs
+ * (docs/adr/0035). The route that runs the Judge provides it from the request; nothing keeps it.
+ */
+export class JudgeKey extends Context.Service<
+  JudgeKey,
+  { readonly apiKey: Redacted.Redacted<string> }
+>()("server/JudgeKey") {}
+
+/** A hosted request that runs the Judge carries no OpenRouter key (docs/adr/0035). */
+export class JudgeKeyRequiredError extends Schema.TaggedError<
+  JudgeKeyRequiredError,
+  { readonly brand: unique symbol }
+>()("JudgeKeyRequiredError", {}) {}
 
 export class EvaluationModel extends Context.Service<
   EvaluationModel,

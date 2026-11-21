@@ -4,6 +4,12 @@ import type { Redacted } from "effect";
 /** `local` runs on the learner's machine; `hosted` is the public site (docs/adr/0003). */
 export type DeployProfile = "local" | "hosted";
 
+/** The Deploy Profile `DEPLOY_PROFILE` names, `local` when it names none. */
+export const deployProfileConfig = Config.Literals(
+  ["local", "hosted"],
+  "DEPLOY_PROFILE"
+).pipe(Config.withDefault("local" as const));
+
 /** PGlite in a data directory locally; Postgres when hosted (docs/adr/0017). */
 export type DatabaseConfig =
   | { readonly kind: "pglite"; readonly dataDirectory: string }
@@ -79,10 +85,7 @@ export class ServerConfig extends Context.Service<
   static readonly layer = Layer.effect(
     ServerConfig,
     Effect.gen(function* () {
-      const profile = yield* Config.Literals(
-        ["local", "hosted"],
-        "DEPLOY_PROFILE"
-      ).pipe(Config.withDefault("local" as const));
+      const profile = yield* deployProfileConfig;
       const [
         database,
         dataDisplayPath,

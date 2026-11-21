@@ -10,6 +10,7 @@ import {
   Effect,
   Layer,
   ManagedRuntime,
+  Option,
   Redacted,
 } from "effect";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -17,6 +18,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { TrainerKeyRequiredError } from "../academy/trainer/trainer-errors";
 import { createApp } from "../app";
 import type { AppBoundaries } from "../app";
+import { JudgeKey } from "../evaluation/evaluation-model";
 import { CurrentLearner, LearnerIdentity } from "../learner-identity";
 import { RateLimitedError } from "./rate-limit";
 import type { RateLimitBucket } from "./rate-limit";
@@ -122,7 +124,8 @@ const hostedApp = (boundaries: AppBoundaries) =>
     webDistPath: "",
   });
 
-const AI_HEADERS = { "x-ai-key": "test-key", "x-ai-provider": "gemini" };
+// An OpenRouter key: in the hosted profile it runs the Trainer and the Judge (docs/adr/0035).
+const AI_HEADERS = { "x-ai-key": "test-key", "x-ai-provider": "openrouter" };
 
 const request = (
   method: string,
@@ -303,7 +306,12 @@ describe("rate limit before the user", () => {
   it("counts an Evaluation against the analysis limits and its deletion against the write limit", async () => {
     const app = hostedApp({ limitRequest: refuse });
     const evaluation = await app.request(
-      request("POST", "/api/evaluations", { writingSample: "A sample." })
+      request(
+        "POST",
+        "/api/evaluations",
+        { writingSample: "A sample." },
+        AI_HEADERS
+      )
     );
     const deletion = await app.request(
       request("DELETE", "/api/evaluations/evaluation-1")
@@ -353,7 +361,12 @@ describe("rate limit before the user", () => {
       ),
     });
     const evaluation = await app.request(
-      request("POST", "/api/evaluations", { writingSample: "A sample." })
+      request(
+        "POST",
+        "/api/evaluations",
+        { writingSample: "A sample." },
+        AI_HEADERS
+      )
     );
     const keyTest = await app.request(
       request("POST", "/api/ai-key/test", {}, AI_HEADERS)
@@ -382,5 +395,95 @@ describe("POST /api/ai-key/test", () => {
     expect(res.status).toBe(429);
     expect(limitedFor).toHaveBeenCalledWith("visitor-1", "keyTest");
     expect(provider).not.toHaveBeenCalled();
+  });
+});
+
+// The hosted profile's Judge runs on the visitor's OpenRouter key (docs/adr/0035): a route that
+// runs it answers for the key before its rate limit, as a Trainer route does.
+describe("the hosted Judge's key", () => {
+  const GEMINI_HEADERS = { "x-ai-key": "test-key", "x-ai-provider": "gemini" };
+  const sample = { writingSample: "I depend of this library." };
+  const answer = { answer: "I would split the service." };
+  const ANSWER_PATH = "/api/interview/interview-1/turns/turn-1/answer";
+
+  it("answers AI_JUDGE_KEY_REQUIRED, uncounted, to an Evaluation without an OpenRouter key", async () => {
+    const app = hostedApp({ limitRequest: limitWith(Effect.void) });
+
+    const keyless = await app.request(
+      request("POST", "/api/evaluations", sample)
+    );
+    const gemini = await app.request(
+      request("POST", "/api/evaluations", sample, GEMINI_HEADERS)
+    );
+
+    expect(keyless.status).toBe(401);
+    expect(await keyless.json()).toStrictEqual({
+      code: "AI_JUDGE_KEY_REQUIRED",
+      error: "Set up an OpenRouter key to get feedback on your writing.",
+    });
+    expect(gemini.status).toBe(401);
+    expect(keyless.headers.get("x-correlation-id")).not.toBeNull();
+    expect(limitedFor).not.toHaveBeenCalled();
+    expect(reached).not.toHaveBeenCalled();
+  });
+
+  it("answers AI_JUDGE_KEY_REQUIRED, uncounted, to practice writing and an interview answer on a Gemini key", async () => {
+    const app = hostedApp({ limitRequest: limitWith(Effect.void) });
+
+    const practice = await app.request(
+      request("POST", "/api/practice-writing", sample, GEMINI_HEADERS)
+    );
+    const interview = await app.request(
+      request("POST", ANSWER_PATH, answer, GEMINI_HEADERS)
+    );
+
+    expect(practice.status).toBe(401);
+    expect(await practice.json()).toMatchObject({
+      code: "AI_JUDGE_KEY_REQUIRED",
+    });
+    expect(interview.status).toBe(401);
+    expect(await interview.json()).toMatchObject({
+      code: "AI_JUDGE_KEY_REQUIRED",
+    });
+    expect(limitedFor).not.toHaveBeenCalled();
+    expect(reached).not.toHaveBeenCalled();
+  });
+
+  it("runs every route of the Judge on the visitor's OpenRouter key, after its limit", async () => {
+    const judgeKeys = vi.fn<(key: string | null) => void>();
+    const judged = () =>
+      Effect.serviceOption(JudgeKey).pipe(
+        Effect.flatMap((key) =>
+          Effect.sync(() => {
+            judgeKeys(
+              Option.isSome(key) ? Redacted.value(key.value.apiKey) : null
+            );
+          })
+        ),
+        Effect.andThen(Effect.die(new Error("judged")))
+      );
+    const app = hostedApp({
+      answerInterviewTurn: judged,
+      evaluateWriting: judged,
+      limitRequest: limitWith(Effect.void),
+      writePractice: judged,
+    });
+
+    await app.request(request("POST", "/api/evaluations", sample, AI_HEADERS));
+    await app.request(
+      request("POST", "/api/practice-writing", sample, AI_HEADERS)
+    );
+    await app.request(request("POST", ANSWER_PATH, answer, AI_HEADERS));
+
+    expect(judgeKeys.mock.calls).toStrictEqual([
+      ["test-key"],
+      ["test-key"],
+      ["test-key"],
+    ]);
+    expect(limitedFor.mock.calls.map(([, bucket]) => bucket)).toStrictEqual([
+      "analysis",
+      "analysis",
+      "analysis",
+    ]);
   });
 });

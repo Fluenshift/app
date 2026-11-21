@@ -10,6 +10,7 @@ import {
   Effect,
   Layer,
   ManagedRuntime,
+  Option,
   Redacted,
 } from "effect";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
@@ -21,6 +22,7 @@ import type {
 import { createApp, serveApp } from "./app";
 import type { AppBoundaries } from "./app";
 import type { EvaluationEndpointResult } from "./evaluation/evaluation-endpoint";
+import { JudgeKey } from "./evaluation/evaluation-model";
 import { LearnerIdentity } from "./learner-identity";
 import { SESSION_COOKIE, signSessionId } from "./session/session-token";
 
@@ -1313,6 +1315,34 @@ describe("Deploy profile endpoint", () => {
 
     expect(response.status).toBe(200);
     expect(await response.json()).toStrictEqual({ deployProfile: "hosted" });
+  });
+});
+
+// The local profile's Judge runs on its configured key, never on one a request carries
+// (docs/adr/0035).
+describe("Judge key in the local profile", () => {
+  it("never reads the Judge's key from the request", async () => {
+    const keys: (string | null)[] = [];
+    const evaluateWriting = () =>
+      Effect.serviceOption(JudgeKey).pipe(
+        Effect.flatMap((key) =>
+          Effect.sync(() => {
+            keys.push(
+              Option.isSome(key) ? Redacted.value(key.value.apiKey) : null
+            );
+          })
+        ),
+        Effect.andThen(Effect.die(new Error("judged")))
+      );
+
+    await appWith({ evaluateWriting }).request(
+      postSample(JSON.stringify({ writingSample: "A sample." }), {
+        "x-ai-key": "sk-or-test",
+        "x-ai-provider": "openrouter",
+      })
+    );
+
+    expect(keys).toStrictEqual([null]);
   });
 });
 

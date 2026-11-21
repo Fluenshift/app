@@ -4,6 +4,7 @@
 // `mode` from its own URL: a technical prompt comes from the bank of packages/core, and the daily
 // challenge from the Academy client, whose route test covers /today.
 import type {
+  DeployProfile,
   Evaluation,
   PracticeWritingResult,
   SampleLimits,
@@ -132,7 +133,8 @@ const evaluated: PracticeWritingResult = {
 };
 
 const renderWrite = async (
-  practiceWriting: PracticeWritingResult | AcademyRequestError
+  practiceWriting: PracticeWritingResult | AcademyRequestError,
+  deployProfile: DeployProfile = "local"
 ) => {
   const client = createInMemoryAcademyClient({
     practiceWriting,
@@ -142,6 +144,7 @@ const renderWrite = async (
     <RouterProvider
       router={createAppRouter({
         academyClient: client,
+        deployProfile,
         evaluationClient: createInMemoryEvaluationClient(),
         history: createMemoryHistory({ initialEntries: ["/write"] }),
       })}
@@ -341,6 +344,24 @@ describe("/write practice writing", () => {
     expect(
       await within(page).findByRole("link", { name: "Set up a key" })
     ).toHaveAttribute("href", "/setup");
+  });
+
+  // The hosted Judge runs on the visitor's OpenRouter key (docs/adr/0035).
+  it("points to the key page when the hosted Judge has no OpenRouter key", async () => {
+    const { page } = await renderWrite(
+      new AcademyRequestError(401, {
+        code: "AI_JUDGE_KEY_REQUIRED",
+        error: "Set up an OpenRouter key to get feedback on your writing.",
+      }),
+      "hosted"
+    );
+    await userEvent.click(
+      within(page).getByRole("button", { name: "Get feedback" })
+    );
+
+    expect(
+      await within(page).findByRole("link", { name: "Set up a key" })
+    ).toHaveAttribute("href", "/settings");
   });
 
   it("keeps the text and shows Grifando's generic message for any other failure", async () => {

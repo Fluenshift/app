@@ -2,10 +2,10 @@
 // apps/server/src/evaluation/openai-evaluation-model.test.ts (5e831bb). PE faked the OpenAI SDK's
 // fetch with Responses API envelopes; these fake the OpenRouter provider's fetch with chat
 // completions, so they check the HTTP request the provider sends as PE's did.
-import { ConfigProvider, Effect, Layer } from "effect";
+import { ConfigProvider, Effect, Layer, Redacted } from "effect";
 import { describe, expect, it, vi } from "vitest";
 
-import { EvaluationModel } from "./evaluation-model";
+import { EvaluationModel, JudgeKey } from "./evaluation-model";
 import {
   OpenRouterEvaluationModelLive,
   makeOpenRouterEvaluationModelLayer,
@@ -637,5 +637,62 @@ describe("OpenRouter Evaluation Model guards", () => {
       kind: "invalid-assessment",
       recoverable: true,
     });
+  });
+});
+
+// The hosted profile's Judge runs on each visitor's OpenRouter key, never on the configured one
+// (docs/adr/0035).
+describe("OpenRouter Evaluation Model keys", () => {
+  it("runs on the visitor's OpenRouter key when the request provides one", async () => {
+    const authorizations: (string | null)[] = [];
+    const providerFetch: ProviderFetch = (_input, init) => {
+      authorizations.push(new Headers(init?.headers).get("authorization"));
+      return Promise.resolve(completion(emptyAssessment));
+    };
+
+    await Effect.runPromise(
+      Effect.gen(function* () {
+        return yield* (yield* EvaluationModel).evaluate("Private writing.");
+      }).pipe(
+        Effect.provideService(
+          JudgeKey,
+          JudgeKey.of({ apiKey: Redacted.make("sk-or-visitor") })
+        ),
+        Effect.provide(
+          configured(makeOpenRouterEvaluationModelLayer(providerFetch))
+        )
+      )
+    );
+
+    expect(authorizations).toStrictEqual(["Bearer sk-or-visitor"]);
+  });
+
+  it("never runs on the configured key in the hosted profile", async () => {
+    const providerFetch = vi.fn<ProviderFetch>(() =>
+      Promise.resolve(completion(emptyAssessment))
+    );
+    const layer = makeOpenRouterEvaluationModelLayer(providerFetch).pipe(
+      Layer.provide(
+        ConfigProvider.layer(
+          ConfigProvider.fromEnvRecord({
+            DEPLOY_PROFILE: "hosted",
+            OPENROUTER_API_KEY: "private-test-key",
+          })
+        )
+      )
+    );
+
+    const outcome = await Effect.runPromise(
+      Effect.gen(function* () {
+        const model = yield* EvaluationModel;
+        const failure = yield* model
+          .evaluate("Private writing.")
+          .pipe(Effect.flip);
+        return { configured: model.configured, kind: failure.kind };
+      }).pipe(Effect.provide(layer))
+    );
+
+    expect(outcome).toStrictEqual({ configured: false, kind: "configuration" });
+    expect(providerFetch).not.toHaveBeenCalled();
   });
 });

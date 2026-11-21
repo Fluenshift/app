@@ -106,13 +106,22 @@ export const messageFor = (error: unknown, fallback: string): string => {
     : fallback;
 };
 
+// The codes of a server that found no key: none for the Trainer, or none for the hosted Judge
+// (ADR 0035).
+const KEY_REQUIRED_CODES = new Set([
+  "AI_KEY_REQUIRED",
+  "AI_JUDGE_KEY_REQUIRED",
+]);
+
 /**
- * Whether a failure asks the Learner to set up a Trainer key: the hosted browser holds none to
- * send, or the server found none (ADR 0034).
+ * Whether a failure asks the Learner to set up a key: the hosted browser holds none to send, or
+ * the server found none (ADR 0034, ADR 0035).
  */
 export const isKeyRequired = (error: unknown): boolean =>
   error instanceof MissingAIKeyError ||
-  (error instanceof AcademyRequestError && error.code === "AI_KEY_REQUIRED");
+  (error instanceof AcademyRequestError &&
+    error.code !== undefined &&
+    KEY_REQUIRED_CODES.has(error.code));
 
 /**
  * What a screen shows for a failed Academy request: Grifando's key notice when the Trainer has no

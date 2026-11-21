@@ -2,7 +2,9 @@
 // fallback and no tools, recording the model that answered (docs/adr/0012). Ported from PE
 // apps/server/src/evaluation/openai-evaluation-model.ts (5e831bb), which called the OpenAI SDK:
 // the request keeps PE's model, instructions, output cap, deadline, reasoning effort, price caps
-// and storage opt-out. Until live calibration it runs as a provisional Rubric Version.
+// and storage opt-out. Until live calibration it runs as a provisional Rubric Version. The local
+// profile's Judge runs on the configured key; the hosted profile's on the visitor's OpenRouter key
+// that the request's route provides (docs/adr/0035).
 import { localizeModelAssessment } from "@fluenshift/core/assessment-localization";
 import {
   EVALUATION_MAX_OUTPUT_TOKENS,
@@ -16,7 +18,11 @@ import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { APICallError, generateText, NoObjectGeneratedError, Output } from "ai";
 import { Effect, Layer, Option, Redacted, Schema } from "effect";
 
-import { EvaluationModel, EvaluationModelError } from "./evaluation-model";
+import {
+  EvaluationModel,
+  EvaluationModelError,
+  JudgeKey,
+} from "./evaluation-model";
 
 const spanFields = {
   byteEnd: Schema.Natural,
@@ -199,21 +205,23 @@ export const makeOpenRouterEvaluationModelLayer = (
         Reflect.set(globalThis, "AI_SDK_LOG_WARNINGS", false);
       });
       const { apiKey } = yield* JudgeConfig;
-      const languageModel = apiKey.pipe(
-        Option.map((secret) =>
-          createOpenRouter({
-            apiKey: Redacted.value(secret),
-            ...(providerFetch === undefined ? {} : { fetch: providerFetch }),
-          })(MODEL)
-        )
-      );
+      const modelOn = (secret: Redacted.Redacted<string>) =>
+        createOpenRouter({
+          apiKey: Redacted.value(secret),
+          ...(providerFetch === undefined ? {} : { fetch: providerFetch }),
+        })(MODEL);
+      const configuredModel = apiKey.pipe(Option.map(modelOn));
 
       return EvaluationModel.of({
-        configured: Option.isSome(languageModel),
+        configured: Option.isSome(configuredModel),
         evaluate: Effect.fn("OpenRouterEvaluationModel.evaluate")(function* (
           writingSample: string,
           protectedSpans: readonly AssessmentSpan[] = []
         ) {
+          const requestKey = yield* Effect.serviceOption(JudgeKey);
+          const languageModel = Option.isSome(requestKey)
+            ? Option.some(modelOn(requestKey.value.apiKey))
+            : configuredModel;
           if (Option.isNone(languageModel)) {
             return yield* failure(
               "configuration",
