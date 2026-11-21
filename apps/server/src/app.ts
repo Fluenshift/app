@@ -82,7 +82,12 @@ import {
 } from "./session/hosted-pipeline";
 import { rateLimited } from "./session/rate-limit";
 import type { RateLimitBucket, RateLimitedError } from "./session/rate-limit";
-import { robotsTxt, sitemapXml } from "./site-files";
+import {
+  OG_IMAGE_PATH,
+  robotsTxt,
+  sitemapXml,
+  withLinkPreview,
+} from "./site-files";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -386,9 +391,12 @@ const guard =
 /**
  * Answers every GET that no API route took. Only files under `assets/` of the web build are
  * served, and the path is never decoded, so no request reaches a file outside that directory.
- * Any other path is a browser route and gets the application shell.
+ * Any other path is a browser route and gets the application shell, as `shell` writes it.
  */
-const webFallback = (webDistPath: string): Handler => {
+const webFallback = (
+  webDistPath: string,
+  shell: (html: string) => string
+): Handler => {
   const root = path.resolve(webDistPath);
   const index = path.resolve(root, "index.html");
 
@@ -400,7 +408,7 @@ const webFallback = (webDistPath: string): Handler => {
     const requestPath = new URL(context.req.url).pathname;
     if (!requestPath.startsWith("/assets/")) {
       return readFile(index, "utf-8").then((html) =>
-        context.html(html, 200, { "cache-control": "no-cache" })
+        context.html(shell(html), 200, { "cache-control": "no-cache" })
       );
     }
 
@@ -418,6 +426,23 @@ const webFallback = (webDistPath: string): Handler => {
     );
   };
 };
+
+/** Grifando's Open Graph card from the root of the web build (docs/adr/0040). */
+const ogImage = (webDistPath: string): Handler => {
+  const card = path.resolve(webDistPath, `.${OG_IMAGE_PATH}`);
+
+  return (context) =>
+    readFile(card).then(
+      (image) =>
+        context.body(image, 200, {
+          "cache-control": "public, max-age=86400",
+          "content-type": "image/png",
+        }),
+      () => context.text("Not Found", 404)
+    );
+};
+
+const asBuilt = (html: string) => html;
 
 const INVALID_REQUEST = {
   code: "invalid-request",
@@ -1523,8 +1548,21 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       })
     );
   }
+  // The hosted profile serves Grifando's Open Graph card and names it in the shell at its public
+  // origin; the local profile serves the shell as built (docs/adr/0040).
   if (options.serveWeb) {
-    app.get("/*", webFallback(options.webDistPath));
+    if (options.profile === "hosted") {
+      app.get(OG_IMAGE_PATH, ogImage(options.webDistPath));
+    }
+    app.get(
+      "/*",
+      webFallback(
+        options.webDistPath,
+        options.profile === "hosted"
+          ? withLinkPreview(options.siteUrl)
+          : asBuilt
+      )
+    );
   }
   return app;
 };
