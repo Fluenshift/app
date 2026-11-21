@@ -4,7 +4,9 @@ Last updated 2026-11-20, at the end of the eleventh agent session. This file hol
 
 ## Work in flight
 
-Phase 6's server side is done. This session merged the hosted request pipeline (#214, ADR 0032), `DELETE /api/me` (#216), rate limits with `ensureLearner` behind them (#218, ADR 0033), the daily idle cleanup (#221), and the browser's AI key store with `aiFetch` (#224), which nothing calls yet. No issue is open.
+The hosted profile's request pipeline is done. This session merged the signed session and its gate (#214, ADR 0032), `DELETE /api/me` (#216), rate limits with `ensureLearner` behind them (#218, ADR 0033), the daily idle cleanup (#221), and the browser's AI key store with `aiFetch` (#224), which nothing calls yet. No issue is open.
+
+Until the BYOK unit wires `aiFetch`, a hosted Academy route that calls the Trainer answers 401 `AI_KEY_REQUIRED`: the browser sends no key, and the hosted profile never uses a configured one (ADR 0012). The local profile works as before.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -40,6 +42,7 @@ On 2026-11-20 there were 20: `hosted` 10 (2 of `sitemap.test.ts`, the 8 paused d
 - Every state-changing route admits its call in `app.ts` (`admitted`, `admittedWithKey`): after its body check and, for a Trainer route, after it finds a key in the headers, the `limitRequest` boundary, then `ensureLearner`, then its work (ADR 0033). `index.ts` passes both boundaries in the hosted profile only, so route tests that omit them run unlimited. A new state-changing route must be admitted with a bucket, and its `errors` need `RateLimitedError: rateLimited`.
 - A fake boundary in a route test must record when its Effect runs, inside `Effect.sync`, not when it is called: `app.ts` builds a boundary's Effect before the limit decides whether it runs (`rate-limit-routes.test.ts`).
 - A hosted production server needs `SESSION_SECRET`, `IP_HASH_SALT` and `CLIENT_IP_HEADER` (`AGENTS.md`, Code). The hosted profile forks the idle cleanup at 03:17 UTC daily (`IdleCleanup`).
+- The hosted Docker smoke is paused, so #215 and #220 checked the hosted wiring by hand: start `postgres:17-alpine` on a loopback port, run `pnpm build`, then in `apps/server` run `node dist/index.mjs` with `DEPLOY_PROFILE=hosted`, `NODE_ENV=production`, `DATABASE_URL`, `MIGRATIONS_PATH=../../packages/db/src/migrations`, `WEB_DIST_PATH=../web/dist`, `SESSION_SECRET`, `IP_HASH_SALT` and a free `SERVER_PORT`, and drive it with `curl`. Stop it with `pgrep -f 'node dis[t]/index.mjs' | xargs -r kill`.
 - BYOK, to decide: the SPA serves both profiles, and only the hosted one takes keys from the browser (ADR 0012). One way: a `GET` route that names the Deploy Profile, read once by the root route's `beforeLoad` through the Academy client; in the hosted profile the HTTP Academy client sends its Trainer calls (and the key test) through `aiFetch` (`apps/web/src/api.ts`), `isKeyRequired` also recognizes `MissingAIKeyError`, and the key notice links to `/settings` instead of `/setup`. The in-memory client answers the local profile, so existing screen tests keep their notice.
 - The key store (`apps/web/src/features/settings/ai-key-store.ts`) and the Trainer key's headers and providers (`packages/contract/src/trainer-key.ts`) are shared by the browser and the server.
 
@@ -85,6 +88,7 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 - Archive `Fluenshift/prompt-evolution`; its pin was verified on 2026-11-12.
 - Levy: point local Grifando clones at `https://github.com/Fluenshift/grifando.git`; reconnect Grifando's Vercel project to the organization and give its CI a `GITLEAKS_LICENSE` secret, if Grifando still deploys from there.
 - Set a budget before live calibration (G13) runs.
+- Choose the host for the hosted profile (ADR 0003, decision 4) before a public deploy, and give it `SESSION_SECRET`, `IP_HASH_SALT` and the `CLIENT_IP_HEADER` its proxy writes (ADR 0033).
 - Give the go-ahead for cutover (Phase 7).
 - Say where Grifando's visual style came from, for `docs/product/ASSET-LICENSES.md` (#119, question 4).
 
