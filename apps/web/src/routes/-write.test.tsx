@@ -20,7 +20,7 @@ import { createInMemoryEvaluationClient } from "../features/evaluations/in-memor
 import { createAppRouter } from "../router";
 
 // The page's heading, what its sheet's aside shows, and the challenge the route hands
-// PracticeWriting (the characterization's initialPracticePrompt prop).
+// PracticeWriting (the characterization's initialChallenge prop).
 const read = async (url: string) => {
   const router = createAppRouter({
     academyClient: createInMemoryAcademyClient({
@@ -42,7 +42,7 @@ const read = async (url: string) => {
       within(aside).queryByRole("heading", { name: "Prompt" }) === null
         ? undefined
         : within(aside).getByRole("paragraph").textContent,
-    initialPracticePrompt: router.state.matches.find(
+    initialChallenge: router.state.matches.find(
       (match) => match.routeId === "/write"
     )?.loaderData,
     title: within(page).queryByRole("heading", { level: 1 })?.textContent,
@@ -55,18 +55,18 @@ describe("/write", () => {
   it("takes its challenge and heading from the query", async () => {
     expect(await read("/write")).toEqual({
       challenge: undefined,
-      initialPracticePrompt: undefined,
+      initialChallenge: undefined,
       title: "Write",
     });
     expect(await read("/write?promptId=missing")).toEqual({
       challenge: undefined,
-      initialPracticePrompt: undefined,
+      initialChallenge: undefined,
       title: "Write",
     });
     expect(await read("/write?promptId=backend-1")).toEqual({
       challenge:
         "Explain the difference between synchronous and asynchronous request handling.",
-      initialPracticePrompt: {
+      initialChallenge: {
         promptText:
           "Explain the difference between synchronous and asynchronous request handling.",
         promptType: "TECHNICAL",
@@ -77,7 +77,7 @@ describe("/write", () => {
     expect(await read("/write?mode=daily")).toEqual({
       challenge:
         "Explain what an API is to someone with no programming background.",
-      initialPracticePrompt: {
+      initialChallenge: {
         promptText:
           "Explain what an API is to someone with no programming background.",
         promptType: "DAILY_CHALLENGE",
