@@ -587,3 +587,50 @@ describe("HTTP Evaluation client keys", () => {
     });
   });
 });
+
+// A hosted Learner deletes themselves and all their data (`DELETE /api/me`): the call reaches no
+// provider, so it carries no key (docs/adr/0003, docs/adr/0036).
+describe("HTTP Academy client Learner deletion", () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  test("sends the hosted Learner's deletion without the browser's key", async () => {
+    saveAIKey({ apiKey: "sk-or-v1-test", provider: "openrouter" });
+    const { fetch, requests } = recordingFetch();
+
+    await Promise.allSettled([
+      createHttpAcademyClient({
+        deployProfile: "hosted",
+        fetch,
+      }).deleteLearner(),
+    ]);
+
+    expect(keysByCall(requests)).toStrictEqual({
+      "DELETE /api/me": [null, null],
+    });
+  });
+
+  test("resolves once the data is deleted, and keeps a refusal's status and message", async () => {
+    const deleted = createHttpAcademyClient({
+      deployProfile: "hosted",
+      fetch: () => Promise.resolve(new Response(null, { status: 204 })),
+    }).deleteLearner();
+    const refused = createHttpAcademyClient({
+      deployProfile: "hosted",
+      fetch: () =>
+        Promise.resolve(
+          Response.json(
+            { error: "You're going a bit fast. Wait a moment and try again." },
+            { status: 429 }
+          )
+        ),
+    }).deleteLearner();
+
+    await expect(deleted).resolves.toBeUndefined();
+    await expect(refused).rejects.toMatchObject({
+      serverMessage: "You're going a bit fast. Wait a moment and try again.",
+      status: 429,
+    });
+  });
+});

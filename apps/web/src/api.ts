@@ -328,6 +328,10 @@ export const createHttpAcademyClient = ({
       }
     },
 
+    deleteLearner() {
+      return Promise.resolve();
+    },
+
     // A 404 means the item is already gone, as when another tab removed it.
     async deleteVocabularyItem(itemId) {
       const response = await api.vocabulary[":itemId"].$delete({
