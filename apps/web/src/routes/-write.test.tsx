@@ -351,7 +351,8 @@ describe("/write practice writing", () => {
     const { page } = await renderWrite(
       new AcademyRequestError(401, {
         code: "AI_JUDGE_KEY_REQUIRED",
-        error: "Set up an OpenRouter key to get feedback on your writing.",
+        error:
+          "Set up an OpenRouter key in Settings to get feedback on your writing.",
       }),
       "hosted"
     );
