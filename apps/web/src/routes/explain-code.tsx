@@ -2,7 +2,7 @@
 // it reads the Deploy Profile's caps before it loads, as /write does (docs/adr/0006).
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
-import { ExplainCodeCoach } from "../features/academy/explain-code-coach";
+import { ExplainCodePractice } from "../features/academy/explain-code-practice";
 import { PageHeader, PageShell } from "../features/academy/page-header";
 import { sampleLimitsFor } from "../features/academy/sample-limits";
 
@@ -17,7 +17,7 @@ const ExplainCodePage = () => {
         description="Paste a small snippet and explain what it does in English — the way you would in a code review."
         title="Explain code"
       />
-      <ExplainCodeCoach sampleLimits={sampleLimits} />
+      <ExplainCodePractice sampleLimits={sampleLimits} />
     </PageShell>
   );
 };
