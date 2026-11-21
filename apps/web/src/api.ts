@@ -451,9 +451,16 @@ export const createHttpAcademyClient = ({
       return status;
     },
 
-    async writePractice(writingSample) {
+    // Explain code's snippet travels beside its explanation, only when there is one
+    // (docs/adr/0038).
+    async writePractice(writingSample, codeSnippet) {
       return academyJson(
-        await trainer["practice-writing"].$post({ json: { writingSample } }),
+        await trainer["practice-writing"].$post({
+          json: {
+            writingSample,
+            ...(codeSnippet === undefined ? {} : { codeSnippet }),
+          },
+        }),
         decodePracticeWriting
       );
     },
