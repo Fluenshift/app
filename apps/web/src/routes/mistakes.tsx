@@ -1,9 +1,13 @@
 // The Mistake Notebook. Ported from Grifando src/app/mistakes/page.tsx (74dbb9f): the notebook
 // comes from the server, and the page applies `window` and `origin` from its own URL
-// (docs/adr/0025).
+// (docs/adr/0025). Its search, which ADR 0020 keeps from Grifando's SPEC and Grifando never
+// built, narrows the patterns in the page and never enters the URL (docs/adr/0008, #276).
+import type { NotebookPattern } from "@fluenshift/contract";
 import { Badge } from "@fluenshift/ui/components/badge";
 import { buttonVariants } from "@fluenshift/ui/components/button";
+import { Input } from "@fluenshift/ui/components/input";
 import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
+import { useState } from "react";
 
 import { MISTAKE_CATEGORY_LABELS } from "../features/academy/mistake-category-labels";
 import { PageHeader, PageShell } from "../features/academy/page-header";
@@ -29,6 +33,23 @@ const mistakesSearch = (filters: {
   ...(filters.last30Days ? { window: "30d" } : {}),
   ...(filters.l1TransferOnly ? { origin: "pt" } : {}),
 });
+
+// The patterns whose example or Mistake Category contains the query, whatever its case.
+const matching = (
+  patterns: readonly NotebookPattern[],
+  query: string
+): readonly NotebookPattern[] => {
+  const needle = query.trim().toLowerCase();
+  return needle === ""
+    ? patterns
+    : patterns.filter((pattern) =>
+        [
+          pattern.exampleOriginal,
+          pattern.exampleCorrection,
+          MISTAKE_CATEGORY_LABELS[pattern.category],
+        ].some((text) => text.toLowerCase().includes(needle))
+      );
+};
 
 // Tab-style filter link: the 2px ink underline marks the active option.
 const FilterTab = ({
@@ -58,6 +79,8 @@ const MistakesPage = () => {
   const patternList = isL1TransferOnly
     ? notebook.patterns.filter((pattern) => pattern.l1Transfer)
     : notebook.patterns;
+  const [query, setQuery] = useState("");
+  const shownPatterns = matching(patternList, query);
   const breakdown = isLast30Days
     ? notebook.breakdown.last30Days
     : notebook.breakdown.allTime;
@@ -144,8 +167,8 @@ const MistakesPage = () => {
               Patterns
             </h2>
             <span className="label-mono text-muted-foreground">
-              {patternList.length}{" "}
-              {patternList.length === 1 ? "pattern" : "patterns"}
+              {shownPatterns.length}{" "}
+              {shownPatterns.length === 1 ? "pattern" : "patterns"}
             </span>
           </div>
           <nav aria-label="Origin" className="mb-6 flex gap-6">
@@ -183,8 +206,29 @@ const MistakesPage = () => {
             </p>
           ) : null}
           {patternList.length === 0 ? null : (
+            <div className="mb-6">
+              <label className="sr-only" htmlFor="pattern-search">
+                Search patterns
+              </label>
+              <Input
+                id="pattern-search"
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                }}
+                placeholder="Search by example or category"
+                type="search"
+                value={query}
+              />
+            </div>
+          )}
+          {patternList.length > 0 && shownPatterns.length === 0 ? (
+            <p className="prose-serif text-iron text-lg">
+              No patterns match your search.
+            </p>
+          ) : null}
+          {shownPatterns.length === 0 ? null : (
             <ul className="border-border border-t">
-              {patternList.map((pattern) => (
+              {shownPatterns.map((pattern) => (
                 <li
                   className="border-border space-y-3 border-b py-5"
                   key={pattern.id}
