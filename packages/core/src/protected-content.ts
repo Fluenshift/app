@@ -2,6 +2,7 @@
 // apps/server/src/evaluation/protected-content.ts. Byte offsets are TextEncoder lengths
 // instead of Buffer.byteLength, so the heuristics run anywhere.
 import type { AssessmentSpan } from "./model-assessment";
+import { readShellLine } from "./shell-line";
 import { encodeUtf8 } from "./utf8";
 
 const SHELL_COMMANDS = new Set([
@@ -114,7 +115,8 @@ const hasCommandEvidence = (
     );
   }
   if (command === "env") {
-    return /^(?:--?\S+\s+)*(?:[A-Za-z_][A-Za-z0-9_]*=\S+)(?:\s|$)/u.test(
+    // PE wrote `--?\S+`, which reads the same strings as `-\S+` but backtracks exponentially.
+    return /^(?:-\S+\s+)*(?:[A-Za-z_][A-Za-z0-9_]*=\S+)(?:\s|$)/u.test(
       argumentsText
     );
   }
@@ -133,13 +135,11 @@ const hasCommandEvidence = (
 };
 
 const startsWithShellCommand = (line: string): boolean => {
-  const match = line.match(
-    /^(?:[A-Za-z_][A-Za-z0-9_]*=(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|(?:\\.|[^\s])+)[\s]+)*(?<command>[^\s]+)(?:\s+(?<arguments>.*))?$/u
-  );
-  const executable = match?.groups?.command;
-  if (executable === undefined) {
+  const match = readShellLine(line);
+  if (match === undefined) {
     return false;
   }
+  const executable = match.command;
 
   if (
     /^(?:\.{1,2}\/|~\/|\/|[A-Za-z]:\\)\S+/u.test(executable) ||
@@ -162,7 +162,7 @@ const startsWithShellCommand = (line: string): boolean => {
     return false;
   }
 
-  const argumentsText = match?.groups?.arguments ?? "";
+  const argumentsText = match.arguments ?? "";
   if (/[.!?]$/u.test(line) && !hasCommandEvidence(command, argumentsText)) {
     return false;
   }
@@ -982,7 +982,10 @@ class ProtectedContentDetector {
       /\b(?:[\w@+.-]+\/)+(?:[\w@+-]+\.)+[A-Za-z0-9]+\b/gu,
       /(?<![\w])(?:\.{1,2}|~)?\/[\w.@~+\-/]+/gu,
       /\b(?:[A-Za-z]+_[A-Za-z0-9_]+|[a-z]+[A-Z][A-Za-z0-9]*)(?:\(\))?/gu,
-      /\b[A-Z][a-z0-9]+(?:[A-Z][A-Za-z0-9]*)+\b/gu,
+      // PE wrote `(?:[A-Z][A-Za-z0-9]*)+` for the capitals: `\b` only holds at the end of a run of
+      // letters and digits, where both forms accept the same runs, but that one backtracks
+      // exponentially.
+      /\b[A-Z][a-z0-9]+[A-Z][A-Za-z0-9]*\b/gu,
       /\b(?:app|args|client|config|console|ctx|data|document|env|globalThis|module|options|process|props|request|response|schema|server|state|this|window)(?:\.[A-Za-z_$][\w$]*)+\b/gu,
       /\b[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)+\(\)/gu,
       /\b[A-Za-z_$][\w$]*\(\)/gu,
