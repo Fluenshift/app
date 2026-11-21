@@ -240,7 +240,9 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0038",
-      "targets": []
+      "targets": [
+        "apps/server/src/practice/practice-writing-routes.test.ts::writing session code snippet > answers 400 with the validation issues for a blank code snippet or one over 2000 characters, before any analysis"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/writing-sessions/codeSnippet.characterization.test.ts::writing session code snippet > trims a code snippet and hands up to 2000 characters of it to the analysis",
@@ -249,7 +251,9 @@
       "slice": "academy-http",
       "disposition": "port-changed",
       "decision": "adr:0038",
-      "targets": []
+      "targets": [
+        "apps/server/src/practice/practice-writing-routes.test.ts::writing session code snippet > trims a code snippet and hands up to 2000 characters of it to the analysis"
+      ]
     },
     {
       "id": "grifando:characterization:src/app/api/writing-sessions/writingSessions.characterization.test.ts::writing session routes > analyzes a submitted text and answers 201 with the session and its analysis",
