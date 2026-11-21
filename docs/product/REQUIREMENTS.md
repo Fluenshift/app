@@ -86,7 +86,7 @@ Grifando's `SPEC.md` it comes from and the ADRs that changed it.
 | AR-14 | Daily Writing offers one challenge a day from a curated bank, biased toward the Learner's weak categories. | §5.5 |
 | AR-15 | Technical English prompts carry one Technical Category from the fixed list. Explain Code asks the Learner to explain a pasted snippet in English, and its feedback concerns the English, never the code. | §5.6, §5.7 |
 | AR-16 | Interview Practice is text only and turn based, as `CONTEXT.md` (Interview) defines it. | §5.8; ADR 0010 |
-| AR-17 | The Academy dashboard keeps a small, fixed set of cards: today's challenge, recent writing, weak categories, recently seen Mistake Patterns, one practice recommendation, and one Finding-based trend (ADR 0027). | §5.9; ADR 0002 |
+| AR-17 | The Academy dashboard keeps a small, fixed set of cards: today's challenge, recent writing, weak categories, recently seen Mistake Patterns, one practice recommendation, one Finding-based trend (ADR 0027), the Streak, and a count of the practice done, as Grifando's dashboard showed them. | §5.9; ADR 0002 |
 | AR-18 | Mistake Patterns, Mastery Level and Recall span Rubric Versions; each Occurrence records the Rubric Version of its Finding. | ADR 0015 |
 | AR-19 | The Trainer may fall back to another model only on overload, and records the model that answered. | §4; ADR 0012 |
 | AR-20 | Every Trainer answer is validated against its schema before anything is stored; an invalid answer stores nothing and keeps the Learner's text. | §9; QR-03 |
@@ -99,7 +99,7 @@ migration.
 | ID | Requirement | Source |
 | --- | --- | --- |
 | HR-01 | One Learner per signed anonymous session cookie: no sign-up, login, email or profile. Every row belongs to one Learner. | ADR 0003 |
-| HR-02 | Writing is capped at 5,000 characters and never more than 32 KiB, prompt text at 1,000 characters, code at 2,000, and a request body at 256 KiB, at the edge and in the service. | ADR 0006 |
+| HR-02 | Writing is capped at 5,000 characters and never more than 32 KiB, code at 2,000, and a request body at 256 KiB, at the edge and in the service. No request carries prompt text (ADR 0026), so none is capped. | ADR 0006, ADR 0026 |
 | HR-03 | Every route that calls a model has fixed-window rate limits per Learner and per hashed IP, kept in PostgreSQL. | ADR 0003 |
 | HR-04 | The site serves a Content Security Policy for a static single-page application. | ADR 0003 |
 | HR-05 | Visitors bring their own AI keys, handled as `DATA-POLICY.md` (Keys) states. | ADR 0012 |

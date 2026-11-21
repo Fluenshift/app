@@ -33,7 +33,9 @@ When the Learner uses the Academy, it also stores:
   Writing Sample;
 - Exercises (type, difficulty, the generated prompt and the model that wrote it) and their
   Attempts (the Learner's answer, whether it was correct, and the feedback);
-- a Category Ability rating for each Mistake Category;
+- Interviews: each question the Trainer asked, the model that asked it, its place in the
+  Interview, when it was answered, and the Evaluation of the answer;
+- a Category Ability estimate for each Mistake Category;
 - vocabulary items: term, meaning in Portuguese, example sentence and the Evaluation it came
   from.
 
@@ -42,8 +44,9 @@ When the Learner uses the Academy, it also stores:
 API keys or other credentials, hidden model reasoning, raw HTTP request or response bodies,
 unstructured provider output after validation.
 
-Credentials are read server-side from `OPENROUTER_API_KEY` through Effect Config, as a
-redacted value. They never reach browser code, History, or logs. Request logging excludes
+In the local profile, credentials are read server-side through Effect Config, as redacted
+values: the Judge's from `OPENROUTER_API_KEY`, the Trainer's from `ANTHROPIC_API_KEY` or
+`GEMINI_API_KEY`, as `AI_PROVIDER` chooses. They never reach browser code, History, or logs. Request logging excludes
 Writing Sample text and provider bodies, and no URL carries text the Learner wrote
 (ADR 0008).
 
@@ -54,8 +57,8 @@ routed to the Judge's pinned model (`RUBRIC.md`) with `store: false`, no tools, 
 conversation state (ADR 0012). The provider receives only that sample, the rubric
 instructions, and structural annotations.
 
-When the Learner uses the Academy, the Trainer's provider (Anthropic, Gemini, or OpenRouter,
-which routes to Gemini's models; ADR 0012, ADR 0035) receives:
+When the Learner uses the Academy, the Trainer's provider (Anthropic or Gemini, or OpenRouter
+in the hosted profile, which routes to Gemini's models; ADR 0012, ADR 0035) receives:
 
 - to enrich an Evaluation: the whole Writing Sample, of either origin, its Findings, and any
   Explain Code snippet;
