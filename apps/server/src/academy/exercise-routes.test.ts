@@ -290,6 +290,20 @@ describe("POST /api/exercises", () => {
     });
   });
 
+  // Grifando's route read a body that is not JSON as no body (src/app/api/exercises/route.ts,
+  // 74dbb9f).
+  it("reads a body that is not JSON as no body", async () => {
+    await seedPattern("visitor-1");
+    const response = await appOf().request(
+      new Request("http://localhost/api/exercises", {
+        body: "{",
+        headers: { "content-type": "application/json", ...AI_HEADERS },
+        method: "POST",
+      })
+    );
+    expect(response.status).toBe(201);
+  });
+
   it("answers 500 with a generic message when generation fails unexpectedly", async () => {
     await seedPattern("visitor-1");
     trainer = {
@@ -489,6 +503,24 @@ describe("POST /api/exercises/[id]/attempts", () => {
     expect(await response.json()).toMatchObject({
       error: "Invalid request body",
       issues: [expect.any(Object)],
+    });
+  });
+
+  // Grifando's route read a body that is not JSON as null (src/app/api/exercises/[id]/attempts,
+  // 74dbb9f).
+  it("refuses a body that is not JSON with the issue of a null body", async () => {
+    const exercise = await seedExerciseWithPattern("visitor-1");
+    const response = await appOf().request(
+      new Request(`http://localhost/api/exercises/${exercise.id}/attempts`, {
+        body: "{",
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      })
+    );
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      error: "Invalid request body",
+      issues: [{ message: "Expected object", path: [] }],
     });
   });
 

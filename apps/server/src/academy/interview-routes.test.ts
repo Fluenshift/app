@@ -372,6 +372,27 @@ describe("interview routes", () => {
 // Grifando's start route answers its generic 500 for an answer the Trainer's schema refuses and
 // for anything unexpected (src/app/api/interview/route.ts, 74dbb9f); no Grifando test covers it.
 describe("POST /api/interview failures", () => {
+  // Grifando's route read a body that is not JSON as null
+  // (src/app/api/interview/[id]/turns/[turnId]/answer/route.ts, 74dbb9f); the body is checked
+  // before the turn is read.
+  it("refuses a body that is not JSON with the issue of a null body", async () => {
+    const response = await appOf().request(
+      new Request(
+        "http://localhost/api/interview/any-session/turns/any-turn/answer",
+        {
+          body: "{",
+          headers: { "content-type": "application/json", ...AI_HEADERS },
+          method: "POST",
+        }
+      )
+    );
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      error: "Invalid request body",
+      issues: [{ message: "Expected object", path: [] }],
+    });
+  });
+
   it("answers the generic 500 when the opening question fails", async () => {
     const continueInterview = vi.mocked(trainer.continueInterview);
     continueInterview.mockReturnValueOnce(

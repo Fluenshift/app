@@ -3,6 +3,7 @@ export {
   AttemptExplanation,
   AttemptRequest,
   CategoryBreakdownEntry,
+  CodeSnippet,
   DailyChallenge,
   errorCategoryOf,
   EXERCISE_TYPES,
@@ -30,6 +31,7 @@ export {
   PendingExercise,
   PendingExerciseList,
   PracticeOccurrence,
+  PracticeWritingRequest,
   PracticeWritingResult,
   PROMPT_TYPES,
   PromptType,
@@ -82,6 +84,7 @@ export {
   TrainerSetup,
   WRITING_SAMPLE_ORIGINS,
   WritingSampleOrigin,
+  WritingSampleRequest,
 } from "./evaluation";
 export { DeployProfile, DeployProfileStatus } from "./deploy-profile";
 export { HealthResponse } from "./health";

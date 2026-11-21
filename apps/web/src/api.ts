@@ -304,22 +304,14 @@ export const createHttpAcademyClient = ({
 
   return {
     async answerInterviewTurn(sessionId, turnId, answer) {
-      // The route reads its body itself, so the typed client takes no JSON for it.
       return academyJson(
-        await trainer.interview[":sessionId"].turns[":turnId"].answer.$post(
-          {
-            param: {
-              sessionId: encodeURIComponent(sessionId),
-              turnId: encodeURIComponent(turnId),
-            },
+        await trainer.interview[":sessionId"].turns[":turnId"].answer.$post({
+          json: { answer },
+          param: {
+            sessionId: encodeURIComponent(sessionId),
+            turnId: encodeURIComponent(turnId),
           },
-          {
-            init: {
-              body: JSON.stringify({ answer }),
-              headers: { "content-type": "application/json" },
-            },
-          }
-        ),
+        }),
         decodeInterviewAnswer
       );
     },
@@ -435,16 +427,10 @@ export const createHttpAcademyClient = ({
 
     async submitAttempt(exerciseId, answer) {
       return academyJson(
-        // The route reads its body itself, so the typed client takes no JSON for it.
-        await api.exercises[":exerciseId"].attempts.$post(
-          { param: { exerciseId: encodeURIComponent(exerciseId) } },
-          {
-            init: {
-              body: JSON.stringify({ answer }),
-              headers: { "content-type": "application/json" },
-            },
-          }
-        ),
+        await api.exercises[":exerciseId"].attempts.$post({
+          json: { answer },
+          param: { exerciseId: encodeURIComponent(exerciseId) },
+        }),
         decodeGradedAttempt
       );
     },

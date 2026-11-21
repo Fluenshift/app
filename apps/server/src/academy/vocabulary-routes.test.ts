@@ -106,6 +106,23 @@ describe("vocabulary routes", () => {
     });
   });
 
+  // Grifando's route read a body that is not JSON as null (src/app/api/vocabulary/route.ts,
+  // 74dbb9f).
+  it("refuses a body that is not JSON with the issue of a null body", async () => {
+    const response = await appOf().request(
+      new Request("http://localhost/api/vocabulary", {
+        body: "{",
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      })
+    );
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      error: "Invalid request body",
+      issues: [{ message: "Expected object", path: [] }],
+    });
+  });
+
   it("deletes the visitor's item with 204, and 404s for an unknown or another user's item", async () => {
     const app = appOf();
     const created = await app.request(json("POST", "/api/vocabulary", item));

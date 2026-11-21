@@ -5,12 +5,15 @@ import path from "node:path";
 
 import {
   AttemptRequest,
+  CodeSnippet,
   ErrorCategory,
   ExerciseGenerationRequest,
   InterviewAnswerRequest,
+  PracticeWritingRequest,
   ProgressEvidenceRequest,
   ProgressPeriod,
   VocabularyItemRequest,
+  WritingSampleRequest,
 } from "@fluenshift/contract";
 import type {
   AcademyDashboard,
@@ -34,9 +37,11 @@ import type { DatabaseError } from "@fluenshift/db";
 import type { InputLimits, SessionSettings } from "@fluenshift/env";
 import { getRequestListener } from "@hono/node-server";
 import { Effect, Option, Schema } from "effect";
+import type { StandardSchema } from "effect";
 import { Hono } from "hono";
 import type { Context as HonoContext, Handler, MiddlewareHandler } from "hono";
 import { bodyLimit } from "hono/body-limit";
+import type { BlankEnv } from "hono/types";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getMimeType } from "hono/utils/mime";
 
@@ -494,6 +499,41 @@ const INVALID_SELECTION = {
   error: "Progress selection is invalid",
 };
 
+// What a route's JSON body is to Hono: its typed client sends the encoded side of the contract
+// schema the route checks the body with, and the route reads the decoded side (docs/adr/0007,
+// docs/adr/0042).
+interface JsonBody<Encoded, Decoded> {
+  in: { json: Encoded };
+  out: { json: Decoded };
+}
+
+/** The context of a route whose JSON body the contract schema `S` checks. */
+type BodyContext<S extends Schema.Top, Path extends string> = HonoContext<
+  BlankEnv,
+  Path,
+  JsonBody<S["Encoded"], S["Type"]>
+>;
+
+// Reads a route's JSON body and checks it with the standard form of a contract schema, which must
+// have the sides the route's context declares to the typed client, or `tsc` fails. Each route
+// reads its body after its own first checks and chooses what a body that is not JSON reads as,
+// keeping its source's answers (docs/adr/0042).
+const readBody = <Encoded, Decoded, Path extends string>(
+  context: HonoContext<BlankEnv, Path, JsonBody<Encoded, Decoded>>,
+  schema: StandardSchema.StandardSchemaV1<Encoded, Decoded>,
+  notJson: unknown
+) =>
+  context.req
+    .json<unknown>()
+    .catch(() => notJson)
+    .then((body) => schema["~standard"].validate(body));
+
+// PE's Evaluation route refused every body but a Writing Sample with one answer.
+const WRITING_SAMPLE_REQUEST = Schema.toStandardSchemaV1(WritingSampleRequest);
+
+// Both evidence routes refuse a selection they cannot read with one answer.
+const EVIDENCE_REQUEST = Schema.toStandardSchemaV1(ProgressEvidenceRequest);
+
 // Grifando's vocabulary routes answer every issue of a refused body (src/app/api/vocabulary,
 // 74dbb9f), and a failure with a message the Learner can act on.
 const VOCABULARY_REQUEST = Schema.toStandardSchemaV1(VocabularyItemRequest, {
@@ -563,9 +603,6 @@ const interviewTurnView = ({
 
 const decodePeriod = Schema.decodeUnknownOption(ProgressPeriod);
 const decodeCategory = Schema.decodeUnknownOption(ErrorCategory);
-const decodeEvidenceRequest = Schema.decodeUnknownOption(
-  ProgressEvidenceRequest
-);
 
 /**
  * The selection a query string may carry: an insight or an Error Category, never a Correction,
@@ -640,8 +677,6 @@ const safelyLogEvaluation = (
   }
 };
 
-const WritingSampleRequest = Schema.Struct({ writingSample: Schema.String });
-
 // Grifando's writing route answered every issue of a refused body (src/app/api/writing-sessions,
 // 74dbb9f); a body that is not JSON is refused too. Explain code's snippet is trimmed, never
 // blank, and within the Deploy Profile's code cap, which only the hosted profile sets
@@ -649,16 +684,13 @@ const WritingSampleRequest = Schema.Struct({ writingSample: Schema.String });
 const practiceWritingRequest = (limits: InputLimits) =>
   Schema.toStandardSchemaV1(
     Schema.Struct({
+      ...PracticeWritingRequest.fields,
       codeSnippet: Schema.optionalKey(
-        Schema.Trim.check(
-          Schema.isMinLength(1),
-          ...Option.match(limits.codeMaxCharacters, {
-            onNone: () => [],
-            onSome: (maximum) => [Schema.isMaxLength(maximum)],
-          })
-        )
+        Option.match(limits.codeMaxCharacters, {
+          onNone: () => CodeSnippet,
+          onSome: (maximum) => CodeSnippet.check(Schema.isMaxLength(maximum)),
+        })
       ),
-      writingSample: Schema.String,
     }),
     { parseOptions: { errors: "all" } }
   );
@@ -862,17 +894,16 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     .get("/api/health", (context) =>
       context.json({ status: "ok" } satisfies HealthResponse)
     )
-    .post("/api/evaluations", (context): Promise<Response> =>
-      context.req.json<unknown>().then(
-        (body) => {
-          const request =
-            Schema.decodeUnknownOption(WritingSampleRequest)(body);
-          return Option.isNone(request)
-            ? context.json(INVALID_REQUEST, 400)
-            : evaluate(context, request.value.writingSample);
-        },
-        () => context.json(INVALID_REQUEST, 400)
-      )
+    .post(
+      "/api/evaluations",
+      (
+        context: BodyContext<typeof WritingSampleRequest, "/api/evaluations">
+      ): Promise<Response> =>
+        readBody(context, WRITING_SAMPLE_REQUEST, null).then((result) =>
+          result.issues === undefined
+            ? evaluate(context, result.value.writingSample)
+            : context.json(INVALID_REQUEST, 400)
+        )
     )
     .get("/api/evaluations", (context): Response | Promise<Response> => {
       const { listEvaluations } = options;
@@ -970,17 +1001,29 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           : Option.none()
       );
     })
-    .post("/api/progress/evidence", (context): Response | Promise<Response> => {
-      const { getProgressEvidence } = options;
-      if (getProgressEvidence === undefined) {
-        return context.json(PROGRESS_NOT_READY, 503);
+    .post(
+      "/api/progress/evidence",
+      (
+        context: BodyContext<
+          typeof ProgressEvidenceRequest,
+          "/api/progress/evidence"
+        >
+      ): Response | Promise<Response> => {
+        const { getProgressEvidence } = options;
+        if (getProgressEvidence === undefined) {
+          return context.json(PROGRESS_NOT_READY, 503);
+        }
+        return readBody(context, EVIDENCE_REQUEST, null).then((result) =>
+          evidence(
+            context,
+            getProgressEvidence,
+            result.issues === undefined
+              ? Option.some(result.value)
+              : Option.none()
+          )
+        );
       }
-      return context.req.json<unknown>().then(
-        (body) =>
-          evidence(context, getProgressEvidence, decodeEvidenceRequest(body)),
-        () => context.json(INVALID_SELECTION, 400)
-      );
-    })
+    )
     // Tests the key the Learner's browser sends, read from the request headers only: the local
     // profile's configured key is never tested. A malformed key reads as invalid at once.
     .post("/api/ai-key/test", (context): Response | Promise<Response> => {
@@ -1030,18 +1073,16 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           Response.json({ exercises: pending.map(publicView) }),
       });
     })
-    .post("/api/exercises", (context): Response | Promise<Response> => {
-      const { generateExercises } = options;
-      if (generateExercises === undefined) {
-        return context.json(notReady("Exercises are not available"), 503);
-      }
-      return context.req
-        .json<unknown>()
-        .then(
-          (body) => EXERCISE_REQUEST["~standard"].validate(body),
-          () => EXERCISE_REQUEST["~standard"].validate({})
-        )
-        .then((result) =>
+    .post(
+      "/api/exercises",
+      (
+        context: BodyContext<typeof ExerciseGenerationRequest, "/api/exercises">
+      ): Response | Promise<Response> => {
+        const { generateExercises } = options;
+        if (generateExercises === undefined) {
+          return context.json(notReady("Exercises are not available"), 503);
+        }
+        return readBody(context, EXERCISE_REQUEST, {}).then((result) =>
           result.issues === undefined
             ? edge(
                 forLearner(
@@ -1075,50 +1116,52 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 { status: 400 }
               )
         );
-    })
+      }
+    )
     // Grades one answer to the Learner's Exercise and answers with the whole Exercise, its
     // answer key included (Grifando's POST /api/exercises/[id]/attempts). No Trainer takes part.
     .post(
       "/api/exercises/:exerciseId/attempts",
-      (context): Response | Promise<Response> => {
+      (
+        context: BodyContext<
+          typeof AttemptRequest,
+          "/api/exercises/:exerciseId/attempts"
+        >
+      ): Response | Promise<Response> => {
         const { submitAttempt } = options;
         if (submitAttempt === undefined) {
           return context.json(notReady("Exercises are not available"), 503);
         }
-        return context.req
-          .json<unknown>()
-          .catch(() => null)
-          .then((body) => ATTEMPT_REQUEST["~standard"].validate(body))
-          .then((result) =>
-            result.issues === undefined
-              ? edge(
-                  forLearner(
+        return readBody(context, ATTEMPT_REQUEST, null).then((result) =>
+          result.issues === undefined
+            ? edge(
+                forLearner(
+                  context.req.raw,
+                  admitted(
                     context.req.raw,
-                    admitted(
-                      context.req.raw,
-                      "write",
-                      submitAttempt(
-                        context.req.param("exerciseId"),
-                        result.value.answer
-                      )
+                    "write",
+                    submitAttempt(
+                      context.req.param("exerciseId"),
+                      result.value.answer
                     )
-                  ),
-                  {
-                    errors: {
-                      DatabaseError: () => SOMETHING_WENT_WRONG,
-                      NotFoundError: () => NOT_FOUND,
-                      RateLimitedError: rateLimited,
-                    },
-                    log: "Failed to submit exercise attempt",
-                    success: (graded) => Response.json(graded),
-                    unexpected: SOMETHING_WENT_WRONG,
-                  }
-                )
-              : Response.json(
-                  { error: "Invalid request body", issues: result.issues },
-                  { status: 400 }
-                )
-          );
+                  )
+                ),
+                {
+                  errors: {
+                    DatabaseError: () => SOMETHING_WENT_WRONG,
+                    NotFoundError: () => NOT_FOUND,
+                    RateLimitedError: rateLimited,
+                  },
+                  log: "Failed to submit exercise attempt",
+                  success: (graded) => Response.json(graded),
+                  unexpected: SOMETHING_WENT_WRONG,
+                }
+              )
+            : Response.json(
+                { error: "Invalid request body", issues: result.issues },
+                { status: 400 }
+              )
+        );
       }
     )
     // "Explain my answer" on the key the request carries (Grifando's explanation route): the
@@ -1267,16 +1310,18 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     // docs/adr/0024). The body is checked before the key.
     .post(
       "/api/interview/:sessionId/turns/:turnId/answer",
-      (context): Response | Promise<Response> => {
+      (
+        context: BodyContext<
+          typeof InterviewAnswerRequest,
+          "/api/interview/:sessionId/turns/:turnId/answer"
+        >
+      ): Response | Promise<Response> => {
         const { answerInterviewTurn } = options;
         if (answerInterviewTurn === undefined) {
           return context.json(INTERVIEWS_NOT_READY, 503);
         }
-        return context.req
-          .json<unknown>()
-          .catch(() => null)
-          .then((body) => INTERVIEW_ANSWER_REQUEST["~standard"].validate(body))
-          .then((result) =>
+        return readBody(context, INTERVIEW_ANSWER_REQUEST, null).then(
+          (result) =>
             result.issues === undefined
               ? edge(
                   forLearner(
@@ -1322,7 +1367,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                   { error: "Invalid request body", issues: result.issues },
                   { status: 400 }
                 )
-          );
+        );
       }
     )
     // The Academy dashboard (Grifando's / page read it in a Server Component; docs/adr/0025).
@@ -1380,16 +1425,22 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     // evaluates the text as a practice Writing Sample and the Trainer folds its Findings. The
     // key is resolved first; a failed Enrichment keeps the Evaluation and answers 201, as
     // Grifando answered with its FAILED session.
-    .post("/api/practice-writing", (context): Response | Promise<Response> => {
-      const { writePractice } = options;
-      if (writePractice === undefined) {
-        return context.json(notReady("Practice writing is not available"), 503);
-      }
-      return context.req
-        .json<unknown>()
-        .catch(() => null)
-        .then((body) => practiceWritingBody["~standard"].validate(body))
-        .then((result) =>
+    .post(
+      "/api/practice-writing",
+      (
+        context: BodyContext<
+          typeof PracticeWritingRequest,
+          "/api/practice-writing"
+        >
+      ): Response | Promise<Response> => {
+        const { writePractice } = options;
+        if (writePractice === undefined) {
+          return context.json(
+            notReady("Practice writing is not available"),
+            503
+          );
+        }
+        return readBody(context, practiceWritingBody, null).then((result) =>
           result.issues === undefined
             ? edge(
                 forLearner(
@@ -1444,17 +1495,18 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 { status: 400 }
               )
         );
-    })
-    .post("/api/vocabulary", (context): Response | Promise<Response> => {
-      const { createVocabularyItem } = options;
-      if (createVocabularyItem === undefined) {
-        return context.json(notReady("Vocabulary is not available"), 503);
       }
-      return context.req
-        .json<unknown>()
-        .catch(() => null)
-        .then((body) => VOCABULARY_REQUEST["~standard"].validate(body))
-        .then((result) =>
+    )
+    .post(
+      "/api/vocabulary",
+      (
+        context: BodyContext<typeof VocabularyItemRequest, "/api/vocabulary">
+      ): Response | Promise<Response> => {
+        const { createVocabularyItem } = options;
+        if (createVocabularyItem === undefined) {
+          return context.json(notReady("Vocabulary is not available"), 503);
+        }
+        return readBody(context, VOCABULARY_REQUEST, null).then((result) =>
           result.issues === undefined
             ? edge(
                 forLearner(
@@ -1479,7 +1531,8 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 { status: 400 }
               )
         );
-    })
+      }
+    )
     .delete(
       "/api/vocabulary/:itemId",
       (context): Response | Promise<Response> => {
