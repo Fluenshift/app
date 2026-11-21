@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./app": "./src/app.ts"
+    "./app": "./src/app.ts",
+    "./seed-docker-smoke": "./src/test/seed-docker-smoke.ts"
   },
   "scripts": {
     "build": "tsdown",

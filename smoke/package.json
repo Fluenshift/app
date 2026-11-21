@@ -10,6 +10,7 @@
   "devDependencies": {
     "@fluenshift/config": "workspace:*",
     "@types/node": "catalog:",
+    "server": "workspace:*",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
