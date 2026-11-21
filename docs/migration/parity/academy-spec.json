@@ -216,7 +216,10 @@
       "slice": "academy-spec",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiFetch > refuses absolute and protocol-relative URLs without calling fetch",
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiFetch > saveAIKey reports false when storage throws"
+      ]
     },
     {
       "id": "grifando:fix-commit:8b80767",
