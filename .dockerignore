@@ -1,5 +1,5 @@
 # The image builds from the workspace sources only: no installed dependencies, build output,
-# local data, credentials, tool settings or migration records.
+# local data, credentials, tool settings or project records.
 **/node_modules
 **/dist
 **/.turbo
@@ -19,15 +19,12 @@
 .codex
 .mcp.json
 .scratch
-SESSION_HANDOFF.md
 AGENTS.md
 CLAUDE.md
 docs
-migration
 e2e
 gates
 scripts
-reports
 playwright-report
 test-results
 coverage

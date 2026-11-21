@@ -1,25 +1,16 @@
 // Gate self-tests (#20): each gate must reject a deliberately broken change, and a control gate
 // must still accept it, so the rejection comes from the intended gate.
 //
-//   node scripts/gate-selftest.ts [--root <baseline clones>]
+//   node scripts/gate-selftest.ts
 //
 // The cases run in a disposable worktree of HEAD beside this repository
-// (../<name>-gate-selftest), which is reset between cases and removed at the end. The parity
-// audit reads the baseline clones that `baselines.ts sync` maintains; --root points at another
-// directory of clones. Exits 1 when a gate accepts its broken case or a control rejects it.
+// (../<name>-gate-selftest), which is reset between cases and removed at the end. Exits 1 when a gate accepts its broken case or a control rejects it.
 
 import { spawnSync } from "node:child_process";
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { parseArgs } from "node:util";
 
-import { BaselineError, defaultRoot, repoRoot } from "./migration/baselines.ts";
+import { repoRoot, ScriptError } from "./repository.ts";
 
 interface Outcome {
   readonly passed: boolean;
@@ -61,9 +52,7 @@ function edit(tree: string, file: string, from: string, to: string): void {
   const full = path.join(tree, file);
   const text = readFileSync(full, "utf8");
   if (!text.includes(from))
-    throw new BaselineError(
-      `${file} no longer contains ${JSON.stringify(from)}`
-    );
+    throw new ScriptError(`${file} no longer contains ${JSON.stringify(from)}`);
   writeFileSync(full, text.replace(from, to));
 }
 
@@ -97,16 +86,10 @@ const UTF8_TEST = "src/utf8.test.ts";
 const testFile = (body: string) =>
   `import { describe, expect, it } from "vitest";\n\ndescribe("self-test", () => {\n${body}\n});\n`;
 
-// The ledger row and target the parity and red-green cases tamper with.
-const LEDGER = "docs/migration/parity/evaluation-core.json";
-const TARGET =
-  '"packages/core/src/rubric-v1.test.ts::Rubric Version 1 > counts letter words while keeping internal apostrophes and hyphens"';
-
 // The tracked files the cases edit, run or compile against, beside the gate configurations. A
 // change to one of them can make a case pass or fail for the wrong reason, so
 // scripts/ci-changes.ts runs the self-tests again when one changes.
 export const SELF_TEST_FIXTURES: readonly string[] = [
-  LEDGER,
   // The unmapped tagged error case calls `makeEdge`.
   "apps/server/src/edge.ts",
   // The Academy cases write through, and import beside, the read-only Evaluation views.
@@ -116,19 +99,7 @@ export const SELF_TEST_FIXTURES: readonly string[] = [
   `packages/core/${UTF8_TEST}`,
 ];
 
-function selfTests(reports: string, baselines: string): SelfTest[] {
-  const parityWithReports: Check = (tree) =>
-    run(tree, "node", [
-      "scripts/migration/parity-check.ts",
-      "--reports",
-      reports,
-    ]);
-  const audit: Check = (tree) =>
-    run(tree, "node", [
-      "scripts/migration/parity-audit.ts",
-      "--root",
-      baselines,
-    ]);
+function selfTests(): SelfTest[] {
   return [
     {
       gate: "G2",
@@ -373,107 +344,15 @@ function selfTests(reports: string, baselines: string): SelfTest[] {
       rejectedBy: [["gate integrity", gates]],
       acceptedBy: [["types", types("packages/core")]],
     },
-    {
-      gate: "G9",
-      name: "a ledger row pointing at a missing test",
-      apply: (tree) =>
-        edit(
-          tree,
-          LEDGER,
-          TARGET,
-          '"packages/core/src/rubric-v1.test.ts::Rubric Version 1 > no such test"'
-        ),
-      rejectedBy: [["parity check", parityWithReports]],
-      acceptedBy: [["tests", tests("packages/core", RUBRIC_TEST)]],
-    },
-    {
-      gate: "G9",
-      name: "a port target with a changed title",
-      apply: (tree) =>
-        edit(
-          tree,
-          LEDGER,
-          TARGET,
-          '"packages/core/src/rubric-v1.test.ts::Rubric Version 1 > matches approved score anchors and band boundaries"'
-        ),
-      rejectedBy: [["parity check", parityWithReports]],
-      acceptedBy: [["tests", tests("packages/core", RUBRIC_TEST)]],
-    },
-    {
-      gate: "G10",
-      name: "a weakened matcher",
-      apply: (tree) =>
-        edit(
-          tree,
-          `packages/core/${PROTECTED_CONTENT_TEST}`,
-          ".toEqual(",
-          ".toMatchObject("
-        ),
-      rejectedBy: [["parity audit", audit]],
-      acceptedBy: [["tests", tests("packages/core", PROTECTED_CONTENT_TEST)]],
-    },
   ];
 }
 
-// G8 needs history: one commit that adds a target whose test already passes.
-function redGreenSelfTest(tree: string): {
-  rejected: boolean;
-  accepted: boolean;
-} {
-  const base = run(tree, "git", ["rev-parse", "HEAD"]).output.trim();
-  write(
-    tree,
-    TEST_FILE,
-    testFile(
-      '  it("passes before any code", () => {\n    expect(1).toBe(1);\n  });'
-    )
-  );
-  edit(
-    tree,
-    LEDGER,
-    TARGET,
-    `${TARGET},\n        "${TEST_FILE}::self-test > passes before any code"`
-  );
-  run(tree, "git", ["add", "-A"]);
-  run(tree, "git", [
-    "-c",
-    "commit.gpgsign=false",
-    "-c",
-    "user.name=gate-selftest",
-    "-c",
-    "user.email=gate-selftest@example.invalid",
-    "commit",
-    "-qm",
-    "test: add a target that already passes",
-  ]);
-  const verdict = run(tree, "node", [
-    "scripts/migration/red-green.ts",
-    "--base",
-    base,
-    "--head",
-    "HEAD",
-  ]);
-  const control = tests("packages/core", "src/selftest.test.ts")(tree);
-  run(tree, "git", ["reset", "-q", "--hard", base]);
-  return {
-    rejected: !verdict.passed && verdict.output.includes("before its code"),
-    accepted: control.passed,
-  };
-}
-
-function main(argv: readonly string[]): number {
-  const { values } = parseArgs({
-    args: [...argv],
-    options: { root: { type: "string" } },
-  });
-  const baselines =
-    values.root === undefined ? defaultRoot : path.resolve(values.root);
+function main(): number {
   const tree = path.resolve(
     repoRoot,
     "..",
     `${path.basename(repoRoot)}-gate-selftest`
   );
-  const reports = `${tree}-reports`;
   const reset = () => {
     run(tree, "git", ["reset", "-q", "--hard", "HEAD"]);
     run(tree, "git", ["clean", "-fdq"]);
@@ -493,16 +372,8 @@ function main(argv: readonly string[]): number {
       "--prefer-offline",
     ]);
     if (!install.passed)
-      throw new BaselineError(`pnpm install failed:\n${install.output}`);
-    const testReports = run(tree, "node", [
-      "scripts/migration/test-reports.ts",
-      reports,
-    ]);
-    if (!testReports.passed)
-      throw new BaselineError(
-        `the test reports failed:\n${testReports.output}`
-      );
-    for (const test of selfTests(reports, baselines)) {
+      throw new ScriptError(`pnpm install failed:\n${install.output}`);
+    for (const test of selfTests()) {
       reset();
       test.apply(tree);
       const rejections = test.rejectedBy.map(
@@ -525,17 +396,8 @@ function main(argv: readonly string[]): number {
         ].join(", ")
       );
     }
-    reset();
-    const redGreen = redGreenSelfTest(tree);
-    report(
-      "G8",
-      "a first commit whose tests already pass",
-      redGreen.rejected && redGreen.accepted,
-      `${redGreen.rejected ? "rejected" : "ACCEPTED"} by red-green, ${redGreen.accepted ? "accepted" : "REJECTED"} by tests`
-    );
   } finally {
     run(repoRoot, "git", ["worktree", "remove", "--force", tree]);
-    rmSync(reports, { recursive: true, force: true });
   }
   console.log(
     failures === 0
@@ -547,7 +409,7 @@ function main(argv: readonly string[]): number {
 
 if (import.meta.main) {
   try {
-    process.exitCode = main(process.argv.slice(2));
+    process.exitCode = main();
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));
     process.exitCode = 2;

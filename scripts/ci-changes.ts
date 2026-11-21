@@ -17,7 +17,7 @@ import { execFileSync } from "node:child_process";
 import { parseArgs } from "node:util";
 
 import { SELF_TEST_FIXTURES } from "./gate-selftest.ts";
-import { BaselineError, repoRoot } from "./migration/baselines.ts";
+import { repoRoot, ScriptError } from "./repository.ts";
 
 export interface Changes {
   readonly code: boolean;
@@ -31,14 +31,12 @@ const INERT = /^(?!(?:apps|packages|smoke)\/).*\.md$/;
 
 // What the gates are made of: the files scripts/check-gates.ts records (lint, TypeScript,
 // formatter, Vite, Vitest and Playwright configurations, hooks, workflows), the scripts, the
-// toolchain, and the records the self-tests read (the pins and the inventory).
+// toolchain.
 const GATE_PATHS: readonly RegExp[] = [
   /^\.github\/workflows\//,
   /^\.husky\//,
   /^\.node-version$/,
   /^\.oxlintrc\.jsonc?$/,
-  /^docs\/migration\/baselines\.json$/,
-  /^docs\/migration\/inventory\//,
   /^gates\//,
   /^mise\.toml$/,
   /^scripts\//,
@@ -89,7 +87,7 @@ function main(argv: readonly string[]): number {
     options: { base: { type: "string" }, head: { type: "string" } },
   });
   if (values.base === undefined || values.head === undefined)
-    throw new BaselineError(
+    throw new ScriptError(
       "usage: ci-changes.ts --base <commit> --head <commit>"
     );
   const files = changedFiles(values.base, values.head);

@@ -1,6 +1,6 @@
 name: CI
 
-# The gates of docs/migration/MIGRATION_PROTOCOL.md, each suite once per run (ADR 0019).
+# The gates of AGENTS.md (Gates), each suite once per run (ADR 0019, ADR 0044).
 # `changes` reads the files a run touches: a change that is only Markdown outside the workspaces
 # runs the static checks and G7 alone, and the gate self-tests run only when a gate changes.
 # G11 records this file line by line, so every edit waits for a new gate baseline.
@@ -72,11 +72,6 @@ jobs:
       - name: G11 gate integrity
         run: pnpm check:gates
 
-      # Without reports: the rows, their dispositions and the ADRs they cite. An ADR is Markdown,
-      # so this is the part of G9 a change that skips the suites still needs.
-      - name: G9 the ledger's structure
-        run: node scripts/migration/parity-check.ts
-
       - name: G2 lint
         run: pnpm lint
 
@@ -93,7 +88,7 @@ jobs:
         run: pnpm build
 
   tests:
-    name: Tests, Docker smoke and parity (G3, G6, G9)
+    name: Tests and Docker smoke (G3, G6)
     needs: changes
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-24.04
@@ -112,14 +107,11 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: G3 the scripts' own tests
-        run: pnpm test:scripts
+      - name: G3 the scripts' own tests and every workspace suite
+        run: pnpm test
 
-      - name: G3 and G6 every suite, with a report
-        run: node scripts/migration/test-reports.ts reports
-
-      - name: G9 every ledger row valid, every target passing
-        run: node scripts/migration/parity-check.ts --reports reports
+      - name: G6 the Docker smoke of both Deploy Profiles
+        run: pnpm docker:smoke
 
   postgres:
     name: Postgres integration (G3)
@@ -181,60 +173,6 @@ jobs:
       - name: G5 journeys against the built process
         run: pnpm test:e2e
 
-  red-green:
-    name: Red-green (G8)
-    needs: changes
-    # Only a pull request holds a unit's first commit.
-    if: github.event_name == 'pull_request' && needs.changes.outputs.code == 'true'
-    runs-on: ubuntu-24.04
-    # A Docker smoke target builds the image at its first commit and at the head.
-    timeout-minutes: 40
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-
-      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
-
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .node-version
-          cache: pnpm
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: G8 every target red at its first commit, green at the head
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: node scripts/migration/red-green.ts --base "$BASE_SHA" --head "$HEAD_SHA"
-
-  records:
-    name: Migration records (pins, inventory, G10)
-    needs: changes
-    if: needs.changes.outputs.code == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .node-version
-
-      - name: Baseline tags still resolve to the pins
-        run: node scripts/migration/baselines.ts verify
-
-      - name: Clone the baselines at their pins
-        run: node scripts/migration/baselines.ts sync
-
-      - name: The inventory reproduces byte for byte
-        run: node scripts/migration/inventory.ts --check
-
-      - name: G10 ported tests keep their source's strength
-        run: node scripts/migration/parity-audit.ts
-
   supply-chain:
     # Runs for every change: a secret can land in Markdown too.
     name: Secrets and dependencies (G7)
@@ -267,7 +205,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.gates == 'true'
     runs-on: ubuntu-24.04
-    # The self-tests start from full test reports, the Docker smoke included.
+    # Each case installs, then runs the gates it names in a worktree.
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -283,9 +221,6 @@ jobs:
 
       - name: Install
         run: pnpm install --frozen-lockfile
-
-      - name: Clone the baselines at their pins
-        run: node scripts/migration/baselines.ts sync
 
       - name: Every gate rejects its broken case
         run: node scripts/gate-selftest.ts

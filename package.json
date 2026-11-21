@@ -19,7 +19,6 @@
     "format:fix": "oxfmt .",
     "lint": "oxlint --deny-warnings",
     "lint:effect": "oxlint --deny-warnings --config oxlint.effect.config.ts apps/server packages/contract packages/core packages/db packages/env",
-    "parity": "node scripts/migration/test-reports.ts reports && node scripts/migration/parity-check.ts --reports reports",
     "prepare": "husky && effect-tsgo patch --typescript --oxlint",
     "test": "pnpm test:scripts && turbo run test",
     "test:e2e": "turbo run build && playwright test",

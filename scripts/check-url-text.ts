@@ -15,7 +15,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-import { repoRoot } from "./migration/baselines.ts";
+import { repoRoot } from "./repository.ts";
 
 /** The query keys a URL may carry: a Progress period, an insight and an Error Category. */
 export const QUERY_KEYS: ReadonlySet<string> = new Set([

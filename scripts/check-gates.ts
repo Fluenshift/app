@@ -26,7 +26,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 
-import { BaselineError, repoRoot } from "./migration/baselines.ts";
+import { repoRoot, ScriptError } from "./repository.ts";
 
 export const baselineFile = path.join(repoRoot, "gates", "baseline.json");
 
@@ -120,7 +120,7 @@ export function ruleSetting(value: Json | undefined): {
 
 export function lintSnapshot(printed: unknown): LintSnapshot {
   if (!isRecord(printed) || !isRecord(printed["rules"]))
-    throw new BaselineError("oxlint --print-config: unexpected output");
+    throw new ScriptError("oxlint --print-config: unexpected output");
   const overrides = Array.isArray(printed["overrides"])
     ? printed["overrides"]
     : [];
@@ -302,9 +302,9 @@ export function effectiveOptions(
   seen: ReadonlySet<string> = new Set()
 ): Record<string, unknown> {
   if (seen.has(file))
-    throw new BaselineError(`${file}: circular tsconfig extends`);
+    throw new ScriptError(`${file}: circular tsconfig extends`);
   const config = readConfig(file);
-  if (!isRecord(config)) throw new BaselineError(`${file}: not a JSON object`);
+  if (!isRecord(config)) throw new ScriptError(`${file}: not a JSON object`);
   const own = isRecord(config["compilerOptions"])
     ? config["compilerOptions"]
     : {};
@@ -398,7 +398,6 @@ export const GATE_SCRIPTS = [
   "format",
   "lint",
   "lint:effect",
-  "parity",
   "prepare",
   "smoke",
   "test",
@@ -670,9 +669,6 @@ const LINE_FILES = [
   /(?:^|\/)(?:vite|vitest|playwright)(?:\.[\w-]+)?\.config\.[cm]?[jt]s$/,
 ];
 const CODE = /\.[cm]?[jt]sx?$/;
-// Characterization tests are written for the baselines and never run here.
-const NOT_OURS = /^migration\//;
-
 function trackedFiles(root: string): string[] {
   return execFileSync("git", ["ls-files", "-z"], {
     cwd: root,
@@ -686,7 +682,7 @@ function readJson(file: string): unknown {
   try {
     return JSON.parse(readFileSync(file, "utf8"));
   } catch (error) {
-    throw new BaselineError(`${file}: not valid JSON (${String(error)})`);
+    throw new ScriptError(`${file}: not valid JSON (${String(error)})`);
   }
 }
 
@@ -711,7 +707,7 @@ function resolverFor(root: string, packages: ReadonlyMap<string, string>) {
     for (const [name, dir] of packages)
       if (specifier.startsWith(`${name}/`))
         return path.join(root, dir, specifier.slice(name.length + 1));
-    throw new BaselineError(`${from}: cannot resolve extends ${specifier}`);
+    throw new ScriptError(`${from}: cannot resolve extends ${specifier}`);
   };
 }
 
@@ -725,7 +721,7 @@ function printLintConfig(root: string, config: string): unknown {
 }
 
 export function snapshotTree(root: string): Snapshot {
-  const files = trackedFiles(root).filter((file) => !NOT_OURS.test(file));
+  const files = trackedFiles(root);
   const read = (file: string) => readFileSync(path.join(root, file), "utf8");
   const resolve = resolverFor(root, workspacePackages(root, files));
   const ofKind = (pattern: RegExp) =>

@@ -43,12 +43,7 @@ const nodeBuiltins = [
 
 export default defineConfig({
   extends: [core, react, tanstack],
-  ignorePatterns: [
-    ...core.ignorePatterns,
-    "apps/web/src/routeTree.gen.ts",
-    // Characterization tests are written for the baselines' stacks and run only there.
-    "migration/**",
-  ],
+  ignorePatterns: [...core.ignorePatterns, "apps/web/src/routeTree.gen.ts"],
   rules: {
     "no-restricted-imports": ["error", { paths: [noZod] }],
     // Configuration comes from Effect Config in packages/env, never process.env.
@@ -87,7 +82,7 @@ export default defineConfig({
       rules: { "node/no-process-env": "off" },
     },
     {
-      // Phase 5f seam (docs/migration/MIGRATION_PROTOCOL.md): the Academy reads Evaluations and
+      // The seam between the products (AGENTS.md, Code): the Academy reads Evaluations and
       // never writes them, so it reaches the Evaluation tables only through their read-only views.
       files: ["apps/server/src/academy/**"],
       rules: {
