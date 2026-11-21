@@ -10,8 +10,8 @@ Each entry says what a term means and, in italics, the synonyms it forbids.
 
 ## Everywhere
 
-**Learner**: the person using Fluenshift on their own writing. Every stored row belongs to
-one Learner. The `local` Deploy Profile has one implicit Learner; in the `hosted` profile each
+**Learner**: the person using Fluenshift on their own writing. Every record of writing and
+practice belongs to one Learner. The `local` Deploy Profile has one implicit Learner; in the `hosted` profile each
 signed session names one (ADR 0003).
 _Not: user, account, customer._
 
@@ -90,6 +90,10 @@ _Not: rewrite, fix._
 inside a Writing Sample. Excluded from correction and preserved byte for byte.
 _Not: writing, prose._
 
+**Finding Rate**: Findings per 100 evaluated English words, of one Evaluation or over a period.
+Naturalness Notes never change it (ADR 0004).
+_Not: error rate, mistake rate._
+
 **Progress Insight**: a normalized or descriptive observation derived from Evaluations over a
 period: Findings per 100 evaluated English words, category recurrence, average score,
 distribution, recurring Corrections. Practice-origin Writing Samples stay out of every insight
@@ -126,14 +130,15 @@ Mistake Pattern, with the Rubric Version of the Evaluation it came from. Immutab
 _Not: mistake record, mistake occurrence, copy of a Finding._
 
 **Pattern Key**: the short slug the Trainer proposes for the concept behind a Finding, such
-as `preposition:depend`. Normalized on write: lowercased, trimmed, other characters collapsed
+as `depend-on-preposition`. Normalized on write: lowercased, trimmed, other characters collapsed
 to hyphens, and its length capped.
 _Not: tag, label, cluster._
 
 **Mistake Category**: the Academy's finer classification of a Finding, one of the eleven
 Grifando categories that ADR 0005 maps onto seven Error Categories, assigned by the Enrichment.
-Grifando's literal-translation category becomes the L1 Transfer flag, and its
-unnatural-phrasing category a Naturalness Note. The Judge never sees it.
+Grifando's literal-translation category becomes the L1 Transfer flag. Its unnatural-phrasing
+category names the Mistake Patterns that Naturalness Notes grow, and maps to no Error Category
+(ADR 0028). The Judge never sees it.
 _Not: Error Category, error type._
 
 **Naturalness Note**: the Enrichment's note that a span is correct but unnatural. It never
@@ -141,8 +146,8 @@ changes the Overall Score, the corrected text or the finding rate (ADR 0004). It
 Mistake Pattern's Occurrences but is never a failed recall (ADR 0020, ADR 0028).
 _Not: Finding, Suggestion, unnatural-phrasing error._
 
-**L1 Transfer**: the flag on an Occurrence whose error carries a pattern over from the
-Learner's first language. Grifando's literal-translation category becomes this flag on the
+**L1 Transfer**: the flag on an Occurrence, of a Finding or of a Naturalness Note, that carries
+a pattern over from the Learner's first language. Grifando's literal-translation category becomes this flag on the
 category of the underlying error (ADR 0005).
 _Not: literal translation category._
 
@@ -165,8 +170,8 @@ _Not: memory score, retention score._
 choice, fill in the blank, rewrite, or translation.
 _Not: quiz, question, drill._
 
-**Attempt**: one answer a Learner gives to an Exercise, graded deterministically against the
-closest acceptable answer. An optional explanation of the answer never affects the grade.
+**Attempt**: one answer a Learner gives to an Exercise, graded deterministically: correct when
+it matches any acceptable answer once normalized. An optional explanation of the answer never affects the grade.
 _Not: try, submission._
 
 **Category Ability**: an Elo-style estimate of the Learner's ability in one Mistake Category,
@@ -186,6 +191,10 @@ _Not: a bare "prompt", which on the Evaluation axis means text written for anoth
 practice-origin Writing Sample that the Judge evaluates like any other; there is no separate
 interview score (ADR 0010).
 _Not: mock interview score, fifth score._
+
+**Vocabulary Item**: a term the Learner keeps to study, with its meaning in Portuguese, an
+example sentence, and the Evaluation it came from, when it came from one.
+_Not: flashcard, word list entry._
 
 ## Collisions resolved
 
