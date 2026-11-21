@@ -239,8 +239,8 @@
       "source": "e2e/mvp.spec.ts",
       "class": "A",
       "slice": "evaluation-e2e",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     }
   ]

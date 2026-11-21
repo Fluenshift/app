@@ -83,8 +83,8 @@ maps slices to phases.
 
 ### Phase 4: the Evaluation axis, what is left
 
-- **4f:** port `e2e/mvp.spec.ts`, then the remaining Docker smoke rows of the local profile.
-  Paused with the end-to-end tests (`AGENTS.md`, Rules).
+- **4f:** port the remaining Docker smoke rows of the local profile; `e2e/mvp.spec.ts` drops
+  with the other rows that check the interface (ADR 0043).
 
 Exit: all PE-sourced rows `verified`; E2E green; local Docker smoke green.
 
@@ -123,10 +123,11 @@ Goal: port the remaining Grifando features and the hosted-deployment behavior.
    SPA; privacy page in EN and PT; Grifando's link preview, its metadata static in the shell
    and its OG image a static file (ADR 0040); robots and sitemap.
 4. Automate the checks of Grifando's `docs/deploy.md` §5 that ADR 0011 keeps (cleanup has no
-   public endpoint) as the hosted-profile Docker smoke. Paused with the end-to-end tests.
+   public endpoint) as the hosted-profile Docker smoke: the session cookie, the CSP header,
+   robots and sitemap. The checks made in a browser drop (ADR 0043).
 
 Exit: every remaining row `verified`, `superseded` or `drop` under an accepted ADR; hosted
-Docker smoke green once the pause on end-to-end tests ends.
+Docker smoke green.
 
 ### Phase 7: parity sign-off and cutover
 
@@ -166,7 +167,7 @@ Exit: every item in the definition of done holds.
 | G3 Tests | Vitest with `@effect/vitest`, unit and integration, on PGlite databases; CI also runs the `Database` service against a Postgres 17 service container. |
 | G4 Build | Server bundle and SPA build; the single process starts and serves `/api/health` and the SPA. |
 | G5 E2E | Playwright journeys against the built process, from `e2e/mvp.spec.ts` and the Phase 0 characterizations. |
-| G6 Docker smoke | Local: loopback-only publication, refusal of non-loopback connections, hostile Host and Origin headers, migrations, data surviving container replacement, image secret scan. Hosted (Phase 6, paused with the end-to-end tests): session cookie, CSP header, robots and sitemap. |
+| G6 Docker smoke | Local: loopback-only publication, refusal of non-loopback connections, hostile Host and Origin headers, migrations, data surviving container replacement, image secret scan. Hosted (Phase 6): session cookie, CSP header, robots and sitemap. |
 | G7 Privacy and supply chain | gitleaks over the whole history; `pnpm audit --prod --audit-level high`; from Phase 6, the no-key-in-logs test; `scripts/check-url-text.ts`, which keeps user text out of URLs (ADR 0008); no remote telemetry (ADR 0013). |
 | G8 Red-green proof | The pull request's first commit fails the unit's target tests with assertion errors; the head passes them. |
 | G9 Parity check | Every inventory row present with a valid disposition, its status derived from the reports (the ledger stores none); every `port-changed`, `superseded` or `drop` row cites an accepted ADR; every target exists in the test reports and passes; `port` targets keep their source titles; only `pending-decision` rows may have skipped tests. |

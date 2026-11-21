@@ -442,8 +442,8 @@
       "source": "apps/server/src/test/dev-proxy.test.ts",
       "class": "C",
       "slice": "evaluation-http",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     },
     {
@@ -451,8 +451,8 @@
       "source": "apps/server/src/test/dev-proxy.test.ts",
       "class": "C",
       "slice": "evaluation-http",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     },
     {
@@ -460,8 +460,8 @@
       "source": "apps/server/src/test/dev-proxy.test.ts",
       "class": "C",
       "slice": "evaluation-http",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     },
     {
@@ -469,8 +469,8 @@
       "source": "apps/server/src/test/dev-proxy.test.ts",
       "class": "C",
       "slice": "evaluation-http",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     }
   ]

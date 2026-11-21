@@ -2,6 +2,8 @@
 
 - Status: Accepted on 2026-11-20 by the session (ADR 0020), with the Phase 6 robots and sitemap
   unit (#243).
+- Amended by ADR 0043: the end-to-end pause has ended, so the hosted Docker smoke's robots and
+  sitemap checks port.
 - Phase 6. Ledger rows in `hosted.json`: `grifando:test:src/app/sitemap.test.ts::getSiteUrl >
   prefers NEXT_PUBLIC_SITE_URL, then the Vercel production host, then localhost` and the
   characterizations of `robots()` and of the proxy matcher become `port-changed` under this ADR;

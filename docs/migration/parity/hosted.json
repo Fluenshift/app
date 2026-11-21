@@ -225,8 +225,8 @@
       "source": "docs/deploy.md",
       "class": null,
       "slice": "hosted",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     },
     {
@@ -234,8 +234,8 @@
       "source": "docs/deploy.md",
       "class": null,
       "slice": "hosted",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     },
     {
@@ -243,8 +243,8 @@
       "source": "docs/deploy.md",
       "class": null,
       "slice": "hosted",
-      "disposition": "port-changed",
-      "decision": "adr:0004",
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     },
     {
@@ -252,8 +252,8 @@
       "source": "docs/deploy.md",
       "class": null,
       "slice": "hosted",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     },
     {
@@ -261,8 +261,8 @@
       "source": "docs/deploy.md",
       "class": null,
       "slice": "hosted",
-      "disposition": "port",
-      "decision": null,
+      "disposition": "drop",
+      "decision": "adr:0043",
       "targets": []
     },
     {

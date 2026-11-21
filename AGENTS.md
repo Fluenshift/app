@@ -221,9 +221,9 @@ standing instructions:
 - Open issues for the problems you find, and solve the ones you can.
 - Speed over ceremony (2026-11-20): CI is the full gate, `code-review` runs once per milestone,
   and mutations run where tests look thin.
-- End-to-end tests are paused: write no new Playwright journey, Vite dev-proxy case or Docker
-  smoke check, and leave their rows open. The existing ones keep running. In-process route
-  tests (`app.request`) continue.
+- End-to-end checks of the server, its container and its data port as any row does
+  (2026-11-21, ADR 0043). The interface will be redesigned: rows that check it drop, and the
+  existing Playwright journeys keep running until their pages change.
 - At the end of a session, rewrite `SESSION_HANDOFF.md` through a pull request. A session that resumes from a compacted conversation ends early: it finishes the pull request already in motion, writes the handoff, and stops, so the next session starts with a fresh context.
 
 Code:
