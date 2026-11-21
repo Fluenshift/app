@@ -115,7 +115,8 @@ const hasCommandEvidence = (
     );
   }
   if (command === "env") {
-    return /^(?:--?\S+\s+)*(?:[A-Za-z_][A-Za-z0-9_]*=\S+)(?:\s|$)/u.test(
+    // PE wrote `--?\S+`, which reads the same strings as `-\S+` but backtracks exponentially.
+    return /^(?:-\S+\s+)*(?:[A-Za-z_][A-Za-z0-9_]*=\S+)(?:\s|$)/u.test(
       argumentsText
     );
   }
@@ -981,7 +982,10 @@ class ProtectedContentDetector {
       /\b(?:[\w@+.-]+\/)+(?:[\w@+-]+\.)+[A-Za-z0-9]+\b/gu,
       /(?<![\w])(?:\.{1,2}|~)?\/[\w.@~+\-/]+/gu,
       /\b(?:[A-Za-z]+_[A-Za-z0-9_]+|[a-z]+[A-Z][A-Za-z0-9]*)(?:\(\))?/gu,
-      /\b[A-Z][a-z0-9]+(?:[A-Z][A-Za-z0-9]*)+\b/gu,
+      // PE wrote `(?:[A-Z][A-Za-z0-9]*)+` for the capitals: `\b` only holds at the end of a run of
+      // letters and digits, where both forms accept the same runs, but that one backtracks
+      // exponentially.
+      /\b[A-Z][a-z0-9]+[A-Z][A-Za-z0-9]*\b/gu,
       /\b(?:app|args|client|config|console|ctx|data|document|env|globalThis|module|options|process|props|request|response|schema|server|state|this|window)(?:\.[A-Za-z_$][\w$]*)+\b/gu,
       /\b[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)+\(\)/gu,
       /\b[A-Za-z_$][\w$]*\(\)/gu,
