@@ -44,6 +44,8 @@ import {
   MissingAIKeyError,
 } from "./features/settings/ai-key-store";
 
+const SAME_ORIGIN_ONLY = "aiFetch only accepts same-origin paths like /api/...";
+
 /**
  * fetch for the routes that call the Trainer in the hosted profile: it attaches the stored key in
  * its two headers, and nowhere else, never in a URL, a body or a log (docs/adr/0012). Ported from
@@ -51,8 +53,6 @@ import {
  * never reaches another host. `send` is the fetch that sends the request, the browser's unless a
  * client was given its own.
  */
-const SAME_ORIGIN_ONLY = "aiFetch only accepts same-origin paths like /api/...";
-
 export const aiFetch = (
   input: string,
   init?: RequestInit,
@@ -91,12 +91,8 @@ type Api = ReturnType<typeof apiOf>;
 // (docs/adr/0012, docs/adr/0034, docs/adr/0035).
 const keyedApiOf = (
   deployProfile: DeployProfile,
-  api: Api,
   fetch?: typeof globalThis.fetch
-): Api =>
-  deployProfile === "hosted"
-    ? hc<AppType>("/", { fetch: keyedFetch(fetch) }).api
-    : api;
+): Api => apiOf(deployProfile === "hosted" ? keyedFetch(fetch) : fetch);
 
 interface HttpEvaluationClientOptions {
   readonly fetch?: typeof globalThis.fetch;
@@ -225,7 +221,7 @@ export const createHttpEvaluationClient = ({
   const api = apiOf(fetch);
   // The one call that reaches the Judge: in the hosted profile it carries the browser's
   // OpenRouter key (docs/adr/0035).
-  const judge = keyedApiOf(deployProfile, api, fetch);
+  const judge = keyedApiOf(deployProfile, fetch);
 
   return {
     async deleteEvaluation(evaluationId) {
@@ -304,7 +300,7 @@ export const createHttpAcademyClient = ({
   const api = apiOf(fetch);
   // The calls that reach the Trainer, Grifando's aiFetch calls: in the hosted profile they carry
   // the browser's key, and no other call does (docs/adr/0012, docs/adr/0034).
-  const trainer = keyedApiOf(deployProfile, api, fetch);
+  const trainer = keyedApiOf(deployProfile, fetch);
 
   return {
     async answerInterviewTurn(sessionId, turnId, answer) {
