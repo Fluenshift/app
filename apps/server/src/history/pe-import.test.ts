@@ -441,6 +441,40 @@ describe("PE import", () => {
     expect(written).toEqual({ ...NOTHING_WRITTEN, learners: 1 });
   });
 
+  it("refuses a PE database with no Evaluations, dry or not, so that the history can still be imported", async () => {
+    const empty = await peDatabase(
+      "delete from suggestions",
+      "delete from findings",
+      "delete from evaluations"
+    );
+    const file = await peDatabase();
+    const database = await productDatabase();
+
+    const outcomes = await run(
+      Effect.gen(function* () {
+        const emptyDryRun = yield* refusal(
+          importPeHistory(empty, { dryRun: true })
+        );
+        const emptyImport = yield* refusal(
+          importPeHistory(empty, { dryRun: false })
+        );
+        const historyImport = yield* refusal(
+          importPeHistory(file, { dryRun: false })
+        );
+        return { emptyDryRun, emptyImport, historyImport };
+      }),
+      database.layer
+    );
+
+    expect(outcomes.emptyDryRun).toBe(
+      "PeImportError: this PE database holds no Evaluations: there is nothing to import"
+    );
+    expect(outcomes.emptyImport).toBe(
+      "PeImportError: this PE database holds no Evaluations: there is nothing to import"
+    );
+    expect(outcomes.historyImport).toBe("not refused");
+  });
+
   it("refuses a PE database with an Evaluation of another Rubric Version, and writes nothing", async () => {
     const file = await peDatabase(
       "update evaluations set rubric_version = '2' where rowid = 2"
