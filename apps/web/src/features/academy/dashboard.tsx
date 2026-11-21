@@ -196,13 +196,13 @@ export const RecentWriting = ({
   );
 };
 
-const metricFormatter = new Intl.NumberFormat("en", {
+const rateFormatter = new Intl.NumberFormat("en", {
   maximumFractionDigits: 1,
 });
 
 // As PE's Progress shows a rate: one decimal, and "<0.1" for a rate too small to round.
 const formatRate = (value: number) =>
-  value > 0 && value < 0.1 ? "<0.1" : metricFormatter.format(value);
+  value > 0 && value < 0.1 ? "<0.1" : rateFormatter.format(value);
 
 const countLabel = (count: number, one: string, many: string) =>
   `${String(count)} ${count === 1 ? one : many}`;

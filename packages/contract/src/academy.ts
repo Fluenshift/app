@@ -20,17 +20,6 @@ const literalObject = <const Values extends readonly string[]>(
     values.map((value) => [value, value])
   ) as LiteralObject<Values>;
 
-export const PROMPT_TYPES = [
-  "FREE",
-  "DAILY_CHALLENGE",
-  "TECHNICAL",
-  "EXPLAIN_CODE",
-  "INTERVIEW",
-] as const;
-export const PromptType = literalObject(PROMPT_TYPES);
-export type PromptType = (typeof PROMPT_TYPES)[number];
-export const PromptTypeSchema = Schema.Literals(PROMPT_TYPES);
-
 export const TECHNICAL_CATEGORIES = [
   "BACKEND",
   "FRONTEND",

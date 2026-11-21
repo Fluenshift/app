@@ -7,7 +7,7 @@ import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 import { PageHeader, PageShell } from "../features/academy/page-header";
 import { PracticeWriting } from "../features/academy/practice-writing";
-import type { InitialChallenge } from "../features/academy/practice-writing";
+import type { InitialPracticePrompt } from "../features/academy/practice-writing";
 import { sampleLimitsFor } from "../features/academy/sample-limits";
 
 interface WriteSearch {
@@ -17,7 +17,7 @@ interface WriteSearch {
 
 const routeApi = getRouteApi("/write");
 
-const headingFor = (challenge: InitialChallenge | undefined) => {
+const headingFor = (challenge: InitialPracticePrompt | undefined) => {
   if (challenge?.promptType === "DAILY_CHALLENGE") {
     return {
       description:
@@ -40,15 +40,15 @@ const headingFor = (challenge: InitialChallenge | undefined) => {
 };
 
 const WritePage = () => {
-  const initialChallenge = routeApi.useLoaderData();
+  const initialPracticePrompt = routeApi.useLoaderData();
   const { sampleLimits } = routeApi.useRouteContext();
-  const heading = headingFor(initialChallenge);
+  const heading = headingFor(initialPracticePrompt);
 
   return (
     <PageShell>
       <PageHeader description={heading.description} title={heading.title} />
       <PracticeWriting
-        initialChallenge={initialChallenge}
+        initialPracticePrompt={initialPracticePrompt}
         sampleLimits={sampleLimits}
       />
     </PageShell>
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/write")({
   }),
   loaderDeps: ({ search }) => search,
   beforeLoad: ({ context }) => sampleLimitsFor(context.academyClient),
-  loader: ({ context, deps }): Promise<InitialChallenge | undefined> => {
+  loader: ({ context, deps }): Promise<InitialPracticePrompt | undefined> => {
     const technicalPrompt =
       deps.promptId === undefined
         ? undefined

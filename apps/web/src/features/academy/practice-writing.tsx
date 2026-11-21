@@ -21,7 +21,7 @@ import { WritingSheet } from "./writing-sheet";
 const GENERIC_FAILURE_MESSAGE =
   "We couldn't analyze this writing right now. Your text has not been lost.";
 
-export type InitialChallenge =
+export type InitialPracticePrompt =
   | { readonly promptText: string; readonly promptType: "DAILY_CHALLENGE" }
   | {
       readonly promptText: string;
@@ -74,11 +74,11 @@ export const submitState = async (
 };
 
 export const PracticeWriting = ({
-  initialChallenge,
+  initialPracticePrompt,
   nextStep,
   sampleLimits,
 }: {
-  readonly initialChallenge?: InitialChallenge;
+  readonly initialPracticePrompt?: InitialPracticePrompt;
   // Shown after a successful Evaluation; receives the Evaluation's id.
   readonly nextStep?: {
     readonly label: string;
@@ -130,11 +130,13 @@ export const PracticeWriting = ({
       <div className="space-y-6">
         <WritingSheet
           disabled={isSubmitting}
-          label={initialChallenge === undefined ? "Your text" : "Your answer"}
+          label={
+            initialPracticePrompt === undefined ? "Your text" : "Your answer"
+          }
           maxLength={sampleLimits.sampleMaxCharacters}
           onChange={setText}
           placeholder={
-            initialChallenge === undefined
+            initialPracticePrompt === undefined
               ? "Free writing, a GitHub issue, a PR description, an explanation of something you built today..."
               : "Write your answer here..."
           }
@@ -168,7 +170,7 @@ export const PracticeWriting = ({
       </div>
 
       <aside className="order-first space-y-4 lg:order-none lg:pt-6">
-        {initialChallenge === undefined ? (
+        {initialPracticePrompt === undefined ? (
           <>
             <h2 className="label-mono text-muted-foreground">
               What you get back
@@ -182,7 +184,9 @@ export const PracticeWriting = ({
         ) : (
           <>
             <h2 className="label-mono text-muted-foreground">Prompt</h2>
-            <p className="text-heading-sm">{initialChallenge.promptText}</p>
+            <p className="text-heading-sm">
+              {initialPracticePrompt.promptText}
+            </p>
           </>
         )}
       </aside>

@@ -151,7 +151,6 @@ const appOf = () =>
     limits: {
       bodyMaxBytes: 256 * 1024,
       codeMaxCharacters: Option.none(),
-      promptMaxCharacters: Option.none(),
       sampleMaxBytes: 32 * 1024,
       sampleMaxCharacters: Option.none(),
     },
