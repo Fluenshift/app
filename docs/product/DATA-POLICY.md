@@ -113,7 +113,8 @@ Visitors bring their own AI keys. A key travels only in the request headers of t
 needs it, and is never stored, logged, or sent anywhere but the provider (ADR 0012). An
 OpenRouter key runs the Judge and the Trainer; a Gemini or Anthropic key runs the Trainer only,
 so feedback on writing needs an OpenRouter key. The hosted Judge never runs on a key from server
-configuration (ADR 0035).
+configuration (ADR 0035). Each provider receives what External transmission (Local profile)
+lists for the Judge or the Trainer that the key runs.
 
 ### Cleanup and deletion
 
@@ -123,8 +124,15 @@ The server deletes, once a day, every Learner idle for 90 days, with all their d
 
 ### Limits and boundary
 
-The rate limits, the Content Security Policy and the privacy page that states this policy are
-requirements HR-03, HR-04 and HR-08 in `REQUIREMENTS.md`.
+The rate limits and the Content Security Policy are requirements HR-03 and HR-04 in
+`REQUIREMENTS.md`.
+
+### Privacy page
+
+`/privacy` states this policy to visitors in English and Portuguese (HR-08): what is stored, the
+hashed IP included, which provider each key reaches, the idle cleanup, and a "Delete my data"
+button that calls `DELETE /api/me` and removes the key from the browser. The hosted profile
+redirects Setup & privacy, which states the local profile's facts, to it (ADR 0036).
 
 ### Cutover from Grifando
 
