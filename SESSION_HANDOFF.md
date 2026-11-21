@@ -4,7 +4,7 @@ Last updated 2026-11-21, at the end of the sixteenth agent session. This file ho
 
 ## Work in flight
 
-This session closed the last two issues of the audit of item 6 of the definition of done (#270): #274, the one-time importer of PE's local Evaluations (#289, ADR 0018, decision 2), and #277, request bodies checked with the contract's schemas and declared to Hono's typed client (#290, ADR 0042). It then ran the `code-review` milestone before cutover on the diff since the merge of #281 (99b2318), opened an issue for each finding (#291 to #296), and closed all but #296: #291 (#298), #294 (#299), #292 (#300), #295 (#301) and #293 (#302). No pull request is open.
+This session closed the last two issues of the audit of item 6 of the definition of done (#270): #274, the one-time importer of PE's local Evaluations (#289, ADR 0018, decision 2), and #277, request bodies checked with the contract's schemas and declared to Hono's typed client (#290, ADR 0042). It then ran the `code-review` milestone before cutover on the diff since the merge of #281 (99b2318), opened an issue for each finding (#291 to #296), and closed all six: #291 (#298), #294 (#299), #292 (#300), #295 (#301), #293 (#302) and #296 (#304). No issue or pull request is open.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -16,9 +16,8 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 
 ## Next steps
 
-1. #296, `ready-for-agent`: the importer must refuse a second run even after the Learner deleted every imported Evaluation. It changes the schema, so it holds the one migration in flight (`pnpm db:generate`).
-2. The `code-review` milestone before cutover has run (this session). Before cutover, run it again only on what changed since 546edf7.
-3. Items 2, 4 and 6 of Phase 7, the import run of item 5, and sign-off wait for the owners (Owner steps). The 18 open rows stay open until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
+1. The `code-review` milestone before cutover has run (this session). Before cutover, run it again on what changed since 0025877, the end of the range it reviewed.
+2. Items 2, 4 and 6 of Phase 7, the import run of item 5, and sign-off wait for the owners (Owner steps). The 18 open rows stay open until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
 
 ## Facts no issue records
 
@@ -32,6 +31,7 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 ### PE import
 
 - tsdown builds two entries, so `dist/` holds `index.mjs`, the importer's `import-pe.mjs` and a shared chunk; whatever copies the server copies the whole directory.
+- The import records itself in `pe_imports`, one row per Learner, written in the import's transaction, and every later run, dry or not, refuses once the row exists (#296). Only deleting that row lets the import run again.
 - The importer's fixture, `apps/server/src/history/fixtures/pe-local.db`, was written by PE's own code at the pin: `migration/fixtures/pe/local-database.ts` holds the script and how to rerun it. Tests copy it into a temporary directory first: SQLite writes `-shm` and `-wal` files beside a WAL database even when it opens it read-only.
 
 ### Hosted profile
@@ -107,7 +107,7 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 - Set a budget before live calibration (G13) runs.
 - Choose the host for the hosted profile (ADR 0003, decision 4) before a public deploy, and give it `SESSION_SECRET`, `IP_HASH_SALT`, the `CLIENT_IP_HEADER` its proxy writes (ADR 0033) and its public origin as `SITE_URL` (ADR 0037).
 - Give the go-ahead for cutover (Phase 7).
-- At cutover, import PE's local Evaluations as `README.md` (Importing PE's local history) says: a dry run first, accepted only when both runs print the same counts (ADR 0018). #296 should be fixed first.
+- At cutover, import PE's local Evaluations as `README.md` (Importing PE's local history) says: a dry run first, accepted only when both runs print the same counts (ADR 0018).
 - Say where Grifando's visual style came from, for `docs/product/ASSET-LICENSES.md` (#119, question 4).
 
 ## Jhefferson's machine
