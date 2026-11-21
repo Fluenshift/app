@@ -284,6 +284,14 @@
       "baseline": "green"
     },
     {
+      "id": "grifando:characterization:src/app/robots.characterization.test.ts::robots > allows every crawler everywhere but /api/ and names the sitemap at the public origin",
+      "kind": "characterization",
+      "source": "src/app/robots.characterization.test.ts",
+      "title": "robots > allows every crawler everywhere but /api/ and names the sitemap at the public origin",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:characterization:src/lib/aiKeyStore.characterization.test.ts::aiKeyStore reading > trims a stored key and reads a blank one as none",
       "kind": "characterization",
       "source": "src/lib/aiKeyStore.characterization.test.ts",
@@ -336,6 +344,14 @@
       "kind": "characterization",
       "source": "src/proxy.characterization.test.ts",
       "title": "proxy session cookie > mints the session cookie site-wide for a year, Secure in production only",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
+      "id": "grifando:characterization:src/proxyMatcher.characterization.test.ts::proxy matcher > leaves robots.txt and sitemap.xml out of the session, which every page gets",
+      "kind": "characterization",
+      "source": "src/proxyMatcher.characterization.test.ts",
+      "title": "proxy matcher > leaves robots.txt and sitemap.xml out of the session, which every page gets",
       "suite": "vitest",
       "baseline": "green"
     },
