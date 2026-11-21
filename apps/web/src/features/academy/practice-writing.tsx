@@ -29,7 +29,7 @@ export type InitialChallenge =
       readonly technicalCategory: TechnicalCategory;
     };
 
-type ViewState =
+export type ViewState =
   | {
       readonly errorMessage?: string;
       readonly keyRequired?: boolean;
@@ -44,7 +44,7 @@ type ViewState =
     };
 
 // Practice writing's answer as the next view state.
-const submitState = async (
+export const submitState = async (
   request: Promise<
     | {
         readonly evaluation: Evaluation;

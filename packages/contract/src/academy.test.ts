@@ -178,8 +178,16 @@ describe("SampleLimits", () => {
 
     expect(
       [
-        { sampleMaxBytes: 32_768, sampleMaxCharacters: null },
-        { sampleMaxBytes: 32_768, sampleMaxCharacters: 5000 },
+        {
+          codeMaxCharacters: null,
+          sampleMaxBytes: 32_768,
+          sampleMaxCharacters: null,
+        },
+        {
+          codeMaxCharacters: 2000,
+          sampleMaxBytes: 32_768,
+          sampleMaxCharacters: 5000,
+        },
         { sampleMaxBytes: 32_768 },
       ].map((limits) => decode(limits)._tag)
     ).toStrictEqual(["Success", "Success", "Failure"]);

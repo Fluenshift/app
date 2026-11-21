@@ -181,6 +181,7 @@ node scripts/migration/ledger-add.ts --slice <slice> --class <A|B|C> <system>:ch
 | `grifando` | `src/app/api/writing-sessions/writingSessions.characterization.test.ts` | Submitting, listing and reading writing sessions beyond the missing-key cases of `route.test.ts`. | 6 |
 | `grifando` | `src/app/robots.characterization.test.ts` | What `robots()` answers, which no test calls: every crawler may read every path but `/api/`, and the rules name the sitemap at the public origin. | 1 |
 | `grifando` | `src/proxyMatcher.characterization.test.ts` | The proxy's matcher, which no test reads: every page gets the session cookie, and `robots.txt` and `sitemap.xml` do not. | 1 |
+| `grifando` | `src/app/api/writing-sessions/codeSnippet.characterization.test.ts` | The code snippet of `POST /api/writing-sessions`, which `route.test.ts` never sends: trimmed, up to 2000 characters handed to the analysis, and a blank or longer one refused with the validation issues before any analysis. | 2 |
 
 PE's HTTP endpoints, by the test that pins each behavior (#21):
 

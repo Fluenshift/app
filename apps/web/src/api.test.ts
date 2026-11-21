@@ -634,3 +634,30 @@ describe("HTTP Academy client Learner deletion", () => {
     });
   });
 });
+
+// Explain code sends its snippet beside the explanation; free writing sends none (docs/adr/0038).
+describe("HTTP Academy client Explain code", () => {
+  test("sends Explain code's snippet with its explanation, and no snippet without one", async () => {
+    const bodies: unknown[] = [];
+    const fetch: typeof globalThis.fetch = (_input, init) => {
+      bodies.push(JSON.parse(String(init?.body)));
+      return Promise.resolve(
+        Response.json({ code: "INTERNAL_ERROR" }, { status: 500 })
+      );
+    };
+    const client = createHttpAcademyClient({ fetch });
+
+    await Promise.allSettled([
+      client.writePractice("I explain this code.", "export const a = 1;"),
+      client.writePractice("I write freely."),
+    ]);
+
+    expect(bodies).toStrictEqual([
+      {
+        codeSnippet: "export const a = 1;",
+        writingSample: "I explain this code.",
+      },
+      { writingSample: "I write freely." },
+    ]);
+  });
+});

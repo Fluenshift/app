@@ -5,7 +5,8 @@ import type {
   AIResponseValidationError,
   PracticeOccurrence,
 } from "@fluenshift/contract";
-import { Effect, Schema } from "effect";
+import { ServerConfig } from "@fluenshift/env";
+import { Effect, Option, Schema } from "effect";
 
 import { trainerForRequest } from "../academy/academy-requests";
 import { getNaturalVersion } from "../academy/enrichment-repository";
@@ -17,7 +18,10 @@ import type {
 import { listOccurrencesForEvaluation } from "../academy/occurrence-repository";
 import { foldEvaluation } from "../academy/pattern-folding";
 import type { TrainerMethods } from "../academy/trainer/trainer-model";
-import { evaluateWriting } from "../evaluation/writing-evaluation";
+import {
+  evaluateWriting,
+  InvalidWritingSampleError,
+} from "../evaluation/writing-evaluation";
 import type { Evaluation } from "../history/learning-history";
 
 // The Judge's Evaluation stands, but the Trainer's Enrichment failed for a reason the Learner
@@ -35,8 +39,23 @@ const isRefusedAnswer = (error: {
 // The Judge evaluates the Writing Sample as practice, then the Trainer folds its Findings. An
 // access error of the Trainer stays itself, for the Learner to act on; any other failure of the
 // Enrichment keeps the Evaluation and names it, as Grifando kept a FAILED writing session.
+// Explain code's snippet reaches the Trainer alone, within the Deploy Profile's code cap, which
+// the service checks behind the route (HR-02, docs/adr/0038); it is never stored.
 export const evaluatePractice = Effect.fn("PracticeWriting.evaluatePractice")(
-  function* (trainer: TrainerMethods, writingSample: string) {
+  function* (
+    trainer: TrainerMethods,
+    writingSample: string,
+    codeSnippet?: string
+  ) {
+    const { limits } = yield* ServerConfig;
+    const overCap = limits.codeMaxCharacters.pipe(
+      Option.filter((maximum) => (codeSnippet?.length ?? 0) > maximum)
+    );
+    if (Option.isSome(overCap)) {
+      return yield* new InvalidWritingSampleError({
+        reason: `Code snippet exceeds ${overCap.value} characters`,
+      });
+    }
     const evaluation = yield* evaluateWriting(
       writingSample,
       new Date(),
@@ -44,7 +63,10 @@ export const evaluatePractice = Effect.fn("PracticeWriting.evaluatePractice")(
       "practice"
     );
     const failed = new EnrichmentFailedError({ evaluationId: evaluation.id });
-    yield* foldEvaluation(trainer, { evaluationId: evaluation.id }).pipe(
+    yield* foldEvaluation(trainer, {
+      evaluationId: evaluation.id,
+      ...(codeSnippet === undefined ? {} : { codeSnippet }),
+    }).pipe(
       Effect.catchIf(isRefusedAnswer, () => Effect.fail(failed)),
       Effect.catchDefect(() => Effect.fail(failed))
     );
@@ -86,12 +108,17 @@ export interface PracticeWriting {
 }
 
 // Practice writing on the key the request carries (docs/adr/0026): the key is resolved before
-// the Judge runs, as Grifando resolved it before its analysis.
+// the Judge runs, as Grifando resolved it before its analysis. Explain code adds its snippet
+// (docs/adr/0038).
 export const practiceWritingFor = Effect.fn(
   "PracticeWriting.practiceWritingFor"
-)(function* (headers: Headers, writingSample: string) {
+)(function* (headers: Headers, writingSample: string, codeSnippet?: string) {
   const trainer = yield* trainerForRequest(headers);
-  const evaluation = yield* evaluatePractice(trainer, writingSample);
+  const evaluation = yield* evaluatePractice(
+    trainer,
+    writingSample,
+    codeSnippet
+  );
   const occurrences = yield* listOccurrencesForEvaluation(evaluation.id);
   return {
     evaluation,

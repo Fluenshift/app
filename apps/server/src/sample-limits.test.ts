@@ -23,6 +23,7 @@ const limitsOf = (environment: Record<string, string>) =>
 describe("sampleLimitsOf", () => {
   it("gives the local profile PE's 32 KiB and no character cap", async () => {
     expect(await limitsOf({ DATA_DIRECTORY: "/data/pglite" })).toStrictEqual({
+      codeMaxCharacters: null,
       sampleMaxBytes: 32_768,
       sampleMaxCharacters: null,
     });
@@ -34,6 +35,10 @@ describe("sampleLimitsOf", () => {
         DATABASE_URL: "postgres://app@db:5432/app",
         DEPLOY_PROFILE: "hosted",
       })
-    ).toStrictEqual({ sampleMaxBytes: 32_768, sampleMaxCharacters: 5000 });
+    ).toStrictEqual({
+      codeMaxCharacters: 2000,
+      sampleMaxBytes: 32_768,
+      sampleMaxCharacters: 5000,
+    });
   });
 });

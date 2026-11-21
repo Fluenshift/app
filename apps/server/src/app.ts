@@ -252,7 +252,8 @@ export interface AppBoundaries<R = never> {
   /** Practice writing on the request's key: the Judge's Evaluation, then the Enrichment's fold. */
   readonly writePractice?: (
     headers: Headers,
-    writingSample: string
+    writingSample: string,
+    codeSnippet?: string
   ) => Effect.Effect<
     PracticeWriting,
     | AIResponseValidationError
@@ -590,11 +591,25 @@ const safelyLogEvaluation = (
 const WritingSampleRequest = Schema.Struct({ writingSample: Schema.String });
 
 // Grifando's writing route answered every issue of a refused body (src/app/api/writing-sessions,
-// 74dbb9f); a body that is not JSON is refused too.
-const PRACTICE_WRITING_REQUEST = Schema.toStandardSchemaV1(
-  WritingSampleRequest,
-  { parseOptions: { errors: "all" } }
-);
+// 74dbb9f); a body that is not JSON is refused too. Explain code's snippet is trimmed, never
+// blank, and within the Deploy Profile's code cap, which only the hosted profile sets
+// (docs/adr/0006, docs/adr/0038).
+const practiceWritingRequest = (limits: InputLimits) =>
+  Schema.toStandardSchemaV1(
+    Schema.Struct({
+      codeSnippet: Schema.optionalKey(
+        Schema.Trim.check(
+          Schema.isMinLength(1),
+          ...Option.match(limits.codeMaxCharacters, {
+            onNone: () => [],
+            onSome: (maximum) => [Schema.isMaxLength(maximum)],
+          })
+        )
+      ),
+      writingSample: Schema.String,
+    }),
+    { parseOptions: { errors: "all" } }
+  );
 
 /** The idle time a connection keeps while the Judge answers, beyond its own deadline. */
 export const HTTP_IDLE_TIMEOUT_MILLISECONDS =
@@ -606,6 +621,7 @@ export const HTTP_IDLE_TIMEOUT_MILLISECONDS =
  */
 export const createApp = <R = never>(options: AppOptions<R>) => {
   const edge = makeEdge(options.runtime);
+  const practiceWritingBody = practiceWritingRequest(options.limits);
   // Every boundary acts for the Learner that LearnerIdentity names for the request.
   const forLearner = <A, E>(
     request: Request,
@@ -1315,7 +1331,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       return context.req
         .json<unknown>()
         .catch(() => null)
-        .then((body) => PRACTICE_WRITING_REQUEST["~standard"].validate(body))
+        .then((body) => practiceWritingBody["~standard"].validate(body))
         .then((result) =>
           result.issues === undefined
             ? edge(
@@ -1326,7 +1342,8 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                     "analysis",
                     writePractice(
                       context.req.raw.headers,
-                      result.value.writingSample
+                      result.value.writingSample,
+                      result.value.codeSnippet
                     )
                   )
                 ),

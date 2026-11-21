@@ -93,6 +93,8 @@ export type InMemoryAcademyClient = AcademyClient & {
   readonly keyTestRequests: readonly (AICredentials | null)[];
   readonly vocabularyRequests: readonly VocabularyItemRequest[];
   readonly writeRequests: readonly string[];
+  /** The snippet each practice writing request sent, beside its Writing Sample. */
+  readonly codeSnippets: readonly (string | undefined)[];
 };
 
 const settle = <A>(
@@ -130,7 +132,11 @@ export const createInMemoryAcademyClient = ({
   keyTests = [],
   mistakeNotebook,
   practiceWriting,
-  sampleLimits = { sampleMaxBytes: 32_768, sampleMaxCharacters: null },
+  sampleLimits = {
+    codeMaxCharacters: null,
+    sampleMaxBytes: 32_768,
+    sampleMaxCharacters: null,
+  },
   vocabulary,
 }: InMemoryAcademyClientOptions = {}): InMemoryAcademyClient => {
   let items = vocabulary;
@@ -138,6 +144,7 @@ export const createInMemoryAcademyClient = ({
   const generationRequests: ExerciseGenerationRequest[] = [];
   const attemptRequests: { answer: string; exerciseId: string }[] = [];
   const writeRequests: string[] = [];
+  const codeSnippets: (string | undefined)[] = [];
   const answerRequests: {
     answer: string;
     sessionId: string;
@@ -154,6 +161,7 @@ export const createInMemoryAcademyClient = ({
     },
     answerRequests,
     attemptRequests,
+    codeSnippets,
     createVocabularyItem: (request) => {
       vocabularyRequests.push(request);
       if (failVocabularySaves || items === undefined) {
@@ -225,8 +233,9 @@ export const createInMemoryAcademyClient = ({
       return keyTest instanceof Promise ? keyTest : settle(keyTest);
     },
     vocabularyRequests,
-    writePractice: (writingSample) => {
+    writePractice: (writingSample, codeSnippet) => {
       writeRequests.push(writingSample);
+      codeSnippets.push(codeSnippet);
       return settle(practiceWriting);
     },
     writeRequests,

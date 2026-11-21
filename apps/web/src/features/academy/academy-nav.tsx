@@ -1,7 +1,6 @@
 // The Academy's own navigation on its screens. Ported from Grifando
-// src/components/layout/NavLinks.tsx (74dbb9f): Overview opens /academy (docs/adr/0025), Explain
-// code is left out until its screen exists, and Key shows in the hosted profile only, where the
-// browser holds the key (docs/adr/0034).
+// src/components/layout/NavLinks.tsx (74dbb9f): Overview opens /academy (docs/adr/0025), and Key
+// shows in the hosted profile only, where the browser holds the key (docs/adr/0034).
 import type { DeployProfile } from "@fluenshift/contract";
 import { cn } from "@fluenshift/ui/utils";
 import { Link, useLocation, useRouteContext } from "@tanstack/react-router";
@@ -13,6 +12,7 @@ const NAV_LINKS = [
   { label: "Today", to: "/today" },
   { label: "Write", to: "/write" },
   { label: "Technical", to: "/technical" },
+  { label: "Explain code", to: "/explain-code" },
   { label: "Interview", to: "/interview" },
   { label: "Exercises", to: "/exercises" },
   { label: "Mistakes", to: "/mistakes" },

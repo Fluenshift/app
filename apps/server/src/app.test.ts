@@ -1279,6 +1279,7 @@ describe("Sample limits endpoint", () => {
 
     expect(response.status).toBe(200);
     expect(await response.json()).toStrictEqual({
+      codeMaxCharacters: null,
       sampleMaxBytes: 32_768,
       sampleMaxCharacters: null,
     });
@@ -1291,6 +1292,7 @@ describe("Sample limits endpoint", () => {
 
     expect(response.status).toBe(200);
     expect(await response.json()).toStrictEqual({
+      codeMaxCharacters: 2000,
       sampleMaxBytes: 32_768,
       sampleMaxCharacters: 5000,
     });

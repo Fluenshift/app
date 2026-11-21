@@ -323,6 +323,7 @@ const answerSheetUnder = async (limits: SampleLimits) => {
 describe("/interview answer sheet caps", () => {
   it("stops the answer sheet at the Deploy Profile's character cap", async () => {
     const { page, sheet } = await answerSheetUnder({
+      codeMaxCharacters: null,
       sampleMaxBytes: 32_768,
       sampleMaxCharacters: 4000,
     });
@@ -333,6 +334,7 @@ describe("/interview answer sheet caps", () => {
 
   it("leaves the answer sheet without a character cap when the Deploy Profile has none", async () => {
     const { page, sheet } = await answerSheetUnder({
+      codeMaxCharacters: null,
       sampleMaxBytes: 32_768,
       sampleMaxCharacters: null,
     });
