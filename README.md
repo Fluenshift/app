@@ -12,12 +12,12 @@ Node 26.13.0 and pnpm 12.18.0, which `mise.toml` pins: with [mise](https://mise.
 
 ```bash
 pnpm install --frozen-lockfile   # install and patch TypeScript and oxlint with Effect diagnostics
-pnpm verify                      # every local gate
+pnpm verify                      # static checks, the tests that need no Docker, and the build
 pnpm test                        # unit and integration tests
 pnpm test:e2e                    # Playwright journeys against the built server and web app
-pnpm test:postgres               # the Database service against a Postgres 17 server
+pnpm test:postgres               # the Database service against Postgres 17: set DEPLOY_PROFILE=hosted and DATABASE_URL
 pnpm db:generate                 # write the next migration from the Drizzle schema
-pnpm dev                         # server and web in watch mode
+pnpm dev                         # Vite for the web app; it proxies /api to a server started on port 3000
 pnpm build                       # server bundle and SPA build
 pnpm docker:smoke                # build and check the image of the local profile (gate G6)
 ```
