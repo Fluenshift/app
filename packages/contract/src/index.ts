@@ -85,12 +85,14 @@ export {
   WRITING_SAMPLE_ORIGINS,
   WritingSampleOrigin,
 } from "./evaluation";
+export { DeployProfile, DeployProfileStatus } from "./deploy-profile";
 export { HealthResponse } from "./health";
 export { LearnerId } from "./learner";
 export {
   isTrainerKeyProvider,
+  KeyTestResult,
   TRAINER_KEY_HEADER,
   TRAINER_KEY_PROVIDERS,
   TRAINER_PROVIDER_HEADER,
 } from "./trainer-key";
-export type { TrainerKeyProvider } from "./trainer-key";
+export type { KeyTestStatus, TrainerKeyProvider } from "./trainer-key";

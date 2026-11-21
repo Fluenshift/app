@@ -15,6 +15,8 @@ import {
 import type {
   AcademyDashboard,
   DailyChallenge,
+  DeployProfileStatus,
+  KeyTestResult,
   MistakeNotebook,
   HealthResponse,
   ProgressEvidenceSelection,
@@ -868,7 +870,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
           RateLimitedError: rateLimited,
           TrainerKeyRequiredError: trainerFailure,
         },
-        success: (status) => Response.json({ status }),
+        success: (status) => Response.json({ status } satisfies KeyTestResult),
       });
     })
     // The Learner's pending Exercises, each by its public view: the answer and the explanation
@@ -1397,6 +1399,13 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     // (docs/adr/0006).
     .get("/api/sample-limits", (context) =>
       context.json(sampleLimitsOf(options.limits))
+    )
+    // The Deploy Profile this process runs in, which the SPA reads once at startup: only the
+    // hosted profile sends the browser's AI key (docs/adr/0012, docs/adr/0034).
+    .get("/api/deploy-profile", (context) =>
+      context.json({
+        deployProfile: options.profile,
+      } satisfies DeployProfileStatus)
     )
     .get("/api/setup", (context) =>
       options.setup === undefined

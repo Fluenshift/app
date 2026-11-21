@@ -3,11 +3,17 @@ import type {
   ProgressEvidence,
   ProgressSummary,
 } from "@fluenshift/contract";
-import { describe, expect, test } from "vitest";
+import { afterEach, describe, expect, test } from "vitest";
 
-import { createHttpAcademyClient, createHttpEvaluationClient } from "./api";
+import {
+  createHttpAcademyClient,
+  createHttpEvaluationClient,
+  readDeployProfile,
+} from "./api";
 import { AcademyRequestError } from "./features/academy/academy-client";
+import type { AcademyClient } from "./features/academy/academy-client";
 import { EvaluationRequestError } from "./features/evaluations/evaluation-client";
+import { MissingAIKeyError, saveAIKey } from "./features/settings/ai-key-store";
 
 const retainedEvaluation: Evaluation = {
   band: "Natural",
@@ -323,5 +329,188 @@ describe("HTTP Academy client", () => {
     await expect(client.getDailyChallenge()).rejects.toBeInstanceOf(
       AcademyRequestError
     );
+  });
+});
+
+describe("Deploy Profile", () => {
+  test("reads the Deploy Profile the server names", async () => {
+    expect(
+      await readDeployProfile({
+        fetch: (input) => {
+          expect(input).toBe("/api/deploy-profile");
+          return Promise.resolve(Response.json({ deployProfile: "hosted" }));
+        },
+      })
+    ).toBe("hosted");
+  });
+
+  test("reads a failed, refused or unknown answer as the local profile", async () => {
+    const answers: (typeof globalThis.fetch)[] = [
+      () => Promise.reject(new TypeError("Failed to fetch")),
+      () =>
+        Promise.resolve(
+          Response.json({ deployProfile: "hosted" }, { status: 500 })
+        ),
+      () => Promise.resolve(Response.json({ deployProfile: "cloud" })),
+    ];
+
+    expect(
+      await Promise.all(answers.map((fetch) => readDeployProfile({ fetch })))
+    ).toStrictEqual(["local", "local", "local"]);
+  });
+});
+
+interface SentRequest {
+  readonly headers: Headers;
+  readonly path: string;
+}
+
+// A server that records each request's path and headers, then fails it, so every call is sent
+// and none needs an answer.
+const recordingFetch = () => {
+  const requests: SentRequest[] = [];
+  const fetch: typeof globalThis.fetch = (input, init) => {
+    requests.push({
+      headers: new Headers(init?.headers),
+      path: typeof input === "string" ? input : "not a path",
+    });
+    return Promise.resolve(
+      Response.json({ code: "INTERNAL_ERROR" }, { status: 500 })
+    );
+  };
+  return { fetch, requests };
+};
+
+// The key each request carried, by its path: provider and key, or nulls for none.
+const keysByPath = (requests: readonly SentRequest[]) =>
+  Object.fromEntries(
+    requests.map(({ headers, path }) => [
+      path,
+      [headers.get("x-ai-provider"), headers.get("x-ai-key")],
+    ])
+  );
+
+// A server that answers every request with one body.
+const answering =
+  (body: unknown): typeof globalThis.fetch =>
+  () =>
+    Promise.resolve(Response.json(body));
+
+// The calls Grifando sent through aiFetch, its key test among them.
+const trainerCalls = (client: AcademyClient) => [
+  client.answerInterviewTurn("session-1", "turn-1", "I fixed the build."),
+  client.explainAttempt("exercise-1", "attempt-1"),
+  client.generateExercises({}),
+  client.startInterview(),
+  client.testAIKey(),
+  client.writePractice("I depend on this library."),
+];
+
+// Every other call of the Academy client.
+const otherCalls = (client: AcademyClient) => [
+  client.createVocabularyItem({
+    exampleSentence: "We shipped it on time.",
+    meaningPt: "entregar",
+    term: "ship",
+  }),
+  client.deleteVocabularyItem("item-1"),
+  client.endInterview("session-1"),
+  client.getAcademyDashboard(),
+  client.getDailyChallenge(),
+  client.getMistakeNotebook(),
+  client.getSampleLimits(),
+  client.listPendingExercises(),
+  client.listVocabulary(),
+  client.submitAttempt("exercise-1", "I depend on this library."),
+];
+
+// The browser's key travels only with the Trainer's calls, and only in the hosted profile
+// (docs/adr/0012, docs/adr/0034).
+describe("HTTP Academy client keys", () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  test("sends the hosted profile's Trainer calls and key test with the browser's key", async () => {
+    saveAIKey({ apiKey: "sk-ant-test", provider: "anthropic" });
+    const { fetch, requests } = recordingFetch();
+
+    await Promise.allSettled(
+      trainerCalls(createHttpAcademyClient({ deployProfile: "hosted", fetch }))
+    );
+
+    expect(keysByPath(requests)).toStrictEqual({
+      "/api/ai-key/test": ["anthropic", "sk-ant-test"],
+      "/api/exercises": ["anthropic", "sk-ant-test"],
+      "/api/exercises/exercise-1/attempts/attempt-1/explanation": [
+        "anthropic",
+        "sk-ant-test",
+      ],
+      "/api/interview": ["anthropic", "sk-ant-test"],
+      "/api/interview/session-1/turns/turn-1/answer": [
+        "anthropic",
+        "sk-ant-test",
+      ],
+      "/api/practice-writing": ["anthropic", "sk-ant-test"],
+    });
+  });
+
+  test("keeps the browser's key off every other hosted call", async () => {
+    saveAIKey({ apiKey: "sk-ant-test", provider: "anthropic" });
+    const { fetch, requests } = recordingFetch();
+
+    await Promise.allSettled(
+      otherCalls(createHttpAcademyClient({ deployProfile: "hosted", fetch }))
+    );
+
+    expect(requests).toHaveLength(10);
+    expect(
+      requests.filter(
+        ({ headers }) => headers.has("x-ai-key") || headers.has("x-ai-provider")
+      )
+    ).toStrictEqual([]);
+  });
+
+  test("refuses a hosted Trainer call before any request when the browser holds no key", async () => {
+    const { fetch, requests } = recordingFetch();
+    const client = createHttpAcademyClient({ deployProfile: "hosted", fetch });
+
+    await expect(client.generateExercises({})).rejects.toBeInstanceOf(
+      MissingAIKeyError
+    );
+    expect(requests).toStrictEqual([]);
+  });
+
+  test("sends no key from the local profile, even one the browser holds", async () => {
+    saveAIKey({ apiKey: "sk-ant-test", provider: "anthropic" });
+    const { fetch, requests } = recordingFetch();
+
+    await Promise.allSettled(
+      trainerCalls(createHttpAcademyClient({ deployProfile: "local", fetch }))
+    );
+
+    expect(requests).toHaveLength(6);
+    expect(
+      requests.filter(
+        ({ headers }) => headers.has("x-ai-key") || headers.has("x-ai-provider")
+      )
+    ).toStrictEqual([]);
+  });
+
+  test("reads the provider's verdict on the key, and refuses one outside the contract", async () => {
+    saveAIKey({ apiKey: "AIza-test", provider: "gemini" });
+
+    expect(
+      await createHttpAcademyClient({
+        deployProfile: "hosted",
+        fetch: answering({ status: "busy" }),
+      }).testAIKey()
+    ).toBe("busy");
+    await expect(
+      createHttpAcademyClient({
+        deployProfile: "hosted",
+        fetch: answering({ status: "maybe" }),
+      }).testAIKey()
+    ).rejects.toBeInstanceOf(AcademyRequestError);
   });
 });

@@ -1,12 +1,13 @@
 // A fake Academy client for the screen tests: it answers from explicit fixtures, keeps the
-// vocabulary it is given and saves, and records each save, generation and Attempt request. A call
-// with no fixture fails.
+// vocabulary it is given and saves, and records each save, generation, Attempt and key test
+// request. A call with no fixture fails.
 import type {
   AcademyDashboard,
   DailyChallenge,
   ExerciseGenerationRequest,
   GradedAttempt,
   InterviewAnswerResult,
+  KeyTestStatus,
   MistakeNotebook,
   PendingExercise,
   PracticeWritingResult,
@@ -16,6 +17,8 @@ import type {
   VocabularyItemRequest,
 } from "@fluenshift/contract";
 
+import { getStoredAIKey, MissingAIKeyError } from "../settings/ai-key-store";
+import type { AICredentials } from "../settings/ai-key-store";
 import {
   AcademyRequestError,
   unavailableAcademyClient,
@@ -25,8 +28,14 @@ import type { AcademyClient } from "./academy-client";
 interface InMemoryExercises {
   /** The Trainer's explanation, or the failure of the explanation request. */
   readonly explanation?: string | AcademyRequestError;
-  /** The set a generation creates, or the failure of the generation request. */
-  readonly generated?: readonly PendingExercise[] | AcademyRequestError;
+  /**
+   * The set a generation creates, or the failure of the generation request: the server's, or
+   * the hosted browser's missing key.
+   */
+  readonly generated?:
+    | readonly PendingExercise[]
+    | AcademyRequestError
+    | MissingAIKeyError;
   /** The grade of an answer to each Exercise, by its id. */
   readonly graded?: Readonly<Record<string, GradedAttempt>>;
   readonly pending?: readonly PendingExercise[];
@@ -46,6 +55,12 @@ interface InMemoryAcademyClientOptions {
   /** Every save fails, as a refused or failed request does. */
   readonly failVocabularySaves?: boolean;
   readonly interview?: InMemoryInterview;
+  /** What each key test finds, in order: a status, a test still running, or its failure. */
+  readonly keyTests?: readonly (
+    | KeyTestStatus
+    | Promise<KeyTestStatus>
+    | AcademyRequestError
+  )[];
   readonly mistakeNotebook?: MistakeNotebook;
   /** What practice writing answers, or the failure of its request. */
   readonly practiceWriting?: PracticeWritingResult | AcademyRequestError;
@@ -67,15 +82,20 @@ export type InMemoryAcademyClient = AcademyClient & {
     readonly exerciseId: string;
   }[];
   readonly generationRequests: readonly ExerciseGenerationRequest[];
+  /** The key the browser held when each key test ran, as the hosted client would send it. */
+  readonly keyTestRequests: readonly (AICredentials | null)[];
   readonly vocabularyRequests: readonly VocabularyItemRequest[];
   readonly writeRequests: readonly string[];
 };
 
-const settle = <A>(fixture: A | AcademyRequestError | undefined) => {
+const settle = <A>(
+  fixture: A | AcademyRequestError | MissingAIKeyError | undefined
+) => {
   if (fixture === undefined) {
     return Promise.reject(new AcademyRequestError(500));
   }
-  return fixture instanceof AcademyRequestError
+  return fixture instanceof AcademyRequestError ||
+    fixture instanceof MissingAIKeyError
     ? Promise.reject(fixture)
     : Promise.resolve(fixture);
 };
@@ -86,6 +106,7 @@ export const createInMemoryAcademyClient = ({
   exercises = {},
   failVocabularySaves = false,
   interview = {},
+  keyTests = [],
   mistakeNotebook,
   practiceWriting,
   sampleLimits = { sampleMaxBytes: 32_768, sampleMaxCharacters: null },
@@ -102,6 +123,7 @@ export const createInMemoryAcademyClient = ({
     turnId: string;
   }[] = [];
   const endRequests: string[] = [];
+  const keyTestRequests: (AICredentials | null)[] = [];
 
   return {
     answerInterviewTurn: (sessionId, turnId, answer) => {
@@ -159,6 +181,7 @@ export const createInMemoryAcademyClient = ({
         ? unavailableAcademyClient.getMistakeNotebook()
         : Promise.resolve(mistakeNotebook),
     getSampleLimits: () => Promise.resolve(sampleLimits),
+    keyTestRequests,
     listPendingExercises: () => settle(exercises.pending),
     listVocabulary: () =>
       items === undefined
@@ -168,6 +191,11 @@ export const createInMemoryAcademyClient = ({
     submitAttempt: (exerciseId, answer) => {
       attemptRequests.push({ answer, exerciseId });
       return settle(exercises.graded?.[exerciseId]);
+    },
+    testAIKey: () => {
+      keyTestRequests.push(getStoredAIKey());
+      const keyTest = keyTests[keyTestRequests.length - 1];
+      return keyTest instanceof Promise ? keyTest : settle(keyTest);
     },
     vocabularyRequests,
     writePractice: (writingSample) => {

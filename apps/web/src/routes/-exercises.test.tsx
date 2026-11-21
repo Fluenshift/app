@@ -1,7 +1,11 @@
 // Grifando's /exercises page (74dbb9f): ExercisePractice, ExerciseQuestion and ExerciseResult,
 // ported from their source under docs/adr/0025, decision 5, since no Grifando test renders them.
 // These screen tests assert Grifando's copy, roles and calls on the in-memory Academy client.
-import type { GradedAttempt, PendingExercise } from "@fluenshift/contract";
+import type {
+  DeployProfile,
+  GradedAttempt,
+  PendingExercise,
+} from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -10,6 +14,7 @@ import { describe, expect, it } from "vitest";
 import { AcademyRequestError } from "../features/academy/academy-client";
 import { createInMemoryAcademyClient } from "../features/academy/in-memory-academy-client";
 import { createInMemoryEvaluationClient } from "../features/evaluations/in-memory-evaluation-client";
+import { MissingAIKeyError } from "../features/settings/ai-key-store";
 import { createAppRouter } from "../router";
 
 const multipleChoice: PendingExercise = {
@@ -61,13 +66,15 @@ const gradedRewrite: GradedAttempt = {
 const renderExercises = async (
   exercises: NonNullable<
     Parameters<typeof createInMemoryAcademyClient>[0]
-  >["exercises"]
+  >["exercises"],
+  deployProfile: DeployProfile = "local"
 ) => {
   const client = createInMemoryAcademyClient({ exercises });
   render(
     <RouterProvider
       router={createAppRouter({
         academyClient: client,
+        deployProfile,
         evaluationClient: createInMemoryEvaluationClient(),
         history: createMemoryHistory({ initialEntries: ["/exercises"] }),
       })}
@@ -183,6 +190,25 @@ describe("/exercises", () => {
     expect(
       within(page).getByRole("link", { name: "Set up a key" })
     ).toHaveAttribute("href", "/setup");
+  });
+
+  // In the hosted profile the browser holds the key, and the notice opens the key page
+  // (docs/adr/0034).
+  it("points to the key page when the hosted browser holds no key", async () => {
+    const { page } = await renderExercises(
+      { generated: new MissingAIKeyError(), pending: [] },
+      "hosted"
+    );
+    await userEvent.click(
+      await within(page).findByRole("button", { name: "Generate practice set" })
+    );
+
+    expect(await within(page).findByRole("alert")).toHaveTextContent(
+      "Set up your AI key to get feedback."
+    );
+    expect(
+      within(page).getByRole("link", { name: "Set up a key" })
+    ).toHaveAttribute("href", "/settings");
   });
 
   it("explains a wrong answer on request and keeps the grade", async () => {

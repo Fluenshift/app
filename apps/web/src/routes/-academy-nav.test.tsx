@@ -1,6 +1,7 @@
 // Grifando's NavLinks (74dbb9f), ported from source under docs/adr/0025, decision 5, as the
-// Academy's own navigation on its screens: Overview opens /academy, and the entries whose screens
-// wait for Phase 6 (Explain code, Key) are left out.
+// Academy's own navigation on its screens: Overview opens /academy, Explain code waits for its
+// screen, and Key shows in the hosted profile only (docs/adr/0034).
+import type { DeployProfile } from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -10,13 +11,14 @@ import { createInMemoryAcademyClient } from "../features/academy/in-memory-acade
 import { createInMemoryEvaluationClient } from "../features/evaluations/in-memory-evaluation-client";
 import { createAppRouter } from "../router";
 
-const renderAt = (url: string) =>
+const renderAt = (url: string, deployProfile: DeployProfile = "local") =>
   render(
     <RouterProvider
       router={createAppRouter({
         academyClient: createInMemoryAcademyClient({
           vocabulary: [],
         }),
+        deployProfile,
         evaluationClient: createInMemoryEvaluationClient(),
         history: createMemoryHistory({ initialEntries: [url] }),
       })}
@@ -48,6 +50,29 @@ describe("Academy navigation", () => {
         .filter((link) => link.getAttribute("aria-current") === "page")
         .map((link) => link.textContent)
     ).toEqual(["Vocabulary"]);
+  });
+
+  it("ends with Grifando's Key entry in the hosted profile", async () => {
+    renderAt("/vocabulary", "hosted");
+    const navigation = await screen.findByRole("navigation", {
+      name: "Academy",
+    });
+
+    expect(
+      within(navigation)
+        .getAllByRole("link")
+        .map((link) => [link.textContent, link.getAttribute("href")])
+    ).toEqual([
+      ["Overview", "/academy"],
+      ["Today", "/today"],
+      ["Write", "/write"],
+      ["Technical", "/technical"],
+      ["Interview", "/interview"],
+      ["Exercises", "/exercises"],
+      ["Mistakes", "/mistakes"],
+      ["Vocabulary", "/vocabulary"],
+      ["Key", "/settings"],
+    ]);
   });
 
   it("names the current page in a disclosure that opens the full list", async () => {

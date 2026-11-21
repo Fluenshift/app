@@ -6,6 +6,7 @@ import type {
   ExerciseGenerationRequest,
   GradedAttempt,
   InterviewAnswerResult,
+  KeyTestStatus,
   MistakeNotebook,
   PendingExercise,
   PracticeWritingResult,
@@ -14,6 +15,8 @@ import type {
   VocabularyItem,
   VocabularyItemRequest,
 } from "@fluenshift/contract";
+
+import { MissingAIKeyError } from "../settings/ai-key-store";
 
 export interface AcademyClient {
   /** One answer to an interview turn, evaluated as practice writing (ADR 0010, ADR 0024). */
@@ -50,6 +53,8 @@ export interface AcademyClient {
     exerciseId: string,
     answer: string
   ) => Promise<GradedAttempt>;
+  /** Tests the browser's key with its provider, which says whether it works (ADR 0034). */
+  readonly testAIKey: () => Promise<KeyTestStatus>;
   /** Practice writing: the Judge's Evaluation, then the Enrichment's Occurrences (ADR 0026). */
   readonly writePractice: (
     writingSample: string
@@ -101,9 +106,13 @@ export const messageFor = (error: unknown, fallback: string): string => {
     : fallback;
 };
 
-/** Whether a failure asks the Learner to set up a Trainer key. */
+/**
+ * Whether a failure asks the Learner to set up a Trainer key: the hosted browser holds none to
+ * send, or the server found none (ADR 0034).
+ */
 export const isKeyRequired = (error: unknown): boolean =>
-  error instanceof AcademyRequestError && error.code === "AI_KEY_REQUIRED";
+  error instanceof MissingAIKeyError ||
+  (error instanceof AcademyRequestError && error.code === "AI_KEY_REQUIRED");
 
 /**
  * What a screen shows for a failed Academy request: Grifando's key notice when the Trainer has no
@@ -139,5 +148,6 @@ export const unavailableAcademyClient: AcademyClient = {
   listVocabulary: unavailable,
   startInterview: unavailable,
   submitAttempt: unavailable,
+  testAIKey: unavailable,
   writePractice: unavailable,
 };

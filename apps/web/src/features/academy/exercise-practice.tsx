@@ -1,7 +1,7 @@
 // A practice set, one Exercise at a time. Ported from Grifando
 // src/components/exercises/ExercisePractice.tsx (74dbb9f). The Academy client replaces Grifando's
-// fetch and aiFetch; in the local profile no key travels from the browser, so a missing key is
-// the server's AI_KEY_REQUIRED answer.
+// fetch and aiFetch: a missing key is the hosted browser's MissingAIKeyError or, in the local
+// profile, the server's AI_KEY_REQUIRED answer (docs/adr/0034).
 import type { GradedAttempt, PendingExercise } from "@fluenshift/contract";
 import { Button } from "@fluenshift/ui/components/button";
 import {

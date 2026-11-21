@@ -1,5 +1,6 @@
 // The application shell: the primary navigation above the current screen. Ported from PE
 // apps/web/src/routes/__root.tsx (5e831bb).
+import type { DeployProfile } from "@fluenshift/contract";
 import { Toaster } from "@fluenshift/ui/components/sonner";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
@@ -9,6 +10,8 @@ import type { EvaluationClient } from "../features/evaluations/evaluation-client
 
 export interface RouterAppContext {
   readonly academyClient: AcademyClient;
+  /** Only the hosted profile sends the browser's AI key (docs/adr/0034). */
+  readonly deployProfile: DeployProfile;
   readonly evaluationClient: EvaluationClient;
 }
 
