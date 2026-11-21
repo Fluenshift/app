@@ -49,8 +49,10 @@ export const cleanupIdleData = Effect.fn("IdleCleanup.cleanupIdleData")(
  * Runs `task` every day at 03:17 UTC, the hour of Grifando's cron. A failed run logs its tag or
  * name, never its message, and waits for the next day, so one failure never stops the schedule.
  */
-export const daily = <A, E, R>(task: Effect.Effect<A, E, R>) =>
-  task.pipe(
+export const daily = Effect.fn("IdleCleanup.daily")(function* <A, E, R>(
+  task: Effect.Effect<A, E, R>
+) {
+  return yield* task.pipe(
     Effect.catchCause((cause) =>
       Effect.logError("idle-cleanup failed").pipe(
         Effect.annotateLogs({ error: nameOf(cause) })
@@ -58,6 +60,7 @@ export const daily = <A, E, R>(task: Effect.Effect<A, E, R>) =>
     ),
     Effect.schedule(Schedule.cron("17 3 * * *", "UTC"))
   );
+});
 
 /** The cleanup of each day, with its counts in the log, at the clock's time. */
 export const cleanupToday = Effect.gen(function* () {
