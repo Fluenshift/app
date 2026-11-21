@@ -115,7 +115,7 @@ Exercise comes from their own mistakes.
 _Not: course, lessons, coach._
 
 **Enrichment**: the Trainer's pass over one Evaluation's Findings, which runs only when the
-Academy is in use. It adds what practice needs and nothing a score depends on: a Pattern Key,
+Academy is in use: from the Learner's first practice-origin Writing Sample on (ADR 0041). It adds what practice needs and nothing a score depends on: a Pattern Key,
 a Mistake Category, the L1 Transfer flag, a natural version and examples, and separate
 Naturalness Notes (ADR 0004).
 _Not: analysis, second evaluation._

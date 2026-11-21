@@ -31,7 +31,6 @@ import {
 } from "./academy/vocabulary-repository";
 import { createApp, serveApp } from "./app";
 import type { AppBoundaries, ProfileOptions } from "./app";
-import { evaluateWritingForEndpoint } from "./evaluation/evaluation-endpoint";
 import { EvaluationModel } from "./evaluation/evaluation-model";
 import { OpenRouterEvaluationModelLive } from "./evaluation/openrouter-evaluation-model";
 import {
@@ -44,6 +43,7 @@ import {
   answerInterviewTurnFor,
   practiceWritingFor,
 } from "./practice/practice-writing";
+import { evaluateWorkFor } from "./practice/work-enrichment";
 import {
   getProgressEvidence,
   getProgressSummary,
@@ -98,8 +98,8 @@ const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
         getAcademyDashboard: academyDashboard,
         getDailyChallenge: dailyChallenge,
         getMistakeNotebook: mistakeNotebook,
-        evaluateWriting: (writingSample) =>
-          evaluateWritingForEndpoint(writingSample, new Date()),
+        evaluateWriting: (writingSample, headers) =>
+          evaluateWorkFor(headers, writingSample),
         getEvaluation,
         getInterviewSession: getSession,
         getProgressEvidence,

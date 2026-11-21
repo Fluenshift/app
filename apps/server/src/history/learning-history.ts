@@ -184,6 +184,28 @@ export interface ListEvaluationsOptions {
   readonly origin?: WritingSampleOrigin;
 }
 
+// Whether the Learner has an Evaluation of a Writing Sample of this origin: the Writing Desk folds
+// its Evaluations once the Learner has practiced (docs/adr/0041).
+export const hasEvaluations = Effect.fn("LearningHistory.hasEvaluations")(
+  function* (origin: WritingSampleOrigin) {
+    const database = yield* Database;
+    const learner = yield* CurrentLearner;
+    const rows = yield* database.run((client) =>
+      client
+        .select({ id: evaluations.id })
+        .from(evaluations)
+        .where(
+          and(
+            eq(evaluations.learnerId, learner.id),
+            eq(evaluations.origin, origin)
+          )
+        )
+        .limit(1)
+    );
+    return rows.length > 0;
+  }
+);
+
 export const listEvaluations = Effect.fn("LearningHistory.listEvaluations")(
   function* (options: ListEvaluationsOptions = {}) {
     const database = yield* Database;

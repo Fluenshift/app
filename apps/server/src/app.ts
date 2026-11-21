@@ -167,7 +167,8 @@ export interface AppBoundaries<R = never> {
     R | CurrentLearner
   >;
   readonly evaluateWriting?: (
-    writingSample: string
+    writingSample: string,
+    headers: Headers
   ) => Effect.Effect<EvaluationEndpointResult, never, R | CurrentLearner>;
   readonly getEvaluation?: (
     evaluationId: string
@@ -824,7 +825,11 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         context.req.raw,
         withJudgeKey(
           context.req.raw,
-          admitted(context.req.raw, "analysis", evaluateWriting(writingSample)),
+          admitted(
+            context.req.raw,
+            "analysis",
+            evaluateWriting(writingSample, context.req.raw.headers)
+          ),
           new JudgeKeyRequiredError()
         )
       ).pipe(
