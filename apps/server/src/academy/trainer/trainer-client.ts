@@ -1,11 +1,13 @@
 // Which model answers the Trainer's calls, and the key test (docs/adr/0012). Ported from Grifando
 // src/server/ai/client.ts (74dbb9f), which built an Anthropic or a Gemini SDK client: here the
-// AI SDK's provider for the key's provider gives the models, and the model pins live in Trainer
-// Config. A Trainer is built for one key and one request, and nothing keeps the key.
+// AI SDK's provider for the key's provider gives the models, OpenRouter's among them
+// (docs/adr/0035), and the model pins live in Trainer Config. A Trainer is built for one key and
+// one request, and nothing keeps the key.
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogle } from "@ai-sdk/google";
 import { TrainerConfig } from "@fluenshift/env";
 import type { TrainerProvider } from "@fluenshift/env";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import type { LanguageModel } from "ai";
 import { Context, Effect, Layer, Redacted } from "effect";
 
@@ -37,6 +39,9 @@ const modelsOf = (
     apiKey: Redacted.value(apiKey),
     ...(providerFetch === undefined ? {} : { fetch: providerFetch }),
   };
+  if (provider === "openrouter") {
+    return createOpenRouter(settings);
+  }
   return provider === "gemini"
     ? createGoogle(settings)
     : createAnthropic(settings);

@@ -9,6 +9,7 @@ const withEnv = (env: Record<string, string>) =>
   );
 
 describe("TrainerConfig", () => {
+  // OpenRouter's pins are Gemini's models under their OpenRouter ids (docs/adr/0035).
   it.effect("pins a primary and a fallback model for each provider", () =>
     Effect.gen(function* () {
       const { models } = yield* TrainerConfig;
@@ -18,6 +19,10 @@ describe("TrainerConfig", () => {
         gemini: {
           fallback: "gemini-3.5-flash-lite",
           primary: "gemini-3.5-flash",
+        },
+        openrouter: {
+          fallback: "google/gemini-3.5-flash-lite",
+          primary: "google/gemini-3.5-flash",
         },
       });
     }).pipe(Effect.provide(withEnv({})))
@@ -34,6 +39,10 @@ describe("TrainerConfig", () => {
           gemini: {
             fallback: "gemini-3.5-flash-lite",
             primary: "gemini-3.8-flash",
+          },
+          openrouter: {
+            fallback: "google/gemini-3.5-flash-lite",
+            primary: "google/gemini-3.5-flash",
           },
         });
       }).pipe(

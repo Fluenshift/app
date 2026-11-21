@@ -60,6 +60,15 @@ const responded = (response: Response | null) => {
   return response;
 };
 
+// The browser's one key may be for OpenRouter (docs/adr/0035).
+describe("readTrainerCredentials on an OpenRouter key", () => {
+  it("reads an OpenRouter key from the request headers", () => {
+    expect(
+      read(h({ "x-ai-provider": "openrouter", "x-ai-key": "sk-or-test" }))
+    ).toEqual({ apiKey: "sk-or-test", provider: "openrouter" });
+  });
+});
+
 describe("readAICredentials", () => {
   it("trims the key", () => {
     expect(
