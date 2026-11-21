@@ -120,8 +120,8 @@ Goal: port the remaining Grifando features and the hosted-deployment behavior.
    which header carries the client IP (ADR 0033); a documented rotation of the session secret (ADR 0032);
    rate limits in Postgres fixed windows per Learner and per hashed IP;
    `DELETE /api/me`; 90-day idle cleanup run by the scheduler of ADR 0011; CSP for a static
-   SPA; privacy page in EN and PT; landing page and OG image generated at build time; robots
-   and sitemap.
+   SPA; privacy page in EN and PT; Grifando's link preview, its metadata static in the shell
+   and its OG image a static file (ADR 0040); robots and sitemap.
 4. Automate the checks of Grifando's `docs/deploy.md` §5 that ADR 0011 keeps (cleanup has no
    public endpoint) as the hosted-profile Docker smoke. Paused with the end-to-end tests.
 
