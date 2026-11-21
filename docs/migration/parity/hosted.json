@@ -31,7 +31,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0037",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::robots > allows every crawler everywhere but /api/ and names the sitemap at the public origin"
+      ]
     },
     {
       "id": "grifando:characterization:src/lib/aiKeyStore.characterization.test.ts::aiKeyStore reading > trims a stored key and reads a blank one as none",
@@ -73,7 +75,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0037",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::proxy matcher > leaves robots.txt and sitemap.xml out of the session, which every page gets"
+      ]
     },
     {
       "id": "grifando:characterization:src/server/clientIp.characterization.test.ts::getIpHashSalt > falls back to a fixed development salt outside production",
@@ -438,8 +442,10 @@
       "class": "A",
       "slice": "hosted",
       "disposition": "port-changed",
-      "decision": "adr:0003",
-      "targets": []
+      "decision": "adr:0037",
+      "targets": [
+        "packages/env/src/site.test.ts::getSiteUrl > prefers SITE_URL without its trailing slashes, then localhost"
+      ]
     },
     {
       "id": "grifando:test:src/app/sitemap.test.ts::sitemap > lists the four public routes and nothing under /api",
@@ -448,7 +454,9 @@
       "slice": "hosted",
       "disposition": "port-changed",
       "decision": "adr:0003",
-      "targets": []
+      "targets": [
+        "apps/server/src/session/hosted-pipeline.test.ts::sitemap > lists the four public routes and nothing under /api"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiFetch > refuses absolute and protocol-relative URLs without calling fetch",
