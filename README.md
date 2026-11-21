@@ -42,7 +42,7 @@ DATA_DIRECTORY=../../.data/pglite node dist/import-pe.mjs --dry-run <path to PE'
 DATA_DIRECTORY=../../.data/pglite node dist/import-pe.mjs <path to PE's local.db>
 ```
 
-Accept the import only when both runs print the same counts. The importer never writes to PE's file, imports nothing when a row does not fit the product, and runs once: after an import it refuses every later run, even after the imported Evaluations were deleted.
+Accept the import only when both runs print the same counts. The importer never writes to PE's file, refuses a file with no Evaluations, imports nothing when a row does not fit the product, and runs once: after an import it refuses every later run, even after the imported Evaluations were deleted.
 
 ## License
 
