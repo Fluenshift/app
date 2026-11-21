@@ -179,6 +179,8 @@ node scripts/migration/ledger-add.ts --slice <slice> --class <A|B|C> <system>:ch
 | `grifando` | `src/app/api/vocabulary/vocabulary.characterization.test.ts` | Saving and deleting a vocabulary item; neither route has a test. | 3 |
 | `grifando` | `src/app/pages.characterization.test.ts` | The data the five Server Component pages read and render; see the tables below. | 6 |
 | `grifando` | `src/app/api/writing-sessions/writingSessions.characterization.test.ts` | Submitting, listing and reading writing sessions beyond the missing-key cases of `route.test.ts`. | 6 |
+| `grifando` | `src/app/robots.characterization.test.ts` | What `robots()` answers, which no test calls: every crawler may read every path but `/api/`, and the rules name the sitemap at the public origin. | 1 |
+| `grifando` | `src/proxyMatcher.characterization.test.ts` | The proxy's matcher, which no test reads: every page gets the session cookie, and `robots.txt` and `sitemap.xml` do not. | 1 |
 
 PE's HTTP endpoints, by the test that pins each behavior (#21):
 

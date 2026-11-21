@@ -71,6 +71,7 @@ const hostedApp = (settings = session, boundaries?: AppBoundaries) =>
     runtime: hostedRuntime,
     serveWeb: false,
     session: settings,
+    siteUrl: "https://fluenshift.example",
     webDistPath: "",
   });
 

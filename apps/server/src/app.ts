@@ -281,12 +281,17 @@ export interface PendingExercise {
 }
 
 /**
- * The deploy profile, with what the hosted profile's request pipeline needs: the session it
- * signs and checks (docs/adr/0003, docs/adr/0032).
+ * The deploy profile, with what the hosted profile needs: the session its request pipeline signs
+ * and checks (docs/adr/0003, docs/adr/0032), and the public origin its robots.txt and sitemap.xml
+ * name (docs/adr/0037).
  */
 export type ProfileOptions =
   | { readonly profile: "local" }
-  | { readonly profile: "hosted"; readonly session: SessionSettings };
+  | {
+      readonly profile: "hosted";
+      readonly session: SessionSettings;
+      readonly siteUrl: string;
+    };
 
 export type AppOptions<R = never> = AppBoundaries<R> &
   ProfileOptions & {

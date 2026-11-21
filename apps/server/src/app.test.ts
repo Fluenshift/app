@@ -99,6 +99,7 @@ const hostedApp = (options: WebOptions) =>
     profile: "hosted",
     runtime,
     session: hostedSession,
+    siteUrl: "https://fluenshift.example",
     ...options,
   });
 

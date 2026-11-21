@@ -7,6 +7,7 @@ import {
   ClientIpConfig,
   ServerConfig,
   SessionConfig,
+  SiteConfig,
   TrainerConfig,
 } from "@fluenshift/env";
 import { Effect, Layer, Option } from "effect";
@@ -152,7 +153,8 @@ const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
 
 // The local profile acts for its one implicit Learner, with no rate limit and no cleanup. The
 // hosted profile reads SessionConfig once, for the session gate and for the Learner each signed
-// cookie names, reads ClientIpConfig for its rate limits, and deletes idle Learners daily
+// cookie names, reads ClientIpConfig for its rate limits and SiteConfig for the origin its
+// robots.txt and sitemap.xml name (docs/adr/0037), and deletes idle Learners daily
 // (docs/adr/0011). It fails to start in production without a session secret or a salt for client
 // IPs (docs/adr/0032, docs/adr/0033).
 const HttpServer = Layer.unwrap(
@@ -163,6 +165,7 @@ const HttpServer = Layer.unwrap(
           Effect.gen(function* () {
             const session = yield* SessionConfig;
             const clientIp = yield* ClientIpConfig;
+            const { siteUrl } = yield* SiteConfig;
             return {
               ensureLearner,
               limitRequest: (headers: Headers, bucket: RateLimitBucket) =>
@@ -171,13 +174,18 @@ const HttpServer = Layer.unwrap(
                 ),
               profile: "hosted" as const,
               session,
+              siteUrl,
             };
           })
         ).pipe(
           Layer.merge(IdleCleanup),
           Layer.provide(LearnerIdentity.hosted),
           Layer.provide(
-            Layer.mergeAll(SessionConfig.layer, ClientIpConfig.layer)
+            Layer.mergeAll(
+              SessionConfig.layer,
+              ClientIpConfig.layer,
+              SiteConfig.layer
+            )
           )
         )
       : httpServer(Effect.succeed({ profile: "local" as const })).pipe(

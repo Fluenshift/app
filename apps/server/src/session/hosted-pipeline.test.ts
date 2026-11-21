@@ -4,6 +4,9 @@
 // nothing is forwarded to a render, a new cookie comes with the answer that serves the
 // application shell, and the CSP is one static policy with no nonce. With the ports of the
 // characterizations of the cookie Grifando minted and of the headers of its next.config.ts.
+// With robots.txt and sitemap.xml, which Next.js generated from src/app/robots.ts and
+// src/app/sitemap.ts and which the hosted profile answers itself, outside the session as
+// Grifando's proxy matcher left them (docs/adr/0037).
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -59,6 +62,7 @@ const fromEnv = (env: Record<string, string>) =>
   ConfigProvider.layer(ConfigProvider.fromEnvRecord(env));
 
 const SECRET = { SESSION_SECRET: "pipeline-test-secret-xxxxxxxxxxxxxxxxxxxx" };
+const SITE_URL = "https://fluenshift.example";
 
 // The session settings the hosted profile reads under one NODE_ENV.
 const sessionFor = (nodeEnv: string) =>
@@ -105,6 +109,7 @@ const hostedApp = (settings = session) =>
     runtime,
     serveWeb: true,
     session: settings,
+    siteUrl: SITE_URL,
     webDistPath,
   });
 
@@ -288,5 +293,71 @@ describe("proxy session cookie", () => {
     expect(production).toBe(
       "; Path=/; Expires=Sat, 20 Nov 2027 12:00:00 GMT; Max-Age=31536000; Secure; HttpOnly; SameSite=lax"
     );
+  });
+});
+
+const answerAt = (pathname: string) =>
+  hostedApp().request(new Request(`http://127.0.0.1:3000${pathname}`));
+
+describe("proxy matcher", () => {
+  it("leaves robots.txt and sitemap.xml out of the session, which every page gets", async () => {
+    const paths = [
+      "/",
+      "/privacy",
+      "/settings",
+      "/technical",
+      "/robots.txt",
+      "/sitemap.xml",
+    ];
+    const answers = await Promise.all(paths.map(answerAt));
+
+    expect(
+      answers.map((answer, index) => [
+        paths[index],
+        answer.headers.get("set-cookie") !== null,
+      ])
+    ).toEqual([
+      ["/", true],
+      ["/privacy", true],
+      ["/settings", true],
+      ["/technical", true],
+      ["/robots.txt", false],
+      ["/sitemap.xml", false],
+    ]);
+  });
+});
+
+describe("robots", () => {
+  it("allows every crawler everywhere but /api/ and names the sitemap at the public origin", async () => {
+    const response = await answerAt("/robots.txt");
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe(
+      "text/plain; charset=UTF-8"
+    );
+    expect(await response.text()).toBe(
+      "User-Agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://fluenshift.example/sitemap.xml\n"
+    );
+  });
+});
+
+describe("sitemap", () => {
+  it("lists the four public routes and nothing under /api", async () => {
+    const response = await answerAt("/sitemap.xml");
+    const sitemap = await response.text();
+    const urls = Array.from(
+      sitemap.matchAll(/<loc>(?<url>[^<]*)<\/loc>/gu),
+      (match) => match.groups?.url
+    );
+    const base = SITE_URL;
+
+    expect(response.headers.get("content-type")).toBe("application/xml");
+    expect(urls).toEqual([
+      `${base}/`,
+      `${base}/technical`,
+      `${base}/privacy`,
+      `${base}/settings`,
+    ]);
+    expect(urls.some((url) => url?.includes("/api"))).toBe(false);
   });
 });
