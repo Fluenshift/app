@@ -179,19 +179,19 @@ const readRows = (pe: DatabaseSync): PeRows => ({
 });
 
 // Read-only: the import never changes PE's file.
-const readPeRows = (file: string) =>
-  Effect.acquireUseRelease(
+const readPeRows = Effect.fn("PeImport.readPeRows")(function* (file: string) {
+  const pe = yield* Effect.acquireRelease(
     Effect.try({
       try: () => new DatabaseSync(file, { readOnly: true }),
       catch: (cause) => unreadable(file, cause),
     }),
-    (pe) =>
-      Effect.try({
-        try: () => readRows(pe),
-        catch: (cause) => unreadable(file, cause),
-      }),
-    (pe) => Effect.sync(() => pe.close())
+    (opened) => Effect.sync(() => opened.close())
   );
+  return yield* Effect.try({
+    try: () => readRows(pe),
+    catch: (cause) => unreadable(file, cause),
+  });
+}, Effect.scoped);
 
 /** A row as the import checked it: its value, or the columns the product would refuse. */
 interface RowCheck<A> {
@@ -506,8 +506,13 @@ export const importPeHistory = Effect.fn("PeImport.importPeHistory")(
 
 const USAGE = "usage: node dist/import-pe.mjs [--dry-run] <PE database file>";
 
-const importArguments = (args: readonly string[]) =>
-  Effect.try({
+const importArguments = Effect.fn("PeImport.importArguments")(function* (
+  args: readonly string[]
+) {
+  const {
+    positionals: [file, ...others],
+    values,
+  } = yield* Effect.try({
     try: () =>
       parseArgs({
         allowPositionals: true,
@@ -516,16 +521,12 @@ const importArguments = (args: readonly string[]) =>
         strict: true,
       }),
     catch: () => new PeImportError({ message: USAGE }),
-  }).pipe(
-    Effect.flatMap(({ positionals: [file, ...others], values }) =>
-      file === undefined || others.length > 0
-        ? Effect.fail(new PeImportError({ message: USAGE }))
-        : Effect.succeed({
-            dryRun: values["dry-run"],
-            file: path.resolve(file),
-          })
-    )
-  );
+  });
+  if (file === undefined || others.length > 0) {
+    return yield* new PeImportError({ message: USAGE });
+  }
+  return { dryRun: values["dry-run"], file: path.resolve(file) };
+});
 
 /**
  * The import command: one PE database file, and `--dry-run` to check it and write nothing. It
