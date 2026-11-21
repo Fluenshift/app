@@ -471,6 +471,35 @@ describe("the hosted Judge's key", () => {
     expect(reached).not.toHaveBeenCalled();
   });
 
+  // A key that cannot be read is the Learner's to fix in Settings, as Grifando answered it on
+  // every route that read a key (src/server/ai/aiErrorResponse.ts, 74dbb9f); only a missing key
+  // or another provider's asks for an OpenRouter key (#263).
+  it("answers AI_KEY_INVALID, uncounted, to practice writing and an interview answer on a malformed key", async () => {
+    const MALFORMED_HEADERS = {
+      "x-ai-key": "not a key",
+      "x-ai-provider": "openrouter",
+    };
+    const KEY_INVALID = {
+      code: "AI_KEY_INVALID",
+      error: "That AI key doesn't look right. Check it in Settings.",
+    };
+    const app = hostedApp({ limitRequest: limitWith(Effect.void) });
+
+    const practice = await app.request(
+      request("POST", "/api/practice-writing", sample, MALFORMED_HEADERS)
+    );
+    const interview = await app.request(
+      request("POST", ANSWER_PATH, answer, MALFORMED_HEADERS)
+    );
+
+    expect(practice.status).toBe(400);
+    expect(await practice.json()).toStrictEqual(KEY_INVALID);
+    expect(interview.status).toBe(400);
+    expect(await interview.json()).toStrictEqual(KEY_INVALID);
+    expect(limitedFor).not.toHaveBeenCalled();
+    expect(reached).not.toHaveBeenCalled();
+  });
+
   it("runs every route of the Judge on the visitor's OpenRouter key, after its limit", async () => {
     const judgeKeys = vi.fn<(key: string | null) => void>();
     const judged = () =>
