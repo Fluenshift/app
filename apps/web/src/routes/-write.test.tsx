@@ -402,6 +402,7 @@ const sheetUnder = async (limits: SampleLimits) => {
 describe("/write sheet caps", () => {
   it("stops the sheet at the Deploy Profile's character cap, and counts up to it", async () => {
     const { page, sheet } = await sheetUnder({
+      codeMaxCharacters: null,
       sampleMaxBytes: 32_768,
       sampleMaxCharacters: 4000,
     });
@@ -412,6 +413,7 @@ describe("/write sheet caps", () => {
 
   it("leaves the sheet without a character cap when the Deploy Profile has none", async () => {
     const { page, sheet } = await sheetUnder({
+      codeMaxCharacters: null,
       sampleMaxBytes: 32_768,
       sampleMaxCharacters: null,
     });

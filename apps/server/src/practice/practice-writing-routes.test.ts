@@ -9,7 +9,8 @@ import { inspect } from "node:util";
 
 import type { LearnerId } from "@fluenshift/contract";
 import { DatabaseError } from "@fluenshift/db";
-import { TrainerConfig } from "@fluenshift/env";
+import { ServerConfig, TrainerConfig } from "@fluenshift/env";
+import type { InputLimits } from "@fluenshift/env";
 import {
   ConfigProvider,
   Effect,
@@ -30,7 +31,7 @@ import {
 } from "../evaluation/evaluation-model";
 import { LearnerIdentity } from "../learner-identity";
 import { makeTemporaryDatabase } from "../test/database";
-import { practiceWritingFor } from "./practice-writing";
+import { evaluatePractice, practiceWritingFor } from "./practice-writing";
 
 const SECRET = "sk-secret-123";
 
@@ -402,5 +403,136 @@ describe("POST /api/practice-writing", () => {
         message: "Failed to evaluate practice writing",
       }),
     ]);
+  });
+});
+
+// The explanation Explain code sends with its snippet; the fake Judge finds its "goed".
+const EXPLANATION = "This function goed through every user.";
+
+// The hosted profile's caps, Grifando's: a code snippet of at most 2000 characters
+// (docs/adr/0006).
+const HOSTED_LIMITS: InputLimits = {
+  bodyMaxBytes: 256 * 1024,
+  codeMaxCharacters: Option.some(2000),
+  promptMaxCharacters: Option.some(1000),
+  sampleMaxBytes: 32 * 1024,
+  sampleMaxCharacters: Option.some(5000),
+};
+
+const LOCAL_LIMITS: InputLimits = {
+  ...HOSTED_LIMITS,
+  codeMaxCharacters: Option.none(),
+  promptMaxCharacters: Option.none(),
+  sampleMaxCharacters: Option.none(),
+};
+
+const postExplanation = (codeSnippet: string, limits = HOSTED_LIMITS) =>
+  createApp({
+    limits,
+    profile: "local",
+    runtime,
+    serveWeb: false,
+    webDistPath: "unused",
+    writePractice: practiceWritingFor,
+  }).request(
+    new Request("http://localhost/api/practice-writing", {
+      body: JSON.stringify({ codeSnippet, writingSample: EXPLANATION }),
+      headers: {
+        "content-type": "application/json",
+        "x-ai-key": SECRET,
+        "x-ai-provider": "anthropic",
+      },
+      method: "POST",
+    })
+  );
+
+// Ported from Grifando's characterization of the code snippet of POST /api/writing-sessions
+// (74dbb9f), port-changed under docs/adr/0038: practice writing takes Explain code's snippet, the
+// Deploy Profile's cap bounds it, and only the Trainer receives it, as context for the
+// Enrichment.
+describe("writing session code snippet", () => {
+  it("trims a code snippet and hands up to 2000 characters of it to the analysis", async () => {
+    const snippet = "x".repeat(2000);
+    const response = await postExplanation(`  ${snippet}\n`);
+
+    expect(response.status).toBe(201);
+    expect(trainer.enrichFindings).toHaveBeenCalledWith(
+      expect.objectContaining({ codeSnippet: snippet })
+    );
+  });
+
+  it("answers 400 with the validation issues for a blank code snippet or one over 2000 characters, before any analysis", async () => {
+    const blank = await postExplanation("   ");
+    const tooLong = await postExplanation("x".repeat(2001));
+
+    expect(blank.status).toBe(400);
+    expect(await blank.json()).toMatchObject({
+      error: "Invalid request body",
+      issues: [expect.objectContaining({ path: ["codeSnippet"] })],
+    });
+    expect(tooLong.status).toBe(400);
+    expect(await tooLong.json()).toMatchObject({
+      error: "Invalid request body",
+      issues: [expect.objectContaining({ path: ["codeSnippet"] })],
+    });
+    expect(trainer.enrichFindings).not.toHaveBeenCalled();
+  });
+});
+
+// The service's own check, behind the route's (HR-02): the Deploy Profile the runtime names caps
+// the snippet.
+const withHostedCodeCap = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
+  Effect.gen(function* () {
+    const config = yield* ServerConfig;
+    return yield* effect.pipe(
+      Effect.provideService(
+        ServerConfig,
+        ServerConfig.of({
+          ...config,
+          limits: { ...config.limits, codeMaxCharacters: Option.some(2000) },
+        })
+      )
+    );
+  });
+
+describe("Explain code in practice writing", () => {
+  it("evaluates the explanation alone: the Judge never receives the snippet", async () => {
+    const judging = vi.fn(oneFinding);
+    judge = judging;
+    const response = await postExplanation("export const marker = 1;");
+    const body = (await response.json()) as {
+      readonly evaluation: { readonly originalText: string };
+    };
+
+    expect(body.evaluation.originalText).toBe(EXPLANATION);
+    expect(judging.mock.calls).toStrictEqual([[EXPLANATION]]);
+  });
+
+  it("takes a snippet of any length in the local profile, which caps none", async () => {
+    const snippet = "x".repeat(5000);
+    const response = await postExplanation(snippet, LOCAL_LIMITS);
+
+    expect(response.status).toBe(201);
+    expect(trainer.enrichFindings).toHaveBeenCalledWith(
+      expect.objectContaining({ codeSnippet: snippet })
+    );
+  });
+
+  it("refuses a snippet over the profile's cap in the service too, before the Judge runs", async () => {
+    const judging = vi.fn(oneFinding);
+    judge = judging;
+    const refusal = await runtime.runPromise(
+      Effect.flip(
+        withHostedCodeCap(
+          evaluatePractice(trainer, EXPLANATION, "x".repeat(2001))
+        )
+      )
+    );
+
+    expect(refusal).toMatchObject({
+      _tag: "InvalidWritingSampleError",
+      reason: "Code snippet exceeds 2000 characters",
+    });
+    expect(judging).not.toHaveBeenCalled();
   });
 });

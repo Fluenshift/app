@@ -142,7 +142,11 @@ describe("/today sheet caps", () => {
                 "Explain what an API is to someone with no programming background.",
               promptType: "DAILY_CHALLENGE",
             },
-            sampleLimits: { sampleMaxBytes: 32_768, sampleMaxCharacters: 4000 },
+            sampleLimits: {
+              codeMaxCharacters: null,
+              sampleMaxBytes: 32_768,
+              sampleMaxCharacters: 4000,
+            },
           }),
           evaluationClient: createInMemoryEvaluationClient(),
           history: createMemoryHistory({ initialEntries: ["/today"] }),

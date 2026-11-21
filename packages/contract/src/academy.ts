@@ -434,9 +434,11 @@ export type AttemptRequest = typeof AttemptRequest.Type;
 /**
  * The Deploy Profile's caps on one Writing Sample, which size the Academy's writing sheets
  * (GET /api/sample-limits, docs/adr/0006): UTF-8 bytes always, and characters when the profile
- * caps them, null otherwise.
+ * caps them, null otherwise. Explain code's snippet has its own character cap, null when the
+ * profile has none (docs/adr/0038).
  */
 export const SampleLimits = Schema.Struct({
+  codeMaxCharacters: Schema.NullOr(Schema.Int),
   sampleMaxBytes: Schema.Int,
   sampleMaxCharacters: Schema.NullOr(Schema.Int),
 });

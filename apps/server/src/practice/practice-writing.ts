@@ -36,7 +36,11 @@ const isRefusedAnswer = (error: {
 // access error of the Trainer stays itself, for the Learner to act on; any other failure of the
 // Enrichment keeps the Evaluation and names it, as Grifando kept a FAILED writing session.
 export const evaluatePractice = Effect.fn("PracticeWriting.evaluatePractice")(
-  function* (trainer: TrainerMethods, writingSample: string) {
+  function* (
+    trainer: TrainerMethods,
+    writingSample: string,
+    _codeSnippet?: string
+  ) {
     const evaluation = yield* evaluateWriting(
       writingSample,
       new Date(),

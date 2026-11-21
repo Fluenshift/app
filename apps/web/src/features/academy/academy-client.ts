@@ -60,9 +60,13 @@ export interface AcademyClient {
   ) => Promise<GradedAttempt>;
   /** Tests the browser's key with its provider, which says whether it works (ADR 0034). */
   readonly testAIKey: () => Promise<KeyTestStatus>;
-  /** Practice writing: the Judge's Evaluation, then the Enrichment's Occurrences (ADR 0026). */
+  /**
+   * Practice writing: the Judge's Evaluation, then the Enrichment's Occurrences (ADR 0026). Explain
+   * code sends the snippet its Writing Sample explains, which only the Trainer receives (ADR 0038).
+   */
   readonly writePractice: (
-    writingSample: string
+    writingSample: string,
+    codeSnippet?: string
   ) => Promise<PracticeWritingResult>;
 }
 

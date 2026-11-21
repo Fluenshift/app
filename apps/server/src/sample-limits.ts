@@ -5,6 +5,7 @@ import type { InputLimits } from "@fluenshift/env";
 import { Option } from "effect";
 
 export const sampleLimitsOf = (limits: InputLimits): SampleLimits => ({
+  codeMaxCharacters: null,
   sampleMaxBytes: limits.sampleMaxBytes,
   sampleMaxCharacters: Option.getOrNull(limits.sampleMaxCharacters),
 });
