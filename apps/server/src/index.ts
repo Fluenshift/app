@@ -53,6 +53,7 @@ import { ensureLearner } from "./session/ensure-learner";
 import { IdleCleanup } from "./session/idle-cleanup";
 import { limitRequest } from "./session/rate-limit";
 import type { RateLimitBucket } from "./session/rate-limit";
+import { trainerSetupOf } from "./trainer-setup";
 
 // What one deploy profile gives the routes: its name, and the hosted profile's session, rate
 // limits and Learner rows (docs/adr/0032, docs/adr/0033).
@@ -68,6 +69,7 @@ const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
       // written or a Postgres server that cannot be reached stops the process at startup.
       yield* Database;
       const model = yield* EvaluationModel;
+      const trainerSettings = yield* TrainerConfig;
       const services = yield* Effect.context<
         | Database
         | EvaluationModel
@@ -124,6 +126,10 @@ const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
           model: model.model,
           provider: model.provider,
           rubricVersion: CURRENT_RUBRIC_VERSION,
+          // The hosted profile holds no Trainer key: the visitor brings one (docs/adr/0012).
+          ...(config.profile === "local"
+            ? { trainer: trainerSetupOf(trainerSettings) }
+            : {}),
         },
         startInterview: startInterviewFor,
         submitAttempt,

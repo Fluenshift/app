@@ -6,9 +6,23 @@ import type {
   TrainerModels,
   TrainerProvider,
 } from "@fluenshift/env";
-import type { Option } from "effect";
+import { Option } from "effect";
 
-export const trainerSetupOf = (_settings: {
+const PROVIDER_NAMES: Readonly<Record<TrainerProvider, string>> = {
+  anthropic: "Anthropic",
+  gemini: "Gemini",
+  openrouter: "OpenRouter",
+};
+
+export const trainerSetupOf = (settings: {
   readonly localKey: Option.Option<TrainerKey>;
   readonly models: Readonly<Record<TrainerProvider, TrainerModels>>;
-}): TrainerSetup => ({ configured: false });
+}): TrainerSetup =>
+  Option.match(settings.localKey, {
+    onNone: (): TrainerSetup => ({ configured: false }),
+    onSome: ({ provider }): TrainerSetup => ({
+      configured: true,
+      model: settings.models[provider].primary,
+      provider: PROVIDER_NAMES[provider],
+    }),
+  });
