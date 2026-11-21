@@ -98,9 +98,11 @@ explicit policy.
 Prompt Evolution's local Evaluations move into the local profile once, as Rubric Version 1, for
 its one Learner (ADR 0018). The importer reads PE's SQLite file without changing it, copies each
 Evaluation with its Findings and Suggestions as a work Writing Sample, and runs no model, so the
-Academy enriches none of them. It imports nothing unless every row fits the product, and refuses
-a file whose Evaluations the product already holds. Progress keeps them in Rubric Version 1's
-own segment, apart from the provisional version.
+Academy enriches none of them. It imports nothing unless every row fits the product, and it runs
+once: the product keeps when the import ran and how many Evaluations, Findings and Suggestions
+it wrote, and refuses every later run, even after the Learner deleted what the import wrote.
+Progress keeps the imported Evaluations in Rubric Version 1's own segment, apart from the
+provisional version.
 
 ## Hosted profile
 
