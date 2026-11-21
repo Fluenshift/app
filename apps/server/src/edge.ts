@@ -64,7 +64,7 @@ const failureOf = <E extends Tagged>(
 // What a log line may say about an unexpected failure: a tagged error's tag or a thrown value's
 // name, never its message or other properties, which can carry a request's key or Learner text
 // (docs/adr/0026).
-const nameOf = (cause: Cause.Cause<unknown>): string => {
+export const nameOf = (cause: Cause.Cause<unknown>): string => {
   const failure = Cause.squash(cause);
   if (isTagged(failure)) {
     return failure._tag;

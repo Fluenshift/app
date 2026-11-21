@@ -49,6 +49,7 @@ import {
 } from "./progress/progress-insights";
 import { deleteLearner } from "./session/delete-learner";
 import { ensureLearner } from "./session/ensure-learner";
+import { IdleCleanup } from "./session/idle-cleanup";
 import { limitRequest } from "./session/rate-limit";
 import type { RateLimitBucket } from "./session/rate-limit";
 
@@ -149,10 +150,11 @@ const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
     })
   );
 
-// The local profile acts for its one implicit Learner, with no rate limit. The hosted profile reads
-// SessionConfig once, for the session gate and for the Learner each signed cookie names, and
-// ClientIpConfig for its rate limits; it fails to start in production without a session secret
-// or a salt for client IPs (docs/adr/0032, docs/adr/0033).
+// The local profile acts for its one implicit Learner, with no rate limit and no cleanup. The
+// hosted profile reads SessionConfig once, for the session gate and for the Learner each signed
+// cookie names, reads ClientIpConfig for its rate limits, and deletes idle Learners daily
+// (docs/adr/0011). It fails to start in production without a session secret or a salt for client
+// IPs (docs/adr/0032, docs/adr/0033).
 const HttpServer = Layer.unwrap(
   Effect.gen(function* () {
     const config = yield* ServerConfig;
@@ -172,6 +174,7 @@ const HttpServer = Layer.unwrap(
             };
           })
         ).pipe(
+          Layer.merge(IdleCleanup),
           Layer.provide(LearnerIdentity.hosted),
           Layer.provide(
             Layer.mergeAll(SessionConfig.layer, ClientIpConfig.layer)

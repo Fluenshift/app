@@ -596,6 +596,14 @@
       "baseline": "green"
     },
     {
+      "id": "grifando:characterization:src/server/domain/privacy/cleanup.characterization.test.ts::cleanupIdleData bounds > keeps a user idle exactly 90 days and a rate-limit window exactly 2 days old",
+      "kind": "characterization",
+      "source": "src/server/domain/privacy/cleanup.characterization.test.ts",
+      "title": "cleanupIdleData bounds > keeps a user idle exactly 90 days and a rate-limit window exactly 2 days old",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:characterization:src/server/domain/progress/streak.characterization.test.ts::streak guards > counts a Sunday rest day in the week that began on Monday",
       "kind": "characterization",
       "source": "src/server/domain/progress/streak.characterization.test.ts",

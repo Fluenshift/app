@@ -3,7 +3,7 @@
   "repository": "Fluenshift/grifando",
   "tag": "parity-baseline",
   "commit": "74dbb9f3305faa4444f981aa2df360c028d3ab08",
-  "ranAt": "2026-11-20T23:06:08.960Z",
+  "ranAt": "2026-11-20T23:29:41.508Z",
   "tools": [
     {
       "name": "node",
@@ -50,6 +50,7 @@
     "src/server/domain/interview/interviewService.characterization.test.ts",
     "src/server/domain/mistakes/mastery.characterization.test.ts",
     "src/server/domain/mistakes/recall.characterization.test.ts",
+    "src/server/domain/privacy/cleanup.characterization.test.ts",
     "src/server/domain/progress/streak.characterization.test.ts",
     "src/server/domain/writing/dailyPrompt.characterization.test.ts",
     "src/server/domain/writing/technicalPrompts.characterization.test.ts",
@@ -90,6 +91,7 @@
         "src/server/domain/interview/interviewService.characterization.test.ts",
         "src/server/domain/mistakes/mastery.characterization.test.ts",
         "src/server/domain/mistakes/recall.characterization.test.ts",
+        "src/server/domain/privacy/cleanup.characterization.test.ts",
         "src/server/domain/progress/streak.characterization.test.ts",
         "src/server/domain/writing/dailyPrompt.characterization.test.ts",
         "src/server/domain/writing/technicalPrompts.characterization.test.ts",
