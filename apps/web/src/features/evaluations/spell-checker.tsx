@@ -207,7 +207,7 @@ interface MarkCardProps {
   readonly readOnly: boolean;
   readonly setActiveId: (id: string | null) => void;
   readonly text: string;
-  readonly totalIssues: number;
+  readonly markCount: number;
 }
 
 /** The replacement a Finding proposes: a button that accepts it, or the correction as read. */
@@ -285,12 +285,12 @@ const MarkCardHeader = ({
   isFinding,
   mark,
   markIndex,
-  totalIssues,
+  markCount,
 }: {
   readonly isFinding: boolean;
   readonly mark: TextMark;
   readonly markIndex: number;
-  readonly totalIssues: number;
+  readonly markCount: number;
 }) => (
   <div
     className={cn(
@@ -316,7 +316,7 @@ const MarkCardHeader = ({
 
     <div className="flex items-center gap-1">
       <span className="text-muted-foreground text-[10px] tabular-nums">
-        {markIndex + 1} of {totalIssues}
+        {markIndex + 1} of {markCount}
       </span>
       <PopoverClose
         aria-label="Close"
@@ -334,20 +334,20 @@ const MarkCardFooter = ({
   onDismiss,
   onNavigate,
   setActiveId,
-  totalIssues,
+  markCount,
 }: {
   readonly mark: TextMark;
   readonly onDismiss: ((mark: TextMark) => void) | undefined;
   readonly onNavigate: (direction: -1 | 1) => void;
   readonly setActiveId: (id: string | null) => void;
-  readonly totalIssues: number;
+  readonly markCount: number;
 }) => (
   <div className="bg-muted/30 flex items-center justify-between border-t px-3.5 py-2 text-xs">
     <div className="flex items-center gap-1">
       <Button
         aria-label="Previous"
         className="size-6 p-0"
-        disabled={totalIssues <= 1}
+        disabled={markCount <= 1}
         onClick={() => onNavigate(-1)}
         size="icon-xs"
         type="button"
@@ -358,7 +358,7 @@ const MarkCardFooter = ({
       <Button
         aria-label="Next"
         className="size-6 p-0"
-        disabled={totalIssues <= 1}
+        disabled={markCount <= 1}
         onClick={() => onNavigate(1)}
         size="icon-xs"
         type="button"
@@ -396,7 +396,7 @@ const MarkCard = ({
   readOnly,
   setActiveId,
   text,
-  totalIssues,
+  markCount,
 }: MarkCardProps) => {
   const isFinding = mark.kind === "finding";
   const accept =
@@ -441,7 +441,7 @@ const MarkCard = ({
           isFinding={isFinding}
           mark={mark}
           markIndex={markIndex}
-          totalIssues={totalIssues}
+          markCount={markCount}
         />
 
         {/* Popover Body */}
@@ -482,7 +482,7 @@ const MarkCard = ({
           onDismiss={readOnly ? undefined : onDismiss}
           onNavigate={onNavigate}
           setActiveId={setActiveId}
-          totalIssues={totalIssues}
+          markCount={markCount}
         />
       </PopoverContent>
     </Popover>
@@ -547,7 +547,7 @@ export const SpellChecker = ({
 
   const findingCount = marks.filter((m) => m.kind === "finding").length;
   const suggestionCount = marks.filter((m) => m.kind === "suggestion").length;
-  const totalIssues = marks.length;
+  const markCount = marks.length;
 
   return (
     <div
@@ -560,11 +560,11 @@ export const SpellChecker = ({
       {/* SpellChecker Toolbar */}
       <div className="bg-muted/30 flex flex-wrap items-center justify-between gap-3 border-b px-4 py-2.5 text-xs">
         <div className="flex items-center gap-2">
-          {totalIssues > 0 ? (
+          {markCount > 0 ? (
             <div className="flex items-center gap-1.5 font-medium">
               <span className="bg-destructive flex size-2 animate-pulse rounded-full" />
               <span>
-                {totalIssues} {totalIssues === 1 ? "issue" : "issues"} detected
+                {markCount} {markCount === 1 ? "issue" : "issues"} detected
               </span>
             </div>
           ) : (
@@ -589,7 +589,7 @@ export const SpellChecker = ({
         </div>
 
         <div className="flex items-center gap-2">
-          {totalIssues > 0 ? (
+          {markCount > 0 ? (
             <div className="flex items-center gap-1">
               <Button
                 aria-label="Previous issue"
@@ -603,7 +603,7 @@ export const SpellChecker = ({
               </Button>
               <span className="text-muted-foreground text-[11px] tabular-nums">
                 {activeMarkIndex === -1 ? 1 : activeMarkIndex + 1} of{" "}
-                {totalIssues}
+                {markCount}
               </span>
               <Button
                 aria-label="Next issue"
@@ -660,7 +660,7 @@ export const SpellChecker = ({
               readOnly={readOnly}
               setActiveId={setActiveId}
               text={segment.text}
-              totalIssues={totalIssues}
+              markCount={markCount}
             />
           );
         })}

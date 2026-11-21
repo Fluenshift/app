@@ -55,7 +55,7 @@ const numberFormatter = new Intl.NumberFormat("en", {
   maximumFractionDigits: 1,
 });
 
-const formatMetric = (value: number) =>
+const formatRate = (value: number) =>
   value > 0 && value < 0.1 ? "<0.1" : numberFormatter.format(value);
 
 const formatEvaluationDate = (value: string) =>
@@ -380,8 +380,7 @@ const ProgressPage = () => {
                     </h3>
                     {progressSummary.findingRate === null ? null : (
                       <p className="mt-3 text-2xl font-semibold tracking-tight">
-                        {formatMetric(progressSummary.findingRate)} per 100
-                        words
+                        {formatRate(progressSummary.findingRate)} per 100 words
                       </p>
                     )}
                     <div className="mt-4">
@@ -463,7 +462,7 @@ const ProgressPage = () => {
                           >
                             <span className="font-medium">{category}</span>
                             <span className="text-muted-foreground text-xs">
-                              {formatMetric(recurrencePercentage)}% ·{" "}
+                              {formatRate(recurrencePercentage)}% ·{" "}
                               {countLabel(
                                 evaluationCount,
                                 "evaluation",
@@ -473,7 +472,7 @@ const ProgressPage = () => {
                           </Link>
                           <div className="px-3 pb-3">
                             <LabeledBar
-                              label={`${category}: ${formatMetric(recurrencePercentage)}% recurrence`}
+                              label={`${category}: ${formatRate(recurrencePercentage)}% recurrence`}
                               maximum={100}
                               value={recurrencePercentage}
                             />

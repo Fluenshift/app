@@ -49,7 +49,7 @@ const metricFormatter = new Intl.NumberFormat("en", {
   maximumFractionDigits: 1,
 });
 
-const formatMetric = (value: number) =>
+const formatRate = (value: number) =>
   value > 0 && value < 0.1 ? "<0.1" : metricFormatter.format(value);
 
 const formatEvaluationDate = (value: string) =>
@@ -338,7 +338,7 @@ const RecentEvaluations = ({
         <p className="mt-1 text-lg font-semibold tabular-nums">
           {progressSummary.findingRate === null
             ? "No compatible evidence"
-            : `${formatMetric(progressSummary.findingRate)} / 100 words`}
+            : `${formatRate(progressSummary.findingRate)} / 100 words`}
         </p>
         <Link
           className="text-muted-foreground hover:text-foreground focus-visible:ring-ring mt-2 inline-flex rounded-sm text-xs font-medium outline-none focus-visible:ring-2"

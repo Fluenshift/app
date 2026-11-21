@@ -5,7 +5,7 @@
 // its slip rolls up to (docs/adr/0005).
 import type { EvaluationFinding } from "@fluenshift/contract";
 
-export interface SpecimenMistake {
+export interface SpecimenFinding {
   readonly byteEnd: number;
   readonly byteStart: number;
   readonly category: EvaluationFinding["category"];
@@ -17,7 +17,7 @@ export interface SpecimenMistake {
 export interface SpecimenScenario {
   readonly id: string;
   readonly label: string;
-  readonly mistakes: readonly SpecimenMistake[];
+  readonly findings: readonly SpecimenFinding[];
   readonly text: string;
 }
 
@@ -25,7 +25,7 @@ export const SPECIMEN_SCENARIOS: readonly SpecimenScenario[] = [
   {
     id: "standup",
     label: "Standup update",
-    mistakes: [
+    findings: [
       {
         byteEnd: 68,
         byteStart: 56,
@@ -56,7 +56,7 @@ export const SPECIMEN_SCENARIOS: readonly SpecimenScenario[] = [
   {
     id: "review",
     label: "Code review comment",
-    mistakes: [
+    findings: [
       {
         byteEnd: 46,
         byteStart: 31,
@@ -87,7 +87,7 @@ export const SPECIMEN_SCENARIOS: readonly SpecimenScenario[] = [
   {
     id: "email",
     label: "Email to a client",
-    mistakes: [
+    findings: [
       {
         byteEnd: 43,
         byteStart: 32,
@@ -121,12 +121,12 @@ export const SPECIMEN_SCENARIOS: readonly SpecimenScenario[] = [
 export const specimenFindings = (
   scenario: SpecimenScenario
 ): EvaluationFinding[] =>
-  scenario.mistakes.map((mistake) => ({
-    byteEnd: mistake.byteEnd,
-    byteStart: mistake.byteStart,
-    category: mistake.category,
-    correction: mistake.correctedSpan,
-    explanation: mistake.note,
-    originalText: mistake.originalSpan,
+  scenario.findings.map((finding) => ({
+    byteEnd: finding.byteEnd,
+    byteStart: finding.byteStart,
+    category: finding.category,
+    correction: finding.correctedSpan,
+    explanation: finding.note,
+    originalText: finding.originalSpan,
     severity: "Minor",
   }));

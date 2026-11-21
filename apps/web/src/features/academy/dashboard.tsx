@@ -201,7 +201,7 @@ const metricFormatter = new Intl.NumberFormat("en", {
 });
 
 // As PE's Progress shows a rate: one decimal, and "<0.1" for a rate too small to round.
-const formatMetric = (value: number) =>
+const formatRate = (value: number) =>
   value > 0 && value < 0.1 ? "<0.1" : metricFormatter.format(value);
 
 const countLabel = (count: number, one: string, many: string) =>
@@ -229,7 +229,7 @@ export const FindingTrend = ({
       ) : (
         <>
           <p className="text-iron">
-            {formatMetric(window.findingRate)} per 100 words over your last{" "}
+            {formatRate(window.findingRate)} per 100 words over your last{" "}
             {countLabel(
               window.evaluationCount,
               "practice sample",
@@ -263,7 +263,7 @@ export const FindingTrend = ({
                   >
                     {new Date(sample.evaluatedAt).toLocaleDateString()}
                   </time>{" "}
-                  {formatMetric(sample.findingRate)} per 100 words (
+                  {formatRate(sample.findingRate)} per 100 words (
                   {countLabel(sample.findingCount, "finding", "findings")} in{" "}
                   {countLabel(
                     sample.evaluatedEnglishWordCount,
