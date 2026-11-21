@@ -1398,6 +1398,11 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     .get("/api/sample-limits", (context) =>
       context.json(sampleLimitsOf(options.limits))
     )
+    // The Deploy Profile this process runs in, which the SPA reads once at startup: only the
+    // hosted profile sends the browser's AI key (docs/adr/0012, docs/adr/0034).
+    .get("/api/deploy-profile", (context) =>
+      context.json(notReady("The Deploy Profile is not available"), 503)
+    )
     .get("/api/setup", (context) =>
       options.setup === undefined
         ? context.json(notReady("Setup status is not available"), 503)

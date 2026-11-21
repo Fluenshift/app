@@ -3,8 +3,13 @@
 // removes it for its one call.
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { MissingAIKeyError, aiFetch } from "../../api";
-import { clearAIKey, getStoredAIKey, saveAIKey } from "./ai-key-store";
+import { aiFetch } from "../../api";
+import {
+  clearAIKey,
+  getStoredAIKey,
+  MissingAIKeyError,
+  saveAIKey,
+} from "./ai-key-store";
 
 const memoryStorage = (): Storage => {
   const data = new Map<string, string>();

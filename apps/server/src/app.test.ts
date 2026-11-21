@@ -1294,6 +1294,28 @@ describe("Sample limits endpoint", () => {
   });
 });
 
+// The Deploy Profile the SPA reads at startup, to know whether it sends the browser's AI key
+// (docs/adr/0034).
+describe("Deploy profile endpoint", () => {
+  it("names the local profile", async () => {
+    const response = await appWith().request(
+      get("http://localhost/api/deploy-profile")
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toStrictEqual({ deployProfile: "local" });
+  });
+
+  it("names the hosted profile to a Learner with a session", async () => {
+    const response = await hostedApp({ serveWeb: false, webDistPath }).request(
+      get("https://fluenshift.example/api/deploy-profile", hostedSessionCookie)
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toStrictEqual({ deployProfile: "hosted" });
+  });
+});
+
 describe("Setup endpoint", () => {
   it("answers 503 not-ready without a setup status", async () => {
     const response = await appWith().request(get("http://localhost/api/setup"));

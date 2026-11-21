@@ -24,6 +24,7 @@ import {
   SetupStatus,
   VocabularyList,
 } from "@fluenshift/contract";
+import type { DeployProfile } from "@fluenshift/contract";
 import { Option, Schema } from "effect";
 import { hc } from "hono/client";
 import type { AppType } from "server/app";
@@ -35,15 +36,10 @@ import type {
   ApiFailure,
   EvaluationClient,
 } from "./features/evaluations/evaluation-client";
-import { getStoredAIKey } from "./features/settings/ai-key-store";
-
-/** Thrown before any request is made, so the screen can ask the visitor for a key. */
-export class MissingAIKeyError extends Error {
-  constructor() {
-    super("Set up your AI key to get feedback.");
-    this.name = "MissingAIKeyError";
-  }
-}
+import {
+  getStoredAIKey,
+  MissingAIKeyError,
+} from "./features/settings/ai-key-store";
 
 /**
  * fetch for the routes that call the Trainer in the hosted profile: it attaches the stored key in
@@ -73,6 +69,16 @@ export const aiFetch = (
 interface HttpEvaluationClientOptions {
   readonly fetch?: typeof globalThis.fetch;
 }
+
+interface HttpAcademyClientOptions extends HttpEvaluationClientOptions {
+  /** In the hosted profile the Trainer calls carry the browser's AI key (docs/adr/0034). */
+  readonly deployProfile?: DeployProfile;
+}
+
+/** The Deploy Profile the server runs in (docs/adr/0034). Stub until the route answers. */
+export const readDeployProfile = (
+  _options: HttpEvaluationClientOptions = {}
+): Promise<DeployProfile> => Promise.resolve("local");
 
 interface ApiResponse {
   readonly json: () => Promise<unknown>;
@@ -236,7 +242,7 @@ export const createHttpEvaluationClient = ({
 
 export const createHttpAcademyClient = ({
   fetch,
-}: HttpEvaluationClientOptions = {}): AcademyClient => {
+}: HttpAcademyClientOptions = {}): AcademyClient => {
   const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
 
   return {
@@ -370,6 +376,11 @@ export const createHttpAcademyClient = ({
         ),
         decodeGradedAttempt
       );
+    },
+
+    // Stub until the key test is wired.
+    testAIKey() {
+      return Promise.resolve("works");
     },
 
     async writePractice(writingSample) {

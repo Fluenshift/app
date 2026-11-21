@@ -6,6 +6,7 @@ import type {
   ExerciseGenerationRequest,
   GradedAttempt,
   InterviewAnswerResult,
+  KeyTestStatus,
   MistakeNotebook,
   PendingExercise,
   PracticeWritingResult,
@@ -50,6 +51,8 @@ export interface AcademyClient {
     exerciseId: string,
     answer: string
   ) => Promise<GradedAttempt>;
+  /** Tests the browser's key with its provider, which says whether it works (ADR 0034). */
+  readonly testAIKey: () => Promise<KeyTestStatus>;
   /** Practice writing: the Judge's Evaluation, then the Enrichment's Occurrences (ADR 0026). */
   readonly writePractice: (
     writingSample: string
@@ -139,5 +142,6 @@ export const unavailableAcademyClient: AcademyClient = {
   listVocabulary: unavailable,
   startInterview: unavailable,
   submitAttempt: unavailable,
+  testAIKey: unavailable,
   writePractice: unavailable,
 };

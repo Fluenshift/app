@@ -5,6 +5,17 @@ import { TRAINER_KEY_PROVIDERS } from "@fluenshift/contract";
 import type { TrainerKeyProvider } from "@fluenshift/contract";
 import { Option, Schema } from "effect";
 
+/**
+ * Thrown before any request is made when the browser holds no key, so the screen can ask the
+ * visitor for one. Ported from Grifando src/lib/aiFetch.ts (74dbb9f).
+ */
+export class MissingAIKeyError extends Error {
+  constructor() {
+    super("Set up your AI key to get feedback.");
+    this.name = "MissingAIKeyError";
+  }
+}
+
 /** A visitor's key for one Trainer provider. */
 export interface AICredentials {
   readonly apiKey: string;
