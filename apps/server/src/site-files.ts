@@ -28,23 +28,30 @@ const escapeAttribute = (value: string): string =>
 
 /**
  * The application shell with the tags Next.js wrote for Grifando's Open Graph card, its URL at
- * the public origin, which no build can know (docs/adr/0040).
+ * the public origin, which no build can know (docs/adr/0040). Grifando's Twitter card declared no
+ * image, so Next.js filled it from the Open Graph card and wrote its tags in its own order (#265).
  */
 export const withLinkPreview =
   (siteUrl: string) =>
   (shell: string): string => {
+    const card = `${siteUrl}${OG_IMAGE_PATH}`;
     const tags = (
       [
-        ["og:image", `${siteUrl}${OG_IMAGE_PATH}`],
-        ["og:image:type", "image/png"],
-        ["og:image:width", "1200"],
-        ["og:image:height", "630"],
-        ["og:image:alt", OG_IMAGE_ALT],
+        ["property", "og:image", card],
+        ["property", "og:image:type", "image/png"],
+        ["property", "og:image:width", "1200"],
+        ["property", "og:image:height", "630"],
+        ["property", "og:image:alt", OG_IMAGE_ALT],
+        ["name", "twitter:image", card],
+        ["name", "twitter:image:alt", OG_IMAGE_ALT],
+        ["name", "twitter:image:type", "image/png"],
+        ["name", "twitter:image:width", "1200"],
+        ["name", "twitter:image:height", "630"],
       ] as const
     )
       .map(
-        ([property, content]) =>
-          `<meta property="${property}" content="${escapeAttribute(content)}" />\n`
+        ([attribute, key, content]) =>
+          `<meta ${attribute}="${key}" content="${escapeAttribute(content)}" />\n`
       )
       .join("");
     return shell.replace("</head>", () => `${tags}</head>`);
