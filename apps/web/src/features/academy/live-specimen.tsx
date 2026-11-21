@@ -10,7 +10,7 @@ import { SPECIMEN_SCENARIOS, specimenFindings } from "./specimen-data";
 import type { SpecimenScenario } from "./specimen-data";
 
 interface Segment {
-  readonly mistakeIndex: number | null;
+  readonly findingIndex: number | null;
   readonly start: number;
   readonly text: string;
 }
@@ -26,13 +26,13 @@ const segmentsOf = (scenario: SpecimenScenario): Segment[] => {
   for (const mark of marks) {
     if (mark.start > cursor) {
       segments.push({
-        mistakeIndex: null,
+        findingIndex: null,
         start: cursor,
         text: scenario.text.slice(cursor, mark.start),
       });
     }
     segments.push({
-      mistakeIndex:
+      findingIndex:
         mark.finding === undefined ? null : findings.indexOf(mark.finding),
       start: mark.start,
       text: scenario.text.slice(mark.start, mark.end),
@@ -41,7 +41,7 @@ const segmentsOf = (scenario: SpecimenScenario): Segment[] => {
   }
   if (cursor < scenario.text.length) {
     segments.push({
-      mistakeIndex: null,
+      findingIndex: null,
       start: cursor,
       text: scenario.text.slice(cursor),
     });
@@ -102,26 +102,26 @@ export const LiveSpecimen = () => {
         >
           <p className="prose-serif text-xl leading-[1.7] md:text-2xl md:leading-[1.7]">
             {segmentsOf(scenario).map((segment) =>
-              segment.mistakeIndex === null ? (
+              segment.findingIndex === null ? (
                 <span key={segment.start}>{segment.text}</span>
               ) : (
                 <span
-                  className={`proof-mark specimen-loop specimen-loop-${String(segment.mistakeIndex + 1)}`}
+                  className={`proof-mark specimen-loop specimen-loop-${String(segment.findingIndex + 1)}`}
                   key={segment.start}
                 >
                   {segment.text}
                   <sup className="proof-mark-num text-violet ml-0.5 font-mono text-[0.625rem] font-medium">
-                    {segment.mistakeIndex + 1}
+                    {segment.findingIndex + 1}
                   </sup>
                 </span>
               )
             )}
           </p>
           <ol className="space-y-4">
-            {scenario.mistakes.map((mistake, index) => (
+            {scenario.findings.map((finding, index) => (
               <li
                 className={`specimen-note specimen-loop specimen-loop-${String(index + 1)} flex gap-3`}
-                key={mistake.originalSpan}
+                key={finding.originalSpan}
                 style={{ animationDelay: "350ms" }}
               >
                 <span className="text-violet pt-1.5 font-mono text-[0.625rem] font-medium">
@@ -130,12 +130,12 @@ export const LiveSpecimen = () => {
                 <div className="space-y-1">
                   <p className="prose-serif text-lg">
                     <span className="text-muted-foreground line-through decoration-1">
-                      {mistake.originalSpan}
+                      {finding.originalSpan}
                     </span>{" "}
-                    <span>{mistake.correctedSpan}</span>
+                    <span>{finding.correctedSpan}</span>
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    {mistake.note}
+                    {finding.note}
                   </p>
                 </div>
               </li>
@@ -146,10 +146,10 @@ export const LiveSpecimen = () => {
         <div className="sr-only">
           <p>Example of a proofed paragraph: {scenario.text}</p>
           <ol>
-            {scenario.mistakes.map((mistake) => (
-              <li key={mistake.originalSpan}>
-                &quot;{mistake.originalSpan}&quot; should be &quot;
-                {mistake.correctedSpan}&quot;. {mistake.note}
+            {scenario.findings.map((finding) => (
+              <li key={finding.originalSpan}>
+                &quot;{finding.originalSpan}&quot; should be &quot;
+                {finding.correctedSpan}&quot;. {finding.note}
               </li>
             ))}
           </ol>

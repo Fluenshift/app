@@ -302,7 +302,7 @@ describe("difficulty targeting", () => {
           )
         )
     ).then(only);
-    expect(ability.rating).toBeGreaterThan(1000);
+    expect(ability.ability).toBeGreaterThan(1000);
     expect(ability.attemptCount).toBe(1);
   });
 

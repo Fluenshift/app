@@ -17,7 +17,10 @@ import {
 } from "@fluenshift/core/selection";
 import { Effect } from "effect";
 
-import { getRatings, setRating } from "./category-ability-repository";
+import {
+  getCategoryAbilities,
+  setCategoryAbility,
+} from "./category-ability-repository";
 import { NotFoundError } from "./errors";
 import {
   createAttempt,
@@ -72,10 +75,10 @@ export const generatePracticeSet = Effect.fn(
     return [];
   }
 
-  const ratings = yield* getRatings();
+  const abilities = yield* getCategoryAbilities();
   const targets = selected.map((pattern, index) => ({
     category: pattern.category,
-    difficulty: targetLevel(ratings.get(pattern.category) ?? DEFAULT_ABILITY),
+    difficulty: targetLevel(abilities.get(pattern.category) ?? DEFAULT_ABILITY),
     exampleCorrection: pattern.exampleCorrection,
     exampleOriginal: pattern.exampleOriginal,
     type: assignExerciseTypeFor(pattern, index),
@@ -145,9 +148,9 @@ export const submitAttempt = Effect.fn("ExerciseService.submitAttempt")(
       });
 
       if (exercise.difficulty !== null) {
-        const ratings = yield* getRatings();
-        const ability = ratings.get(pattern.category) ?? DEFAULT_ABILITY;
-        yield* setRating(
+        const abilities = yield* getCategoryAbilities();
+        const ability = abilities.get(pattern.category) ?? DEFAULT_ABILITY;
+        yield* setCategoryAbility(
           pattern.category,
           updateAbility(ability, exercise.difficulty, isCorrect)
         );

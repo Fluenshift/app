@@ -51,11 +51,6 @@ export const TechnicalCategory = literalObject(TECHNICAL_CATEGORIES);
 export type TechnicalCategory = (typeof TECHNICAL_CATEGORIES)[number];
 export const TechnicalCategorySchema = Schema.Literals(TECHNICAL_CATEGORIES);
 
-export const SESSION_STATUSES = ["PENDING", "ANALYZED", "FAILED"] as const;
-export const SessionStatus = literalObject(SESSION_STATUSES);
-export type SessionStatus = (typeof SESSION_STATUSES)[number];
-export const SessionStatusSchema = Schema.Literals(SESSION_STATUSES);
-
 export const MISTAKE_CATEGORIES = [
   "ARTICLES",
   "PREPOSITIONS",

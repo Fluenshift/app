@@ -10,45 +10,45 @@ import { Effect } from "effect";
 
 import { CurrentLearner } from "../learner-identity";
 
-// Ratings by category; categories never practiced are absent (callers use DEFAULT_ABILITY).
-export const getRatings = Effect.fn("CategoryAbilityRepository.getRatings")(
-  function* () {
-    const database = yield* Database;
-    const learner = yield* CurrentLearner;
-    const rows = yield* database.run((client) =>
-      client
-        .select()
-        .from(categoryAbilities)
-        .where(eq(categoryAbilities.learnerId, learner.id))
-    );
-    return new Map(
-      rows.map((row) => [row.category as MistakeCategory, row.rating])
-    );
-  }
-);
+// Abilities by category; categories never practiced are absent (callers use DEFAULT_ABILITY).
+export const getCategoryAbilities = Effect.fn(
+  "CategoryAbilityRepository.getCategoryAbilities"
+)(function* () {
+  const database = yield* Database;
+  const learner = yield* CurrentLearner;
+  const rows = yield* database.run((client) =>
+    client
+      .select()
+      .from(categoryAbilities)
+      .where(eq(categoryAbilities.learnerId, learner.id))
+  );
+  return new Map(
+    rows.map((row) => [row.category as MistakeCategory, row.ability])
+  );
+});
 
-export const setRating = Effect.fn("CategoryAbilityRepository.setRating")(
-  function* (category: MistakeCategory, rating: number) {
-    const database = yield* Database;
-    const learner = yield* CurrentLearner;
-    yield* database.run((client) =>
-      client
-        .insert(categoryAbilities)
-        .values({
-          attemptCount: 1,
-          category,
-          id: randomUUID(),
-          learnerId: learner.id,
-          rating,
-        })
-        .onConflictDoUpdate({
-          set: {
-            attemptCount: sql`${categoryAbilities.attemptCount} + 1`,
-            rating,
-            updatedAt: new Date(),
-          },
-          target: [categoryAbilities.learnerId, categoryAbilities.category],
-        })
-    );
-  }
-);
+export const setCategoryAbility = Effect.fn(
+  "CategoryAbilityRepository.setCategoryAbility"
+)(function* (category: MistakeCategory, ability: number) {
+  const database = yield* Database;
+  const learner = yield* CurrentLearner;
+  yield* database.run((client) =>
+    client
+      .insert(categoryAbilities)
+      .values({
+        attemptCount: 1,
+        category,
+        id: randomUUID(),
+        learnerId: learner.id,
+        ability,
+      })
+      .onConflictDoUpdate({
+        set: {
+          attemptCount: sql`${categoryAbilities.attemptCount} + 1`,
+          ability,
+          updatedAt: new Date(),
+        },
+        target: [categoryAbilities.learnerId, categoryAbilities.category],
+      })
+  );
+});

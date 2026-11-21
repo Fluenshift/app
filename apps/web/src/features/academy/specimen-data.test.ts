@@ -21,16 +21,16 @@ describe("live specimen data", () => {
   for (const scenario of SPECIMEN_SCENARIOS) {
     describe(scenario.label, () => {
       it("has three marks", () => {
-        expect(scenario.mistakes).toHaveLength(3);
+        expect(scenario.findings).toHaveLength(3);
       });
 
       it("quotes every mistake span verbatim in the paragraph", () => {
         const bytes = encoder.encode(scenario.text);
-        for (const mistake of scenario.mistakes) {
-          expect(scenario.text).toContain(mistake.originalSpan);
+        for (const finding of scenario.findings) {
+          expect(scenario.text).toContain(finding.originalSpan);
           expect(
-            decoder.decode(bytes.subarray(mistake.byteStart, mistake.byteEnd))
-          ).toBe(mistake.originalSpan);
+            decoder.decode(bytes.subarray(finding.byteStart, finding.byteEnd))
+          ).toBe(finding.originalSpan);
         }
       });
 
@@ -39,7 +39,7 @@ describe("live specimen data", () => {
           .toSorted((a, b) => a.start - b.start)
           .map((mark) => mark.id);
         expect(marked).toEqual(
-          scenario.mistakes.map((_, index) => `finding-${String(index)}`)
+          scenario.findings.map((_, index) => `finding-${String(index)}`)
         );
       });
     });
