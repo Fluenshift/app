@@ -113,14 +113,12 @@ describe("ServerConfig", () => {
       assert.deepStrictEqual(local.limits, {
         bodyMaxBytes: 262_144,
         codeMaxCharacters: Option.none(),
-        promptMaxCharacters: Option.none(),
         sampleMaxBytes: 32_768,
         sampleMaxCharacters: Option.none(),
       });
       assert.deepStrictEqual(hosted.limits, {
         bodyMaxBytes: 262_144,
         codeMaxCharacters: Option.some(2000),
-        promptMaxCharacters: Option.some(1000),
         sampleMaxBytes: 32_768,
         sampleMaxCharacters: Option.some(5000),
       });

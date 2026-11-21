@@ -19,7 +19,6 @@ export type DatabaseConfig =
 export interface InputLimits {
   readonly bodyMaxBytes: number;
   readonly codeMaxCharacters: Option.Option<number>;
-  readonly promptMaxCharacters: Option.Option<number>;
   readonly sampleMaxBytes: number;
   readonly sampleMaxCharacters: Option.Option<number>;
 }
@@ -31,14 +30,12 @@ const LIMITS: Readonly<Record<DeployProfile, InputLimits>> = {
   hosted: {
     bodyMaxBytes: BODY_MAX_BYTES,
     codeMaxCharacters: Option.some(2000),
-    promptMaxCharacters: Option.some(1000),
     sampleMaxBytes: SAMPLE_MAX_BYTES,
     sampleMaxCharacters: Option.some(5000),
   },
   local: {
     bodyMaxBytes: BODY_MAX_BYTES,
     codeMaxCharacters: Option.none(),
-    promptMaxCharacters: Option.none(),
     sampleMaxBytes: SAMPLE_MAX_BYTES,
     sampleMaxCharacters: Option.none(),
   },

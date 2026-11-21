@@ -178,7 +178,6 @@ const appOf = (boundaries: AppBoundaries = {}) =>
     limits: {
       bodyMaxBytes: 256 * 1024,
       codeMaxCharacters: Option.none(),
-      promptMaxCharacters: Option.none(),
       sampleMaxBytes: 32 * 1024,
       sampleMaxCharacters: Option.none(),
     },
@@ -435,7 +434,6 @@ const EXPLANATION = "This function goed through every user.";
 const HOSTED_LIMITS: InputLimits = {
   bodyMaxBytes: 256 * 1024,
   codeMaxCharacters: Option.some(2000),
-  promptMaxCharacters: Option.some(1000),
   sampleMaxBytes: 32 * 1024,
   sampleMaxCharacters: Option.some(5000),
 };
@@ -443,7 +441,6 @@ const HOSTED_LIMITS: InputLimits = {
 const LOCAL_LIMITS: InputLimits = {
   ...HOSTED_LIMITS,
   codeMaxCharacters: Option.none(),
-  promptMaxCharacters: Option.none(),
   sampleMaxCharacters: Option.none(),
 };
 
