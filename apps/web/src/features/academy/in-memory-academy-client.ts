@@ -1,6 +1,6 @@
 // A fake Academy client for the screen tests: it answers from explicit fixtures, keeps the
-// vocabulary it is given and saves, and records each save, generation, Attempt and key test
-// request. A call with no fixture fails.
+// vocabulary it is given and saves, and records each save, generation, Attempt, key test and
+// Learner deletion request. A call with no fixture fails.
 import type {
   AcademyDashboard,
   DailyChallenge,
@@ -51,6 +51,11 @@ interface InMemoryInterview {
 interface InMemoryAcademyClientOptions {
   readonly academyDashboard?: AcademyDashboard;
   readonly dailyChallenge?: DailyChallenge;
+  /**
+   * What each deletion of the Learner does, in order: `null` deletes, a promise is a deletion
+   * still running, an error is its failure.
+   */
+  readonly deletions?: readonly (null | Promise<undefined> | Error)[];
   readonly exercises?: InMemoryExercises;
   /** Every save fails, as a refused or failed request does. */
   readonly failVocabularySaves?: boolean;
@@ -81,6 +86,8 @@ export type InMemoryAcademyClient = AcademyClient & {
     readonly answer: string;
     readonly exerciseId: string;
   }[];
+  /** The key the browser held when each deletion ran: the page clears it only after one. */
+  readonly deletionRequests: readonly (AICredentials | null)[];
   readonly generationRequests: readonly ExerciseGenerationRequest[];
   /** The key the browser held when each key test ran, as the hosted client would send it. */
   readonly keyTestRequests: readonly (AICredentials | null)[];
@@ -100,9 +107,23 @@ const settle = <A>(
     : Promise.resolve(fixture);
 };
 
+// A deletion's fixture as its answer; with none, the request fails.
+const deletionOf = (
+  deletion: null | Promise<undefined> | Error | undefined
+): Promise<undefined> => {
+  if (deletion === null) {
+    return Promise.resolve(undefined);
+  }
+  if (deletion instanceof Promise) {
+    return deletion;
+  }
+  return Promise.reject(deletion ?? new AcademyRequestError(500));
+};
+
 export const createInMemoryAcademyClient = ({
   academyDashboard,
   dailyChallenge,
+  deletions = [],
   exercises = {},
   failVocabularySaves = false,
   interview = {},
@@ -124,6 +145,7 @@ export const createInMemoryAcademyClient = ({
   }[] = [];
   const endRequests: string[] = [];
   const keyTestRequests: (AICredentials | null)[] = [];
+  const deletionRequests: (AICredentials | null)[] = [];
 
   return {
     answerInterviewTurn: (sessionId, turnId, answer) => {
@@ -150,6 +172,10 @@ export const createInMemoryAcademyClient = ({
       ];
       return Promise.resolve();
     },
+    deleteLearner: async () => {
+      deletionRequests.push(getStoredAIKey());
+      await deletionOf(deletions[deletionRequests.length - 1]);
+    },
     deleteVocabularyItem: (itemId) => {
       if (items === undefined) {
         return unavailableAcademyClient.deleteVocabularyItem(itemId);
@@ -157,6 +183,7 @@ export const createInMemoryAcademyClient = ({
       items = items.filter((item) => item.id !== itemId);
       return Promise.resolve();
     },
+    deletionRequests,
     endInterview: (sessionId) => {
       endRequests.push(sessionId);
       return Promise.resolve();

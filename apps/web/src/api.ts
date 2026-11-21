@@ -328,6 +328,17 @@ export const createHttpAcademyClient = ({
       }
     },
 
+    // The deletion reaches no provider, so it goes without the key (docs/adr/0036).
+    async deleteLearner() {
+      const response = await api.me.$delete();
+      if (!response.ok) {
+        throw new AcademyRequestError(
+          response.status,
+          Option.getOrUndefined(decodeAcademyFailure(await parseJson(response)))
+        );
+      }
+    },
+
     // A 404 means the item is already gone, as when another tab removed it.
     async deleteVocabularyItem(itemId) {
       const response = await api.vocabulary[":itemId"].$delete({

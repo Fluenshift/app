@@ -1,5 +1,7 @@
-// Ported from PE apps/web/src/routes/setup.tsx (5e831bb).
-import { createFileRoute, getRouteApi } from "@tanstack/react-router";
+// Ported from PE apps/web/src/routes/setup.tsx (5e831bb). It speaks for the local profile, whose
+// facts FR-24 lists; in the hosted profile HR-08 replaces FR-24, so it redirects to /privacy
+// (docs/adr/0036).
+import { createFileRoute, getRouteApi, redirect } from "@tanstack/react-router";
 
 const routeApi = getRouteApi("/setup");
 
@@ -65,6 +67,11 @@ const SetupPage = () => {
 };
 
 export const Route = createFileRoute("/setup")({
+  beforeLoad: ({ context }) => {
+    if (context.deployProfile === "hosted") {
+      throw redirect({ replace: true, to: "/privacy" });
+    }
+  },
   component: SetupPage,
   loader: ({ context }) => context.evaluationClient.getSetupStatus(),
 });

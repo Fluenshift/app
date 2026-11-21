@@ -28,6 +28,11 @@ export interface AcademyClient {
   readonly createVocabularyItem: (
     request: VocabularyItemRequest
   ) => Promise<void>;
+  /**
+   * Deletes the hosted Learner and all their data, and expires the session, so only a page load
+   * starts a new one (`DELETE /api/me`, ADR 0003, ADR 0036). It reaches no provider.
+   */
+  readonly deleteLearner: () => Promise<void>;
   /** Resolves once the item is gone, also when it was already gone. */
   readonly deleteVocabularyItem: (itemId: string) => Promise<void>;
   /** Ends an interview; a failure is ignored, as Grifando's wrap-up showed regardless. */
@@ -145,6 +150,7 @@ const unavailable = () =>
 export const unavailableAcademyClient: AcademyClient = {
   answerInterviewTurn: unavailable,
   createVocabularyItem: unavailable,
+  deleteLearner: unavailable,
   deleteVocabularyItem: unavailable,
   endInterview: unavailable,
   explainAttempt: unavailable,
