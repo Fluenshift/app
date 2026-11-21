@@ -246,7 +246,7 @@ Code:
 - Whatever starts the built server sets `DATA_DIRECTORY` (local profile) or `DATABASE_URL`
   (hosted). A hosted production server also needs `SESSION_SECRET` (ADR 0032), `IP_HASH_SALT`,
   `CLIENT_IP_HEADER` naming the header its proxy writes (ADR 0033), and `SITE_URL`, the public
-  origin its `robots.txt` and `sitemap.xml` name (ADR 0037).
+  origin its `robots.txt`, `sitemap.xml` and link preview name (ADR 0037, ADR 0040).
 - pnpm fails an install on a dependency build script nobody reviewed: list it in `allowBuilds`.
 - Web tests import relatively: an `@/` alias would change `vite.config.ts`, which G11 records.
 
