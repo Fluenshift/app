@@ -82,6 +82,7 @@ export {
   ProgressSummary,
   RecurringCorrection,
   SetupStatus,
+  TrainerSetup,
   WRITING_SAMPLE_ORIGINS,
   WritingSampleOrigin,
 } from "./evaluation";
