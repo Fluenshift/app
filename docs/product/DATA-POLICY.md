@@ -108,7 +108,7 @@ provisional version.
 
 ## Hosted profile
 
-The hosted profile replaces Grifando's public site; it is built in Phase 6 of the migration,
+The hosted profile replaces Grifando's public site; it was built in Phase 6 of the migration,
 and this section records what the accepted ADRs decided for it.
 
 ### Learners and storage
