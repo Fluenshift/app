@@ -1,12 +1,12 @@
 # Session handoff
 
-Last updated 2026-11-20, at the end of the eleventh agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Last updated 2026-11-20, at the end of the twelfth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
 
 ## Work in flight
 
-The hosted profile's request pipeline is done. This session merged the signed session and its gate (#214, ADR 0032), `DELETE /api/me` (#216), rate limits with `ensureLearner` behind them (#218, ADR 0033), the daily idle cleanup (#221), and the browser's AI key store with `aiFetch` (#224), which nothing calls yet. No issue is open.
+This session merged the BYOK wiring and Grifando's `/settings` page (#230, ADR 0034): the SPA reads its Deploy Profile at startup, and in the hosted profile the Trainer's calls and the key test carry the browser's key. It also decided the hosted Judge's key (#233, ADR 0035): visitors bring an OpenRouter key, which runs the Judge and the Trainer. Two issues implement ADR 0035 and are open, labeled `ready-for-agent`: #231, then #232.
 
-Until the BYOK unit wires `aiFetch`, a hosted Academy route that calls the Trainer answers 401 `AI_KEY_REQUIRED`: the browser sends no key, and the hosted profile never uses a configured one (ADR 0012). The local profile works as before.
+Until #232 merges, the hosted Judge still reads `OPENROUTER_API_KEY` from server configuration, as the local one does. The local profile works as before.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -18,10 +18,11 @@ On 2026-11-20 there were 20: `hosted` 10 (2 of `sitemap.test.ts`, the 8 paused d
 
 ## Next steps
 
-1. **Phase 6** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), which matters once the owners want a public deploy; run `code-review` at its end. The open rows group into these units, in this order, each an issue with its rows (`hosted.json` unless named):
-   - BYOK wiring and the `/settings` page (`src/app/settings/page.tsx`, `src/components/settings/AIKeyForm.tsx`, with the form's message for blocked storage from fix `2a86084`). It needs a decision first (Facts, Hosted profile): ADR 0012 keeps browser keys out of the local profile, so the SPA must learn its Deploy Profile before it stores or sends a key.
-   - Grifando's remaining pages: `/privacy`, with its "Delete my data" button (`src/components/privacy/DeleteMyDataButton.tsx`, which calls `DELETE /api/me` and clears the stored key), and `/explain-code`.
-   - Robots and sitemap: `src/app/sitemap.test.ts` (`port-changed`, ADR 0003), once `/privacy` and `/settings` exist, since the sitemap lists them.
+1. **Phase 6** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), which matters once the owners want a public deploy; run `code-review` at its end. The remaining units, in this order, each an issue with its rows (`hosted.json` unless named):
+   - #231, then #232: ADR 0035, the OpenRouter key in the browser, the Trainer on it, then the hosted Judge on it.
+   - `/privacy`, with its "Delete my data" button (`src/components/privacy/DeleteMyDataButton.tsx`, which calls `DELETE /api/me` and clears the stored key), after #232, since the page says which provider receives what on whose key. Grifando's page names Vercel Web Analytics, which ADR 0013 rules out. The unit also decides what the hosted profile shows for PE's Setup & privacy page (Facts, Hosted profile) and whether Grifando's site footer, with its "Privacy" and "Key settings" links, ports.
+   - `/explain-code` (`src/app/explain-code/`, `src/components/writing/ExplainCodeCoach.tsx`): the snippet is never persisted and is Protected Technical Content (`MIGRATION_PROTOCOL.md`, Phase 6).
+   - Robots and sitemap: `src/app/sitemap.test.ts` (`port-changed`, ADR 0003), once `/privacy` exists, since the sitemap lists it and `/settings`.
    - `docs/deploy.md` (8 rows) is the hosted Docker smoke, paused with the end-to-end tests.
 2. **Phase 7**, then its `code-review`.
 
@@ -43,8 +44,11 @@ On 2026-11-20 there were 20: `hosted` 10 (2 of `sitemap.test.ts`, the 8 paused d
 - A fake boundary in a route test must record when its Effect runs, inside `Effect.sync`, not when it is called: `app.ts` builds a boundary's Effect before the limit decides whether it runs (`rate-limit-routes.test.ts`).
 - A hosted production server needs `SESSION_SECRET`, `IP_HASH_SALT` and `CLIENT_IP_HEADER` (`AGENTS.md`, Code). The hosted profile forks the idle cleanup at 03:17 UTC daily (`IdleCleanup`).
 - The hosted Docker smoke is paused, so #215 and #220 checked the hosted wiring by hand: start `postgres:17-alpine` on a loopback port, run `pnpm build`, then in `apps/server` run `node dist/index.mjs` with `DEPLOY_PROFILE=hosted`, `NODE_ENV=production`, `DATABASE_URL`, `MIGRATIONS_PATH=../../packages/db/src/migrations`, `WEB_DIST_PATH=../web/dist`, `SESSION_SECRET`, `IP_HASH_SALT` and a free `SERVER_PORT`, and drive it with `curl`. Stop it with `pgrep -f 'node dis[t]/index.mjs' | xargs -r kill`.
-- BYOK, to decide: the SPA serves both profiles, and only the hosted one takes keys from the browser (ADR 0012). One way: a `GET` route that names the Deploy Profile, read once by the root route's `beforeLoad` through the Academy client; in the hosted profile the HTTP Academy client sends its Trainer calls (and the key test) through `aiFetch` (`apps/web/src/api.ts`), `isKeyRequired` also recognizes `MissingAIKeyError`, and the key notice links to `/settings` instead of `/setup`. The in-memory client answers the local profile, so existing screen tests keep their notice.
-- The key store (`apps/web/src/features/settings/ai-key-store.ts`) and the Trainer key's headers and providers (`packages/contract/src/trainer-key.ts`) are shared by the browser and the server.
+- The SPA reads `GET /api/deploy-profile` once in `main.tsx` (`readDeployProfile`), before it builds its clients; a failed answer reads as `local` (ADR 0034). The router context carries `deployProfile`, and `createAppRouter` defaults to `local`, so a screen test of the hosted profile passes `deployProfile: "hosted"`. `KeyRequiredNotice` and `AcademyNav` read it from the root route's context.
+- In the hosted profile the HTTP Academy client sends its Trainer calls and the key test through a second Hono client whose fetch is `aiFetch` (`trainer` in `createHttpAcademyClient`), so no other call carries the key; #232 routes `POST /api/evaluations` the same way. `/settings` redirects to `/setup` in the local profile.
+- A web test that needs storage the browser blocks spies on `Storage.prototype.setItem` (`-settings.test.tsx`).
+- PE's Setup & privacy page (`/setup`) still says the app runs on localhost and asks for `OPENROUTER_API_KEY` in the server environment, and the primary header links to it in both profiles: the `/privacy` unit gives the hosted profile its own.
+- The key store (`apps/web/src/features/settings/ai-key-store.ts`) and the Trainer key's headers, providers and key test answer (`packages/contract/src/trainer-key.ts`) are shared by the browser and the server.
 
 ### Academy, server
 
@@ -64,7 +68,7 @@ On 2026-11-20 there were 20: `hosted` 10 (2 of `sitemap.test.ts`, the 8 paused d
 - Grifando's client components port from source (ADR 0025, decision 5): no baseline test renders them, so screen tests assert Grifando's copy, roles and calls. Copy stays Grifando's; names follow `CONTEXT.md`, in ported tests too (`docs/migration/README.md`, Mechanical mapping).
 - Find queries wait 5 seconds (`apps/web/src/test/setup.ts`): a screen's first render loads its route chunk and runs its loader.
 - No key travels from the browser in the local profile: the server uses its configured Trainer key or answers 401 `AI_KEY_REQUIRED`, which shows Grifando's key notice.
-- Lint shapes React code: the React Compiler rule refuses `try`/`finally` in a component; the promise rules refuse `.then(onOk, onError)` and callbacks inside `.then`, so a component awaits a module-level async helper that catches; `<output>` replaces `role="status"` and `<fieldset>` replaces `role="group"`; wrap a handler passed as `onClick={props.onX}` in an arrow; no nested ternaries; regular expressions take the `u` flag; no member access on an `await` expression. TanStack route options go in the order `validateSearch`, `loaderDeps`, `beforeLoad`, `loader`, `component`.
+- Lint shapes React code: a label around a base-ui radio needs `htmlFor` and the radio an `id` when its text is a literal (`label-has-associated-control`); the React Compiler rule refuses `try`/`finally` in a component; the promise rules refuse `.then(onOk, onError)` and callbacks inside `.then`, so a component awaits a module-level async helper that catches; `<output>` replaces `role="status"` and `<fieldset>` replaces `role="group"`; wrap a handler passed as `onClick={props.onX}` in an arrow; no nested ternaries; regular expressions take the `u` flag; no member access on an `await` expression. TanStack route options go in the order `validateSearch`, `loaderDeps`, `beforeLoad`, `loader`, `component`.
 - Hono's typed client takes no `json` for a route with path parameters that reads its body itself: send the body through `init` (`submitAttempt` in `api.ts`). A typed `Link` needs an existing route.
 - Grifando's category breakdown orders by count only: a tie keeps no order, and tests do not assert one.
 
@@ -88,6 +92,7 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 - Archive `Fluenshift/prompt-evolution`; its pin was verified on 2026-11-12.
 - Levy: point local Grifando clones at `https://github.com/Fluenshift/grifando.git`; reconnect Grifando's Vercel project to the organization and give its CI a `GITLEAKS_LICENSE` secret, if Grifando still deploys from there.
 - Set a budget before live calibration (G13) runs.
+- Leave `OPENROUTER_API_KEY` unset on a hosted deploy: hosted visitors bring the Judge's key (ADR 0035), and until #232 merges a set key would pay for every visitor's Evaluation.
 - Choose the host for the hosted profile (ADR 0003, decision 4) before a public deploy, and give it `SESSION_SECRET`, `IP_HASH_SALT` and the `CLIENT_IP_HEADER` its proxy writes (ADR 0033).
 - Give the go-ahead for cutover (Phase 7).
 - Say where Grifando's visual style came from, for `docs/product/ASSET-LICENSES.md` (#119, question 4).
@@ -97,3 +102,4 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 - `$F` is `/home/jheff/projects/personal/fluenshift`. `$F/app-verify/protocol-review` is an old checkout outside the migration.
 - Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-app/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
 - The interactive `grep` is ugrep, so one-liners call `/usr/bin/grep`.
+- A Postgres container from an earlier hand check, `fs-unit-pg`, listens on `127.0.0.1:55432` (user `app`, password `pw`, database `app`). Reuse it for hosted hand checks, or remove it with `docker rm -f fs-unit-pg`.
