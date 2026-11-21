@@ -1,7 +1,7 @@
 // The Writing Desk's Evaluations in the Academy (docs/adr/0041): once the Learner has practiced,
-// POST /api/evaluations folds each Evaluation it stores, as practice writing does, so a mistake in
+// POST /api/evaluations folds each Evaluation it stores, as practice writing does, so a Finding in
 // real text costs mastery (docs/adr/0014). The routes run on a fresh PGlite database, a test
-// header names the Learner, a fake Judge finds one mistake, a fake Trainer enriches it, and a
+// header names the Learner, a fake Judge makes one Finding, a fake Trainer enriches it, and a
 // logger keeps every line the runtime logs.
 import { rm } from "node:fs/promises";
 import { inspect } from "node:util";
@@ -69,7 +69,7 @@ const trainerClient = Layer.succeed(
   })
 );
 
-// The Judge finds one tense mistake, on "goed".
+// The Judge makes one Finding of tense, on "goed".
 const judgeModel = EvaluationModel.fake((writingSample) => {
   const byteStart = new TextEncoder().encode(
     writingSample.slice(0, writingSample.indexOf("goed"))
