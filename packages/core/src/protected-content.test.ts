@@ -254,3 +254,25 @@ describe("Protected Technical Content guards", () => {
     ]);
   });
 });
+
+// PE's patterns backtracked exponentially on these lines: about a dozen seconds at this length,
+// and twice as long for each character more (#306).
+const millisecondsToDetect = (sample: string) => {
+  const start = performance.now();
+  findProtectedTechnicalContent(sample);
+  return performance.now() - start;
+};
+
+describe("Protected Technical Content time", () => {
+  it("answers within a second on a crafted assignment line", () => {
+    expect(
+      millisecondsToDetect(`I wrote this.\nA=${"\\!".repeat(30)}\nThanks.`)
+    ).toBeLessThan(1000);
+  });
+
+  it("answers within a second on a crafted run of capitals", () => {
+    expect(
+      millisecondsToDetect(`I wrote Aa${"A".repeat(30)}_ today.`)
+    ).toBeLessThan(1000);
+  });
+});

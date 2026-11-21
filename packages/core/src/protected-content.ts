@@ -2,6 +2,7 @@
 // apps/server/src/evaluation/protected-content.ts. Byte offsets are TextEncoder lengths
 // instead of Buffer.byteLength, so the heuristics run anywhere.
 import type { AssessmentSpan } from "./model-assessment";
+import { readShellLine } from "./shell-line";
 import { encodeUtf8 } from "./utf8";
 
 const SHELL_COMMANDS = new Set([
@@ -133,13 +134,11 @@ const hasCommandEvidence = (
 };
 
 const startsWithShellCommand = (line: string): boolean => {
-  const match = line.match(
-    /^(?:[A-Za-z_][A-Za-z0-9_]*=(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|(?:\\.|[^\s])+)[\s]+)*(?<command>[^\s]+)(?:\s+(?<arguments>.*))?$/u
-  );
-  const executable = match?.groups?.command;
-  if (executable === undefined) {
+  const match = readShellLine(line);
+  if (match === undefined) {
     return false;
   }
+  const executable = match.command;
 
   if (
     /^(?:\.{1,2}\/|~\/|\/|[A-Za-z]:\\)\S+/u.test(executable) ||
@@ -162,7 +161,7 @@ const startsWithShellCommand = (line: string): boolean => {
     return false;
   }
 
-  const argumentsText = match?.groups?.arguments ?? "";
+  const argumentsText = match.arguments ?? "";
   if (/[.!?]$/u.test(line) && !hasCommandEvidence(command, argumentsText)) {
     return false;
   }
