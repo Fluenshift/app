@@ -4,7 +4,7 @@ Last updated 2026-11-20, at the end of the thirteenth agent session. This file h
 
 ## Work in flight
 
-This session ported Grifando's hosted privacy page with its "Delete my data" button (#241, ADR 0036) and served `robots.txt` and `sitemap.xml` in the hosted profile (#244, ADR 0037). One issue is open: #242, `/explain-code`, written and labeled `ready-for-agent` but not started.
+This session ported Grifando's hosted privacy page with its "Delete my data" button (#241, ADR 0036), served `robots.txt` and `sitemap.xml` in the hosted profile (#244, ADR 0037), and ported Explain code (#246, ADR 0038). No issue is open: every Phase 6 unit that is not paused has merged.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -16,13 +16,8 @@ On 2026-11-20 there were 18, all paused: `hosted` 8 (the deploy-smoke rows of `d
 
 ## Next steps
 
-1. **`/explain-code`, #242**, the last Phase 6 unit that is not paused. Its issue lists the sources and targets. What it must settle:
-   - The route's validation of `codeSnippet` (Grifando: trimmed, 1 to 2,000 characters, optional) has no source test: characterize it at the Grifando baseline first, beside `migration/characterization/grifando/files/src/app/api/writing-sessions/writingSessions.characterization.test.ts`, whose mocks it can copy, then add its rows (`BASELINES.md`, Characterization tests). Grifando answers a refused body 400 `{ error: "Invalid request body", issues }`, as `POST /api/practice-writing` already does.
-   - `codeMaxCharacters` of `InputLimits` is 2,000 in the hosted profile and none locally, and nothing reads it yet. HR-02 wants the cap at the edge and in the service: the route's request schema is static (`PRACTICE_WRITING_REQUEST` in `app.ts`), so the edge check needs the profile's limits, and `evaluatePractice` (`practice-writing.ts`) the service check. The snippet reaches `foldEvaluation`, which already passes it to the Trainer and never stores it; the Judge never receives it.
-   - The SPA's code sheet needs the cap: `SampleLimits` (`GET /api/sample-limits`) has no code field, and existing tests compare it whole. Decide between a new field and Grifando's fixed 2,000 in the screen, and record the choice.
-   - The Academy navigation's "Explain code" entry, which ADR 0034 left out until the screen exists.
-2. **The `code-review` milestone of Phase 6**, once #242 merges (`AGENTS.md`, start of a session).
-3. **Phase 7** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), then its `code-review`. Its cutover waits for the owners.
+1. **The `code-review` milestone of Phase 6** (`AGENTS.md`, start of a session): review the Phase 6 changes, the first-parent history of `main` after #212 (the Phase 5f review), against the protocol's Phase 6 list (`docs/migration/MIGRATION_PROTOCOL.md`, Phases) and the hosted requirements HR-01 to HR-09. Open an issue for each finding and fix the ones a session can.
+2. **Phase 7** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), then its `code-review`. Its cutover waits for the owners.
 
 ## Facts no issue records
 
@@ -54,6 +49,7 @@ On 2026-11-20 there were 18, all paused: `hosted` 8 (the deploy-smoke rows of `d
 
 ### Academy, server
 
+- Explain code is practice writing with a `codeSnippet` (ADR 0038): the route checks it against the Deploy Profile's code cap (2,000 characters hosted, none locally), `evaluatePractice` checks it again before the Judge runs, and only `foldEvaluation` receives it, for the Trainer. `SampleLimits` carries `codeMaxCharacters` for the code sheet. A service test that needs the hosted cap provides a changed `ServerConfig` around the call (`withHostedCodeCap` in `practice-writing-routes.test.ts`).
 - Practice writing composes outside the Academy, in `apps/server/src/practice/practice-writing.ts`: `evaluatePractice` runs the Judge with the practice origin, then `foldEvaluation`; ADR 0024 and ADR 0026 set the failure answers. `foldEvaluation` runs in one transaction and refuses a second fold of the same Evaluation, so a failed Enrichment can be retried alone; no route retries it yet. A practice Writing Sample records no Practice Prompt (ADR 0026).
 - The Enrichment runs on every practice Evaluation, even one whose Findings form no Mistake Pattern (ADR 0028). It answers the Findings' entries, the natural version, which the `enrichments` row keeps (`getNaturalVersion` in `enrichment-repository.ts`), and the notes, each an `UNNATURAL` Occurrence of an `UNNATURAL_PHRASING` pattern with a `note_position` and no Finding. The practice writing and interview answers carry `naturalVersion`.
 - A route that calls the Trainer takes it from `trainerForRequest(headers)` (`apps/server/src/academy/academy-requests.ts`): the request headers, else the local profile's configured key, else `TrainerKeyRequiredError`. Each such route has a helper that resolves the key before it reads anything (`generateExercisesFor`, `explainAttemptFor`, `startInterviewFor`, `answerInterviewTurnFor`, `practiceWritingFor`). Its edge answers access errors through `TRAINER_FAILURES` and takes an `unexpected` failure when it keeps its source's 500 message (`SOMETHING_WENT_WRONG`, `EXPLANATION_FAILED`). `NOT_FOUND` is Grifando's 404 body.
