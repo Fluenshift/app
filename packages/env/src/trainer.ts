@@ -1,7 +1,7 @@
 import { Config, Context, Effect, Layer, Option, Redacted } from "effect";
 
-/** The providers a Trainer runs on (docs/adr/0012). */
-export type TrainerProvider = "anthropic" | "gemini";
+/** The providers a Trainer runs on (docs/adr/0012, docs/adr/0035). */
+export type TrainerProvider = "anthropic" | "gemini" | "openrouter";
 
 /** A key for one provider. */
 export interface TrainerKey {
@@ -70,6 +70,8 @@ export class TrainerConfig extends Context.Service<
         models: {
           anthropic: { fallback: ANTHROPIC_FALLBACK_MODEL, primary: anthropic },
           gemini: { fallback: GEMINI_FALLBACK_MODEL, primary: gemini },
+          // Stub until the OpenRouter pins land.
+          openrouter: { fallback: "", primary: "" },
         },
       });
     })

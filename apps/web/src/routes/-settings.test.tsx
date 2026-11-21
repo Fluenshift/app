@@ -1,7 +1,8 @@
 // Grifando's key page, src/app/settings/page.tsx and src/components/settings/AIKeyForm.tsx
 // (74dbb9f), ported from source under docs/adr/0025, decision 5: no baseline test renders them,
 // so these assert Grifando's copy, roles and calls. The page belongs to the hosted profile; the
-// local profile's key lives in server configuration (docs/adr/0034).
+// local profile's key lives in server configuration (docs/adr/0034). Where it names providers,
+// it offers OpenRouter first, since only an OpenRouter key runs the Judge (docs/adr/0035).
 import type { DeployProfile, KeyTestStatus } from "@fluenshift/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
@@ -51,7 +52,7 @@ afterEach(() => {
 });
 
 describe("/settings", () => {
-  it("explains where the key lives and how to get a free Gemini key", async () => {
+  it("explains where the key lives and how to get each provider's key", async () => {
     renderSettings();
 
     expect(
@@ -59,7 +60,7 @@ describe("/settings", () => {
     ).toBeVisible();
     expect(
       screen.getByText(
-        "Feedback comes from an AI model you choose, using your own key. A free Gemini key takes about two minutes to get."
+        "Feedback comes from AI models that run on your own key. An OpenRouter key runs everything; a Gemini or Anthropic key runs only the Academy’s exercises, explanations and interview questions."
       )
     ).toBeVisible();
     expect(
@@ -78,6 +79,32 @@ describe("/settings", () => {
         "No plano gratuito do Gemini, o Google pode usar o que você envia para melhorar os produtos dele — use uma chave paga ou a Anthropic para qualquer coisa sensível."
       )
     ).toHaveAttribute("lang", "pt-BR");
+
+    const openRouter = screen.getByRole("region", {
+      name: "Get an OpenRouter key",
+    });
+    expect(listItems(openRouter)).toStrictEqual([
+      "Open OpenRouter and sign in.",
+      "Add credits: OpenRouter charges for each request.",
+      "Create a key, paste it here, choose OpenRouter and press Save & test.",
+    ]);
+    const openRouterKeys = within(openRouter).getByRole("link", {
+      name: "OpenRouter",
+    });
+    expect(openRouterKeys).toHaveAttribute(
+      "href",
+      "https://openrouter.ai/settings/keys"
+    );
+    expect(openRouterKeys).toHaveAttribute("target", "_blank");
+    const openRouterPt = screen.getByRole("region", {
+      name: "Como pegar uma chave do OpenRouter",
+    });
+    expect(openRouterPt).toHaveAttribute("lang", "pt-BR");
+    expect(listItems(openRouterPt)).toStrictEqual([
+      "Abra o OpenRouter e entre na sua conta.",
+      "Adicione créditos: o OpenRouter cobra por pedido.",
+      "Crie uma chave, cole aqui, escolha OpenRouter e clique em Save & test.",
+    ]);
 
     const guide = screen.getByRole("region", {
       name: "Get a free Gemini key",
@@ -127,15 +154,28 @@ describe("/settings", () => {
     const save = await screen.findByRole("button", { name: "Save & test" });
     expect(save).toBeDisabled();
     expect(screen.getByRole("button", { name: "Remove" })).toBeDisabled();
+    expect(screen.getAllByRole("radio")).toHaveLength(3);
     expect(
-      screen.getByRole("radio", { name: "Gemini — recommended, free key" })
+      screen
+        .getAllByRole("radio")
+        .map((radio) => radio.getAttribute("aria-checked"))
+    ).toStrictEqual(["true", "false", "false"]);
+    expect(
+      screen.getByRole("radio", {
+        name: "OpenRouter — recommended, runs everything",
+      })
     ).toBeChecked();
+    expect(
+      screen.getByRole("radio", { name: "Gemini — free key, Academy only" })
+    ).not.toBeChecked();
     const key = screen.getByLabelText("API key");
     expect(key).toHaveAttribute("type", "password");
     expect(key).toHaveAttribute("maxlength", "256");
     expect(key).toHaveAttribute("placeholder", "Paste your key here");
 
-    await userEvent.click(screen.getByRole("radio", { name: "Anthropic" }));
+    await userEvent.click(
+      screen.getByRole("radio", { name: "Anthropic — Academy only" })
+    );
     await userEvent.type(key, "  sk-ant-test  ");
     await userEvent.click(save);
 
@@ -155,7 +195,7 @@ describe("/settings", () => {
       "Paste a new key to replace the saved one"
     );
     expect(
-      screen.getByText("A Anthropic key is saved in this browser.")
+      screen.getByText("An Anthropic key is saved in this browser.")
     ).toBeVisible();
     expect(screen.getByRole("button", { name: "Remove" })).toBeEnabled();
   });
@@ -167,9 +207,11 @@ describe("/settings", () => {
     );
 
     expect(
-      await screen.findByText("A Anthropic key is saved in this browser.")
+      await screen.findByText("An Anthropic key is saved in this browser.")
     ).toBeVisible();
-    expect(screen.getByRole("radio", { name: "Anthropic" })).toBeChecked();
+    expect(
+      screen.getByRole("radio", { name: "Anthropic — Academy only" })
+    ).toBeChecked();
     expect(screen.getByLabelText("API key")).toHaveAttribute(
       "placeholder",
       "Paste a new key to replace the saved one"
@@ -182,6 +224,27 @@ describe("/settings", () => {
     expect(client.keyTestRequests).toStrictEqual([
       { apiKey: "sk-ant-saved", provider: "anthropic" },
     ]);
+  });
+
+  it("saves an OpenRouter key, which runs every feature", async () => {
+    const client = renderSettings(
+      createInMemoryAcademyClient({ keyTests: ["works"] })
+    );
+    await userEvent.type(
+      await screen.findByLabelText("API key"),
+      "sk-or-v1-test"
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Save & test" }));
+
+    expect(
+      await screen.findByText("Your key works. You’re all set.")
+    ).toBeVisible();
+    expect(client.keyTestRequests).toStrictEqual([
+      { apiKey: "sk-or-v1-test", provider: "openrouter" },
+    ]);
+    expect(
+      screen.getByText("An OpenRouter key is saved in this browser.")
+    ).toBeVisible();
   });
 
   it("holds the form while the key is tested", async () => {
