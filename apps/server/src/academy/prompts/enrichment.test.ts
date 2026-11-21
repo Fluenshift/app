@@ -99,7 +99,7 @@ describe("buildEnrichmentUserMessage", () => {
     );
   });
 
-  it("says so when the evaluator found no Finding", () => {
+  it("says so when the Judge found no Finding", () => {
     const message = buildEnrichmentUserMessage({
       findings: [],
       writingSample: "I depend on it.",
