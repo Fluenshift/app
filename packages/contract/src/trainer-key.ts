@@ -21,7 +21,7 @@ export const TRAINER_KEY_HEADER = "x-ai-key";
 export const isTrainerKeyProvider = (
   value: unknown
 ): value is TrainerKeyProvider =>
-  value === "openrouter" || value === "gemini" || value === "anthropic";
+  TRAINER_KEY_PROVIDERS.some((provider) => provider === value);
 
 /**
  * Body of `POST /api/ai-key/test` (Grifando's src/app/api/ai-key/test/route.ts): a key the

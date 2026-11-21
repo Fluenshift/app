@@ -691,7 +691,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
   // A route that calls the Trainer checks the visitor's key first, as Grifando's did: a request
   // without a usable key is not counted, and the route answers it for its key. The hosted profile
   // reads keys from request headers only (docs/adr/0012).
-  const admittedWithKey = <A, E>(
+  const admittedWithTrainerKey = <A, E>(
     request: Request,
     bucket: RateLimitBucket,
     effect: Effect.Effect<A, E, R | CurrentLearner>
@@ -745,14 +745,14 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
   // serves both: an OpenRouter key (docs/adr/0035). A request without a usable key asks for it,
   // as an Evaluation does, rather than for any Trainer key (#251). The local profile's Judge runs
   // on its configured key, and its Trainer key is checked as any Trainer route's.
-  const admittedWithKeys = <A, E>(
+  const admittedWithTrainerAndJudgeKeys = <A, E>(
     request: Request,
     bucket: RateLimitBucket,
     effect: Effect.Effect<A, E, R | CurrentLearner>
   ) =>
     withJudgeKey(
       request,
-      admittedWithKey(request, bucket, effect),
+      admittedWithTrainerKey(request, bucket, effect),
       Effect.fail(new JudgeKeyRequiredError())
     );
 
@@ -1020,7 +1020,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             ? edge(
                 forLearner(
                   context.req.raw,
-                  admittedWithKey(
+                  admittedWithTrainerKey(
                     context.req.raw,
                     "generation",
                     generateExercises(context.req.raw.headers, result.value)
@@ -1107,7 +1107,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         return edge(
           forLearner(
             context.req.raw,
-            admittedWithKey(
+            admittedWithTrainerKey(
               context.req.raw,
               "analysis",
               explainAttempt(context.req.raw.headers, {
@@ -1146,7 +1146,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       return edge(
         forLearner(
           context.req.raw,
-          admittedWithKey(
+          admittedWithTrainerKey(
             context.req.raw,
             "generation",
             startInterview(context.req.raw.headers)
@@ -1255,7 +1255,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
               ? edge(
                   forLearner(
                     context.req.raw,
-                    admittedWithKeys(
+                    admittedWithTrainerAndJudgeKeys(
                       context.req.raw,
                       "analysis",
                       answerInterviewTurn(context.req.raw.headers, {
@@ -1368,7 +1368,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             ? edge(
                 forLearner(
                   context.req.raw,
-                  admittedWithKeys(
+                  admittedWithTrainerAndJudgeKeys(
                     context.req.raw,
                     "analysis",
                     writePractice(

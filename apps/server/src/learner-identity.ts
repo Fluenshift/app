@@ -47,17 +47,20 @@ export class LearnerIdentity extends Context.Service<
     Effect.gen(function* () {
       const { secret } = yield* SessionConfig;
       return LearnerIdentity.of({
-        identify: (request) => {
+        identify: Effect.fn("LearnerIdentity.identify")(function* (
+          request: Request
+        ) {
           const token = parse(
             request.headers.get("cookie") ?? "",
             SESSION_COOKIE
           )[SESSION_COOKIE];
           const id = verifySessionToken(token, Redacted.value(secret));
           const learner = id === null ? Option.none() : decodeLearnerId(id);
-          return Effect.fromOption(learner).pipe(
-            Effect.mapError(() => new MissingSessionError())
-          );
-        },
+          if (Option.isNone(learner)) {
+            return yield* new MissingSessionError();
+          }
+          return learner.value;
+        }),
       });
     })
   );
