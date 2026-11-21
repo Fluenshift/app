@@ -45,12 +45,12 @@ const LENS_VIEW_LABELS = {
   suggestions: "Suggestions",
 } as const;
 
-const metricFormatter = new Intl.NumberFormat("en", {
+const rateFormatter = new Intl.NumberFormat("en", {
   maximumFractionDigits: 1,
 });
 
 const formatRate = (value: number) =>
-  value > 0 && value < 0.1 ? "<0.1" : metricFormatter.format(value);
+  value > 0 && value < 0.1 ? "<0.1" : rateFormatter.format(value);
 
 const formatEvaluationDate = (value: string) =>
   new Intl.DateTimeFormat("en", {

@@ -39,7 +39,7 @@ export const TodaySession = ({
 
       {step.kind === "write" ? (
         <PracticeWriting
-          initialChallenge={challenge}
+          initialPracticePrompt={challenge}
           sampleLimits={sampleLimits}
           nextStep={{
             label: "Continue to review",
