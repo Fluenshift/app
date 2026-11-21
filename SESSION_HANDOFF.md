@@ -1,10 +1,10 @@
 # Session handoff
 
-Last updated 2026-11-21, at the end of the fifteenth agent session, resumed. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Last updated 2026-11-21, at the end of the sixteenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
 
 ## Work in flight
 
-This session ran Phase 7, items 1 and 3 (#262: parity 603 verified, 268 terminal, 18 open, 0 blocked; the final audit found no gap), the `code-review` milestone before cutover on the diff since #256 (fixed in #264, #266 and #268), and the audit of item 6 of the definition of done (#270): five auditors read the merged documents against the code. #279 fixed every stale document. Where a document was right and the code wrong, the document stays and an issue holds the fix: #271 to #278. #280 fixed #272, a body over the cap that declares no length, #282 fixed #271: the Writing Desk folds its Evaluations into the Academy once the Learner has practiced (ADR 0041). #284 (#273), #285 (#276), #286 (#275) and #287 (#278) closed four more; #274 and #277 remain.
+This session closed the last two issues of the audit of item 6 of the definition of done (#270): #274, the one-time importer of PE's local Evaluations (#289, ADR 0018, decision 2), and #277, request bodies checked with the contract's schemas and declared to Hono's typed client (#290, ADR 0042). It then ran the `code-review` milestone before cutover on the diff since the merge of #281 (99b2318) and opened an issue for each finding: #291 to #296. No pull request is open.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -16,10 +16,8 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 
 ## Next steps
 
-1. The two issues left from the audit of #270, each labeled `ready-for-agent`, each large enough for a fresh session:
-   - #274: the importer of ADR 0018, decision 2. Building it is session work; running it at cutover is the owners'. PE's local database is SQLite (`file:local.db`): Node's built-in `node:sqlite` reads it without a dependency. Characterize first: build a small PE database at the baseline with PE's own code.
-   - #277: request bodies validated with the contract's schemas through `@hono/standard-validator` (ADR 0000, ADR 0007), route by route, each keeping the error answers its tests pin; or an ADR that amends both to the current shape and drops the unused pins. The issue recommends the validator: client and server drift then fails `tsc`.
-2. When both are closed, item 6 of the definition of done holds; run the `code-review` milestone again on the diff since the merge of #281.
+1. The six issues of the milestone review, #291 to #296, each `ready-for-agent`. Take #291, #294 and #292 first: they are small. #296 changes the schema, so it holds the one migration in flight.
+2. The `code-review` milestone before cutover has run (this session). After the issues above, run it again only on what changed since 0025877, before cutover.
 3. Items 2, 4 and 6 of Phase 7, the import run of item 5, and sign-off wait for the owners (Owner steps). The 18 open rows stay open until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
 
 ## Facts no issue records
@@ -30,6 +28,11 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 - A Mistake Pattern's state is what `replayPattern` (`@fluenshift/core/pattern-replay`) builds from its Occurrences and the Attempts on its Exercises: deleting an Evaluation rebuilds each pattern it touched that way (`unfoldEvaluation`, called by Learning History's `deleteEvaluation`, ADR 0031). A new path that changes a pattern must be one the replay reproduces, and must stamp its Occurrence or Attempt with the moment it writes on the pattern (`now` in `pattern-folding.ts`, `submitAttempt`), or the next deletion undoes it.
 - Progress reads `listEvaluations({ origin: "work" })`: practice writing stays out of every insight and its evidence (ADR 0030). The Academy dashboard's trend reads practice (ADR 0027).
 - A fix-commit or issue row takes as targets the tests that pin its fix, which may already be targets of the rows that ported them (`docs/migration/README.md`, `targets`).
+
+### PE import
+
+- tsdown builds two entries, so `dist/` holds `index.mjs`, the importer's `import-pe.mjs` and a shared chunk; whatever copies the server copies the whole directory.
+- The importer's fixture, `apps/server/src/history/fixtures/pe-local.db`, was written by PE's own code at the pin: `migration/fixtures/pe/local-database.ts` holds the script and how to rerun it. Tests copy it into a temporary directory first: SQLite writes `-shm` and `-wal` files beside a WAL database even when it opens it read-only.
 
 ### Hosted profile
 
@@ -56,7 +59,7 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 
 ### Academy, server
 
-- The names #278 kept, because tests pin them: the daily challenge's `promptText` and `promptType`, a recurring Correction's `occurrenceCount`, `promptMaxCharacters` (dead since ADR 0026), and `MistakeSeverity`, which types the stored `severity` of an Occurrence and the practice answer's field. Category Ability's column keeps Grifando's name `rating` under the schema property `ability`.
+- The names #278 kept, because tests pin them: the daily challenge's `promptText` and `promptType`, a recurring Correction's `occurrenceCount`, `promptMaxCharacters` (dead since ADR 0026; #292 removes it unless a ledger target pins it), and `MistakeSeverity`, which types the stored `severity` of an Occurrence and the practice answer's field. Category Ability's column keeps Grifando's name `rating` under the schema property `ability`.
 - Explain code is practice writing with a `codeSnippet` (ADR 0038): the route checks it against the Deploy Profile's code cap (2,000 characters hosted, none locally), `evaluatePractice` checks it again before the Judge runs, and only `foldEvaluation` receives it, for the Trainer. `SampleLimits` carries `codeMaxCharacters` for the code sheet. A service test that needs the hosted cap provides a changed `ServerConfig` around the call (`withHostedCodeCap` in `practice-writing-routes.test.ts`).
 - Once the Learner has a practice-origin Evaluation, the Writing Desk folds each Evaluation it stores, on the request's Trainer key or the local profile's configured one, before it answers; with no key it does not, and a failed fold keeps the 201 and logs one `work-enrichment` line (ADR 0041, `apps/server/src/practice/work-enrichment.ts`). The Writing Desk boundary is `evaluateWriting(writingSample, headers)`.
 - Practice writing composes outside the Academy, in `apps/server/src/practice/practice-writing.ts`: `evaluatePractice` runs the Judge with the practice origin, then `foldEvaluation`; ADR 0024 and ADR 0026 set the failure answers. `foldEvaluation` runs in one transaction and refuses a second fold of the same Evaluation, so a failed Enrichment can be retried alone; no route retries it yet. A practice Writing Sample records no Practice Prompt (ADR 0026).
@@ -79,7 +82,7 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 - A web test that reads a file of the workspace builds its path from `import.meta.dirname`: under jsdom, `new URL(..., import.meta.url)` is jsdom's URL, which `node:fs` refuses (`link-preview.test.ts`).
 - No key travels from the browser in the local profile: the server uses its configured Trainer key or answers 401 `AI_KEY_REQUIRED`, which shows Grifando's key notice.
 - Lint shapes React code: a label around a base-ui radio needs `htmlFor` and the radio an `id` when its text is a literal (`label-has-associated-control`); the React Compiler rule refuses `try`/`finally` in a component; the promise rules refuse `.then(onOk, onError)` and callbacks inside `.then`, so a component awaits a module-level async helper that catches; `<output>` replaces `role="status"` and `<fieldset>` replaces `role="group"`; wrap a handler passed as `onClick={props.onX}` in an arrow; no nested ternaries; regular expressions take the `u` flag; no member access on an `await` expression. TanStack route options go in the order `validateSearch`, `loaderDeps`, `beforeLoad`, `loader`, `component`.
-- Hono's typed client takes no `json` for a route with path parameters that reads its body itself: send the body through `init` (`submitAttempt` in `api.ts`). A typed `Link` needs an existing route.
+- The typed client sends every route's JSON body through `json`, path parameters or not (ADR 0042). A new route that reads a body also adds its line to `apps/web/src/api-bodies.test.ts`. A typed `Link` needs an existing route.
 - Grifando's category breakdown orders by count only: a tie keeps no order, and tests do not assert one.
 
 ### Gates and CI
@@ -104,7 +107,7 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 - Set a budget before live calibration (G13) runs.
 - Choose the host for the hosted profile (ADR 0003, decision 4) before a public deploy, and give it `SESSION_SECRET`, `IP_HASH_SALT`, the `CLIENT_IP_HEADER` its proxy writes (ADR 0033) and its public origin as `SITE_URL` (ADR 0037).
 - Give the go-ahead for cutover (Phase 7).
-- At cutover, run the importer of PE's local Evaluations once #274 builds it: a dry run first, accepted only when its counts match (ADR 0018).
+- At cutover, import PE's local Evaluations as `README.md` (Importing PE's local history) says: a dry run first, accepted only when both runs print the same counts (ADR 0018). #296 should be fixed first.
 - Say where Grifando's visual style came from, for `docs/product/ASSET-LICENSES.md` (#119, question 4).
 
 ## Jhefferson's machine
@@ -114,5 +117,6 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 - The interactive `grep` is ugrep, so one-liners call `/usr/bin/grep`.
 - `git rebase` signs by default and gpg times out: run `git -c commit.gpgsign=false rebase origin/main`, and abort a rebase that already stopped on a signature before rerunning it.
 - `$F/app-baselines/worktrees/grifando-run/node_modules` holds Grifando's packages as its baseline run installed them, Next.js 16.4.5 included: read a framework's behavior there when a port depends on it, as #265 read how Next.js wrote metadata.
+- mise holds Bun 1.4.0, PE's pinned Bun, at `~/.local/share/mise/installs/bun/1.4.0/bin`; the default `bun` is newer. Rebuilding the PE import fixture uses it.
 - Google Chrome is installed (`/usr/bin/google-chrome`): Playwright's `channel: "chrome"` can check a third-party player outside the repository, as #252 did for the sandbox.
 - A Postgres container from an earlier hand check, `fs-unit-pg`, listens on `127.0.0.1:55432` (user `app`, password `pw`, database `app`). Reuse it for hosted hand checks, or remove it with `docker rm -f fs-unit-pg`.
