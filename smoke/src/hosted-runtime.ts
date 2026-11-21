@@ -2,15 +2,10 @@
 // application in production beside a Postgres 17 server, with every setting a hosted production
 // server needs (AGENTS.md, Code). The secrets are random per run and never leave the scratch
 // directory.
-import { randomInt } from "node:crypto";
-
-const randomLetters = (length: number) =>
-  Array.from({ length }, () => String.fromCodePoint(97 + randomInt(26))).join(
-    ""
-  );
+import { randomLetters, REPOSITORY_ROOT } from "./docker";
 
 /** A Compose file that publishes the application on the given loopback port. */
-export const hostedRuntime = (repositoryRoot: string, hostPort: number) => {
+export const hostedRuntime = (hostPort: number) => {
   const password = randomLetters(24);
   return `services:
   db:
@@ -26,7 +21,7 @@ export const hostedRuntime = (repositoryRoot: string, hostPort: number) => {
       retries: 30
   app:
     build:
-      context: ${JSON.stringify(repositoryRoot)}
+      context: ${JSON.stringify(REPOSITORY_ROOT)}
       dockerfile: apps/server/Dockerfile
     depends_on:
       db:

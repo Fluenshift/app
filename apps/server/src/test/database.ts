@@ -85,6 +85,28 @@ const migratedTemplate = () => {
   return template;
 };
 
+/**
+ * The local profile's configuration, its `Database` over the PGlite data directory, and the
+ * local Learner: what a persistence test or the Docker smoke's seed runs against.
+ */
+export const localProfileLayer = (dataDirectory: string) => {
+  const config = ServerConfig.layer.pipe(
+    Layer.provide(
+      ConfigProvider.layer(
+        ConfigProvider.fromEnvRecord({
+          DATA_DIRECTORY: dataDirectory,
+          MIGRATIONS_PATH: MIGRATIONS,
+        })
+      )
+    )
+  );
+  return Layer.mergeAll(
+    Database.layer.pipe(Layer.provide(config)),
+    config,
+    CurrentLearner.local
+  );
+};
+
 export const makeTemporaryDatabase = () =>
   Promise.all([
     migratedTemplate(),
@@ -92,22 +114,5 @@ export const makeTemporaryDatabase = () =>
   ]).then(async ([source, directory]) => {
     const dataDirectory = path.join(directory, "pglite");
     await cp(source, dataDirectory, { recursive: true });
-    const config = ServerConfig.layer.pipe(
-      Layer.provide(
-        ConfigProvider.layer(
-          ConfigProvider.fromEnvRecord({
-            DATA_DIRECTORY: dataDirectory,
-            MIGRATIONS_PATH: MIGRATIONS,
-          })
-        )
-      )
-    );
-    return {
-      directory,
-      layer: Layer.mergeAll(
-        Database.layer.pipe(Layer.provide(config)),
-        config,
-        CurrentLearner.local
-      ),
-    };
+    return { directory, layer: localProfileLayer(dataDirectory) };
   });

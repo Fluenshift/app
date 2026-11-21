@@ -3,20 +3,12 @@
 // its container: PGlite admits one process at a time, so the smoke runs this on the host while no
 // container holds the directory. The fake Judge answers one Finding on "fail", and the product's
 // own pipeline checks, scores, bands and stores the Evaluation, for the local Learner.
-import path from "node:path";
-
-import { Database } from "@fluenshift/db";
-import { ServerConfig } from "@fluenshift/env";
-import { ConfigProvider, Effect, Layer } from "effect";
+import { Effect, Layer } from "effect";
 
 import { EvaluationModel } from "../evaluation/evaluation-model";
 import { evaluateWriting } from "../evaluation/writing-evaluation";
-import { CurrentLearner } from "../learner-identity";
+import { localProfileLayer } from "./database";
 
-const MIGRATIONS = path.resolve(
-  import.meta.dirname,
-  "../../../../packages/db/src/migrations"
-);
 const FIXED_TIMESTAMP = new Date("2026-09-08T12:00:00.000Z");
 
 /** Where to write the Evaluation, and the Writing Sample it evaluates. */
@@ -59,18 +51,8 @@ const judgeOf = (writingSample: string) => {
 };
 
 /** Writes the Evaluation and answers its id. */
-export const seedDockerSmoke = (seed: DockerSmokeSeed): Promise<string> => {
-  const config = ServerConfig.layer.pipe(
-    Layer.provide(
-      ConfigProvider.layer(
-        ConfigProvider.fromEnvRecord({
-          DATA_DIRECTORY: seed.dataDirectory,
-          MIGRATIONS_PATH: MIGRATIONS,
-        })
-      )
-    )
-  );
-  return Effect.runPromise(
+export const seedDockerSmoke = (seed: DockerSmokeSeed): Promise<string> =>
+  Effect.runPromise(
     evaluateWriting(
       seed.writingSample,
       FIXED_TIMESTAMP,
@@ -78,13 +60,10 @@ export const seedDockerSmoke = (seed: DockerSmokeSeed): Promise<string> => {
     ).pipe(
       Effect.map((evaluation) => evaluation.id),
       Effect.provide(
-        Layer.mergeAll(
-          Database.layer.pipe(Layer.provide(config)),
-          config,
-          CurrentLearner.local,
+        Layer.merge(
+          localProfileLayer(seed.dataDirectory),
           judgeOf(seed.writingSample)
         )
       )
     )
   );
-};

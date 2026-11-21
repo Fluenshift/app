@@ -1,6 +1,7 @@
 // What the Docker smoke needs besides its checks: commands, HTTP probes and sentinel scans.
 // Ported from PE `scripts/docker-smoke.ts`, on Node instead of Bun.
 import { spawn } from "node:child_process";
+import { randomInt } from "node:crypto";
 import { once } from "node:events";
 import { request } from "node:http";
 import type { IncomingMessage } from "node:http";
@@ -8,6 +9,8 @@ import { createServer } from "node:net";
 import { networkInterfaces } from "node:os";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
+
+import { removeScratch } from "./scratch";
 
 export const REPOSITORY_ROOT = path.resolve(import.meta.dirname, "..", "..");
 
@@ -179,4 +182,30 @@ export const probeNonLoopback = async (port: number) => {
     })
   );
   return { addresses, answered: answered.flat() };
+};
+
+/** Lowercase letters drawn without modulo bias, for names and throwaway secrets. */
+export const randomLetters = (length: number) =>
+  Array.from({ length }, () => String.fromCodePoint(97 + randomInt(26))).join(
+    ""
+  );
+
+/** Removes a smoke's Compose project, its volumes and images, then its scratch directory. */
+export const removeProject = async (
+  compose: ReturnType<typeof composeOf> | undefined,
+  scratch: string
+) => {
+  try {
+    await compose?.([
+      "down",
+      "--volumes",
+      "--remove-orphans",
+      "--rmi",
+      "local",
+    ]);
+  } finally {
+    if (scratch !== "") {
+      await removeScratch(scratch);
+    }
+  }
 };
