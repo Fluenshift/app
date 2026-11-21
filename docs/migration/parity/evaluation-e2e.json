@@ -108,16 +108,20 @@
       "slice": "evaluation-e2e",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "smoke/src/docker-smoke.test.ts::Docker smoke > seeds deterministic retained evidence"
+      ]
     },
     {
       "id": "pe:docker-smoke:L471",
       "source": "scripts/docker-smoke.ts",
       "class": null,
       "slice": "evaluation-e2e",
-      "disposition": "port",
-      "decision": null,
-      "targets": []
+      "disposition": "port-changed",
+      "decision": "adr:0020",
+      "targets": [
+        "smoke/src/docker-smoke.test.ts::Docker smoke > seeds deterministic retained evidence"
+      ]
     },
     {
       "id": "pe:docker-smoke:L479",
@@ -148,7 +152,9 @@
       "slice": "evaluation-e2e",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "smoke/src/docker-smoke.test.ts::Docker smoke > replaces the container and reopens its data directory"
+      ]
     },
     {
       "id": "pe:docker-smoke:L499",
@@ -212,7 +218,9 @@
       "slice": "evaluation-e2e",
       "disposition": "port-changed",
       "decision": "adr:0017",
-      "targets": []
+      "targets": [
+        "smoke/src/docker-smoke.test.ts::Docker smoke > scans browser assets and logs"
+      ]
     },
     {
       "id": "pe:docker-smoke:L532",
@@ -221,7 +229,9 @@
       "slice": "evaluation-e2e",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "smoke/src/docker-smoke.test.ts::Docker smoke > scans browser assets and logs"
+      ]
     },
     {
       "id": "pe:docker-smoke:L536",

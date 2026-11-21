@@ -1,12 +1,12 @@
 // Gate G6 for the local profile: builds the image, starts it with Docker Compose as the invoking
 // user, and checks its boundary, its data directory and what it serves. Ported from PE
-// `scripts/docker-smoke.ts`. The checks that need Evaluations and the setup status join with
-// the routes that answer them (Phases 4d and 4f).
+// `scripts/docker-smoke.ts`.
 import { randomInt } from "node:crypto";
 import { existsSync, statSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { seedDockerSmoke } from "server/seed-docker-smoke";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import {
@@ -36,6 +36,44 @@ const secretSentinel = plant("secret", `sk-smoke-${randomLetters(24)}`);
 const sampleSentinel = plant("sample", `smokesample${randomLetters(20)}`);
 const writingSample = `${sampleSentinel} Command fail.`;
 
+// The Evaluation the seed writes, as the server answers it: the fake Judge's one Finding, scored
+// and banded by Rubric Version 1, which new Evaluations record as provisional (ADR 0020, #87).
+const expectedEvaluation = (id: string, sample: string) => {
+  const byteStart = new TextEncoder().encode(
+    sample.slice(0, sample.indexOf("fail"))
+  ).length;
+  return {
+    band: "Natural",
+    correctedText: sample.replace("fail", "fails"),
+    evaluatedAt: "2026-09-08T12:00:00.000Z",
+    evaluatedEnglishWordCount: 3,
+    findings: [
+      {
+        byteEnd: byteStart + 4,
+        byteStart,
+        category: "Verb form/tense",
+        correction: "fails",
+        explanation: "A singular subject needs a singular verb.",
+        originalText: "fail",
+        severity: "Minor",
+      },
+    ],
+    id,
+    model: "deterministic-docker-smoke-model",
+    originalText: sample,
+    provider: "test",
+    rubricVersion: "1-provisional",
+    score: 85,
+    suggestions: [],
+    summary: "One local agreement error.",
+  };
+};
+
+const readJson = async (url: string): Promise<unknown> => {
+  const response = await fetchResponse(url);
+  return response.json();
+};
+
 interface ComposeConfig {
   readonly services?: {
     readonly app?: { readonly ports?: unknown; readonly user?: unknown };
@@ -49,6 +87,8 @@ let hostPort = 0;
 let baseUrl = "";
 let releaseCompose: ReturnType<typeof composeOf> | undefined;
 let compose: ReturnType<typeof composeOf> | undefined;
+let evaluationId = "";
+let seededEvaluation: unknown;
 
 const running = () => {
   if (compose === undefined) {
@@ -190,6 +230,28 @@ describe("Docker smoke", () => {
     expect(hostileOrigin.status).toBe(403);
   });
 
+  // PGlite admits one process at a time, so the seed writes while no container holds the data.
+  it("seeds deterministic retained evidence", async () => {
+    const app = running();
+    await app(["stop", "app"]);
+    evaluationId = await seedDockerSmoke({
+      dataDirectory: path.join(dataDirectory, "pglite"),
+      writingSample,
+    });
+    await app(["start", "app"]);
+    await waitForHealth(baseUrl);
+
+    expect(evaluationId).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u
+    );
+    seededEvaluation = await readJson(
+      `${baseUrl}/api/evaluations/${evaluationId}`
+    );
+    expect(seededEvaluation).toStrictEqual(
+      expectedEvaluation(evaluationId, writingSample)
+    );
+  });
+
   it("replaces the container and reopens its data directory", async () => {
     const app = running();
     const firstContainer = await app(["ps", "--quiet", "app"]);
@@ -213,6 +275,9 @@ describe("Docker smoke", () => {
       firstContainer.stdout.trim()
     );
     expect(statSync(cluster).ino).toBe(clusterBefore);
+    expect(
+      await readJson(`${baseUrl}/api/evaluations/${evaluationId}`)
+    ).toStrictEqual(seededEvaluation);
   });
 
   it("scans browser assets and logs", async () => {
@@ -242,6 +307,17 @@ describe("Docker smoke", () => {
     expect(served).toStrictEqual(
       assets.map((asset) => ({ asset, leaked: [], status: 200 }))
     );
+
+    const setup = await readJson(`${baseUrl}/api/setup`);
+    expect(setup).toStrictEqual({
+      configured: true,
+      dataLocation: path.join(dataDirectory, "pglite"),
+      model: "openai/gpt-5.6-terra",
+      provider: "OpenRouter",
+      rubricVersion: "1-provisional",
+      trainer: { configured: false },
+    });
+    expect(leakedSentinels(JSON.stringify(setup))).toStrictEqual([]);
 
     const logs = await app(["logs", "--no-color", "app"]);
     expect(leakedSentinels(`${logs.stdout}${logs.stderr}`)).toStrictEqual([]);

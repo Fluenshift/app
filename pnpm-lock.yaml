@@ -682,6 +682,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 26.6.6
+      server:
+        specifier: workspace:*
+        version: link:../apps/server
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
