@@ -10,7 +10,7 @@ import { Button } from "@fluenshift/ui/components/button";
 import { Label } from "@fluenshift/ui/components/label";
 import { Textarea } from "@fluenshift/ui/components/textarea";
 import { cn } from "@fluenshift/ui/utils";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import { ChevronRight, Command, ShieldCheck, Sparkles } from "lucide-react";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -452,13 +452,20 @@ export const WritingDesk = ({
   const [activeFindingId, setActiveFindingId] = useState<string | null>(null);
   const [lensView, setLensView] = useState<LensView>("findings");
   const [status, setStatus] = useState<SubmissionStatus>("idle");
+  const deployProfile = useRouteContext({
+    from: "__root__",
+    select: (context) => context.deployProfile,
+  });
   const [failureMessage, setFailureMessage] = useState("");
   const [failureNeedsKey, setFailureNeedsKey] = useState(false);
   const [writingSample, setWritingSample] = useState("");
   const evidenceLensRef = useRef<HTMLElement>(null);
   const submissionInFlightRef = useRef(false);
   const isPending = status === "pending";
-  const providerNeedsConfiguration = setupStatus.configured === false;
+  // Only the local server holds the Judge's key; the hosted Judge runs on each visitor's key, which
+  // a missing-key notice asks for when it is absent (docs/adr/0035, #248).
+  const providerNeedsConfiguration =
+    deployProfile === "local" && !setupStatus.configured;
   const hasChangedSinceEvaluation =
     evaluation !== null && evaluation.originalText !== writingSample;
 
@@ -512,7 +519,7 @@ export const WritingDesk = ({
 
     if (
       writingSample.trim().length === 0 ||
-      !setupStatus.configured ||
+      providerNeedsConfiguration ||
       isPending ||
       submissionInFlightRef.current
     ) {
@@ -750,7 +757,7 @@ export const WritingDesk = ({
                   className="rounded-lg px-4"
                   disabled={
                     writingSample.trim().length === 0 ||
-                    !setupStatus.configured ||
+                    providerNeedsConfiguration ||
                     isPending
                   }
                   type="submit"

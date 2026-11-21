@@ -1,5 +1,6 @@
 // The Writing Desk in the hosted profile, whose Judge runs on the visitor's OpenRouter key
-// (docs/adr/0035): a missing key keeps the draft and points to the key page.
+// (docs/adr/0035): a missing key keeps the draft and points to the key page, and the server's own
+// Judge key, which that profile never reads, gates nothing (#248).
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -71,5 +72,41 @@ describe("Writing Desk key", () => {
       "The provider took too long. Wait a moment, then retry."
     );
     expect(within(alert).queryByRole("link")).not.toBeInTheDocument();
+  });
+});
+
+describe("Writing Desk in the hosted profile", () => {
+  test("submits although the server holds no Judge key, which that profile never reads", async () => {
+    const user = userEvent.setup();
+    render(
+      <RouterProvider
+        router={createAppRouter({
+          deployProfile: "hosted",
+          evaluationClient: createInMemoryEvaluationClient({
+            attempts: [{ error: new MissingAIKeyError(), kind: "failure" }],
+            setupStatus: {
+              configured: false,
+              dataLocation: "PostgreSQL",
+              model: "openai/gpt-5.6-terra",
+              provider: "OpenRouter",
+              rubricVersion: "1",
+            },
+          }),
+          history: createMemoryHistory({ initialEntries: ["/"] }),
+        })}
+      />
+    );
+    await user.type(
+      await screen.findByLabelText("Writing Sample"),
+      "I depend of this library."
+    );
+
+    expect(
+      screen.queryByText("Provider setup required.")
+    ).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Evaluate writing" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Feedback on your writing needs an OpenRouter key."
+    );
   });
 });
