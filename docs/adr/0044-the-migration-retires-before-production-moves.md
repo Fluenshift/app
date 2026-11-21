@@ -1,6 +1,10 @@
 # 0044. The migration retires before production moves
 
 - Status: Accepted on 2026-11-21, at the request of Jhefferson in a Claude Code session (#324).
+- Later on 2026-11-21, at Jhefferson's request, a session made `Fluenshift/prompt-evolution` and
+  `Fluenshift/grifando` private, then archived them (decision 6). `Fluenshift/app` stays public
+  until the owners choose its name (#333): on GitHub's Free plan a private repository loses
+  unlimited Actions minutes, code scanning and the enforcement of its rules.
 - Amends ADR 0019 and ADR 0020 (the gates that run), `AGENTS.md`, and the order of Phase 7 in
   the retired `docs/migration/MIGRATION_PROTOCOL.md`. Retires G8, G9, G10 and the checks of the
   baseline pins and the inventory.
