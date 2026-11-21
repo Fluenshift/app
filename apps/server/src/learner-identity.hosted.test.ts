@@ -31,7 +31,7 @@ const requestWith = (value: string | undefined) =>
       value === undefined ? {} : { cookie: `${SESSION_COOKIE}=${value}` },
   });
 
-const getCurrentUserId = (value: string | undefined) =>
+const identifyLearner = (value: string | undefined) =>
   Effect.runPromise(
     Effect.gen(function* () {
       const identity = yield* LearnerIdentity;
@@ -44,7 +44,7 @@ const getCurrentUserId = (value: string | undefined) =>
 describe("getCurrentUserId", () => {
   it("returns the id from a valid signed cookie", async () => {
     expect(
-      await getCurrentUserId(signSessionId("user-1", getSessionSecret()))
+      await identifyLearner(signSessionId("user-1", getSessionSecret()))
     ).toBe("user-1");
   });
 
@@ -55,7 +55,7 @@ describe("getCurrentUserId", () => {
         signSessionId("user-1", getSessionSecret()).replace("user-1", "user-2"),
         signSessionId("user-1", "some-other-secret-xxxxxxxxxxxxxxxx"),
       ].map((value) =>
-        expect(getCurrentUserId(value)).rejects.toBeInstanceOf(
+        expect(identifyLearner(value)).rejects.toBeInstanceOf(
           MissingSessionError
         )
       )

@@ -55,7 +55,7 @@ const query = <A>(read: (client: DrizzleClient) => Promise<A>) =>
 
 // A Learner last active `idleDays` before `now`, with one Evaluation, as Grifando's seedUser gave
 // each user one writing session.
-const seedUser = async (id: string, idleDays: number) => {
+const seedLearner = async (id: string, idleDays: number) => {
   await query((client) =>
     client
       .insert(learners)
@@ -102,8 +102,8 @@ const evaluationCount = (id: string) =>
 
 describe("cleanupIdleData", () => {
   it("removes users idle 91 days with their data, keeps 89-day ones", async () => {
-    await seedUser("old", 91);
-    await seedUser("recent", 89);
+    await seedLearner("old", 91);
+    await seedLearner("recent", 89);
     const result = await run(cleanupIdleData(now));
     expect(result.learners).toBe(1);
     expect(await findLearner("old")).toBeNull();

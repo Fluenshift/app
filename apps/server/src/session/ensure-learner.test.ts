@@ -40,7 +40,7 @@ const as = <A, E>(
     )
   );
 
-const ensureUser = (learner: string) => as(learner, ensureLearner());
+const ensureLearnerFor = (learner: string) => as(learner, ensureLearner());
 
 const query = <A>(run: (client: DrizzleClient) => Promise<A>) =>
   Effect.runPromise(
@@ -73,8 +73,8 @@ const setLastActiveAt = (learner: string, lastActiveAt: Date) =>
 
 describe("ensureUser", () => {
   it("creates the user on first write and isolates two sessions", async () => {
-    await ensureUser("s1");
-    await ensureUser("s2");
+    await ensureLearnerFor("s1");
+    await ensureLearnerFor("s2");
     await query((client) =>
       client.insert(vocabularyItems).values({
         exampleSentence: "e",
@@ -89,28 +89,28 @@ describe("ensureUser", () => {
   });
 
   it("recreates a deleted user on the next write", async () => {
-    await ensureUser("s1");
+    await ensureLearnerFor("s1");
     await query((client) =>
       client.delete(learners).where(eq(learners.id, "s1"))
     );
-    await ensureUser("s1");
+    await ensureLearnerFor("s1");
     expect(
       await query((client) => client.$count(learners, eq(learners.id, "s1")))
     ).toBe(1);
   });
 
   it("bumps lastActiveAt at most once per hour", async () => {
-    await ensureUser("s1");
+    await ensureLearnerFor("s1");
 
     const recent = new Date(Date.now() - 30 * 60 * 1000);
     await setLastActiveAt("s1", recent);
-    await ensureUser("s1");
+    await ensureLearnerFor("s1");
     const unchanged = await lastActiveAtOf("s1");
     expect(unchanged.getTime()).toBe(recent.getTime());
 
     const stale = new Date(Date.now() - 2 * 60 * 60 * 1000);
     await setLastActiveAt("s1", stale);
-    await ensureUser("s1");
+    await ensureLearnerFor("s1");
     const bumped = await lastActiveAtOf("s1");
     expect(bumped.getTime()).toBeGreaterThan(stale.getTime());
   });

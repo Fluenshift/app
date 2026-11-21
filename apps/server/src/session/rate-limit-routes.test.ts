@@ -63,10 +63,10 @@ const limitedFor = vi.fn<(learner: string, bucket: RateLimitBucket) => void>();
 // Each step of an admitted call, in order.
 const steps = vi.fn<(step: string) => void>();
 // Records each run of ensureLearner, Grifando's ensureUser.
-const ensureUser = vi.fn();
+const learnerEnsured = vi.fn();
 const ensureLearner = () =>
   Effect.sync(() => {
-    ensureUser();
+    learnerEnsured();
     steps("ensure");
   });
 // Records each run of a boundary the rate limit must keep a refused call from; building its
@@ -161,7 +161,7 @@ const statusesInOrder = async (
 beforeEach(() => {
   limitedFor.mockReset();
   steps.mockReset();
-  ensureUser.mockReset();
+  learnerEnsured.mockReset();
   reached.mockReset();
 });
 
@@ -266,7 +266,7 @@ describe("rate limit before the user", () => {
       "write",
       "analysis",
     ]);
-    expect(ensureUser).not.toHaveBeenCalled();
+    expect(learnerEnsured).not.toHaveBeenCalled();
     expect(reached).not.toHaveBeenCalled();
   });
 

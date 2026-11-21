@@ -15,7 +15,7 @@ import { submitState } from "./practice-writing";
 import type { ViewState } from "./practice-writing";
 import { WritingSheet } from "./writing-sheet";
 
-export const ExplainCodeCoach = ({
+export const ExplainCodePractice = ({
   sampleLimits,
 }: {
   readonly sampleLimits: SampleLimits;

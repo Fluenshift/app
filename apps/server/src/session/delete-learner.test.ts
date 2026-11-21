@@ -50,7 +50,7 @@ const query = <A>(run: (client: DrizzleClient) => Promise<A>) =>
   );
 
 // A Learner with one Evaluation, as Grifando's seedUser gave each user one writing session.
-const seedUser = (id: string) =>
+const seedLearner = (id: string) =>
   as(
     id,
     persistEvaluation({
@@ -86,8 +86,8 @@ const evaluationCount = (id: string) =>
 
 describe("deleteUserData", () => {
   it("deletes the user and their data but not others", async () => {
-    await seedUser("me");
-    await seedUser("other");
+    await seedLearner("me");
+    await seedLearner("other");
     await as("me", deleteLearner());
     expect(await findLearner("me")).toBeNull();
     expect(await evaluationCount("me")).toBe(0);
