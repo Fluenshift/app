@@ -39,7 +39,7 @@ const NAME_CHARACTER = /[A-Za-z0-9_]/u;
 const isLineTerminator = (code: number | undefined): boolean =>
   code === 0x0a || code === 0x0d || code === 0x20_28 || code === 0x20_29;
 
-const valueAt = (table: Int32Array, index: number): number =>
+const entryAt = (table: Int32Array, index: number): number =>
   table[index] ?? NONE;
 
 export const readShellLine = (line: string): ShellLine | undefined => {
@@ -65,16 +65,16 @@ export const readShellLine = (line: string): ShellLine | undefined => {
       return index;
     }
     if (character === "\\") {
-      return escapes(index) ? valueAt(table, index + 2) : NONE;
+      return escapes(index) ? entryAt(table, index + 2) : NONE;
     }
-    return valueAt(table, index + 1);
+    return entryAt(table, index + 1);
   };
   for (let index = length - 1; index >= 0; index -= 1) {
     const blank = isWhitespace(index);
-    whitespaceEnd[index] = blank ? valueAt(whitespaceEnd, index + 1) : index;
-    wordEnd[index] = blank ? index : valueAt(wordEnd, index + 1);
+    whitespaceEnd[index] = blank ? entryAt(whitespaceEnd, index + 1) : index;
+    wordEnd[index] = blank ? index : entryAt(wordEnd, index + 1);
     nameEnd[index] = NAME_CHARACTER.test(line.charAt(index))
-      ? valueAt(nameEnd, index + 1)
+      ? entryAt(nameEnd, index + 1)
       : index;
     doubleQuoteClose[index] = closingQuote(doubleQuoteClose, '"', index);
     singleQuoteClose[index] = closingQuote(singleQuoteClose, "'", index);
@@ -95,20 +95,20 @@ export const readShellLine = (line: string): ShellLine | undefined => {
   // After a value that ends at `end`, whitespace, then the assignments that follow it.
   const afterValue = (end: number) =>
     isWhitespace(end)
-      ? valueAt(commandStart, valueAt(whitespaceEnd, end))
+      ? entryAt(commandStart, entryAt(whitespaceEnd, end))
       : NONE;
   const quotedValueClose = (start: number) => {
     const quote = line.charAt(start);
     if (quote === '"') {
-      return valueAt(doubleQuoteClose, start + 1);
+      return entryAt(doubleQuoteClose, start + 1);
     }
     if (quote === "'") {
-      return valueAt(singleQuoteClose, start + 1);
+      return entryAt(singleQuoteClose, start + 1);
     }
     return NONE;
   };
   const afterAssignment = (start: number) => {
-    const equals = valueAt(nameEnd, start);
+    const equals = entryAt(nameEnd, start);
     if (!NAME_START.test(line.charAt(start)) || line.charAt(equals) !== "=") {
       return NONE;
     }
@@ -118,26 +118,26 @@ export const readShellLine = (line: string): ShellLine | undefined => {
     if (afterQuoted !== NONE || value >= length || isWhitespace(value)) {
       return afterQuoted;
     }
-    const end = valueAt(unquotedEnd, value);
+    const end = entryAt(unquotedEnd, value);
     return end === NONE ? NONE : afterValue(end);
   };
   const commandAt = (start: number) => {
-    const end = valueAt(wordEnd, start);
+    const end = entryAt(wordEnd, start);
     return (
       start < length &&
       !isWhitespace(start) &&
-      (end === length || lastLineTerminator < valueAt(whitespaceEnd, end))
+      (end === length || lastLineTerminator < entryAt(whitespaceEnd, end))
     );
   };
   for (let index = length - 1; index >= 0; index -= 1) {
     if (isWhitespace(index)) {
       unquotedEnd[index] = afterValue(index) === NONE ? NONE : index;
     } else if (line.charAt(index) === "\\" && escapes(index)) {
-      const escaped = valueAt(unquotedEnd, index + 2);
+      const escaped = entryAt(unquotedEnd, index + 2);
       unquotedEnd[index] =
-        escaped === NONE ? valueAt(unquotedEnd, index + 1) : escaped;
+        escaped === NONE ? entryAt(unquotedEnd, index + 1) : escaped;
     } else {
-      unquotedEnd[index] = valueAt(unquotedEnd, index + 1);
+      unquotedEnd[index] = entryAt(unquotedEnd, index + 1);
     }
     const assigned = afterAssignment(index);
     if (assigned !== NONE) {
@@ -147,14 +147,14 @@ export const readShellLine = (line: string): ShellLine | undefined => {
     }
   }
 
-  const start = valueAt(commandStart, 0);
+  const start = entryAt(commandStart, 0);
   if (start === NONE) {
     return undefined;
   }
-  const end = valueAt(wordEnd, start);
+  const end = entryAt(wordEnd, start);
   return {
     arguments:
-      end === length ? undefined : line.slice(valueAt(whitespaceEnd, end)),
+      end === length ? undefined : line.slice(entryAt(whitespaceEnd, end)),
     command: line.slice(start, end),
   };
 };

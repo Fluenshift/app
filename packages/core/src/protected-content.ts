@@ -135,11 +135,11 @@ const hasCommandEvidence = (
 };
 
 const startsWithShellCommand = (line: string): boolean => {
-  const match = readShellLine(line);
-  if (match === undefined) {
+  const shellLine = readShellLine(line);
+  if (shellLine === undefined) {
     return false;
   }
-  const executable = match.command;
+  const executable = shellLine.command;
 
   if (
     /^(?:\.{1,2}\/|~\/|\/|[A-Za-z]:\\)\S+/u.test(executable) ||
@@ -162,7 +162,7 @@ const startsWithShellCommand = (line: string): boolean => {
     return false;
   }
 
-  const argumentsText = match.arguments ?? "";
+  const argumentsText = shellLine.arguments ?? "";
   if (/[.!?]$/u.test(line) && !hasCommandEvidence(command, argumentsText)) {
     return false;
   }

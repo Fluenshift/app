@@ -255,8 +255,8 @@ describe("Protected Technical Content guards", () => {
   });
 });
 
-// PE's patterns backtracked exponentially on these lines: about a dozen seconds at this length,
-// and twice as long for each character more (#306).
+// PE's patterns backtracked exponentially on these lines: several seconds at this length, and
+// twice as long for each repetition more (#306).
 const millisecondsToDetect = (sample: string) => {
   const start = performance.now();
   findProtectedTechnicalContent(sample);
