@@ -56,7 +56,10 @@ import type {
   KeyTestStatus,
   TrainerCredentials,
 } from "./academy/trainer/trainer-client";
-import { TrainerKeyRequiredError } from "./academy/trainer/trainer-errors";
+import {
+  InvalidTrainerCredentialsError,
+  TrainerKeyRequiredError,
+} from "./academy/trainer/trainer-errors";
 import type { TrainerAccessError } from "./academy/trainer/trainer-errors";
 import type { VocabularyItem } from "./academy/vocabulary-repository";
 import { INTERNAL_ERROR, makeEdge } from "./edge";
@@ -705,46 +708,43 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     );
 
   // The hosted profile's Judge runs on the visitor's OpenRouter key (docs/adr/0035). A request
-  // that carries one runs its work on that key; a request whose key is for another provider
-  // answers AI_JUDGE_KEY_REQUIRED before its rate limit; a request with no usable key takes
-  // `keyless`, the route's own answer for it. The local profile's Judge runs on its configured
-  // key, so it reads none from the request.
+  // that carries one runs its work on that key; a request with no key, or with a key for another
+  // provider, answers AI_JUDGE_KEY_REQUIRED before its rate limit (decision 4); a request whose
+  // key cannot be read fails with `unreadableKey`, the route's own answer for it (#263). The
+  // local profile's Judge runs on its configured key, so it reads none from the request.
   const withJudgeKey = <A, E, E2>(
     request: Request,
     work: Effect.Effect<A, E, R | CurrentLearner>,
-    keyless: Effect.Effect<A, E2, R | CurrentLearner>
+    unreadableKey: E2
   ): Effect.Effect<A, E | E2 | JudgeKeyRequiredError, R | CurrentLearner> =>
     options.profile === "local"
       ? work
       : readTrainerCredentials(request.headers).pipe(
           Effect.matchEffect({
-            onFailure: () => keyless,
+            onFailure: () => Effect.fail(unreadableKey),
             onSuccess: (
               credentials
             ): Effect.Effect<
               A,
-              E | E2 | JudgeKeyRequiredError,
+              E | JudgeKeyRequiredError,
               R | CurrentLearner
-            > => {
-              if (credentials === null) {
-                return keyless;
-              }
-              return credentials.provider === "openrouter"
+            > =>
+              credentials?.provider === "openrouter"
                 ? work.pipe(
                     Effect.provideService(
                       JudgeKey,
                       JudgeKey.of({ apiKey: credentials.apiKey })
                     )
                   )
-                : Effect.fail(new JudgeKeyRequiredError());
-            },
+                : Effect.fail(new JudgeKeyRequiredError()),
           })
         );
 
   // A route that runs the Trainer and the Judge needs, in the hosted profile, the one key that
-  // serves both: an OpenRouter key (docs/adr/0035). A request without a usable key asks for it,
-  // as an Evaluation does, rather than for any Trainer key (#251). The local profile's Judge runs
-  // on its configured key, and its Trainer key is checked as any Trainer route's.
+  // serves both: an OpenRouter key (docs/adr/0035). A request without one asks for it, as an
+  // Evaluation does, rather than for any Trainer key (#251); a key that cannot be read answers
+  // AI_KEY_INVALID, as on every Trainer route (#263). The local profile's Judge runs on its
+  // configured key, and its Trainer key is checked as any Trainer route's.
   const admittedWithTrainerAndJudgeKeys = <A, E>(
     request: Request,
     bucket: RateLimitBucket,
@@ -753,7 +753,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     withJudgeKey(
       request,
       admittedWithTrainerKey(request, bucket, effect),
-      Effect.fail(new JudgeKeyRequiredError())
+      new InvalidTrainerCredentialsError()
     );
 
   // Both evidence routes answer here once they have read a selection, or failed to.
@@ -804,7 +804,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         withJudgeKey(
           context.req.raw,
           admitted(context.req.raw, "analysis", evaluateWriting(writingSample)),
-          Effect.fail(new JudgeKeyRequiredError())
+          new JudgeKeyRequiredError()
         )
       ).pipe(
         Effect.tapDefect(() =>
