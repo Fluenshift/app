@@ -1,6 +1,6 @@
 # 0006. Set input caps per deploy profile
 
-- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile. Since ADR 0026, decision 2, no request carries prompt text, so its cap guards nothing (noted on 2026-11-21, #270).
+- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile. Since ADR 0026, decision 2, no request carries prompt text, so its cap guarded nothing (noted on 2026-11-21, #270), and #292 removed that cap from the Config the same day.
 - Seam: Phase 1 (e). Ledger rows: `decision: "adr:0006"`.
 
 ## Context
