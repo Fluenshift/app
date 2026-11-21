@@ -362,6 +362,7 @@ describe("Deploy Profile", () => {
 
 interface SentRequest {
   readonly headers: Headers;
+  readonly method: string;
   readonly path: string;
 }
 
@@ -372,6 +373,7 @@ const recordingFetch = () => {
   const fetch: typeof globalThis.fetch = (input, init) => {
     requests.push({
       headers: new Headers(init?.headers),
+      method: init?.method ?? "GET",
       path: typeof input === "string" ? input : "not a path",
     });
     return Promise.resolve(
@@ -512,5 +514,76 @@ describe("HTTP Academy client keys", () => {
         fetch: answering({ status: "maybe" }),
       }).testAIKey()
     ).rejects.toBeInstanceOf(AcademyRequestError);
+  });
+});
+
+// The key each request carried, by its method and path.
+const keysByCall = (requests: readonly SentRequest[]) =>
+  Object.fromEntries(
+    requests.map(({ headers, method, path }) => [
+      `${method} ${path}`,
+      [headers.get("x-ai-provider"), headers.get("x-ai-key")],
+    ])
+  );
+
+// The hosted Judge runs on the browser's OpenRouter key, which only the call that runs it carries
+// (docs/adr/0035).
+describe("HTTP Evaluation client keys", () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  test("sends only the hosted profile's Evaluation with the browser's key", async () => {
+    saveAIKey({ apiKey: "sk-or-test", provider: "openrouter" });
+    const { fetch, requests } = recordingFetch();
+    const client = createHttpEvaluationClient({
+      deployProfile: "hosted",
+      fetch,
+    });
+
+    await Promise.allSettled([
+      client.evaluateWriting("I depend of this library."),
+      client.listEvaluations(),
+      client.getEvaluation("evaluation-1"),
+      client.deleteEvaluation("evaluation-1"),
+      client.getSetupStatus(),
+    ]);
+
+    expect(keysByCall(requests)).toStrictEqual({
+      "DELETE /api/evaluations/evaluation-1": [null, null],
+      "GET /api/evaluations": [null, null],
+      "GET /api/evaluations/evaluation-1": [null, null],
+      "GET /api/setup": [null, null],
+      "POST /api/evaluations": ["openrouter", "sk-or-test"],
+    });
+  });
+
+  test("refuses a hosted Evaluation before any request when the browser holds no key", async () => {
+    const { fetch, requests } = recordingFetch();
+    const client = createHttpEvaluationClient({
+      deployProfile: "hosted",
+      fetch,
+    });
+
+    await expect(
+      client.evaluateWriting("I depend of this library.")
+    ).rejects.toBeInstanceOf(MissingAIKeyError);
+    expect(requests).toStrictEqual([]);
+  });
+
+  test("sends no key with the local profile's Evaluation", async () => {
+    saveAIKey({ apiKey: "sk-or-test", provider: "openrouter" });
+    const { fetch, requests } = recordingFetch();
+
+    await Promise.allSettled([
+      createHttpEvaluationClient({
+        deployProfile: "local",
+        fetch,
+      }).evaluateWriting("I depend of this library."),
+    ]);
+
+    expect(keysByCall(requests)).toStrictEqual({
+      "POST /api/evaluations": [null, null],
+    });
   });
 });

@@ -86,7 +86,7 @@ interface HttpEvaluationClientOptions {
   readonly fetch?: typeof globalThis.fetch;
 }
 
-interface HttpAcademyClientOptions extends HttpEvaluationClientOptions {
+interface HttpClientOptions extends HttpEvaluationClientOptions {
   /** In the hosted profile the Trainer calls carry the browser's AI key (docs/adr/0034). */
   readonly deployProfile?: DeployProfile;
 }
@@ -201,7 +201,7 @@ const identity = (evaluationId: string) => ({
 
 export const createHttpEvaluationClient = ({
   fetch,
-}: HttpEvaluationClientOptions = {}): EvaluationClient => {
+}: HttpClientOptions = {}): EvaluationClient => {
   const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
 
   return {
@@ -275,7 +275,7 @@ export const createHttpEvaluationClient = ({
 export const createHttpAcademyClient = ({
   deployProfile = "local",
   fetch,
-}: HttpAcademyClientOptions = {}): AcademyClient => {
+}: HttpClientOptions = {}): AcademyClient => {
   const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
   // The calls that reach the Trainer, Grifando's aiFetch calls: in the hosted profile they carry
   // the browser's key, and no other call does (docs/adr/0012, docs/adr/0034).
