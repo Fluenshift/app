@@ -16,6 +16,7 @@ import type { FormEvent, KeyboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { MissingAIKeyError } from "../settings/ai-key-store";
 import { EvaluationRequestError } from "./evaluation-client";
 import type { EvaluationClient } from "./evaluation-client";
 import { SpellChecker } from "./spell-checker";
@@ -108,7 +109,20 @@ const evaluationFailureMessages = new Map([
   ],
 ]);
 
+const JUDGE_KEY_REQUIRED = "Feedback on your writing needs an OpenRouter key.";
+
+// The hosted Judge runs on the visitor's OpenRouter key (docs/adr/0035): the browser holds none,
+// or the server found none in the request.
+const needsJudgeKey = (error: unknown) =>
+  error instanceof MissingAIKeyError ||
+  (error instanceof EvaluationRequestError &&
+    error.code === "AI_JUDGE_KEY_REQUIRED");
+
 const describeEvaluationFailure = (error: unknown) => {
+  if (needsJudgeKey(error)) {
+    return JUDGE_KEY_REQUIRED;
+  }
+
   if (error instanceof TypeError) {
     return "Could not reach the server. Check the connection and retry.";
   }
@@ -439,6 +453,7 @@ export const WritingDesk = ({
   const [lensView, setLensView] = useState<LensView>("findings");
   const [status, setStatus] = useState<SubmissionStatus>("idle");
   const [failureMessage, setFailureMessage] = useState("");
+  const [failureNeedsKey, setFailureNeedsKey] = useState(false);
   const [writingSample, setWritingSample] = useState("");
   const evidenceLensRef = useRef<HTMLElement>(null);
   const submissionInFlightRef = useRef(false);
@@ -524,6 +539,7 @@ export const WritingDesk = ({
     } catch (error) {
       submissionInFlightRef.current = false;
       setFailureMessage(describeEvaluationFailure(error));
+      setFailureNeedsKey(needsJudgeKey(error));
       setStatus("failure");
     }
   };
@@ -690,6 +706,17 @@ export const WritingDesk = ({
                   </p>
                   <p className="text-muted-foreground mt-1 text-xs">
                     {failureMessage}
+                    {failureNeedsKey ? (
+                      <>
+                        {" "}
+                        <Link
+                          className="hover:text-foreground underline underline-offset-4"
+                          to="/settings"
+                        >
+                          Set up a key
+                        </Link>
+                      </>
+                    ) : null}
                   </p>
                 </div>
               ) : null}

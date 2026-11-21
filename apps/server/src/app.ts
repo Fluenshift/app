@@ -67,6 +67,7 @@ import type {
   EvaluationFailureCode,
   WritingEvaluationFailure,
 } from "./evaluation/evaluation-endpoint";
+import { JudgeKey, JudgeKeyRequiredError } from "./evaluation/evaluation-model";
 import { CurrentLearner, LearnerIdentity } from "./learner-identity";
 import type {
   EnrichmentFailedError,
@@ -306,6 +307,16 @@ const FORBIDDEN: EdgeFailure = {
     error: "Only same-origin localhost access is allowed",
   },
   status: 403,
+};
+
+// What a hosted route that runs the Judge answers without an OpenRouter key (docs/adr/0035). The
+// Learner reads the message, which names the key the Judge needs.
+const JUDGE_KEY_REQUIRED: EdgeFailure = {
+  body: {
+    code: "AI_JUDGE_KEY_REQUIRED",
+    error: "Set up an OpenRouter key to get feedback on your writing.",
+  },
+  status: 401,
 };
 
 const SAMPLE_TOO_LARGE: EdgeFailure = {
@@ -644,6 +655,54 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       })
     );
 
+  // The hosted profile's Judge runs on the visitor's OpenRouter key (docs/adr/0035). A request
+  // that carries one runs its work on that key; a request whose key is for another provider
+  // answers AI_JUDGE_KEY_REQUIRED before its rate limit; a request with no usable key takes
+  // `keyless`, the route's own answer for it. The local profile's Judge runs on its configured
+  // key, so it reads none from the request.
+  const withJudgeKey = <A, E, E2>(
+    request: Request,
+    work: Effect.Effect<A, E, R | CurrentLearner>,
+    keyless: Effect.Effect<A, E2, R | CurrentLearner>
+  ): Effect.Effect<A, E | E2 | JudgeKeyRequiredError, R | CurrentLearner> =>
+    options.profile === "local"
+      ? work
+      : readTrainerCredentials(request.headers).pipe(
+          Effect.matchEffect({
+            onFailure: () => keyless,
+            onSuccess: (
+              credentials
+            ): Effect.Effect<
+              A,
+              E | E2 | JudgeKeyRequiredError,
+              R | CurrentLearner
+            > => {
+              if (credentials === null) {
+                return keyless;
+              }
+              return credentials.provider === "openrouter"
+                ? work.pipe(
+                    Effect.provideService(
+                      JudgeKey,
+                      JudgeKey.of({ apiKey: credentials.apiKey })
+                    )
+                  )
+                : Effect.fail(new JudgeKeyRequiredError());
+            },
+          })
+        );
+
+  // A route that runs the Trainer and the Judge checks the Trainer's key, then, in the hosted
+  // profile, the Judge's: one OpenRouter key serves both (docs/adr/0035).
+  const admittedWithKeys = <A, E>(
+    request: Request,
+    bucket: RateLimitBucket,
+    effect: Effect.Effect<A, E, R | CurrentLearner>
+  ) => {
+    const work = admittedWithKey(request, bucket, effect);
+    return withJudgeKey(request, work, work);
+  };
+
   // Both evidence routes answer here once they have read a selection, or failed to.
   const evidence = (
     context: HonoContext,
@@ -689,7 +748,11 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
     return edge(
       forLearner(
         context.req.raw,
-        admitted(context.req.raw, "analysis", evaluateWriting(writingSample))
+        withJudgeKey(
+          context.req.raw,
+          admitted(context.req.raw, "analysis", evaluateWriting(writingSample)),
+          Effect.fail(new JudgeKeyRequiredError())
+        )
       ).pipe(
         Effect.tapDefect(() =>
           Effect.sync(() => {
@@ -700,6 +763,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       {
         errors: {
           DatabaseError: () => INTERNAL_ERROR,
+          JudgeKeyRequiredError: () => JUDGE_KEY_REQUIRED,
           RateLimitedError: rateLimited,
         },
         success: (result) => {
@@ -1138,7 +1202,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
               ? edge(
                   forLearner(
                     context.req.raw,
-                    admittedWithKey(
+                    admittedWithKeys(
                       context.req.raw,
                       "analysis",
                       answerInterviewTurn(context.req.raw.headers, {
@@ -1164,6 +1228,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                       EvaluationModelError: judgeFailure,
                       InvalidAssessmentError: judgeFailure,
                       InvalidWritingSampleError: judgeFailure,
+                      JudgeKeyRequiredError: () => JUDGE_KEY_REQUIRED,
                       NoEnglishError: judgeFailure,
                       NotFoundError: () => NOT_FOUND,
                       RateLimitedError: rateLimited,
@@ -1250,7 +1315,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
             ? edge(
                 forLearner(
                   context.req.raw,
-                  admittedWithKey(
+                  admittedWithKeys(
                     context.req.raw,
                     "analysis",
                     writePractice(
@@ -1275,6 +1340,7 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                     EvaluationModelError: judgeFailure,
                     InvalidAssessmentError: judgeFailure,
                     InvalidWritingSampleError: judgeFailure,
+                    JudgeKeyRequiredError: () => JUDGE_KEY_REQUIRED,
                     NoEnglishError: judgeFailure,
                     RateLimitedError: rateLimited,
                     UnsafeCorrectionError: judgeFailure,

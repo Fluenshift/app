@@ -87,7 +87,10 @@ interface HttpEvaluationClientOptions {
 }
 
 interface HttpClientOptions extends HttpEvaluationClientOptions {
-  /** In the hosted profile the Trainer calls carry the browser's AI key (docs/adr/0034). */
+  /**
+   * In the hosted profile the calls that reach the Trainer or the Judge carry the browser's AI
+   * key (docs/adr/0034, docs/adr/0035).
+   */
   readonly deployProfile?: DeployProfile;
 }
 
@@ -200,9 +203,16 @@ const identity = (evaluationId: string) => ({
 });
 
 export const createHttpEvaluationClient = ({
+  deployProfile = "local",
   fetch,
 }: HttpClientOptions = {}): EvaluationClient => {
   const { api } = hc<AppType>("/", fetch === undefined ? {} : { fetch });
+  // The one call that reaches the Judge: in the hosted profile it carries the browser's
+  // OpenRouter key (docs/adr/0035).
+  const judge =
+    deployProfile === "hosted"
+      ? hc<AppType>("/", { fetch: keyedFetch(fetch) }).api
+      : api;
 
   return {
     async deleteEvaluation(evaluationId) {
@@ -218,7 +228,9 @@ export const createHttpEvaluationClient = ({
     },
 
     async evaluateWriting(writingSample) {
-      const response = await api.evaluations.$post({ json: { writingSample } });
+      const response = await judge.evaluations.$post({
+        json: { writingSample },
+      });
       const payload = await parseJson(response);
       if (
         response.status === 422 &&
