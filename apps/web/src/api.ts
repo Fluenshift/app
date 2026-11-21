@@ -34,6 +34,24 @@ import type {
   EvaluationClient,
 } from "./features/evaluations/evaluation-client";
 
+/** Thrown before any request is made, so the screen can ask the visitor for a key. */
+export class MissingAIKeyError extends Error {
+  constructor() {
+    super("Set up your AI key to get feedback.");
+    this.name = "MissingAIKeyError";
+  }
+}
+
+/**
+ * fetch for the routes that call the Trainer in the hosted profile: it attaches the stored key in
+ * its two headers, and nowhere else, never in a URL, a body or a log (docs/adr/0012). Ported from
+ * Grifando src/lib/aiFetch.ts (74dbb9f), with its fix 2a86084: same-origin paths only, so the key
+ * never reaches another host.
+ */
+// Stub: passes every call through, with no check and no key.
+export const aiFetch = (input: string, init?: RequestInit): Promise<Response> =>
+  Promise.resolve(fetch(input, init));
+
 interface HttpEvaluationClientOptions {
   readonly fetch?: typeof globalThis.fetch;
 }

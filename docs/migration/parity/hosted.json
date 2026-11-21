@@ -25,6 +25,15 @@
       ]
     },
     {
+      "id": "grifando:characterization:src/lib/aiKeyStore.characterization.test.ts::aiKeyStore reading > trims a stored key and reads a blank one as none",
+      "source": "src/lib/aiKeyStore.characterization.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": []
+    },
+    {
       "id": "grifando:characterization:src/nextConfig.characterization.test.ts::next.config security headers > adds nosniff, the referrer policy, the permissions policy and HSTS to every path, without X-Powered-By",
       "source": "src/nextConfig.characterization.test.ts",
       "class": "C",
