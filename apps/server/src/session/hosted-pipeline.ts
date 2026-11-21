@@ -8,6 +8,7 @@ import { Redacted } from "effect";
 import type { MiddlewareHandler } from "hono";
 import { getCookie } from "hono/cookie";
 
+import { SITE_FILE_PATHS } from "../site-files";
 import {
   newSessionId,
   SESSION_COOKIE,
@@ -90,7 +91,8 @@ export const sessionCookie = (
  * and no cookie: an API call never mints a session, which would create Learners without bound.
  * The health check is the one exception, for the host's checks. Any other request without a
  * valid session gets a new cookie on its answer, as Grifando's pages did, except the build's
- * static assets, whose answers caches keep.
+ * static assets, whose answers caches keep, and robots.txt and sitemap.xml, which crawlers read
+ * and Grifando's proxy matcher left out (docs/adr/0037).
  */
 export const sessionGate =
   ({ secret, secureCookie }: SessionSettings): MiddlewareHandler =>
@@ -106,7 +108,7 @@ export const sessionGate =
         ? next()
         : Promise.resolve(context.json(SESSION_REQUIRED, 401));
     }
-    if (valid || path.startsWith("/assets/")) {
+    if (valid || path.startsWith("/assets/") || SITE_FILE_PATHS.has(path)) {
       return next();
     }
     const token = signSessionId(newSessionId(), Redacted.value(secret));

@@ -82,6 +82,7 @@ import {
 } from "./session/hosted-pipeline";
 import { rateLimited } from "./session/rate-limit";
 import type { RateLimitBucket, RateLimitedError } from "./session/rate-limit";
+import { robotsTxt, sitemapXml } from "./site-files";
 
 export interface EvaluationLogEvent {
   readonly code:
@@ -1490,6 +1491,21 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
       context.json(INTERNAL_ERROR.body, INTERNAL_ERROR.status)
     );
 
+  // Grifando's robots.txt and sitemap.xml, in the hosted profile only: the local profile is
+  // reachable from its own machine alone (docs/adr/0037).
+  if (options.profile === "hosted") {
+    const { siteUrl } = options;
+    app.get("/robots.txt", (context) =>
+      context.body(robotsTxt(siteUrl), 200, {
+        "content-type": "text/plain; charset=UTF-8",
+      })
+    );
+    app.get("/sitemap.xml", (context) =>
+      context.body(sitemapXml(siteUrl), 200, {
+        "content-type": "application/xml",
+      })
+    );
+  }
   if (options.serveWeb) {
     app.get("/*", webFallback(options.webDistPath));
   }
