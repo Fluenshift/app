@@ -36,6 +36,7 @@ import { getRequestListener } from "@hono/node-server";
 import { Effect, Option, Schema } from "effect";
 import { Hono } from "hono";
 import type { Context as HonoContext, Handler, MiddlewareHandler } from "hono";
+import { bodyLimit } from "hono/body-limit";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getMimeType } from "hono/utils/mime";
 
@@ -372,26 +373,43 @@ const refusalOf = (
 // What a profile without a step of the pipeline runs in its place.
 const passThrough: MiddlewareHandler = (_context, next) => next();
 
+// Every API answer is marked as not storable.
+const markApi = (context: HonoContext) => {
+  if (context.req.path.startsWith("/api/")) {
+    context.header("cache-control", "no-store");
+  }
+};
+
 /**
- * Runs before every route: it refuses a foreign request and a declared body over the cap, and
- * marks every API answer as not storable. An accepted request gets the header once its answer
- * exists, because a route may answer with a `Response` of its own, as the edge helper does.
+ * Runs before every route: it refuses a foreign request and a body over the cap, and marks every
+ * API answer as not storable. A declared length over the cap is refused before any byte is read;
+ * a body that declares none, as a chunked request does, is counted as it arrives (HR-02, #272).
+ * An accepted request gets the header once its answer exists, because a route may answer with a
+ * `Response` of its own, as the edge helper does.
  */
-const guard =
-  (options: Pick<AppOptions, "limits" | "profile">): MiddlewareHandler =>
-  (context, next) => {
-    const markApi = () => {
-      if (context.req.path.startsWith("/api/")) {
-        context.header("cache-control", "no-store");
-      }
-    };
+const guard = (
+  options: Pick<AppOptions, "limits" | "profile">
+): MiddlewareHandler => {
+  const capBody = bodyLimit({
+    maxSize: options.limits.bodyMaxBytes,
+    onError: (context) => {
+      markApi(context);
+      return context.json(SAMPLE_TOO_LARGE.body, SAMPLE_TOO_LARGE.status);
+    },
+  });
+
+  return (context, next) => {
     const refusal = refusalOf(context.req.raw, options);
     if (refusal !== undefined) {
-      markApi();
+      markApi(context);
       return Promise.resolve(context.json(refusal.body, refusal.status));
     }
-    return next().then(markApi);
+    const marked = () => {
+      markApi(context);
+    };
+    return capBody(context, () => next().then(marked));
   };
+};
 
 // A file of the web build with its headers, or a 404 when it cannot be read.
 const serveFile = (
