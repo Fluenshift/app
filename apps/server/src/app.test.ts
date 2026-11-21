@@ -25,6 +25,7 @@ import type { EvaluationEndpointResult } from "./evaluation/evaluation-endpoint"
 import { JudgeKey } from "./evaluation/evaluation-model";
 import { LearnerIdentity } from "./learner-identity";
 import { SESSION_COOKIE, signSessionId } from "./session/session-token";
+import { setupStatusOf } from "./setup-status";
 
 let webDistPath = "";
 let emptyWebDistPath = "";
@@ -93,7 +94,7 @@ const hostedSessionCookie = {
   cookie: `${SESSION_COOKIE}=${signSessionId("visitor-1", Redacted.value(hostedSession.secret))}`,
 };
 
-const hostedApp = (options: WebOptions) =>
+const hostedApp = (options: WebOptions & AppBoundaries) =>
   createApp({
     limits: hosted.limits,
     profile: "hosted",
@@ -1418,6 +1419,97 @@ describe("Setup endpoint", () => {
     expect(await response.json()).toEqual({
       code: "not-ready",
       error: "Setup status is not available",
+    });
+  });
+
+  // The Trainer's models of these tests, one pair per provider.
+  const trainerModels = {
+    anthropic: { fallback: "claude-haiku", primary: "claude-sonnet-5" },
+    gemini: { fallback: "gemini-lite", primary: "gemini-3.5-flash" },
+    openrouter: { fallback: "or-lite", primary: "or-flash" },
+  };
+  const judge = {
+    configured: true,
+    model: "openai/gpt-5.6-terra",
+    provider: "OpenRouter",
+  };
+
+  it("answers the Trainer the local profile holds a key for, beside the Judge", async () => {
+    const response = await appWith({
+      setup: setupStatusOf({
+        dataLocation: "/data/pglite",
+        judge,
+        profile: "local",
+        trainer: {
+          localKey: Option.some({
+            apiKey: Redacted.make("trainer-key"),
+            provider: "gemini",
+          }),
+          models: trainerModels,
+        },
+      }),
+    }).request(get("http://localhost/api/setup"));
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toStrictEqual({
+      configured: true,
+      dataLocation: "/data/pglite",
+      model: "openai/gpt-5.6-terra",
+      provider: "OpenRouter",
+      rubricVersion: "1-provisional",
+      trainer: {
+        configured: true,
+        model: "gemini-3.5-flash",
+        provider: "Gemini",
+      },
+    });
+  });
+
+  it("answers that the local profile holds no Trainer key", async () => {
+    const response = await appWith({
+      setup: setupStatusOf({
+        dataLocation: "/data/pglite",
+        judge,
+        profile: "local",
+        trainer: { localKey: Option.none(), models: trainerModels },
+      }),
+    }).request(get("http://localhost/api/setup"));
+
+    expect(await response.json()).toStrictEqual({
+      configured: true,
+      dataLocation: "/data/pglite",
+      model: "openai/gpt-5.6-terra",
+      provider: "OpenRouter",
+      rubricVersion: "1-provisional",
+      trainer: { configured: false },
+    });
+  });
+
+  it("answers no Trainer in the hosted profile, whose visitors bring their own key", async () => {
+    const response = await hostedApp({
+      serveWeb: false,
+      setup: setupStatusOf({
+        dataLocation: "PostgreSQL",
+        judge: { ...judge, configured: false },
+        profile: "hosted",
+        trainer: {
+          localKey: Option.some({
+            apiKey: Redacted.make("trainer-key"),
+            provider: "anthropic",
+          }),
+          models: trainerModels,
+        },
+      }),
+      webDistPath,
+    }).request(get("http://localhost/api/setup", hostedSessionCookie));
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toStrictEqual({
+      configured: false,
+      dataLocation: "PostgreSQL",
+      model: "openai/gpt-5.6-terra",
+      provider: "OpenRouter",
+      rubricVersion: "1-provisional",
     });
   });
 
