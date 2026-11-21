@@ -4,7 +4,7 @@ Last updated 2026-11-20, at the end of the eleventh agent session. This file hol
 
 ## Work in flight
 
-Phase 6 is half done. This session merged the hosted request pipeline (#214, ADR 0032), `DELETE /api/me` (#216), rate limits with `ensureLearner` behind them (#218, ADR 0033) and the daily idle cleanup (#221). No issue is open.
+Phase 6's server side is done. This session merged the hosted request pipeline (#214, ADR 0032), `DELETE /api/me` (#216), rate limits with `ensureLearner` behind them (#218, ADR 0033), the daily idle cleanup (#221), and the browser's AI key store with `aiFetch` (#224), which nothing calls yet. No issue is open.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -12,12 +12,12 @@ Merged work: `git log --first-parent --oneline main`. The rows that still wait f
 node -e 'const fs=require("fs");const d="docs/migration/parity/";for(const f of fs.readdirSync(d))for(const r of JSON.parse(fs.readFileSync(d+f)).rows)if(r.disposition.startsWith("port")&&r.targets.length===0)console.log(f,r.id)'
 ```
 
-On 2026-11-20 there were 31: `hosted` 20 (10 of `aiKeyStore.test.ts`, 2 of `sitemap.test.ts`, the 8 paused deploy-smoke rows), `academy-spec` 1 (`grifando:fix-commit:2a86084`), and 10 paused end-to-end rows (the 4 dev-proxy cases of `evaluation-http`, the 6 rows of `evaluation-e2e`), which stay open.
+On 2026-11-20 there were 20: `hosted` 10 (2 of `sitemap.test.ts`, the 8 paused deploy-smoke rows) and 10 paused end-to-end rows (the 4 dev-proxy cases of `evaluation-http`, the 6 rows of `evaluation-e2e`), which stay open. Grifando's `/settings`, `/privacy` and `/explain-code` pages have no rows: their client components port from source and their screen tests assert Grifando's copy, roles and calls (ADR 0025, decision 5).
 
 ## Next steps
 
 1. **Phase 6** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), which matters once the owners want a public deploy; run `code-review` at its end. The open rows group into these units, in this order, each an issue with its rows (`hosted.json` unless named):
-   - BYOK: `src/lib/aiKeyStore.test.ts` (the key store and `aiFetch`), `academy-spec`'s `grifando:fix-commit:2a86084` (same-origin `aiFetch`, blocked key storage reported), and the `/settings` page. It needs a decision first (Facts, Hosted profile): ADR 0012 keeps browser keys out of the local profile, so the SPA must learn its Deploy Profile before it stores or sends a key.
+   - BYOK wiring and the `/settings` page (`src/app/settings/page.tsx`, `src/components/settings/AIKeyForm.tsx`, with the form's message for blocked storage from fix `2a86084`). It needs a decision first (Facts, Hosted profile): ADR 0012 keeps browser keys out of the local profile, so the SPA must learn its Deploy Profile before it stores or sends a key.
    - Grifando's remaining pages: `/privacy`, with its "Delete my data" button (`src/components/privacy/DeleteMyDataButton.tsx`, which calls `DELETE /api/me` and clears the stored key), and `/explain-code`.
    - Robots and sitemap: `src/app/sitemap.test.ts` (`port-changed`, ADR 0003), once `/privacy` and `/settings` exist, since the sitemap lists them.
    - `docs/deploy.md` (8 rows) is the hosted Docker smoke, paused with the end-to-end tests.
@@ -40,7 +40,8 @@ On 2026-11-20 there were 31: `hosted` 20 (10 of `aiKeyStore.test.ts`, 2 of `site
 - Every state-changing route admits its call in `app.ts` (`admitted`, `admittedWithKey`): after its body check and, for a Trainer route, after it finds a key in the headers, the `limitRequest` boundary, then `ensureLearner`, then its work (ADR 0033). `index.ts` passes both boundaries in the hosted profile only, so route tests that omit them run unlimited. A new state-changing route must be admitted with a bucket, and its `errors` need `RateLimitedError: rateLimited`.
 - A fake boundary in a route test must record when its Effect runs, inside `Effect.sync`, not when it is called: `app.ts` builds a boundary's Effect before the limit decides whether it runs (`rate-limit-routes.test.ts`).
 - A hosted production server needs `SESSION_SECRET`, `IP_HASH_SALT` and `CLIENT_IP_HEADER` (`AGENTS.md`, Code). The hosted profile forks the idle cleanup at 03:17 UTC daily (`IdleCleanup`).
-- BYOK, to decide: the SPA serves both profiles, and only the hosted one takes keys from the browser (ADR 0012). One way: a `GET` route that names the Deploy Profile, read by the root route; in the hosted profile the API client sends the stored key on Trainer calls through `aiFetch`, and the key notice links to `/settings`. `apps/web/src/api.ts` stays the only module that calls the server, so `aiFetch` belongs there.
+- BYOK, to decide: the SPA serves both profiles, and only the hosted one takes keys from the browser (ADR 0012). One way: a `GET` route that names the Deploy Profile, read once by the root route's `beforeLoad` through the Academy client; in the hosted profile the HTTP Academy client sends its Trainer calls (and the key test) through `aiFetch` (`apps/web/src/api.ts`), `isKeyRequired` also recognizes `MissingAIKeyError`, and the key notice links to `/settings` instead of `/setup`. The in-memory client answers the local profile, so existing screen tests keep their notice.
+- The key store (`apps/web/src/features/settings/ai-key-store.ts`) and the Trainer key's headers and providers (`packages/contract/src/trainer-key.ts`) are shared by the browser and the server.
 
 ### Academy, server
 
