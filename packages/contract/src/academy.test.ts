@@ -20,9 +20,6 @@ import {
   MistakeSeverity,
   MistakeSeveritySchema,
   mistakeCategoriesOf,
-  PROMPT_TYPES,
-  PromptType,
-  PromptTypeSchema,
   SampleLimits,
   TECHNICAL_CATEGORIES,
   TechnicalCategory,
@@ -30,17 +27,10 @@ import {
 } from "./academy";
 import { ERROR_CATEGORIES } from "./evaluation";
 
-// The enums of Grifando's prisma/schema.prisma at the pinned commit (74dbb9f), in their
-// declared order. Ported Academy modules read them as `MasteryLevel.MASTERED`, iterate them
-// with `Object.values`, and decode them with the schemas.
+// The enums of Grifando's prisma/schema.prisma at the pinned commit (74dbb9f) that the product
+// keeps, in their declared order. Ported Academy modules read them as `MasteryLevel.MASTERED`,
+// iterate them with `Object.values`, and decode them with the schemas.
 const PRISMA_ENUMS = {
-  PromptType: [
-    "FREE",
-    "DAILY_CHALLENGE",
-    "TECHNICAL",
-    "EXPLAIN_CODE",
-    "INTERVIEW",
-  ],
   TechnicalCategory: [
     "BACKEND",
     "FRONTEND",
@@ -79,7 +69,6 @@ const PRISMA_ENUMS = {
 } as const;
 
 const ENUMS = {
-  PromptType: [PROMPT_TYPES, PromptType, PromptTypeSchema],
   TechnicalCategory: [
     TECHNICAL_CATEGORIES,
     TechnicalCategory,
