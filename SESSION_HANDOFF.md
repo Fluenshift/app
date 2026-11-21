@@ -1,10 +1,10 @@
 # Session handoff
 
-Last updated 2026-11-21, at the end of the fifteenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Last updated 2026-11-21, at the end of the fifteenth agent session, resumed. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
 
 ## Work in flight
 
-Phase 7 is done as far as sessions may take it. This session ran item 1, the parity check on `main` (889 rows: 603 verified, 268 terminal, 18 open, 0 blocked), and item 3, the final audit: it regenerated the inventory from the baseline tags, cross-checked the inventory's extraction rules by methods that do not reuse `inventory.ts`, diffed the ledger against it, and found no gap (#262, its comment holds the counts). It then ran the `code-review` milestone before cutover on the diff since #256 and fixed what it found: a malformed key on a hosted call that runs both models answers `AI_KEY_INVALID` again (#263), the hosted shell writes the `twitter:image` tags Next.js wrote for Grifando's card (#265), and the stale documents and three small refactors (#267, whose pull request lists what it declined and why).
+This session ran Phase 7, items 1 and 3 (#262: parity 603 verified, 268 terminal, 18 open, 0 blocked; the final audit found no gap), the `code-review` milestone before cutover on the diff since #256 (fixed in #264, #266 and #268), and the audit of item 6 of the definition of done (#270): five auditors read the merged documents against the code. #279 fixed every stale document. Where a document was right and the code wrong, the document stays and an issue holds the fix: #271 to #278. #280 fixed #272, a body over the cap that declares no length.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -16,9 +16,13 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 
 ## Next steps
 
-1. **Definition of done, item 6** (`docs/migration/MIGRATION_PROTOCOL.md`), in a fresh session: audit the merged documents against the code, one unit per document that disagrees: `CONTEXT.md`, `REQUIREMENTS.md`, `RUBRIC.md`, `DATA-POLICY.md` per Deploy Profile, `ASSET-LICENSES.md` (bundled fonts included), the ADRs, `AGENTS.md` and the README. Already checked on 2026-11-21: the 40 PE requirement IDs are unchanged, `pnpm check:docs` finds every documented command, and items 4 and 5 hold (Grifando #77 and #78 have their targets in `academy-spec.json`, G7 keeps the Progress drill-down out of URLs, and the seam invariants have their tests).
-2. Items 2 and 4 to 6 of Phase 7, and sign-off, wait for the owners (Owner steps). The 18 open rows stay open until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
-3. If code changes after #268 and before cutover, run the `code-review` milestone again on the diff since its merge.
+1. The issues the audit of #270 opened, each labeled `ready-for-agent`, in this order:
+   - #271: Writing Desk Evaluations never reach the Academy, against ADR 0004, ADR 0014 and ADR 0020. Decide in an ADR what "the Academy is in use" means and what the Writing Desk answers when the Enrichment fails; the issue gives the recommended options.
+   - #273: `/setup` never names the local Trainer's key, and `docker-compose.yml` lost PE's `env_file`.
+   - #274: the importer of ADR 0018, decision 2. Building it is session work; running it at cutover is the owners'.
+   - #275 (fonts and the `hand-note` style), #276 (Mistake Notebook search), #277 (request validation with the contract's schemas), #278 (names against `CONTEXT.md`).
+2. When they are closed, item 6 of the definition of done holds; run the `code-review` milestone again on the diff since the merge of #280.
+3. Items 2, 4 and 6 of Phase 7, the import run of item 5, and sign-off wait for the owners (Owner steps). The 18 open rows stay open until the owners end the end-to-end pause; then port them, and run item 2 on a fresh clone of the release commit.
 
 ## Facts no issue records
 
@@ -34,6 +38,7 @@ On 2026-11-21 the ledger held 889 rows, none `pending-decision`, and 18 still op
 - `createApp` takes `profile: "hosted"` only with its `session` (`SessionSettings` of `@fluenshift/env`) and its `siteUrl`. In that profile `securityHeaders` sets the CSP and Grifando's four headers on every answer, `guard` refuses a body over 256 KiB, then `sessionGate` refuses an API request without a valid `ig_session` cookie (401 `SESSION_REQUIRED`), except `GET /api/health`, and mints a cookie on any other answer but `/assets/` (ADR 0032). `index.ts` builds the server per profile with `Layer.unwrap`; the hosted branch provides `LearnerIdentity.hosted` and `SessionConfig.layer`.
 - A hosted test signs its cookie with the secret it gives `SessionConfig`: `hosted-pipeline.test.ts` and `me-route.test.ts` show the setup. Every hosted API request in a test carries that cookie, the health check aside.
 - `sessionCookie(value, maxAgeSeconds, secure)` writes a cookie as Grifando's Next.js did, attribute order included, because characterizations pin the exact strings.
+- The guard refuses a declared body over the cap before reading it, then counts a body that declares no length with Hono's `bodyLimit`, which hands the routes a buffered copy of the request (#272). An in-process test request with a string body declares no length, so every route test reads that copy.
 - Every state-changing route admits its call in `app.ts` (`admitted`, `admittedWithTrainerKey`, `admittedWithTrainerAndJudgeKeys`): after its body check, after a Trainer route finds a key in the headers and, in the hosted profile, after a route that runs the Judge finds an OpenRouter key, the `limitRequest` boundary, then `ensureLearner`, then its work (ADR 0033, ADR 0035). `index.ts` passes both boundaries in the hosted profile only, so route tests that omit them run unlimited. A new state-changing route must be admitted with a bucket, and its `errors` need `RateLimitedError: rateLimited`.
 - A fake boundary in a route test must record when its Effect runs, inside `Effect.sync`, not when it is called: `app.ts` builds a boundary's Effect before the limit decides whether it runs (`rate-limit-routes.test.ts`).
 - A hosted production server needs `SESSION_SECRET`, `IP_HASH_SALT`, `CLIENT_IP_HEADER` and `SITE_URL` (`AGENTS.md`, Code). The hosted profile forks the idle cleanup at 03:17 UTC daily (`IdleCleanup`).
@@ -98,6 +103,7 @@ Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this
 - Set a budget before live calibration (G13) runs.
 - Choose the host for the hosted profile (ADR 0003, decision 4) before a public deploy, and give it `SESSION_SECRET`, `IP_HASH_SALT`, the `CLIENT_IP_HEADER` its proxy writes (ADR 0033) and its public origin as `SITE_URL` (ADR 0037).
 - Give the go-ahead for cutover (Phase 7).
+- At cutover, run the importer of PE's local Evaluations once #274 builds it: a dry run first, accepted only when its counts match (ADR 0018).
 - Say where Grifando's visual style came from, for `docs/product/ASSET-LICENSES.md` (#119, question 4).
 
 ## Jhefferson's machine
