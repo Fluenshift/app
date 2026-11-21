@@ -1,1 +1,12 @@
+/* Grifando's three faces at its weights and styles, latin only, served by the build itself
+   (docs/adr/0009, #275). */
+@import "@fontsource/inter/latin-300.css";
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
+@import "@fontsource/source-serif-4/latin-300.css";
+@import "@fontsource/source-serif-4/latin-300-italic.css";
+@import "@fontsource/source-serif-4/latin-400.css";
+@import "@fontsource/source-serif-4/latin-400-italic.css";
 @import "@fluenshift/ui/globals.css";
