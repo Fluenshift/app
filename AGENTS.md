@@ -1,9 +1,10 @@
 # Agent notes
 
-This repository merges two products into one on a new stack: Prompt Evolution (PE), which
-evaluates the English of real text, and Grifando, which turns a learner's mistakes into
-practice. The migration is in progress. No human reads the code: the gates are the reviewer, so
-weigh every choice by how much it turns a mistake into a failing check.
+This repository is Fluenshift: one product, on one stack, from two. Prompt Evolution (PE)
+evaluates the English of real text, and Grifando turns a learner's mistakes into practice. The
+merge is done (ADR 0044). Next, the owners redesign the interface and decide which features
+stay, change or go (#320). No human reads the code: the gates are the reviewer, so weigh every
+choice by how much it turns a mistake into a failing check.
 
 Precedence: an ADR, then this file, then every other document. A document that disagrees with
 the repository or with GitHub is stale: trust what you can check, and fix the document.
@@ -13,26 +14,32 @@ keep going.
 
 ## Start of a session
 
-1. Read `SESSION_HANDOFF.md`: the work in flight and the next steps.
-2. Run `gh issue list --repo Fluenshift/app --state open` to see the units already written.
-3. Take the first open next step as a work unit (below).
+1. Run `gh issue list --repo Fluenshift/app --state open`. The issues are the work, and each
+   one's comments hold its state.
+2. Triage every open `needs-triage` issue first, oldest first. Owner feedback arrives that way,
+   or in a session's chat, which the session files as such an issue first. Edit it into a unit
+   (the files it touches, a `lane:` label), remove `needs-triage`, and take it or label it
+   `ready-for-agent`; or close it with the reason.
+3. Take the oldest open `ready-for-agent` issue as a work unit. An issue assigned to an owner,
+   such as #320, is theirs: leave it.
+4. List the open CodeQL alerts (`gh api 'repos/Fluenshift/app/code-scanning/alerts?state=open'`).
+   An alert on `main` blocks nothing, so it can sit unseen: open an issue for each.
 
 Read the other documents when their subject comes up:
 
 | Document | Read it |
 | --- | --- |
 | `CONTEXT.md` | Before naming anything in code, tests or UI. |
-| `docs/adr/README.md`, then the ADR | When a ledger row, an issue or a rule cites an ADR, and before a change at a seam between the two products. |
-| `docs/migration/MIGRATION_PROTOCOL.md` | When planning a unit: the phases ahead, what each gate enforces, the definition of done, baseline bumps. |
-| `docs/migration/README.md` | Before reading or editing the ledger or the inventory, when porting a test (the mechanical mapping), and when G8 or G10 fails. |
-| `docs/migration/BASELINES.md` | Before running a baseline suite or writing a characterization test. |
+| `docs/adr/README.md`, then the ADR | When an issue or a rule cites an ADR, and before a change at a seam between the two products. |
+| `docs/engineering-notes.md` | Before a change to a seam, the hosted profile, the Academy, the PE import, Protected Technical Content, the Docker smoke or CI. |
 | `docs/product/` | When a unit touches a requirement, the rubric or the data policy. |
 | `apps/server/node_modules/effect/AGENTS.md`, and `ai-docs/` beside it | Before writing Effect code. They match the installed version. |
 
 Claude Code sessions with the `mattpocock-skills` plugin use `tdd` for a unit, `code-review` once
-per milestone (the end of a phase, and before cutover), `diagnosing-bugs` for a gate failure whose cause is
-unclear, `domain-modeling` for a new `CONTEXT.md` term or an ADR, and `writing-for-agents` for
-any edit to this file, `SESSION_HANDOFF.md` or an issue meant for agents.
+per milestone (a finished feature, and before a deploy), `diagnosing-bugs` for a gate failure
+whose cause is unclear, `domain-modeling` for a new `CONTEXT.md` term or an ADR, and
+`writing-for-agents` for any edit to this file, `docs/engineering-notes.md` or an issue meant
+for agents.
 
 ## Commands
 
@@ -43,12 +50,11 @@ shell environment when a session starts, so start sessions in the repository.
 | Command | What it does |
 | --- | --- |
 | `pnpm install --frozen-lockfile` | Install; also patches TypeScript and oxlint with the Effect diagnostics. |
-| `pnpm verify` | Format, documented commands, gate integrity, URL text, lint, Effect lint, types, Effect diagnostics, the tests that need no Docker, and the build. G5 and G8 to G10 run apart (Work units, step 7). |
+| `pnpm verify` | Format, documented commands, gate integrity, URL text, lint, Effect lint, types, Effect diagnostics, the tests that need no Docker, and the build. G5, G6 and G7's scans run apart, in CI. |
 | `pnpm format` / `pnpm format:fix` | Check or apply oxfmt. |
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
 | `pnpm test` | The scripts' own tests, then Vitest in every workspace. The database cases run first, beside the small suites only, because PGlite's cold start times out next to the web and server suites (#72); the web suite waits for the server suite, whose load times out its 1-second queries. |
-| `pnpm parity` | Every Vitest suite with a report, the Docker smoke included, then G9 on those reports. CI's test job runs the same two scripts. Needs Docker. |
 | `pnpm db:generate` | Write the next migration of `packages/db` from `packages/db/src/schema.ts` with drizzle-kit. Only the coordinator runs it, one migration in flight at a time. |
 | `pnpm test:postgres` | The `Database` service against a Postgres 17 server; `DEPLOY_PROFILE=hosted` and `DATABASE_URL` name it. |
 | `pnpm test:e2e` | Build the server and the web app, then run the Playwright journeys against the one process that serves both. |
@@ -57,10 +63,10 @@ shell environment when a session starts, so start sessions in the repository.
 | `pnpm docker:up` / `pnpm docker:down` | Start the local profile in Docker on `127.0.0.1:3001`, with its data in `./.data`, or remove the container. |
 | `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, Vitest, Vite and Playwright setting, the hooks, and each workflow line by line are at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
 | `pnpm check:url-text` | Gate G7 (ADR 0008): no server route reads user text from a URL. A query string carries only the period, the insight and the Error Category; a path only the Evaluation ID and the Academy's record IDs (ADR 0023). |
-| `node scripts/gate-selftest.ts` | Proves that each gate still rejects its broken case. Run it after changing a gate, with `--root` naming the baseline clones; CI runs it when a gate changes. Needs Docker. |
+| `node scripts/gate-selftest.ts` | Proves that each gate still rejects its broken case. Run it after changing a gate; CI runs it when a gate changes. |
 
-Migration scripts run on plain Node, with no dependencies: `node scripts/migration/<script>.ts`.
-Each script's header comment gives its usage.
+The scripts in `scripts/` run on plain Node, with no dependencies. Each script's header comment
+gives its usage.
 
 ## Layout
 
@@ -76,55 +82,56 @@ Each script's header comment gives its usage.
 | `packages/config` | Shared TypeScript configuration, including the Effect diagnostic severities. |
 | `e2e` | Playwright journeys against the built process. |
 | `smoke` | The Docker smoke (G6): Vitest suites against the image in the local and the hosted profile. |
-| `docs/migration`, `migration/` | Baselines, inventory, ledger, characterization tests. The inventory, the ledger and the reports are large generated JSON: query a row with a script, never open a whole file. |
+| `docs/adr`, `docs/product` | The decisions, and the requirements, rubric, data policy and asset licenses. |
+| `scripts`, `gates` | The gate scripts and G11's baseline. |
+
+## Gates
+
+| Gate | What it enforces |
+| --- | --- |
+| G1 Types | `tsc` with the Effect diagnostics at error severity, in every workspace. |
+| G2 Lint and format | Type-aware oxlint with the Effect rules, and `oxfmt --check`. Bans focused and skipped tests, Node built-ins in `packages/core` and `packages/contract`, `zod`, `process.env` outside `packages/env`, and Academy writes to Evaluation data. |
+| G3 Tests | Vitest in every workspace, on PGlite databases, and the `Database` service against Postgres 17. |
+| G4 Build | The server bundle and the SPA build. |
+| G5 E2E | Playwright journeys against the built process. |
+| G6 Docker smoke | The image in the local profile (loopback-only publication, hostile Host and Origin headers, data surviving container replacement, no secret in assets or logs) and in the hosted profile (session cookie, CSP header, robots and sitemap). |
+| G7 Privacy and supply chain | gitleaks over the whole history, `pnpm audit --prod --audit-level high`, and no user text in a URL (ADR 0008). |
+| G11 Gate integrity | Every gate setting at least as strict as `gates/baseline.json`; no new suppression comment. |
+| G13 Live calibration | Deferred until the owners schedule it: paid, with frozen fixtures and a budget. |
+
+G8, G9 and G10 checked the migration's ledger and retired with it (ADR 0044); G12 retired
+earlier (ADR 0019). CI runs each suite once per run, and two rules skip work that cannot fail
+(`scripts/ci-changes.ts`): a change that is only Markdown outside the workspaces runs the static
+checks and G7 alone, and the gate self-tests run only when a gate changes.
 
 ## Work units
 
-A work unit is a GitHub Issue. State lives on GitHub, never in files: an open issue labeled `ready-for-agent` is free, its assignee holds it, a linked pull
-request is its review, and a closed issue is done.
+A work unit is a GitHub Issue. State lives on GitHub, never in files: an open issue labeled
+`ready-for-agent` is free, its assignee holds it, a linked pull request is its review, and a
+closed issue is done.
 
-Checkouts sit under one parent directory, `$F`: `$F/app`, the clone, where each unit is a
-branch, and `$F/app-baselines/`, the sources at their pins (`node scripts/migration/baselines.ts
-sync`). A second session that runs at the same time needs its own checkout: start it with
+Checkouts sit under one parent directory, `$F`; `$F/app` is the clone, where each unit is a
+branch. A second session that runs at the same time needs its own checkout: start it with
 `claude --worktree <name>`, and Claude Code creates one under `.claude/worktrees/` and removes it
-when the session ends. The migration scripts look for the baselines beside the checkout, so a
-worktree session passes them `--root $F/app-baselines`.
+when the session ends.
 
-1. **Take one unit.** Its issue lists its ledger rows, the source files at the pinned commits
-   and the target paths. When the next step of `SESSION_HANDOFF.md` has no issue yet, write it
-   first, in that form, with a `lane:` label. Remove `ready-for-agent`, assign the issue to
-   yourself, then branch from the newest `main`:
+1. **Take one unit.** When the work has no issue yet, write it first, with a `lane:` label: what
+   to build, the files it touches, and when it is done. Remove `ready-for-agent`, assign the
+   issue to yourself, then branch from the newest `main`:
    `git fetch origin && git switch -c wu/<issue>-<slug> origin/main`. Run
    `pnpm install --frozen-lockfile` when the lockfile changed.
-2. **Read** the ledger rows, then the source tests, then the source code, then the ADRs they
-   cite. If anything is ambiguous, decide: take the option you would recommend, say why in the
-   pull request, and record it in an ADR when it changes a disposition, a gate or product
-   behavior.
+2. **Read** the issue, the code it touches and the ADRs they cite. If anything is ambiguous,
+   decide: take the option you would recommend, say why in the pull request, and record it in an
+   ADR when it changes product behavior or a gate.
 3. **Commit 1 holds the tests**, with the typed stubs they need to compile and the database
-   migration they need. Port each source test, title verbatim, changing only the mechanics in
-   the mapping table of `docs/migration/README.md`. Stubs return a wrong placeholder value, so
-   every target fails on an assertion, not on an import or a missing binding. Behavior that no
-   source test covers gets a characterization test at the baseline first
-   (`docs/migration/BASELINES.md`), in this same commit.
-4. **Later commits port the code** into the target idioms until the tests pass. Reuse the
-   baseline code wherever it fits the stack; keep algorithms, constants, orderings, limits and
-   messages identical; add no behavior.
-5. **Mutate where tests look thin**: break one condition or constant of a ported module,
-   confirm a ported test fails, revert; `node scripts/migration/mutate.ts` runs a list of them.
-   A survivor is untested baseline behavior: characterize it (step 3). List the mutations you
-   ran in the pull request.
-6. **Write the ledger targets** as `file::full title` with `node scripts/migration/ledger-targets.ts`,
-   which sets only `targets` and only for tests that passed: each row's `id` contains the test
-   title, so a text replacement rewrites the `id` too.
-7. **Run the touched test files and G8**, then push. CI is the full gate: it runs every check,
-   G9 and G10 included, in about three minutes, so read its failures instead of running
-   `pnpm verify` first. G8 runs here because its fix rewrites the first commit:
-
-   ```sh
-   node scripts/migration/red-green.ts --base origin/main --head HEAD   # G8
-   ```
-
-8. **Open one pull request** that closes the issue. Wait for its checks in the background, since
+   migration they need. Stubs return a wrong placeholder value, so every new test fails on an
+   assertion, not on an import or a missing binding.
+4. **Later commits write the code** until the tests pass.
+5. **Mutate where tests look thin**: break one condition or constant of the new code, confirm a
+   test fails, revert. List the mutations you ran in the pull request.
+6. **Run the touched test files**, then push. CI is the full gate: it runs every check in about
+   three minutes, so read its failures instead of running `pnpm verify` first.
+7. **Open one pull request** that closes the issue. Wait for its checks in the background, since
    a run can outlast a tool call's time limit. Merge it when every check is green, then return
    to `main`:
 
@@ -134,58 +141,35 @@ worktree session passes them `--root $F/app-baselines`.
    git switch main && git pull --ff-only origin main && git branch -D wu/<issue>-<slug>
    ```
 
-9. **Stop rule.** After two failed attempts at the same gate failure, post the failing output on
-   the issue and take other work. Never change an expected value, a gate or a disposition to
-   get green without an ADR that says why.
+8. **Stop rule.** After two failed attempts at the same gate failure, post the failing output on
+   the issue and take other work. Never change an expected value or a gate to get green without
+   an ADR that says why.
 
 Traps that earlier units paid for:
 
-- G8 reads each new ledger target at the first commit of the pull request that holds its test.
-  A target that is red on an error instead of an assertion passes with a note. A ported test
-  whose behavior an earlier unit already built is green at that commit and cannot be a target
-  (#63). A new test that reuses an existing title fails G8: give it a new title.
-- G8 runs whole test files at the first commit. A test that waits for a call its stub never
-  makes hangs until the 60-second timeout of `apps/server`: still red, only slow.
-- G10 reports class C differences without failing: put them in the pull request body.
+- A `gh pr checks --watch` started seconds after `gh pr create` can exit on CodeQL's checks alone
+  while CI is still queued. Before merging, list the checks and see the CI jobs green.
 - G11 records the lint, TypeScript, Vitest, Playwright, Vite and oxfmt configurations, the
   hooks, the gate scripts of every `package.json`, each workflow line by line and CI's path
   classifier, `scripts/ci-changes.ts`. A change to one fails `pnpm check:gates` until the
-  coordinator records the baseline again, and a weaker baseline needs an accepted ADR.
-  `turbo.json` is not recorded.
+  coordinator records the baseline again (`node scripts/check-gates.ts --write`), and a weaker
+  baseline needs an accepted ADR. `turbo.json` is not recorded.
 - One database migration is in flight at a time. A unit that needs the previous unit's
   migration branches from that unit, then rebases on `main` and runs `pnpm db:generate` again
   after it merges. Until a migration merges, delete its folder and regenerate it after a schema
   change; after, add a new one.
-- Generated files conflict between sibling units. Ledger: keep the union of both sides' rows
-  and targets (`node scripts/migration/ledger-union.ts <file>...`). Reports and inventories:
-  take theirs, then rerun the scripts. Tables of `docs/migration/BASELINES.md`: edit by hand.
 - Retarget dependent pull requests to `main` before their base branch is deleted
   (`gh api -X PATCH repos/Fluenshift/app/pulls/<pr> -f base=main`): GitHub closes them otherwise.
 - `gh pr edit` fails on gh 2.46. Edit a body with
   `gh api -X PATCH repos/Fluenshift/app/pulls/<pr> -F body=@<file>`.
 - CodeQL rejects `randomBytes` with `%` (`js/biased-cryptographic-random`): use `randomInt`.
+- A comment that cites `migration/...` or `docs/migration/...` names a file that git history
+  keeps: `git show 8a379e2:<path>` (ADR 0044).
 
 ## Rules
 
-Migration:
-
-- **Baselines are read-only.** Read and run sources only at the pinned commits, through
-  `scripts/migration/baselines.ts`, in disposable worktrees outside this working tree. Never
-  push to, tag, open issues or PRs in, or change settings of `Fluenshift/prompt-evolution` or
-  `Fluenshift/grifando`. Never change organization or ruleset settings. Use only the token the
-  session started with.
-- **Sources have an order.** Baseline tests, then baseline code, then baseline docs. An
-  ADR overrides all three for its rows. When sources still disagree, choose, and record the
-  choice in an ADR.
-- **Tests come first.** In a `port` row never change an expected value, delete an assertion,
-  weaken a matcher, rename the title, or add `skip`, `only` or `todo`.
-- **Port behavior, not architecture.**
-- **Characterize first.** Behavior no test covers gets a characterization test against the
-  baseline before it is ported.
-- **Build nothing outside the ledger.** Both systems' out-of-scope lists stay out of scope
-  unless an ADR adds an item.
 - **Decide open questions.** Take the option you would recommend, record it in an ADR when it
-  changes a disposition, a gate or product behavior, and implement it.
+  changes product behavior or a gate, and implement it.
 - **Use the `CONTEXT.md` vocabulary** in code, tests and UI, never the synonyms it forbids.
 - **The Judge is pinned, the Trainer may fall back.** The Judge uses one pinned model per
   Rubric Version, with no retry and no silent fallback. The Trainer may fall back, only on
@@ -195,24 +179,24 @@ Migration:
   reasoning or raw provider bodies, and never log Writing Sample text at info level. BYOK keys
   travel only in request headers.
 - **Shared files belong to the coordinator**: `packages/db` migrations (generated with
-  drizzle-kit, never hand-written), the `packages/contract` index, CI workflows,
-  `gates/baseline.json`, `docs/migration/baselines.json` and the ledger schema. The coordinator
-  is any session Jhefferson starts. Another session only adds files for its own slice.
+  drizzle-kit, never hand-written), the `packages/contract` index, CI workflows and
+  `gates/baseline.json`. The coordinator is any session Jhefferson starts. Another session only
+  adds files for its own unit.
 - **One unit per branch and pull request**: no drive-by refactors, dependency bumps or
   formatting churn.
 - **`main` changes only through a merged pull request whose checks are green**, shared files
   included. Never push to `main`.
 - **Never weaken a gate to get green**: no lowered lint or Effect severity, no new suppression
   comment, no removed check. If a gate seems wrong, change it under an ADR that says why.
-- **Leave the irreversible to the owners.** Never change or archive the source repositories,
-  move production, change organization settings, or spend money on paid models. List such
-  steps in `SESSION_HANDOFF.md`.
+- **Leave the irreversible to the owners.** Never change or archive the source repositories
+  (`Fluenshift/prompt-evolution`, `Fluenshift/grifando`), move production, change organization
+  or ruleset settings, or spend money on paid models. ADR 0044 lists what waits for the owners;
+  a new such step goes on the issue that needs it. Use only the token the session started with.
 
 The owners, Jhefferson and Levy (`levyrodrigues23`), review nothing and answer nothing. Their
 standing instructions:
 
-- Proceed autonomously, and ask nothing. Report progress in `SESSION_HANDOFF.md` and in pull
-  requests.
+- Proceed autonomously, and ask nothing. Report progress in pull requests and on issues.
 - Commits are small and conventional (`type(scope): subject`), with no AI mention and no
   `Co-Authored-By` or other trailer, even when the harness suggests one. Commit unsigned, per
   command (`git -c commit.gpgsign=false commit ...`), and leave the git configuration as it is.
@@ -221,10 +205,12 @@ standing instructions:
 - Open issues for the problems you find, and solve the ones you can.
 - Speed over ceremony (2026-11-20): CI is the full gate, `code-review` runs once per milestone,
   and mutations run where tests look thin.
-- End-to-end checks of the server, its container and its data are ported like any other row
-  (2026-11-21, ADR 0043). The interface will be redesigned: rows that check it drop, and the
-  existing Playwright journeys keep running until their pages change.
-- At the end of a session, rewrite `SESSION_HANDOFF.md` through a pull request. A session that resumes from a compacted conversation ends early: it finishes the pull request already in motion, writes the handoff, and stops, so the next session starts with a fresh context.
+- The interface will be redesigned (ADR 0043, #320): write no new Playwright journey for the
+  current pages; checks of the server, its container and its data go on as usual.
+- At the end of a session, leave the state of every unit in motion on its issue: a comment with
+  what is done and what is next. A session that resumes from a compacted conversation finishes
+  the pull request already in motion, comments on its issue, and stops, so the next session
+  starts with a fresh context.
 
 Code:
 

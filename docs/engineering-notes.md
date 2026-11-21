@@ -1,52 +1,27 @@
-# Session handoff
+# Engineering notes
 
-Last updated 2026-11-21, at the end of the eighteenth agent session. This file holds only what the repository and GitHub do not: the work in flight, the next steps and the facts they need. `AGENTS.md` holds the rules and how a unit runs. Rewrite this file at the end of every session, through a pull request.
+Facts about the code that neither the code nor a test makes obvious, gathered by the sessions that paid for them. Each section stands alone: read the one your change touches. A fact the code contradicts is stale: fix it here, through the unit that found it.
 
-## Work in flight
-
-This session ran the `code-review` milestone on the diff since 5f0fae7, the four pull requests that closed the previous review's issues (#310 to #313). Neither axis found wrong behavior: a differential test of `readShellLine` against PE's pattern found no mismatch on about 101.8 million generated lines, and both timing tests fail on the old patterns. #316 corrected a timing note and two names (#315). It then ended the end-to-end pause at Jhefferson's request (ADR 0043, #319): the ten rows that check the interface dropped, and the eight that check the server, its container and its data ported, five in the local Docker smoke (#325) and three in a new hosted Docker smoke (#326). #323 then signed off Phase 7 items 1 to 3 on a fresh clone of 4a772f7: every gate, both Docker smokes and the inventory check passed, and its closing comment holds the record and the definition of done item by item. Its `code-review` milestone found no wrong behavior; #329 closed its findings (#328), among them `pe:docker-smoke:L525` and `L532`, now `superseded` under ADR 0021. Open: #324 (retire the migration), `ready-for-agent`, and #320, the owners' TODO for the product idea, which sessions leave alone.
-
-On 2026-11-21 Jhefferson said that the owners, Jhefferson and Levy, now try the product and give feedback. Next steps, item 1, says how a session takes it. Jhefferson ran it that day: the interface will be redesigned, so its details wait (ADR 0043), and after the migration the owners decide which features stay, change or go (#320).
-
-The reviews' judgement calls that no unit took, so that the next review need not raise them again: one shared rate formatter for the copies in `dashboard.tsx`, `writing-desk.tsx` and `progress.tsx`; one shared `InputLimits` fixture for the seven copies in the server's route tests; named types for the Trainer shape of `setup-status.ts` and the counts of `pe-import.ts`; the daily challenge member of `InitialPracticePrompt` derived from the contract's `DailyChallenge`; a test that `index.ts` passes its profile to `setupStatusOf`; the names `commandAt`, `afterValue` and `afterAssignment` in `shell-line.ts`, and its seven `new Int32Array(length + 2).fill(...)` lines; the name `SchemaParameter` in `request-body.test.ts`; and a timing test for the `env` pattern, which no crafted input reaches through `hasCommandEvidence`.
-
-Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
-
-```sh
-node -e 'const fs=require("fs");const d="docs/migration/parity/";for(const f of fs.readdirSync(d))for(const r of JSON.parse(fs.readFileSync(d+f)).rows)if(r.disposition.startsWith("port")&&r.targets.length===0)console.log(f,r.id)'
-```
-
-On 2026-11-21, after #329, the ledger held 889 rows: 609 verified, 280 terminal, none open or `pending-decision`. Grifando's `/settings`, `/privacy` and `/explain-code` pages, Focus Music and the link preview have no rows: they port from source and their tests assert Grifando's copy, roles and calls (ADR 0025, decision 5).
-
-## Next steps
-
-1. **Owner feedback.** It arrives as issues labeled `needs-triage` in `Fluenshift/app`, or in a session's chat, which the session files as such an issue first. Triage every open `needs-triage` issue before other work, oldest first: edit it into a unit (the rows and files it touches, a `lane:` label), remove `needs-triage`, and take it or label it `ready-for-agent`; or close it with the reason. Decide what the feedback leaves open, as any other question (ADR 0020). A change to product behavior, to scope or to a ported test's expected value gets an ADR whose status line names the owner who asked, and the rows it changes become `port-changed` under it. Done when no open issue carries `needs-triage`.
-2. Take #324 in a fresh session: it retires the migration material, its gates and this file, under ADR 0044, and rewrites `AGENTS.md` for feature work. List the open CodeQL alerts first (`gh api 'repos/Fluenshift/app/code-scanning/alerts?state=open'`); none was open on 2026-11-21.
-3. Item 4 of Phase 7 (the go-ahead), item 6 (production and the archives) and the import run of item 5 wait for the owners (Owner steps). At Jhefferson's request, #324 retires the migration material before production moves.
-
-## Facts no issue records
-
-### Seams
+## Seams
 
 - The Academy (`apps/server/src/academy/**`, tests aside) reads the Evaluation tables only through `evaluationsView`, `findingsView` and `suggestionsView`; lint refuses the tables, `persistEvaluation`, `deleteEvaluation`, the `evaluation/` and `practice/` modules, and raw SQL (`execute`). Code that writes both axes composes them outside the Academy (`AGENTS.md`, Code).
 - A Mistake Pattern's state is what `replayPattern` (`@fluenshift/core/pattern-replay`) builds from its Occurrences and the Attempts on its Exercises: deleting an Evaluation rebuilds each pattern it touched that way (`unfoldEvaluation`, called by Learning History's `deleteEvaluation`, ADR 0031). A new path that changes a pattern must be one the replay reproduces, and must stamp its Occurrence or Attempt with the moment it writes on the pattern (`now` in `pattern-folding.ts`, `submitAttempt`), or the next deletion undoes it.
 - Progress reads `listEvaluations({ origin: "work" })`: practice writing stays out of every insight and its evidence (ADR 0030). The Academy dashboard's trend reads practice (ADR 0027).
-- A fix-commit or issue row takes as targets the tests that pin its fix, which may already be targets of the rows that ported them (`docs/migration/README.md`, `targets`).
 
-### PE import
+## PE import
 
 - tsdown builds two entries, so `dist/` holds `index.mjs`, the importer's `import-pe.mjs` and a shared chunk; whatever copies the server copies the whole directory.
 - The import records itself in `pe_imports`, one row per Learner, written in the import's transaction, and every later run, dry or not, refuses once the row exists (#296). Only deleting that row lets the import run again.
 - The importer refuses a PE file with no Evaluations, dry run or not, before it records anything (#309).
 - An owner who tries the importer before cutover points `DATA_DIRECTORY` at a scratch directory: a real import into `./.data` makes the import at cutover refuse.
-- The importer's fixture, `apps/server/src/history/fixtures/pe-local.db`, was written by PE's own code at the pin: `migration/fixtures/pe/local-database.ts` holds the script and how to rerun it. Tests copy it into a temporary directory first: SQLite writes `-shm` and `-wal` files beside a WAL database even when it opens it read-only.
+- The importer's fixture, `apps/server/src/history/fixtures/pe-local.db`, was written by PE's own code at its pin; the script and how to rerun it stay in git history (`git show 8a379e2:migration/fixtures/pe/local-database.ts`). Tests copy it into a temporary directory first: SQLite writes `-shm` and `-wal` files beside a WAL database even when it opens it read-only.
 
-### Protected Technical Content
+## Protected Technical Content
 
 - `packages/core/src/shell-line.ts` reads the command and arguments of a line as PE's shell-line pattern matched them, in linear time (#306); its header gives the pattern and the order in which the pattern tries its choices. `shell-line.test.ts` pins 42 lines whose expected values PE's pattern computed. To pin another line, run the pattern from that header outside the repository: in a test file, CodeQL would raise `js/redos` again. Check a change to the reader the same way, against the pattern on millions of generated lines over names, `=`, both quotes, backslashes, whitespace and line terminators, as the review of #315 did.
 - `protected-content.test.ts` times `findProtectedTechnicalContent` on two crafted lines, with a budget of one second. A new pattern that repeats a group whose characters its neighbor also matches needs the same check.
 
-### Hosted profile
+## Hosted profile
 
 - `createApp` takes `profile: "hosted"` only with its `session` (`SessionSettings` of `@fluenshift/env`) and its `siteUrl`. In that profile `securityHeaders` sets the CSP and Grifando's four headers on every answer, `guard` refuses a body over 256 KiB, then `sessionGate` refuses an API request without a valid `ig_session` cookie (401 `SESSION_REQUIRED`), except `GET /api/health`, and mints a cookie on any other answer but `/assets/` (ADR 0032). `index.ts` builds the server per profile with `Layer.unwrap`; the hosted branch provides `LearnerIdentity.hosted` and `SessionConfig.layer`.
 - A hosted test signs its cookie with the secret it gives `SessionConfig`: `hosted-pipeline.test.ts` and `me-route.test.ts` show the setup. Every hosted API request in a test carries that cookie, the health check aside.
@@ -69,7 +44,7 @@ On 2026-11-21, after #329, the ledger held 889 rows: 609 verified, 280 terminal,
 - `apps/web/src/index.css` imports Grifando's nine latin faces from `@fontsource` (#275); `apps/web/src/fonts.test.ts` pins the list, and a new face joins both with its row in `ASSET-LICENSES.md`. `/setup` shows the local Trainer from `SetupStatus.trainer`, which only the local profile fills (#273); `setupStatusOf` (`apps/server/src/setup-status.ts`) builds the status, and the Setup endpoint tests of `app.test.ts` cover both profiles. The Mistake Notebook's search is page state, never in the URL (#276).
 - The shell's metadata is static in `apps/web/index.html`, in both profiles; the hosted server adds the card's Open Graph tags, then the `twitter:image` tags Next.js filled from them because Grifando's Twitter card declared no image (#265), before `</head>` (`withLinkPreview` in `apps/server/src/site-files.ts`) and serves `/og-image.png` from the build's root without a session cookie (`SITE_FILE_PATHS`). The card is `apps/web/public/og-image.png`, rendered once from Grifando's `opengraph-image.tsx` with satori and resvg (ADR 0040); a new brand renders it again at 1200 by 630.
 
-### Academy, server
+## Academy, server
 
 - The names #278 kept, because tests pin them: the daily challenge's `promptText` and `promptType`, a recurring Correction's `occurrenceCount`, and `MistakeSeverity`, which types the stored `severity` of an Occurrence and the practice answer's field. Category Ability's column keeps Grifando's name `rating` under the schema property `ability`.
 - Explain code is practice writing with a `codeSnippet` (ADR 0038): the route checks it against the Deploy Profile's code cap (2,000 characters hosted, none locally), `evaluatePractice` checks it again before the Judge runs, and only `foldEvaluation` receives it, for the Trainer. `SampleLimits` carries `codeMaxCharacters` for the code sheet. A service test that needs the hosted cap provides a changed `ServerConfig` around the call (`withHostedCodeCap` in `practice-writing-routes.test.ts`).
@@ -83,12 +58,11 @@ On 2026-11-21, after #329, the ledger held 889 rows: 609 verified, 280 terminal,
 - Academy route tests follow `exercise-routes.test.ts` or `interview-routes.test.ts`: a real PGlite database, the `x-test-learner` header picks the Learner, a fake `TrainerClient` layer, and `TrainerConfig` read from an empty environment. Page read route tests live in `page-routes.test.ts`, with seed helpers and the clock fixed by `vi.useFakeTimers({ now, toFake: ["Date"] })`; each route's `DatabaseError` entry has its own "answers the generic 500" case.
 - The server's persistence tests copy one migrated PGlite template per test (#112), keyed by a hash of the migrations and the lockfile; a new migration builds a new template on the next run.
 
-### Academy, web
+## Academy, web
 
 - Each page read is a Hono `GET` route plus an SPA route (ADR 0025). `PageShell` carries the Academy's navigation; a new screen's entry goes in `NAV_LINKS`. Screens call the server through the `AcademyClient` (`academy-client.ts`): over HTTP in `apps/web/src/api.ts`, and in screen tests through `createInMemoryAcademyClient`, which answers from fixtures and records requests. `createAppRouter` defaults to `unavailableAcademyClient`. A component reads the client with `useRouteContext({ from: "__root__" })`; `failureNotice(error, fallback)` gives a failed request's key notice or message.
 - A screen with a writing sheet reads the Deploy Profile's caps from `GET /api/sample-limits` in its `beforeLoad` (`sampleLimitsFor`), so its loader data stays its own; the in-memory client defaults to the local caps (32 KiB, no character cap).
 - Academy screens show a practice Evaluation through `PracticeEvaluation` (with one `OccurrenceNote` or `FindingNote` per note) and an interview turn through `TurnFeedback`.
-- Grifando's client components port from source (ADR 0025, decision 5): no baseline test renders them, so screen tests assert Grifando's copy, roles and calls. Copy stays Grifando's; names follow `CONTEXT.md`, in ported tests too (`docs/migration/README.md`, Mechanical mapping).
 - Find queries wait 5 seconds (`apps/web/src/test/setup.ts`): a screen's first render loads its route chunk and runs its loader.
 - Focus Music (`apps/web/src/features/music/focus-music.tsx`) sits in the header of both profiles, beside the primary navigation, in the root route, so it stays mounted across pages (ADR 0039). It reads browser storage only when first opened (`focus-music:last-link`, `focus-music:playlists`). Its frame's sandbox pairs `allow-scripts` with `allow-same-origin`, which both players need; lint admits that pair in this one file, G11 records the override, and `-focus-music.test.tsx` pins the sandbox. Any other iframe needs a sandbox the rule accepts. A new music provider needs its origin in the hosted CSP's `frame-src`, a parser in `music-link.ts`, and a check in a real browser that it plays in that sandbox.
 - A web test that reads a file of the workspace builds its path from `import.meta.dirname`: under jsdom, `new URL(..., import.meta.url)` is jsdom's URL, which `node:fs` refuses (`link-preview.test.ts`).
@@ -97,41 +71,24 @@ On 2026-11-21, after #329, the ledger held 889 rows: 609 verified, 280 terminal,
 - The typed client sends every route's JSON body through `json`, path parameters or not (ADR 0042). A new route that reads a body also adds its line to `apps/web/src/api-bodies.test.ts`. A typed `Link` needs an existing route.
 - Grifando's category breakdown orders by count only: a tie keeps no order, and tests do not assert one.
 
-### Gates and CI
+## Gates and CI
 
 - The local Docker smoke seeds its Evaluation from the host while the container is stopped, since PGlite admits one process at a time: `seedDockerSmoke` (`apps/server/src/test/seed-docker-smoke.ts`, exported to the smoke as `server/seed-docker-smoke`) runs the product's `evaluateWriting` with a fake Judge (#325). The application shell answers 200 at any path, so a smoke check of a served file also pins its media type (#326).
-- G10 checks class A and B rows strictly: a port keeps the source's matcher (`toBeNull` stays `toBeNull`, not a count). Run `node scripts/migration/parity-audit.ts --root ../app-baselines` before pushing a class B port.
-- A characterization run (`node scripts/migration/characterization-run.ts grifando`) takes about 3 minutes and needs Docker. A mutation spot-check that survives in pure code usually means a gap the baseline tests leave: characterize it, then fold the new tests into the unit's first commit (reset to it, amend, cherry-pick the later commits), so G8 still sees them red.
-- `node scripts/migration/mutate.ts` matches `from` against the formatted file: oxfmt splits long conditions over lines.
 - Hono middleware: lint refuses `await next()` (`node/callback-return`) and an inline `.then` callback that returns nothing (`promise/always-return`); pass a named arrow to `next().then`, as `guard` does.
 - Run `pnpm lint:effect` before pushing a test that decodes: it warns on `Schema.decodeUnknown*` over a value already typed as the schema's encoded side (use `Schema.decodeExit`), and warnings fail CI.
 - G7 accepts only the path parameters ADR 0023 lists (`PATH_PARAMETERS` in `scripts/check-url-text.ts`); a new one needs an ADR. Filters and prompt choices stay in the SPA's own URL (ADR 0025).
-- G10 audits `port` rows only; a `port-changed` row's differences go in the pull request. A run reports 15 standing class C differences: 14 on the Trainer, resilience, key test and OpenRouter rows (listed in #199), and the route pattern `/:path*` of the `next.config` characterization (#215); say so in the pull request body.
 - CI runs the gate self-tests, about 2 more minutes, when a pull request changes a gate, a file in `SELF_TEST_FIXTURES` (`scripts/gate-selftest.ts`, `apps/server/src/edge.ts` among them), a `package.json`, a `tsconfig` or the lockfile (`GATE_PATHS` in `scripts/ci-changes.ts`).
 - CodeQL's default setup analyzes every pull request (the checks "Analyze (javascript-typescript)" and "CodeQL") and `main`. An alert on `main` blocks nothing, so it can sit unseen, as #306's three did for a week: list the open alerts at the start of a session.
-- A `gh pr checks --watch` started seconds after `gh pr create` can exit 0 on CodeQL's two checks alone while CI is still queued (#310). Before merging, list the checks and see the CI jobs green.
 - CI flake seen once (PR #157): the end-to-end job hung on "Install the Playwright browser" for over nine minutes. Cancel the run and rerun its failed jobs (`gh run cancel <run>`, then `gh run rerun <run> --failed`).
 - CI, measured on 2026-11-16: a pull request that changes product code takes about 2.3 minutes, one that changes a gate about 2.8, and one that changes only Markdown outside the workspaces runs the static checks and G7 alone. Measure before changing CI again.
 
-## Owner steps
-
-Sessions never do these (`AGENTS.md`, Rules): they cannot be undone outside this repository, or they cost money.
-
-- Archive `Fluenshift/prompt-evolution`; its pin was verified on 2026-11-12.
-- Levy: point local Grifando clones at `https://github.com/Fluenshift/grifando.git`; reconnect Grifando's Vercel project to the organization and give its CI a `GITLEAKS_LICENSE` secret, if Grifando still deploys from there.
-- Set a budget before live calibration (G13) runs.
-- Choose the host for the hosted profile (ADR 0003, decision 4) before a public deploy, and give it `SESSION_SECRET`, `IP_HASH_SALT`, the `CLIENT_IP_HEADER` its proxy writes (ADR 0033) and its public origin as `SITE_URL` (ADR 0037).
-- Give the go-ahead for cutover (Phase 7).
-- At cutover, import PE's local Evaluations as `README.md` (Importing PE's local history) says: a dry run first, accepted only when both runs print the same counts (ADR 0018).
-- Say where Grifando's visual style came from, for `docs/product/ASSET-LICENSES.md` (#119, question 4).
-
 ## Jhefferson's machine
 
-- `$F` is `/home/jheff/projects/personal/fluenshift`. `$F/app-verify/protocol-review` is an old checkout outside the migration.
+- `$F` is `/home/jheff/projects/personal/fluenshift`. `$F/app-verify/protocol-review` is an old checkout, outside the product.
 - Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-app/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
 - The interactive `grep` is ugrep, so one-liners call `/usr/bin/grep`.
 - `git rebase` signs by default and gpg times out: run `git -c commit.gpgsign=false rebase origin/main`, and abort a rebase that already stopped on a signature before rerunning it.
-- `$F/app-baselines/worktrees/grifando-run/node_modules` holds Grifando's packages as its baseline run installed them, Next.js 16.4.5 included: read a framework's behavior there when a port depends on it, as #265 read how Next.js wrote metadata.
+- Outside the repository, `$F/app-baselines/worktrees/grifando-run/node_modules` holds Grifando's packages as its baseline run installed them, Next.js 16.4.5 included: read a framework's behavior there when a port depends on it, as #265 read how Next.js wrote metadata.
 - mise holds Bun 1.4.0, PE's pinned Bun, at `~/.local/share/mise/installs/bun/1.4.0/bin`; the default `bun` is newer. Rebuilding the PE import fixture uses it.
 - Google Chrome is installed (`/usr/bin/google-chrome`): Playwright's `channel: "chrome"` can check a third-party player outside the repository, as #252 did for the sandbox.
 - A Postgres container from an earlier hand check, `fs-unit-pg`, listens on `127.0.0.1:55432` (user `app`, password `pw`, database `app`). Reuse it for hosted hand checks, or remove it with `docker rm -f fs-unit-pg`.
