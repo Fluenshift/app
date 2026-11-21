@@ -110,7 +110,10 @@ last write (ADR 0032).
 ### Keys
 
 Visitors bring their own AI keys. A key travels only in the request headers of the call that
-needs it, and is never stored, logged, or sent anywhere but the provider (ADR 0012).
+needs it, and is never stored, logged, or sent anywhere but the provider (ADR 0012). An
+OpenRouter key runs the Judge and the Trainer; a Gemini or Anthropic key runs the Trainer only,
+so feedback on writing needs an OpenRouter key. The hosted Judge never runs on a key from server
+configuration (ADR 0035).
 
 ### Cleanup and deletion
 
