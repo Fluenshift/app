@@ -24,12 +24,12 @@
 ## Decision
 
 1. Each route that reads a JSON body reads it itself, after its own first checks, and checks it
-   with the standard form of its contract schema (`readBody` in `apps/server/src/app.ts`). Its
+   with the standard form of its contract schema (`readBody` in `apps/server/src/request-body.ts`). Its
    answers stay as they were.
 2. The route declares the body to Hono's typed client through its context type, from the same
    contract schema (`BodyContext`): the client sends the schema's encoded side. `readBody` takes
-   only a schema with the sides the context declares, or `tsc` fails, so the declared body and
-   the checked body cannot drift apart.
+   only a schema whose sides are exactly the ones the context declares, or `tsc` fails, so the
+   declared body and the checked body cannot drift apart, not even by one optional key (#295).
 3. Every request schema lives in `packages/contract`: `WritingSampleRequest` and
    `PracticeWritingRequest` move there, and the server adds the Deploy Profile's code cap to
    `CodeSnippet` (ADR 0038).
@@ -41,6 +41,8 @@
   in `apps/web`. `apps/web/src/api-bodies.test.ts` pins each body type to its contract schema.
 - The typed client sends the bodies of routes with path parameters as JSON too, so `api.ts` no
   longer builds them by hand.
+- A schema with one key more or one key less than the declared body fails `tsc` on the server;
+  `apps/server/src/request-body.test.ts` pins that check.
 - A new route that reads a body takes its context as `BodyContext` and reads it with `readBody`
   and a contract schema.
 

@@ -37,11 +37,9 @@ import type { DatabaseError } from "@fluenshift/db";
 import type { InputLimits, SessionSettings } from "@fluenshift/env";
 import { getRequestListener } from "@hono/node-server";
 import { Effect, Option, Schema } from "effect";
-import type { StandardSchema } from "effect";
 import { Hono } from "hono";
 import type { Context as HonoContext, Handler, MiddlewareHandler } from "hono";
 import { bodyLimit } from "hono/body-limit";
-import type { BlankEnv } from "hono/types";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getMimeType } from "hono/utils/mime";
 
@@ -83,6 +81,8 @@ import type {
   InterviewAnswer,
   PracticeWriting,
 } from "./practice/practice-writing";
+import { readBody } from "./request-body";
+import type { BodyContext } from "./request-body";
 import { sampleLimitsOf } from "./sample-limits";
 import {
   securityHeaders,
@@ -498,35 +498,6 @@ const INVALID_SELECTION = {
   code: "invalid-selection",
   error: "Progress selection is invalid",
 };
-
-// What a route's JSON body is to Hono: its typed client sends the encoded side of the contract
-// schema the route checks the body with, and the route reads the decoded side (docs/adr/0007,
-// docs/adr/0042).
-interface JsonBody<Encoded, Decoded> {
-  in: { json: Encoded };
-  out: { json: Decoded };
-}
-
-/** The context of a route whose JSON body the contract schema `S` checks. */
-type BodyContext<S extends Schema.Top, Path extends string> = HonoContext<
-  BlankEnv,
-  Path,
-  JsonBody<S["Encoded"], S["Type"]>
->;
-
-// Reads a route's JSON body and checks it with the standard form of a contract schema, which must
-// have the sides the route's context declares to the typed client, or `tsc` fails. Each route
-// reads its body after its own first checks and chooses what a body that is not JSON reads as,
-// keeping its source's answers (docs/adr/0042).
-const readBody = <Encoded, Decoded, Path extends string>(
-  context: HonoContext<BlankEnv, Path, JsonBody<Encoded, Decoded>>,
-  schema: StandardSchema.StandardSchemaV1<Encoded, Decoded>,
-  notJson: unknown
-) =>
-  context.req
-    .json<unknown>()
-    .catch(() => notJson)
-    .then((body) => schema["~standard"].validate(body));
 
 // PE's Evaluation route refused every body but a Writing Sample with one answer.
 const WRITING_SAMPLE_REQUEST = Schema.toStandardSchemaV1(WritingSampleRequest);
