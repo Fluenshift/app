@@ -143,7 +143,8 @@ Goal: prove completeness, then retire the old apps.
 5. Carry data over as ADR 0018 decides. Grifando's hosted data starts fresh: the old site shows
    a notice for at least 30 days before cutover, and its database stays read-only for 30 days
    after. A one-time importer copies PE's local Evaluations as Rubric Version 1, and the import
-   is accepted only when its dry-run counts match.
+   is accepted only when its dry-run counts match (`apps/server/src/import-pe.ts`; `README.md`,
+   Importing PE's local history).
 6. Cutover, only now:
    - Move production to the product, then archive `Fluenshift/grifando`, and
      `Fluenshift/prompt-evolution` if it is not archived yet. Each archived README gets a line
