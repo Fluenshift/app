@@ -56,7 +56,7 @@ shell environment when a session starts, so start sessions in the repository.
 | `pnpm docker:smoke` | Gate G6: build the image of the local profile, start it with Compose as the invoking user, and check its boundary, its data directory and what it serves. Needs Docker. |
 | `pnpm docker:up` / `pnpm docker:down` | Start the local profile in Docker on `127.0.0.1:3001`, with its data in `./.data`, or remove the container. |
 | `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, Vitest, Vite and Playwright setting, the hooks, and each workflow line by line are at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
-| `pnpm check:url-text` | Gate G7 (ADR 0008): no server route reads user text from a URL. A query string carries only the period, the insight and the Error Category; a path only the Evaluation ID. |
+| `pnpm check:url-text` | Gate G7 (ADR 0008): no server route reads user text from a URL. A query string carries only the period, the insight and the Error Category; a path only the Evaluation ID and the Academy's record IDs (ADR 0023). |
 | `node scripts/gate-selftest.ts` | Proves that each gate still rejects its broken case. Run it after changing a gate, with `--root` naming the baseline clones; CI runs it when a gate changes. Needs Docker. |
 
 Migration scripts run on plain Node, with no dependencies: `node scripts/migration/<script>.ts`.
@@ -70,7 +70,7 @@ Each script's header comment gives its usage.
 | `apps/web` | Vite, React, TanStack Router. `src/api.ts` is the only module that calls the server. |
 | `packages/contract` | Effect Schema for every API request and response. Isomorphic. |
 | `packages/core` | The pure domain. Isomorphic: no Node built-ins, no `Buffer`. |
-| `packages/db` | Drizzle inside the Effect `Database` service: PGlite locally and in tests, Postgres when hosted. The schema scopes every row by Learner; both layers apply the migrations when they open. |
+| `packages/db` | Drizzle inside the Effect `Database` service: PGlite locally and in tests, Postgres when hosted. The schema scopes every row of Learner data by Learner (the hosted rate-limit windows key on a Learner or a hashed IP, ADR 0033); both layers apply the migrations when they open. |
 | `packages/env` | Effect `Config`. The only place that may read the environment. |
 | `packages/ui` | Shared UI components. |
 | `packages/config` | Shared TypeScript configuration, including the Effect diagnostic severities. |
@@ -87,7 +87,8 @@ Checkouts sit under one parent directory, `$F`: `$F/app`, the clone, where each 
 branch, and `$F/app-baselines/`, the sources at their pins (`node scripts/migration/baselines.ts
 sync`). A second session that runs at the same time needs its own checkout: start it with
 `claude --worktree <name>`, and Claude Code creates one under `.claude/worktrees/` and removes it
-when the session ends.
+when the session ends. The migration scripts look for the baselines beside the checkout, so a
+worktree session passes them `--root $F/app-baselines`.
 
 1. **Take one unit.** Its issue lists its ledger rows, the source files at the pinned commits
    and the target paths. When the next step of `SESSION_HANDOFF.md` has no issue yet, write it
@@ -243,8 +244,9 @@ Code:
   `apps/server/src/practice/practice-writing.ts` does.
 - The server bundle keeps npm packages external: every npm package that bundled workspace code
   imports is also a dependency of `apps/server`.
-- Whatever starts the built server sets `DATA_DIRECTORY` (local profile) or `DATABASE_URL`
-  (hosted). A hosted production server also needs `SESSION_SECRET` (ADR 0032), `IP_HASH_SALT`,
+- Whatever starts the built server sets `NODE_ENV=production`, which serves the SPA, and
+  `DATA_DIRECTORY` (local profile) or `DEPLOY_PROFILE=hosted` with `DATABASE_URL`. A hosted
+  production server also needs `SESSION_SECRET` (ADR 0032), `IP_HASH_SALT`,
   `CLIENT_IP_HEADER` naming the header its proxy writes (ADR 0033), and `SITE_URL`, the public
   origin its `robots.txt`, `sitemap.xml` and link preview name (ADR 0037, ADR 0040).
 - pnpm fails an install on a dependency build script nobody reviewed: list it in `allowBuilds`.
@@ -253,7 +255,8 @@ Code:
 ## Effect
 
 Effect 4.1.2 runs in `apps/server` and in `packages/contract`, `core`, `db` and `env`. The web
-app uses only the schemas of `packages/contract`.
+app decodes with Effect Schema, the contract's above all, and runs no Effect service, layer or
+runtime (ADR 0007).
 
 - Errors are `Schema.TaggedError<X, { readonly brand: unique symbol }>()`, never
   `extends Error`.

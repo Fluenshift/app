@@ -1,6 +1,7 @@
 # 0021. Rows whose behavior an earlier unit built
 
-- Status: Accepted on 2026-11-17 by the session (ADR 0020).
+- Status: Accepted on 2026-11-17 by the session (ADR 0020). Consequences corrected on
+  2026-11-21 (#270), to name the Trainer row the decision superseded.
 - Ledger rows: `decision: "adr:0021"`.
 
 ## Context
@@ -29,7 +30,11 @@ for good.
   correction and a bad period` are superseded by their ported tests in
   `apps/server/src/app.test.ts`, with the Correction in the body of
   `POST /api/progress/evidence` (ADR 0008). #65 built both routes.
-- The Trainer's keys unit applies it to `accessErrorForStatus > classifies provider statuses`.
+- The key test unit (#136) applies it to `POST /api/ai-key/test > answers busy when the
+  provider does not answer in time`, and pins that behavior at the Trainer client rather than
+  under the row's title (`trainer-client.test.ts`, "reads a provider that does not answer in 15
+  seconds as busy, and stops waiting"). `accessErrorForStatus > classifies provider statuses`
+  stayed a target, because its test failed first (#134).
 - A superseded row has no target, so the parity check counts it as terminal, not verified.
 
 ## Alternatives

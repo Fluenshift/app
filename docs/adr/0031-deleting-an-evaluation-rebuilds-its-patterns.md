@@ -2,7 +2,8 @@
 
 - Status: Accepted on 2026-11-20 by the session (ADR 0020). Decision 1 amended the same day after
   the Phase 5f review (#211), to state what a rebuild keeps when the deleted Evaluation created the
-  pattern.
+  pattern. Decision 3 corrected on 2026-11-21 (#270): the Streak counts the practice that
+  remains, as Grifando's did.
 - Phase 5f, the seam invariant "deleting an Evaluation removes the Academy state derived from
   it". No ledger row changes: PE deletes Evaluations but has no Academy, and Grifando never
   deletes a single writing session.
@@ -19,7 +20,8 @@
   and the recall counters. The stored pattern keeps only the totals, so subtracting a deleted
   Evaluation's share cannot undo a demotion that later Attempts built on.
 - Exercises are written by the Trainer from a pattern's example, and Attempts are the Learner's
-  own answers. Category Ability and the Streak are built from Attempts.
+  own answers. Category Ability is built from Attempts; the Streak counts the days of practice
+  Writing Samples and Attempts.
 
 ## Decision
 
@@ -33,8 +35,9 @@
    before that still count (decision 3).
 2. A pattern left without an Occurrence is removed: nothing the Learner still keeps shows the
    mistake.
-3. Exercises and Attempts stay, and so do Category Ability and the Streak: they record practice
-   the Learner did. An Exercise whose pattern is removed keeps its Attempts and loses its pattern.
+3. Exercises and Attempts stay, and so does Category Ability: they record practice the Learner
+   did. The Streak counts the practice that remains, so the day of a deleted practice Evaluation
+   counts only if an Attempt or another practice Writing Sample falls on it. An Exercise whose pattern is removed keeps its Attempts and loses its pattern.
 4. Each Occurrence records the moment of its fold and each Attempt the moment that it records on
    its pattern, so a replay gets the same times back.
 5. Learning History's delete calls the Academy's rebuild, so no path deletes an Evaluation

@@ -199,8 +199,8 @@ gate rejects its broken case, run only when a gate changes; they run the suites 
    re-anchored only when unique), and PE's Progress drill-down no longer sending `originalText`
    or `correction` in the query string.
 5. Seam invariants tested: the Academy only reads Findings and never writes Evaluation data;
-   deleting an Evaluation cascades to its Academy state; practice-origin samples are excluded
-   from Finding Rate by default; the Evaluation never says "improved".
+   deleting an Evaluation rebuilds the Academy state it touched (ADR 0031); practice-origin
+   samples stay out of every Progress Insight (ADR 0030); the Evaluation never says "improved".
 6. Merged docs match the code: `CONTEXT.md`, `REQUIREMENTS.md` (PE IDs unchanged), `RUBRIC.md`,
    `DATA-POLICY.md` per profile, `ASSET-LICENSES.md` (including bundled fonts), the ADRs,
    `AGENTS.md`, and a README where every command exists.
