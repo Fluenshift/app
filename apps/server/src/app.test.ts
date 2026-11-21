@@ -111,6 +111,29 @@ const webApp = () => localApp({ serveWeb: true, webDistPath });
 const get = (url: string, headers: Record<string, string> = {}) =>
   new Request(url, { headers });
 
+// A POST whose body arrives as a stream of `bytes` spaces, so it declares no length, as a
+// chunked request does (#272).
+const streamedPost = (url: string, bytes: number) => {
+  const chunk = new Uint8Array(16 * 1024).fill(0x20);
+  let sent = 0;
+  return new Request(url, {
+    body: new ReadableStream<Uint8Array>({
+      pull: (controller) => {
+        const size = Math.min(chunk.length, bytes - sent);
+        if (size <= 0) {
+          controller.close();
+          return;
+        }
+        controller.enqueue(chunk.slice(0, size));
+        sent += size;
+      },
+    }),
+    duplex: "half",
+    headers: { "content-type": "application/json" },
+    method: "POST",
+  });
+};
+
 const postSample = (body: string, headers: Record<string, string> = {}) =>
   new Request("http://localhost/api/evaluations", {
     body,
@@ -288,6 +311,28 @@ describe("HTTP application", () => {
       error: "Writing Sample is too large",
     });
   });
+
+  // HR-02 caps the body at the edge, whether or not the request declares its length (#272).
+  it("lets a streamed body at the cap through and refuses one past it, though neither declares its length", async () => {
+    const app = appWith();
+    const atCap = await app.request(
+      streamedPost("http://localhost/api/unknown", local.limits.bodyMaxBytes)
+    );
+    const pastCap = await app.request(
+      streamedPost(
+        "http://localhost/api/unknown",
+        local.limits.bodyMaxBytes + 1
+      )
+    );
+
+    expect(atCap.status).toBe(404);
+    expect(pastCap.status).toBe(413);
+    expect(pastCap.headers.get("cache-control")).toBe("no-store");
+    expect(await pastCap.json()).toStrictEqual({
+      code: "sample-too-large",
+      error: "Writing Sample is too large",
+    });
+  });
 });
 
 describe("production HTTP application", () => {
@@ -323,6 +368,22 @@ describe("production HTTP application", () => {
 
     expect(response.status).toBe(413);
     expect(await response.text()).not.toContain("Private writing.");
+  });
+
+  it("rejects a streamed body over the cap before evaluation in the hosted profile", async () => {
+    const app = hostedApp({ serveWeb: false, webDistPath });
+    const response = await app.request(
+      streamedPost(
+        "http://localhost/api/evaluations",
+        hosted.limits.bodyMaxBytes + 1
+      )
+    );
+
+    expect(response.status).toBe(413);
+    expect(await response.json()).toStrictEqual({
+      code: "sample-too-large",
+      error: "Writing Sample is too large",
+    });
   });
 
   it("rejects remote hosts and cross-origin writes before evaluating", async () => {
