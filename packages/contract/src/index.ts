@@ -87,3 +87,10 @@ export {
 } from "./evaluation";
 export { HealthResponse } from "./health";
 export { LearnerId } from "./learner";
+export {
+  isTrainerKeyProvider,
+  TRAINER_KEY_HEADER,
+  TRAINER_KEY_PROVIDERS,
+  TRAINER_PROVIDER_HEADER,
+} from "./trainer-key";
+export type { TrainerKeyProvider } from "./trainer-key";

@@ -284,6 +284,14 @@
       "baseline": "green"
     },
     {
+      "id": "grifando:characterization:src/lib/aiKeyStore.characterization.test.ts::aiKeyStore reading > trims a stored key and reads a blank one as none",
+      "kind": "characterization",
+      "source": "src/lib/aiKeyStore.characterization.test.ts",
+      "title": "aiKeyStore reading > trims a stored key and reads a blank one as none",
+      "suite": "vitest",
+      "baseline": "green"
+    },
+    {
       "id": "grifando:characterization:src/lib/answerDiff.characterization.test.ts::diffWords guards > ignores periods, commas, question and exclamation marks, semicolons, colons and double quotes only",
       "kind": "characterization",
       "source": "src/lib/answerDiff.characterization.test.ts",

@@ -25,6 +25,17 @@
       ]
     },
     {
+      "id": "grifando:characterization:src/lib/aiKeyStore.characterization.test.ts::aiKeyStore reading > trims a stored key and reads a blank one as none",
+      "source": "src/lib/aiKeyStore.characterization.test.ts",
+      "class": "A",
+      "slice": "hosted",
+      "disposition": "port",
+      "decision": null,
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiKeyStore reading > trims a stored key and reads a blank one as none"
+      ]
+    },
+    {
       "id": "grifando:characterization:src/nextConfig.characterization.test.ts::next.config security headers > adds nosniff, the referrer policy, the permissions policy and HSTS to every path, without X-Powered-By",
       "source": "src/nextConfig.characterization.test.ts",
       "class": "C",
@@ -428,7 +439,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiFetch > refuses absolute and protocol-relative URLs without calling fetch"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiFetch > rejects with MissingAIKeyError and never calls fetch when no key is stored",
@@ -437,7 +450,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiFetch > rejects with MissingAIKeyError and never calls fetch when no key is stored"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiFetch > saveAIKey reports false when storage throws",
@@ -446,7 +461,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiFetch > saveAIKey reports false when storage throws"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiFetch > sends the provider and key headers, keeping the caller's headers",
@@ -455,7 +472,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiFetch > sends the provider and key headers, keeping the caller's headers"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > clears the stored key",
@@ -464,7 +483,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiKeyStore > clears the stored key"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > returns null for a stored value with an unknown provider or empty key",
@@ -473,7 +494,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiKeyStore > returns null for a stored value with an unknown provider or empty key"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > returns null for corrupt stored JSON",
@@ -482,7 +505,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiKeyStore > returns null for corrupt stored JSON"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > returns null outside the browser",
@@ -491,7 +516,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiKeyStore > returns null outside the browser"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > returns null when storage throws (blocked site data)",
@@ -500,7 +527,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiKeyStore > returns null when storage throws (blocked site data)"
+      ]
     },
     {
       "id": "grifando:test:src/lib/aiKeyStore.test.ts::aiKeyStore > saves a trimmed key and reads it back",
@@ -509,7 +538,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "apps/web/src/features/settings/ai-key-store.test.ts::aiKeyStore > saves a trimmed key and reads it back"
+      ]
     },
     {
       "id": "grifando:test:src/proxy.test.ts::proxy > answers 401 SESSION_REQUIRED to an /api request without a valid cookie and mints nothing",

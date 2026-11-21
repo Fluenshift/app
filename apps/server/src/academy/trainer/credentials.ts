@@ -2,8 +2,12 @@
 // local profile only, the key in server configuration. Ported from Grifando
 // src/server/ai/credentials.ts, src/lib/aiCredentials.ts and src/server/ai/aiErrorResponse.ts
 // (74dbb9f).
+import {
+  isTrainerKeyProvider,
+  TRAINER_KEY_HEADER,
+  TRAINER_PROVIDER_HEADER,
+} from "@fluenshift/contract";
 import { ServerConfig, TrainerConfig } from "@fluenshift/env";
-import type { TrainerProvider } from "@fluenshift/env";
 import { Effect, Option, Redacted } from "effect";
 
 import type { EdgeErrors, EdgeFailure } from "../../edge";
@@ -11,14 +15,8 @@ import type { TrainerCredentials } from "./trainer-client";
 import { InvalidTrainerCredentialsError } from "./trainer-errors";
 import type { TrainerAccessError } from "./trainer-errors";
 
-export const TRAINER_PROVIDER_HEADER = "x-ai-provider";
-export const TRAINER_KEY_HEADER = "x-ai-key";
-
 const MAX_KEY_LENGTH = 256;
 const PRINTABLE_ASCII = /^[\u0021-\u007E]+$/u;
-
-const isTrainerProvider = (value: string): value is TrainerProvider =>
-  value === "gemini" || value === "anthropic";
 
 // The key the request carries, or null when it carries none. A malformed key fails instead, so
 // that the Learner can fix it in Settings.
@@ -30,7 +28,7 @@ export const readTrainerCredentials = Effect.fn("TrainerCredentials.read")(
       return null;
     }
     if (
-      !isTrainerProvider(provider) ||
+      !isTrainerKeyProvider(provider) ||
       apiKey.length > MAX_KEY_LENGTH ||
       !PRINTABLE_ASCII.test(apiKey)
     ) {

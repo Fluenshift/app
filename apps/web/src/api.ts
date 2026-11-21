@@ -4,6 +4,8 @@
 // with its contract (docs/adr/0007), and a Progress selection travels in a request body, never in
 // the URL (docs/adr/0008).
 import {
+  TRAINER_KEY_HEADER,
+  TRAINER_PROVIDER_HEADER,
   AcademyDashboard,
   AttemptExplanation,
   DailyChallenge,
@@ -33,6 +35,40 @@ import type {
   ApiFailure,
   EvaluationClient,
 } from "./features/evaluations/evaluation-client";
+import { getStoredAIKey } from "./features/settings/ai-key-store";
+
+/** Thrown before any request is made, so the screen can ask the visitor for a key. */
+export class MissingAIKeyError extends Error {
+  constructor() {
+    super("Set up your AI key to get feedback.");
+    this.name = "MissingAIKeyError";
+  }
+}
+
+/**
+ * fetch for the routes that call the Trainer in the hosted profile: it attaches the stored key in
+ * its two headers, and nowhere else, never in a URL, a body or a log (docs/adr/0012). Ported from
+ * Grifando src/lib/aiFetch.ts (74dbb9f), with its fix 2a86084: same-origin paths only, so the key
+ * never reaches another host.
+ */
+export const aiFetch = (
+  input: string,
+  init?: RequestInit
+): Promise<Response> => {
+  if (!input.startsWith("/") || input.startsWith("//")) {
+    return Promise.reject(
+      new Error("aiFetch only accepts same-origin paths like /api/...")
+    );
+  }
+  const credentials = getStoredAIKey();
+  if (credentials === null) {
+    return Promise.reject(new MissingAIKeyError());
+  }
+  const headers = new Headers(init?.headers);
+  headers.set(TRAINER_PROVIDER_HEADER, credentials.provider);
+  headers.set(TRAINER_KEY_HEADER, credentials.apiKey);
+  return fetch(input, { ...init, headers });
+};
 
 interface HttpEvaluationClientOptions {
   readonly fetch?: typeof globalThis.fetch;
