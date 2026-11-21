@@ -218,7 +218,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "smoke/src/hosted-smoke.test.ts::Hosted Docker smoke > gives a new visitor the session cookie"
+      ]
     },
     {
       "id": "grifando:deploy-smoke:02",
@@ -272,7 +274,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "smoke/src/hosted-smoke.test.ts::Hosted Docker smoke > answers with the Content-Security-Policy header"
+      ]
     },
     {
       "id": "grifando:deploy-smoke:08",
@@ -281,7 +285,9 @@
       "slice": "hosted",
       "disposition": "port",
       "decision": null,
-      "targets": []
+      "targets": [
+        "smoke/src/hosted-smoke.test.ts::Hosted Docker smoke > answers robots.txt and sitemap.xml"
+      ]
     },
     {
       "id": "grifando:deploy-smoke:09",
