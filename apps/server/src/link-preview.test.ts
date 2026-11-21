@@ -77,13 +77,14 @@ const localApp = () =>
     webDistPath,
   });
 
+// Open Graph names a tag by its property, Twitter by its name, as Next.js wrote them.
 const IMAGE_TAG =
-  /<meta property="(?<property>og:image[^"]*)" content="(?<content>[^"]*)" \/>\n/gu;
+  /<meta (?:property|name)="(?<key>(?:og|twitter):image[^"]*)" content="(?<content>[^"]*)" \/>\n/gu;
 
-// The card's tags in the shell, in order, as property and content.
+// The card's tags in the shell, in order, as property or name, and content.
 const imageTagsOf = (shell: string) =>
   Array.from(shell.matchAll(IMAGE_TAG), (match) => [
-    match.groups?.["property"],
+    match.groups?.["key"],
     match.groups?.["content"],
   ]);
 
@@ -101,9 +102,27 @@ describe("link preview", () => {
       ["og:image:width", "1200"],
       ["og:image:height", "630"],
       ["og:image:alt", ALT],
+      ["twitter:image", "https://fluenshift.example/og-image.png"],
+      ["twitter:image:alt", ALT],
+      ["twitter:image:type", "image/png"],
+      ["twitter:image:width", "1200"],
+      ["twitter:image:height", "630"],
     ]);
     expect(shell.indexOf("og:image")).toBeLessThan(shell.indexOf("</head>"));
     expect(shell.replaceAll(IMAGE_TAG, "")).toBe(SHELL);
+  });
+
+  // Grifando's layout declared a Twitter card without images, and Next.js 16.4.5 fills one from
+  // the Open Graph images (postProcessMetadata), so Grifando's shell named the card twice (#265).
+  it("names the Open Graph card in the hosted shell's Twitter card, as Next.js filled it in", async () => {
+    const response = await hostedApp().request(
+      new Request("http://127.0.0.1:3000/")
+    );
+    const shell = await response.text();
+
+    expect(shell).toContain(
+      '<meta name="twitter:image" content="https://fluenshift.example/og-image.png" />\n'
+    );
   });
 
   it("escapes the public origin it writes into the hosted shell", async () => {
@@ -111,8 +130,14 @@ describe("link preview", () => {
       new Request("http://127.0.0.1:3000/")
     );
 
-    expect(imageTagsOf(await response.text())[0]).toEqual([
+    const tags = imageTagsOf(await response.text());
+
+    expect(tags[0]).toEqual([
       "og:image",
+      "https://a.example/?x=&quot;1&quot;&amp;y=&lt;2&gt;/og-image.png",
+    ]);
+    expect(tags[5]).toEqual([
+      "twitter:image",
       "https://a.example/?x=&quot;1&quot;&amp;y=&lt;2&gt;/og-image.png",
     ]);
   });
