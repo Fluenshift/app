@@ -271,6 +271,14 @@ const ZOE = {
 
 const FIXTURE_COUNTS = { evaluations: 4, findings: 6, suggestions: 2 };
 
+// The fixture's Evaluations, in PE's insertion order.
+const FIXTURE_EVALUATION_IDS = [
+  "8b778665-bbce-4d50-8fa8-151f399b51bd",
+  "d754a4c6-d8fe-48c2-b5c7-98d728ec6000",
+  "04bf42b0-8ee7-49a4-90de-18136a5478eb",
+  "a1c0cb43-bc6b-4f13-ac9d-6adb783340ec",
+];
+
 // An Evaluation the product made before the import, for the local Learner.
 const PRODUCT_EVALUATION = {
   contentHash: "product-content-hash",
@@ -405,6 +413,34 @@ describe("PE import", () => {
     });
   });
 
+  it("refuses a second import, dry or not, once the Learner deleted every imported Evaluation", async () => {
+    const file = await peDatabase();
+    const database = await productDatabase();
+
+    await run(importPeHistory(file, { dryRun: false }), database.layer);
+    const refusals = await run(
+      Effect.gen(function* () {
+        yield* pipe(
+          FIXTURE_EVALUATION_IDS,
+          Effect.forEach((id) => deleteEvaluation(id))
+        );
+        const again = yield* refusal(importPeHistory(file, { dryRun: false }));
+        const dryRun = yield* refusal(importPeHistory(file, { dryRun: true }));
+        return { again, dryRun };
+      }),
+      database.layer
+    );
+    const written = await run(tableCounts, database.layer);
+
+    expect(refusals.again).toBe(
+      "PeImportError: the product imported a PE database before (4 Evaluations, 6 Findings and 2 Suggestions): the import runs once"
+    );
+    expect(refusals.dryRun).toBe(
+      "PeImportError: the product imported a PE database before (4 Evaluations, 6 Findings and 2 Suggestions): the import runs once"
+    );
+    expect(written).toEqual({ ...NOTHING_WRITTEN, learners: 1 });
+  });
+
   it("refuses a PE database with an Evaluation of another Rubric Version, and writes nothing", async () => {
     const file = await peDatabase(
       "update evaluations set rubric_version = '2' where rowid = 2"
@@ -537,12 +573,26 @@ describe("PE import", () => {
       database.layer
     );
     const written = await run(tableCounts, database.layer);
+    // Once the product takes the rows again, the import runs: the failed one left no trace.
+    const retried = await run(
+      Effect.gen(function* () {
+        const product = yield* Database;
+        yield* product.run((client) =>
+          client.execute(
+            sql`alter table findings drop constraint test_no_minor_finding`
+          )
+        );
+        return yield* importPeHistory(file, { dryRun: false });
+      }),
+      database.layer
+    );
 
     expect(refused).toBe(
       'PeImportError: the product database failed, so nothing was imported: new row for relation "findings" violates check constraint "test_no_minor_finding"'
     );
     expect(refused).not.toContain("merge it in main");
     expect(written).toEqual(NOTHING_WRITTEN);
+    expect(retried).toEqual(FIXTURE_COUNTS);
   });
 });
 

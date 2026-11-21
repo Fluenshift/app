@@ -192,6 +192,31 @@ export const suggestions = pgTable(
   ]
 );
 
+// The one-time import of PE's local Learning History (docs/adr/0018, decision 2): when it ran and
+// what it wrote. A Learner has at most one, so the import never runs twice, even after the
+// Learner deleted the Evaluations it wrote (#296).
+export const peImports = pgTable(
+  "pe_imports",
+  {
+    evaluationCount: integer("evaluation_count").notNull(),
+    findingCount: integer("finding_count").notNull(),
+    importedAt: moment("imported_at").notNull().defaultNow(),
+    learnerId: text("learner_id").primaryKey(),
+    suggestionCount: integer("suggestion_count").notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.learnerId],
+      foreignColumns: [learners.id],
+      name: "pe_imports_learner_fk",
+    }).onDelete("cascade"),
+    check(
+      "pe_imports_counts_check",
+      sql`${table.evaluationCount} >= 0 and ${table.findingCount} >= 0 and ${table.suggestionCount} >= 0`
+    ),
+  ]
+);
+
 // The Academy (Phase 5): Grifando's mistake loop over the Learner's Findings. Ported from
 // Grifando prisma/schema.prisma (74dbb9f); every row belongs to a Learner (docs/adr/0003).
 
