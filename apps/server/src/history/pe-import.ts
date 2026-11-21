@@ -516,6 +516,13 @@ const writeHistory = (
 export const importPeHistory = Effect.fn("PeImport.importPeHistory")(
   function* (file: string, options: { readonly dryRun: boolean }) {
     const history = yield* readPeHistory(file);
+    // An empty file, passed by mistake, would otherwise record an import and refuse the real one.
+    if (history.length === 0) {
+      return yield* new PeImportError({
+        message:
+          "this PE database holds no Evaluations: there is nothing to import",
+      });
+    }
     const database = yield* Database;
     const held = yield* database.run((client) => heldCount(client, history));
     if (held > 0) {

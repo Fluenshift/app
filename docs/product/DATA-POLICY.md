@@ -100,7 +100,9 @@ its one Learner (ADR 0018). The importer reads PE's SQLite file without changing
 Evaluation with its Findings and Suggestions as a work Writing Sample, and runs no model, so the
 Academy enriches none of them. It imports nothing unless every row fits the product, and it runs
 once: the product keeps when the import ran and how many Evaluations, Findings and Suggestions
-it wrote, and refuses every later run, even after the Learner deleted what the import wrote.
+it wrote, and refuses every later run, even after the Learner deleted what the import wrote. A
+PE file with no Evaluations is refused before anything is recorded, so a wrong file cannot use
+up the one import.
 Progress keeps the imported Evaluations in Rubric Version 1's own segment, apart from the
 provisional version.
 
