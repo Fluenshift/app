@@ -4,7 +4,7 @@ Last updated 2026-11-20, at the end of the thirteenth agent session. This file h
 
 ## Work in flight
 
-This session ported Grifando's hosted privacy page with its "Delete my data" button (#241, ADR 0036), served `robots.txt` and `sitemap.xml` in the hosted profile (#244, ADR 0037), and ported Explain code (#246, ADR 0038). No issue is open: every Phase 6 unit that is not paused has merged.
+This session ported Grifando's hosted privacy page with its "Delete my data" button (#241, ADR 0036), served `robots.txt` and `sitemap.xml` in the hosted profile (#244, ADR 0037), and ported Explain code (#246, ADR 0038). It then ran the `code-review` milestone of Phase 6, over the first-parent history after #212: it fixed the hosted Writing Desk, which could never submit (#249), and the names that used forbidden synonyms (#255), and opened #251 to #254 for the rest, each labeled `ready-for-agent`.
 
 Merged work: `git log --first-parent --oneline main`. The rows that still wait for a target, one per line with their slice:
 
@@ -16,8 +16,12 @@ On 2026-11-20 there were 18, all paused: `hosted` 8 (the deploy-smoke rows of `d
 
 ## Next steps
 
-1. **The `code-review` milestone of Phase 6** (`AGENTS.md`, start of a session): review the Phase 6 changes, the first-parent history of `main` after #212 (the Phase 5f review), against the protocol's Phase 6 list (`docs/migration/MIGRATION_PROTOCOL.md`, Phases) and the hosted requirements HR-01 to HR-09. Open an issue for each finding and fix the ones a session can.
-2. **Phase 7** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), then its `code-review`. Its cutover waits for the owners.
+1. **Finish Phase 6**: the review found two items of its list never built.
+   - #252, Grifando's Focus Music player (Phase 6, item 1): only the link parsers of `apps/web/src/features/music/` exist, and the hosted CSP's `frame-src` allows frames nothing shows.
+   - #253, the landing page and OG image generated at build time (Phase 6, item 3): port or drop under an ADR.
+2. **#251**: decide which code a keyless hosted call that runs both models answers, and make ADR 0035, decision 4, and `admittedWithKeys` agree.
+3. **#254**: the review's refactoring candidates; weigh them before Phase 7, one unit each.
+4. **Phase 7** (`docs/migration/MIGRATION_PROTOCOL.md`, Phases), then its `code-review`. Its cutover waits for the owners.
 
 ## Facts no issue records
 
@@ -37,6 +41,7 @@ On 2026-11-20 there were 18, all paused: `hosted` 8 (the deploy-smoke rows of `d
 - A fake boundary in a route test must record when its Effect runs, inside `Effect.sync`, not when it is called: `app.ts` builds a boundary's Effect before the limit decides whether it runs (`rate-limit-routes.test.ts`).
 - A hosted production server needs `SESSION_SECRET`, `IP_HASH_SALT`, `CLIENT_IP_HEADER` and `SITE_URL` (`AGENTS.md`, Code). The hosted profile forks the idle cleanup at 03:17 UTC daily (`IdleCleanup`).
 - The hosted Docker smoke is paused, so #215 and #220 checked the hosted wiring by hand: start `postgres:17-alpine` on a loopback port, run `pnpm build`, then in `apps/server` run `node dist/index.mjs` with `DEPLOY_PROFILE=hosted`, `NODE_ENV=production`, `DATABASE_URL`, `MIGRATIONS_PATH=../../packages/db/src/migrations`, `WEB_DIST_PATH=../web/dist`, `SESSION_SECRET`, `IP_HASH_SALT` and a free `SERVER_PORT`, and drive it with `curl`. Stop it with `pgrep -f 'node dis[t]/index.mjs' | xargs -r kill`.
+- The Writing Desk's "Provider setup required" gate reads `GET /api/setup`'s `configured` in the local profile only (#249): the hosted server never holds a Judge key, so there `configured` is always false and gates nothing.
 - The SPA reads `GET /api/deploy-profile` once in `main.tsx` (`readDeployProfile`), before it builds its clients; a failed answer reads as `local` (ADR 0034). The router context carries `deployProfile`, and `createAppRouter` defaults to `local`, so a screen test of the hosted profile passes `deployProfile: "hosted"`. `KeyRequiredNotice` and `AcademyNav` read it from the root route's context.
 - In the hosted profile the HTTP Academy client sends its Trainer calls and the key test through a second Hono client whose fetch is `aiFetch` (`trainer` in `createHttpAcademyClient`), so no other call carries the key; the HTTP Evaluation client sends `POST /api/evaluations` the same way. `/settings` redirects to `/setup` in the local profile.
 - A hosted route that runs the Judge goes through `withJudgeKey` in `app.ts` (`admittedWithKeys` when it also runs the Trainer): it provides the request's OpenRouter key as `JudgeKey` (`apps/server/src/evaluation/evaluation-model.ts`), which the Judge's model is built on for that call, or answers 401 `AI_JUDGE_KEY_REQUIRED` before its rate limit (ADR 0035). A hosted route test that reaches the Judge sends an OpenRouter key.
