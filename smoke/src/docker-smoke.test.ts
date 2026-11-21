@@ -1,7 +1,6 @@
 // Gate G6 for the local profile: builds the image, starts it with Docker Compose as the invoking
 // user, and checks its boundary, its data directory and what it serves. Ported from PE
 // `scripts/docker-smoke.ts`.
-import { randomInt } from "node:crypto";
 import { existsSync, statSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -16,21 +15,18 @@ import {
   leakedSentinels,
   plant,
   probeNonLoopback,
+  randomLetters,
+  removeProject,
   REPOSITORY_ROOT,
   reserveLoopbackPort,
   runCommand,
   waitForHealth,
 } from "./docker";
-import { createScratch, removeScratch } from "./scratch";
+import { createScratch } from "./scratch";
 
 const COMPOSE_FILE = path.join(REPOSITORY_ROOT, "docker-compose.yml");
 const HOST_USER_ID = process.getuid?.() ?? 1000;
 const HOST_GROUP_ID = process.getgid?.() ?? 1000;
-
-const randomLetters = (length: number) =>
-  Array.from({ length }, () => String.fromCodePoint(97 + randomInt(26))).join(
-    ""
-  );
 
 const secretSentinel = plant("secret", `sk-smoke-${randomLetters(24)}`);
 const sampleSentinel = plant("sample", `smokesample${randomLetters(20)}`);
@@ -39,6 +35,7 @@ const writingSample = `${sampleSentinel} Command fail.`;
 // The Evaluation the seed writes, as the server answers it: the fake Judge's one Finding, scored
 // and banded by Rubric Version 1, which new Evaluations record as provisional (ADR 0020, #87).
 const expectedEvaluation = (id: string, sample: string) => {
+  expect(sample.indexOf("fail")).not.toBe(-1);
   const byteStart = new TextEncoder().encode(
     sample.slice(0, sample.indexOf("fail"))
   ).length;
@@ -71,6 +68,7 @@ const expectedEvaluation = (id: string, sample: string) => {
 
 const readJson = async (url: string): Promise<unknown> => {
   const response = await fetchResponse(url);
+  expect(response.status).toBe(200);
   return response.json();
 };
 
@@ -80,7 +78,8 @@ interface ComposeConfig {
   };
 }
 
-// The state of one run, built before the first check. The checks run in order and share it.
+// The state of one run. The checks run in order: the setup and the first checks build it, and the
+// later checks read it.
 let scratch = "";
 let dataDirectory = "";
 let hostPort = 0;
@@ -142,21 +141,7 @@ beforeAll(async () => {
   compose = composeOf({ envFile, files: [COMPOSE_FILE, runtime], name });
 });
 
-afterAll(async () => {
-  try {
-    await compose?.([
-      "down",
-      "--volumes",
-      "--remove-orphans",
-      "--rmi",
-      "local",
-    ]);
-  } finally {
-    if (scratch !== "") {
-      await removeScratch(scratch);
-    }
-  }
-});
+afterAll(() => removeProject(compose, scratch));
 
 describe("Docker smoke", () => {
   it("validates the release Compose boundary", async () => {
@@ -308,6 +293,9 @@ describe("Docker smoke", () => {
       assets.map((asset) => ({ asset, leaked: [], status: 200 }))
     );
 
+    // PE's expected status changed with ADR 0017 (the data location), ADR 0020 decision 5 (the
+    // provisional Rubric Version) and #273 (the local Trainer). Phase 4 built it, so its rows are
+    // superseded under ADR 0021 and the check stays here, pinned.
     const setup = await readJson(`${baseUrl}/api/setup`);
     expect(setup).toStrictEqual({
       configured: true,

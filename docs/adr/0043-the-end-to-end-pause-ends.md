@@ -7,7 +7,7 @@
 
 ## Context
 
-- On 2026-11-20 the owners paused the end-to-end tests: no new Playwright journey, Vite dev-proxy
+- On 2026-11-15 the owners paused the end-to-end tests: no new Playwright journey, Vite dev-proxy
   case or Docker smoke check, and their rows stayed open. On 2026-11-21 eighteen rows were open
   for that reason alone, and parity sign-off (Phase 7, item 1) needs every row terminal.
 - On 2026-11-21 Jhefferson ran the product, ended the pause, and wrote that the interface will
@@ -17,14 +17,16 @@
 
 ## Decision
 
-1. The pause ends. An end-to-end check of the server, its container or its data ports as any row
-   does.
+1. The pause ends. An end-to-end check of the server, its container or its data is ported like
+   any other row.
 2. The ten rows that check the interface drop:
    - `pe:test:e2e/mvp.spec.ts::complete retained-evidence journey`, a browser journey through the
      Writing Desk, History and Progress pages. Route tests pin the server calls it crosses.
    - The four `pe:test:apps/server/src/test/dev-proxy.test.ts::real development proxy same-origin
-     access` rows, which run the web app's development server in front of the server. The
-     guard's refusals they repeat are pinned in process (#47).
+     access` rows, which run the web app's development server in front of the server: that
+     server is part of the interface. The guard's refusals they repeat are pinned in process
+     (#47), and G11 keeps the proxy's `changeOrigin: false` in `apps/web/vite.config.ts`, which
+     the same-origin case pinned.
    - `grifando:deploy-smoke:02` to `06`, the checks Grifando made by hand in a browser after a
      deploy: the key notice on `/write`, the key test on `/settings`, a written text reaching its
      corrected page, the exercises, and "Delete my data". Route and screen tests pin the calls

@@ -53,7 +53,7 @@ shell environment when a session starts, so start sessions in the repository.
 | `pnpm test:postgres` | The `Database` service against a Postgres 17 server; `DEPLOY_PROFILE=hosted` and `DATABASE_URL` name it. |
 | `pnpm test:e2e` | Build the server and the web app, then run the Playwright journeys against the one process that serves both. |
 | `pnpm build` | Server bundle and SPA build. |
-| `pnpm docker:smoke` | Gate G6: build the image of the local profile, start it with Compose as the invoking user, and check its boundary, its data directory and what it serves. Needs Docker. |
+| `pnpm docker:smoke` | Gate G6: build the image and start it with Compose twice: in the local profile as the invoking user, to check its boundary, its data directory and what it serves, and in the hosted profile beside Postgres, to check its session cookie, CSP header, robots and sitemap. Needs Docker. |
 | `pnpm docker:up` / `pnpm docker:down` | Start the local profile in Docker on `127.0.0.1:3001`, with its data in `./.data`, or remove the container. |
 | `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, Vitest, Vite and Playwright setting, the hooks, and each workflow line by line are at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
 | `pnpm check:url-text` | Gate G7 (ADR 0008): no server route reads user text from a URL. A query string carries only the period, the insight and the Error Category; a path only the Evaluation ID and the Academy's record IDs (ADR 0023). |
@@ -75,7 +75,7 @@ Each script's header comment gives its usage.
 | `packages/ui` | Shared UI components. |
 | `packages/config` | Shared TypeScript configuration, including the Effect diagnostic severities. |
 | `e2e` | Playwright journeys against the built process. |
-| `smoke` | The Docker smoke (G6): a Vitest suite against the image of the local profile. |
+| `smoke` | The Docker smoke (G6): Vitest suites against the image in the local and the hosted profile. |
 | `docs/migration`, `migration/` | Baselines, inventory, ledger, characterization tests. The inventory, the ledger and the reports are large generated JSON: query a row with a script, never open a whole file. |
 
 ## Work units
@@ -221,7 +221,7 @@ standing instructions:
 - Open issues for the problems you find, and solve the ones you can.
 - Speed over ceremony (2026-11-20): CI is the full gate, `code-review` runs once per milestone,
   and mutations run where tests look thin.
-- End-to-end checks of the server, its container and its data port as any row does
+- End-to-end checks of the server, its container and its data are ported like any other row
   (2026-11-21, ADR 0043). The interface will be redesigned: rows that check it drop, and the
   existing Playwright journeys keep running until their pages change.
 - At the end of a session, rewrite `SESSION_HANDOFF.md` through a pull request. A session that resumes from a compacted conversation ends early: it finishes the pull request already in motion, writes the handoff, and stops, so the next session starts with a fresh context.

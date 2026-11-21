@@ -40,7 +40,8 @@
 
 - A hosted production server sets `SITE_URL`, beside the settings of ADR 0032 and ADR 0033. Left
   unset, both files name `http://localhost:3000`, as Grifando's did without its variables.
-- The hosted Docker smoke's robots and sitemap checks (G6) stay paused with the end-to-end tests.
+- The hosted Docker smoke checks robots and sitemap (G6), since ADR 0043 ended the end-to-end
+  pause.
 - A new public page joins the sitemap only through `PUBLIC_PATHS` in
   `apps/server/src/site-files.ts`.
 

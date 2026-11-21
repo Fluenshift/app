@@ -166,7 +166,7 @@ Exit: every item in the definition of done holds.
 | G2 Lint and format | Type-aware oxlint with the Effect preset, oxlint-tsgolint, `oxfmt --check`. Bans focused and skipped tests, Node built-ins in `packages/core` and `packages/contract`, `zod` imports, and `process.env` outside `packages/env`; from 5f, Academy imports of Evaluation write services and of the writable Evaluation tables, which the Academy reads through read-only views. |
 | G3 Tests | Vitest with `@effect/vitest`, unit and integration, on PGlite databases; CI also runs the `Database` service against a Postgres 17 service container. |
 | G4 Build | Server bundle and SPA build; the single process starts and serves `/api/health` and the SPA. |
-| G5 E2E | Playwright journeys against the built process, from `e2e/mvp.spec.ts` and the Phase 0 characterizations. |
+| G5 E2E | Playwright journeys against the built process, from the Phase 0 characterizations; PE's `e2e/mvp.spec.ts` dropped with the rows that check the interface (ADR 0043). |
 | G6 Docker smoke | Local: loopback-only publication, refusal of non-loopback connections, hostile Host and Origin headers, migrations, data surviving container replacement, image secret scan. Hosted (Phase 6): session cookie, CSP header, robots and sitemap. |
 | G7 Privacy and supply chain | gitleaks over the whole history; `pnpm audit --prod --audit-level high`; from Phase 6, the no-key-in-logs test; `scripts/check-url-text.ts`, which keeps user text out of URLs (ADR 0008); no remote telemetry (ADR 0013). |
 | G8 Red-green proof | The pull request's first commit fails the unit's target tests with assertion errors; the head passes them. |
