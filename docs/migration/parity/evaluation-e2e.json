@@ -216,22 +216,18 @@
       "source": "scripts/docker-smoke.ts",
       "class": null,
       "slice": "evaluation-e2e",
-      "disposition": "port-changed",
-      "decision": "adr:0017",
-      "targets": [
-        "smoke/src/docker-smoke.test.ts::Docker smoke > scans browser assets and logs"
-      ]
+      "disposition": "superseded",
+      "decision": "adr:0021",
+      "targets": []
     },
     {
       "id": "pe:docker-smoke:L532",
       "source": "scripts/docker-smoke.ts",
       "class": null,
       "slice": "evaluation-e2e",
-      "disposition": "port",
-      "decision": null,
-      "targets": [
-        "smoke/src/docker-smoke.test.ts::Docker smoke > scans browser assets and logs"
-      ]
+      "disposition": "superseded",
+      "decision": "adr:0021",
+      "targets": []
     },
     {
       "id": "pe:docker-smoke:L536",

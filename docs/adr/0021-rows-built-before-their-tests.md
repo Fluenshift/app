@@ -35,6 +35,9 @@ for good.
   under the row's title (`trainer-client.test.ts`, "reads a provider that does not answer in 15
   seconds as busy, and stops waiting"). `accessErrorForStatus > classifies provider statuses`
   stayed a target, because its test failed first (#134).
+- The sign-off review (#328) applies it to `pe:docker-smoke:L525` and `pe:docker-smoke:L532`:
+  the setup checks stay in the local Docker smoke's "scans browser assets and logs", and the
+  container has answered `/api/setup` since Phase 4.
 - A superseded row has no target, so the parity check counts it as terminal, not verified.
 
 ## Alternatives

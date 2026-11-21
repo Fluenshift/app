@@ -134,7 +134,7 @@ pnpm parity   # run every suite with JSON reports, then check
 ```
 
 Every suite means each workspace whose `test` or `smoke` script runs Vitest. The `smoke` workspace
-is the Docker smoke (gate G6), which builds and starts the image of the local profile, so
+is the Docker smoke (gate G6), which builds and starts the image in the local and the hosted profile, so
 `pnpm parity` needs Docker.
 
 It fails when an inventory row is missing from the ledger or present twice, when a row is

@@ -19,7 +19,7 @@ pnpm test:postgres               # the Database service against Postgres 17: set
 pnpm db:generate                 # write the next migration from the Drizzle schema
 pnpm dev                         # Vite for the web app; it proxies /api to a server started on port 3000
 pnpm build                       # server bundle and SPA build
-pnpm docker:smoke                # build and check the image of the local profile (gate G6)
+pnpm docker:smoke                # build and check the image in the local and hosted profiles (gate G6)
 ```
 
 ## Local profile in Docker
