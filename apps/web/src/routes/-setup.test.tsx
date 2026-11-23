@@ -137,4 +137,25 @@ describe("Setup & privacy", () => {
       "The Academy sends practice writing to Anthropic, and once you have practiced, every Evaluation too."
     );
   });
+
+  test("says the Trainer shares the Judge's OpenRouter key", async () => {
+    const router = createAppRouter({
+      evaluationClient: createInMemoryEvaluationClient({
+        setupStatus: {
+          ...SETUP,
+          trainer: {
+            configured: true,
+            model: "google/gemini-3.5-flash",
+            provider: "OpenRouter",
+          },
+        },
+      }),
+      history: createMemoryHistory({ initialEntries: ["/setup"] }),
+    });
+
+    render(<RouterProvider router={router} />);
+
+    const trainer = await screen.findByRole("region", { name: "Trainer" });
+    expect(trainer).toHaveTextContent("Shares the Judge's OpenRouter key");
+  });
 });

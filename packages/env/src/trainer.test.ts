@@ -8,6 +8,17 @@ const withEnv = (env: Record<string, string>) =>
     Layer.provide(ConfigProvider.layer(ConfigProvider.fromEnvRecord(env)))
   );
 
+const keyOf = (env: Record<string, string>) =>
+  Effect.gen(function* () {
+    const { localKey } = yield* TrainerConfig;
+    return localKey.pipe(
+      Option.map(({ apiKey, provider }) => ({
+        apiKey: Redacted.value(apiKey),
+        provider,
+      }))
+    );
+  }).pipe(Effect.provide(withEnv(env)));
+
 describe("TrainerConfig", () => {
   // OpenRouter's pins are Gemini's models under their OpenRouter ids (docs/adr/0035).
   it.effect("pins a primary and a fallback model for each provider", () =>
@@ -96,5 +107,47 @@ describe("TrainerConfig", () => {
         withEnv({ AI_PROVIDER: "gemini", ANTHROPIC_API_KEY: "k1" })
       )
     )
+  );
+
+  it.effect("selects OpenRouter when AI_PROVIDER names it", () =>
+    Effect.gen(function* () {
+      assert.deepStrictEqual(
+        yield* keyOf({ AI_PROVIDER: "openrouter", OPENROUTER_API_KEY: "k" }),
+        Option.some({ apiKey: "k", provider: "openrouter" })
+      );
+    })
+  );
+
+  it.effect("falls back to OpenRouter when it is the only key", () =>
+    Effect.gen(function* () {
+      assert.deepStrictEqual(
+        yield* keyOf({ OPENROUTER_API_KEY: "k" }),
+        Option.some({ apiKey: "k", provider: "openrouter" })
+      );
+    })
+  );
+
+  it.effect(
+    "keeps Anthropic when its key is set and AI_PROVIDER is empty",
+    () =>
+      Effect.gen(function* () {
+        assert.deepStrictEqual(
+          yield* keyOf({ ANTHROPIC_API_KEY: "a", OPENROUTER_API_KEY: "k" }),
+          Option.some({ apiKey: "a", provider: "anthropic" })
+        );
+      })
+  );
+
+  it.effect("keeps Gemini when AI_PROVIDER names it", () =>
+    Effect.gen(function* () {
+      assert.deepStrictEqual(
+        yield* keyOf({
+          AI_PROVIDER: "gemini",
+          GEMINI_API_KEY: "g",
+          OPENROUTER_API_KEY: "k",
+        }),
+        Option.some({ apiKey: "g", provider: "gemini" })
+      );
+    })
   );
 });
