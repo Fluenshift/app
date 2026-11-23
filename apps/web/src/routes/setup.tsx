@@ -57,6 +57,13 @@ const SetupPage = () => {
                   then restart.
                 </p>
               )}
+              {setup.trainer.configured &&
+                setup.trainer.provider === "OpenRouter" &&
+                setup.provider === "OpenRouter" && (
+                  <p className="text-muted-foreground mt-2 text-xs leading-5">
+                    Shares the Judge&apos;s OpenRouter key.
+                  </p>
+                )}
             </section>
           )}
         </div>
