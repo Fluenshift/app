@@ -120,3 +120,36 @@ browser extensions; reminders; vocabulary review, whose schema exists but whose 
 Brought into scope by the merge: the hosted Deploy Profile with anonymous sessions
 (ADR 0003), several Trainer providers and visitors' own keys (ADR 0012), and the Academy's
 simple Streak (Grifando §6.1) and searchable Mistake Notebook (ADR 0020).
+
+## Planned
+
+Requirements of the specs in [`docs/specs/`](../specs/), accepted as the plan and not yet built.
+A row moves into Functional when the unit that builds it lands with its tests. Text Kind (TK)
+rows are in [`2026-11-23-text-kinds.md`](../specs/2026-11-23-text-kinds.md), Progress chart (PC)
+rows in [`2026-11-23-progress-charts.md`](../specs/2026-11-23-progress-charts.md) and one-key
+(OK) rows in [`2026-11-23-one-key-local.md`](../specs/2026-11-23-one-key-local.md).
+
+| ID | Requirement | Profiles |
+| --- | --- | --- |
+| OK-01 | `AI_PROVIDER=openrouter` selects OpenRouter for the Trainer, with `OPENROUTER_API_KEY` and the Trainer's existing OpenRouter model pins (`OPENROUTER_MODEL`, `OPENROUTER_FALLBACK_MODEL`). | local |
+| OK-02 | With `AI_PROVIDER` empty, no Anthropic or Gemini key and an OpenRouter key present, the Trainer uses OpenRouter. | local |
+| OK-03 | An existing Anthropic or Gemini setup behaves exactly as today. | local |
+| OK-04 | The Setup page names the Trainer's provider and says when it shares the Judge's key. | local |
+| OK-05 | No key appears in any log line or response (as the key-in-logs tests of `apps/server/src/practice/practice-writing-routes.test.ts` check today). | local |
+| PC-01 | Progress returns a time series per period: one bucket per calendar day for 7 and 30 days, per ISO week (Monday start) for all history, each with evaluation count, English word count, Finding count and Finding Rate. Days and weeks are in the time zone the browser sends (IANA name); without one, UTC. | both |
+| PC-02 | Buckets with no Evaluations are returned empty, not as zero Finding Rate. | both |
+| PC-03 | The series also carries Finding count per Error Category per bucket. | both |
+| PC-04 | The series honors the Text Kind filter (TK-07) and stays within one Rubric Version. | both |
+| PC-05 | Selecting a bucket opens the evidence of its Evaluations through the existing evidence route. | both |
+| PC-06 | Each chart has a text equivalent (a table or a summary sentence) for screen readers, and colors are not the only way to tell series apart. | both |
+| PC-07 | A trend with fewer than 3 non-empty buckets shows the points and says the sample is too small to read a trend. | both |
+| PC-08 | Comparison by Text Kind shows Finding Rate per kind for the period, with each kind's evaluation count. | both |
+| TK-01 | A Writing Sample request may carry one Text Kind; a missing one is stored as `other`. | both |
+| TK-02 | An unknown Text Kind is rejected with 400 and stores nothing. | both |
+| TK-03 | Every Evaluation retains its Text Kind; it is immutable like the rest of the record (FR-13). | both |
+| TK-04 | Evaluations stored before this change read as `other`. | both |
+| TK-05 | The Writing Desk offers the Text Kind next to the text box, defaulting to the Learner's last choice in this browser. | both |
+| TK-06 | History rows and the Evaluation page show the Text Kind's label. | both |
+| TK-07 | Progress and its evidence accept an optional Text Kind filter; without it they behave as today. | both |
+| TK-08 | Until a Rubric Version declares kind-aware judging, the Text Kind is not sent to the Judge. | both |
+| TK-09 | Practice Evaluations (Academy) are stored as `other`; the Academy offers no selector. | both |
