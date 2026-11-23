@@ -36,13 +36,15 @@ const nonEmpty = (key: Option.Option<Redacted.Redacted<string>>) =>
 
 const providerOf = (
   aiProvider: string,
-  anthropicValue: Option.Option<string>,
-  openrouterValue: Option.Option<string>
+  keys: Readonly<Record<TrainerProvider, Option.Option<string>>>
 ): TrainerProvider => {
   if (aiProvider === "gemini" || aiProvider === "openrouter") {
     return aiProvider;
   }
-  return Option.isNone(anthropicValue) && Option.isSome(openrouterValue)
+  // OK-02: OpenRouter only when it is the sole key.
+  return Option.isNone(keys.anthropic) &&
+    Option.isNone(keys.gemini) &&
+    Option.isSome(keys.openrouter)
     ? "openrouter"
     : "anthropic";
 };
@@ -84,19 +86,14 @@ export class TrainerConfig extends Context.Service<
         Config.option(Config.Redacted("OPENROUTER_API_KEY")),
       ]);
       // As Grifando's development keys did: Gemini or OpenRouter when AI_PROVIDER names it.
-      // With it empty, Anthropic when its key is set, else OpenRouter when that key is set
-      // (one key runs the Judge and the Trainer), else Anthropic with no key.
-      const [anthropicValue, geminiValue, openrouterValue] = [
-        nonEmpty(anthropicKey),
-        nonEmpty(geminiKey),
-        nonEmpty(openrouterKey),
-      ];
-      const provider = providerOf(aiProvider, anthropicValue, openrouterValue);
-      const localKey = {
-        anthropic: anthropicValue,
-        gemini: geminiValue,
-        openrouter: openrouterValue,
-      }[provider].pipe(
+      // With it empty, OpenRouter only when it is the sole key, else Anthropic (OK-02).
+      const keys = {
+        anthropic: nonEmpty(anthropicKey),
+        gemini: nonEmpty(geminiKey),
+        openrouter: nonEmpty(openrouterKey),
+      };
+      const provider = providerOf(aiProvider, keys);
+      const localKey = keys[provider].pipe(
         Option.map((key): TrainerKey => ({
           apiKey: Redacted.make(key),
           provider,

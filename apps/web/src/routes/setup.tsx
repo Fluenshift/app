@@ -51,7 +51,8 @@ const SetupPage = () => {
                 </p>
               ) : (
                 <p className="text-muted-foreground mt-4 text-xs leading-5">
-                  Set <code>ANTHROPIC_API_KEY</code>, or{" "}
+                  Set <code>ANTHROPIC_API_KEY</code>,{" "}
+                  <code>OPENROUTER_API_KEY</code>, or{" "}
                   <code>GEMINI_API_KEY</code> with{" "}
                   <code>AI_PROVIDER=gemini</code>, in the server environment,
                   then restart.
