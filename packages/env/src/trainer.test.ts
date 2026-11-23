@@ -150,4 +150,16 @@ describe("TrainerConfig", () => {
       );
     })
   );
+
+  it.effect(
+    "keeps Anthropic's slot with no Anthropic key when Gemini's key is set",
+    () =>
+      Effect.gen(function* () {
+        assert.isTrue(
+          Option.isNone(
+            yield* keyOf({ GEMINI_API_KEY: "g", OPENROUTER_API_KEY: "k" })
+          )
+        );
+      })
+  );
 });
