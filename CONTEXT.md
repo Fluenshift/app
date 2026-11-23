@@ -39,6 +39,11 @@ its English Passages are judged. Identical text submitted twice produces two Wri
 because each submission is a new point in history.
 _Not: prompt submission, request, query, message, writing session._
 
+**Text Kind**: what a work Writing Sample is, as the Learner declared it: a prompt to an AI, a
+GitHub issue, a pull request description, or other. Practice Writing Samples are always other.
+Planned in [`docs/specs/2026-11-23-text-kinds.md`](./docs/specs/2026-11-23-text-kinds.md).
+_Not: type, category, origin._
+
 **English Passage**: a meaning-bearing span of natural-language English inside a Writing
 Sample. Non-English text and Protected Technical Content are excluded, even when the latter
 contains English words.
