@@ -1,6 +1,7 @@
 # 0036. The hosted privacy page states the hosted profile's facts; each profile links its own pages
 
 - Status: Accepted on 2026-11-20 by the session (ADR 0020), with the Phase 6 privacy unit (#240).
+  ADR 0045 supersedes the product's name in decision 2: the page says Grifando.
 - Phase 6, requirements HR-07 and HR-08. No ledger row changes its disposition: Grifando's
   `/privacy` page and `DeleteMyDataButton` have no test at the baseline and port from source
   (ADR 0025, decision 5).

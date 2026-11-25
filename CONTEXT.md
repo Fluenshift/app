@@ -1,16 +1,17 @@
-# Fluenshift: domain language
+# Grifando: domain language
 
-Fluenshift evaluates the English of a Learner's real writing and turns the mistakes it finds
+Grifando evaluates the English of a Learner's real writing and turns the mistakes it finds
 into practice. It merges two products: the Evaluation axis comes from Prompt Evolution, the
-Academy from Grifando. This glossary is the vocabulary for code, tests and UI, independent of
-any interface. Evaluation policy is `docs/product/RUBRIC.md`; the decisions at the seams
-between the two products are the ADRs in `docs/adr/`.
+Academy from old Grifando, whose name it took (ADR 0045). This glossary is the vocabulary for
+code, tests and UI, independent of any interface. Evaluation policy is
+`docs/product/RUBRIC.md`; the decisions at the seams between the two products are the ADRs in
+`docs/adr/`.
 
 Each entry says what a term means and, in italics, the synonyms it forbids.
 
 ## Everywhere
 
-**Learner**: the person using Fluenshift on their own writing. Every record of writing and
+**Learner**: the person using Grifando on their own writing. Every record of writing and
 practice belongs to one Learner. The `local` Deploy Profile has one implicit Learner; in the `hosted` profile each
 signed session names one (ADR 0003).
 _Not: user, account, customer._
@@ -113,7 +114,7 @@ _Not: system prompt version, evaluator version._
 
 ## Academy
 
-**Academy**: the practice side of Fluenshift. It builds Mistake Patterns from a Learner's
+**Academy**: the practice side of Grifando. It builds Mistake Patterns from a Learner's
 Findings and offers Exercises to master them. Practice is offered, never required: an
 Evaluation works alone (ADR 0016). Inside the Academy the Learner writes first, and every
 Exercise comes from their own mistakes.
@@ -140,8 +141,8 @@ to hyphens, and its length capped.
 _Not: tag, label, cluster._
 
 **Mistake Category**: the Academy's finer classification of a Finding, one of the eleven
-Grifando categories that ADR 0005 maps onto seven Error Categories, assigned by the Enrichment.
-Grifando's literal-translation category becomes the L1 Transfer flag. Its unnatural-phrasing
+old Grifando categories that ADR 0005 maps onto seven Error Categories, assigned by the Enrichment.
+Old Grifando's literal-translation category becomes the L1 Transfer flag. Its unnatural-phrasing
 category names the Mistake Patterns that Naturalness Notes grow, and maps to no Error Category
 (ADR 0028). The Judge never sees it.
 _Not: Error Category, error type._
@@ -152,7 +153,7 @@ Mistake Pattern's Occurrences but is never a failed recall (ADR 0020, ADR 0028).
 _Not: Finding, Suggestion, unnatural-phrasing error._
 
 **L1 Transfer**: the flag on an Occurrence, of a Finding or of a Naturalness Note, that carries
-a pattern over from the Learner's first language. Grifando's literal-translation category becomes this flag on the
+a pattern over from the Learner's first language. Old Grifando's literal-translation category becomes this flag on the
 category of the underlying error (ADR 0005).
 _Not: literal translation category._
 
@@ -203,13 +204,15 @@ _Not: flashcard, word list entry._
 
 ## Collisions resolved
 
-| Source term | Fluenshift term |
+| Source term | Grifando term |
 | --- | --- |
-| Grifando's user (`userId`) | Learner |
-| Grifando's writing session and writing analysis | a practice-origin Writing Sample and its Evaluation (ADR 0004) |
+| Fluenshift, the product's name until ADR 0045 | Grifando; Fluenshift names only the GitHub organization |
+| Grifando, for the source product, in text written before ADR 0045 | old Grifando |
+| Old Grifando's user (`userId`) | Learner |
+| Old Grifando's writing session and writing analysis | a practice-origin Writing Sample and its Evaluation (ADR 0004) |
 | "mistake" for one error in one text | Finding on the Evaluation axis; Occurrence in the Academy |
-| Grifando's mistake occurrence | Occurrence |
-| Grifando's 13 categories | Mistake Category for eleven of them, mapped onto seven Error Categories; the L1 Transfer flag; the Naturalness Note (ADR 0005) |
-| Grifando's error and unnatural severities | an Occurrence of a Finding, and a Naturalness Note |
-| Grifando's model-supplied scores | none: the Overall Score is the only score (ADR 0002) |
-| "prompt" in Grifando's sense | Practice Prompt |
+| Old Grifando's mistake occurrence | Occurrence |
+| Old Grifando's 13 categories | Mistake Category for eleven of them, mapped onto seven Error Categories; the L1 Transfer flag; the Naturalness Note (ADR 0005) |
+| Old Grifando's error and unnatural severities | an Occurrence of a Finding, and a Naturalness Note |
+| Old Grifando's model-supplied scores | none: the Overall Score is the only score (ADR 0002) |
+| "prompt" in old Grifando's sense | Practice Prompt |

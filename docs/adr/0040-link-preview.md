@@ -2,7 +2,8 @@
 
 - Status: Accepted on 2026-11-21 by the session (ADR 0020), with the Phase 6 landing page and
   Open Graph image unit (#253). Decision 4 amended the same day after the pre-cutover review
-  (#265), to add the tags Next.js wrote for the Twitter card.
+  (#265), to add the tags Next.js wrote for the Twitter card. ADR 0045 supersedes the product's
+  name in decisions 2 and 3: the shell and the card say Grifando.
 - Phase 6, item 3 (`docs/migration/MIGRATION_PROTOCOL.md`: "landing page and OG image generated
   at build time"), and ADR 0000 ("landing page and OG image static at build"). Grifando's
   metadata in `src/app/layout.tsx` and its card in `src/app/opengraph-image.tsx` (74dbb9f) have
