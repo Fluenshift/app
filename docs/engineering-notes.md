@@ -84,8 +84,8 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 
 ## Jhefferson's machine
 
-- `$F` is `/home/jheff/projects/personal/fluenshift`; `$F/app` is the only checkout of this repository.
-- Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-app/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
+- `$F` is `/home/jheff/projects/personal/fluenshift`; `$F/grifando` is the only checkout of this repository, and `$F/old-grifando` a read-only clone of old Grifando.
+- Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-grifando/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
 - The interactive `grep` is ugrep, so one-liners call `/usr/bin/grep`.
 - `git rebase` signs by default and gpg times out: run `git -c commit.gpgsign=false rebase origin/main`, and abort a rebase that already stopped on a signature before rerunning it.
 - mise holds Bun 1.4.0, PE's pinned Bun, at `~/.local/share/mise/installs/bun/1.4.0/bin`; the default `bun` is newer. Rebuilding the PE import fixture needs it, with PE cloned at its pin (5e831bb).

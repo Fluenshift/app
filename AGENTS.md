@@ -1,10 +1,12 @@
 # Agent notes
 
-This repository is Fluenshift: one product, on one stack, from two. Prompt Evolution (PE)
-evaluates the English of real text, and Grifando turns a learner's mistakes into practice. The
-merge is done (ADR 0044). Next, the owners redesign the interface and decide which features
-stay, change or go (#320). No human reads the code: the gates are the reviewer, so weigh every
-choice by how much it turns a mistake into a failing check.
+This repository is Grifando: one product, on one stack, from two. Prompt Evolution (PE)
+evaluated the English of real text, and old Grifando, whose name the product took (ADR 0045),
+turned a learner's mistakes into practice. Text older than ADR 0045 says Fluenshift for the
+product and Grifando for old Grifando. The merge is done (ADR 0044). Next, the owners redesign
+the interface and decide which features stay, change or go (#320). No human reads the code: the
+gates are the reviewer, so weigh every choice by how much it turns a mistake into a failing
+check.
 
 Precedence: an ADR, then this file, then every other document. A document that disagrees with
 the repository or with GitHub is stale: trust what you can check, and fix the document.
@@ -14,7 +16,7 @@ keep going.
 
 ## Start of a session
 
-1. Run `gh issue list --repo Fluenshift/app --state open`. The issues are the work, and each
+1. Run `gh issue list --repo Fluenshift/grifando --state open`. The issues are the work, and each
    one's comments hold its state.
 2. Triage every open `needs-triage` issue first, oldest first. Owner feedback arrives that way,
    or in a session's chat, which the session files as such an issue first. Edit it into a unit
@@ -22,7 +24,7 @@ keep going.
    `ready-for-agent`; or close it with the reason.
 3. Take the oldest open `ready-for-agent` issue as a work unit. An issue assigned to an owner,
    such as #320, is theirs: leave it.
-4. List the open CodeQL alerts (`gh api 'repos/Fluenshift/app/code-scanning/alerts?state=open'`).
+4. List the open CodeQL alerts (`gh api 'repos/Fluenshift/grifando/code-scanning/alerts?state=open'`).
    An alert on `main` blocks nothing, so it can sit unseen: open an issue for each.
 
 Read the other documents when their subject comes up:
@@ -110,7 +112,7 @@ A work unit is a GitHub Issue. State lives on GitHub, never in files: an open is
 `ready-for-agent` is free, its assignee holds it, a linked pull request is its review, and a
 closed issue is done.
 
-Checkouts sit under one parent directory, `$F`; `$F/app` is the clone, where each unit is a
+Checkouts sit under one parent directory, `$F`; `$F/grifando` is the clone, where each unit is a
 branch. A second session that runs at the same time needs its own checkout: start it with
 `claude --worktree <name>`, and Claude Code creates one under `.claude/worktrees/` and removes it
 when the session ends.
@@ -136,8 +138,8 @@ when the session ends.
    to `main`:
 
    ```sh
-   gh pr create --repo Fluenshift/app --title "..." --body-file <body.md>
-   gh pr checks <pr> --repo Fluenshift/app --watch --fail-fast && gh pr merge <pr> --repo Fluenshift/app --merge
+   gh pr create --repo Fluenshift/grifando --title "..." --body-file <body.md>
+   gh pr checks <pr> --repo Fluenshift/grifando --watch --fail-fast && gh pr merge <pr> --repo Fluenshift/grifando --merge
    git switch main && git pull --ff-only origin main && git branch -D wu/<issue>-<slug>
    ```
 
@@ -159,9 +161,9 @@ Traps that earlier units paid for:
   after it merges. Until a migration merges, delete its folder and regenerate it after a schema
   change; after, add a new one.
 - Retarget dependent pull requests to `main` before their base branch is deleted
-  (`gh api -X PATCH repos/Fluenshift/app/pulls/<pr> -f base=main`): GitHub closes them otherwise.
+  (`gh api -X PATCH repos/Fluenshift/grifando/pulls/<pr> -f base=main`): GitHub closes them otherwise.
 - `gh pr edit` fails on gh 2.46. Edit a body with
-  `gh api -X PATCH repos/Fluenshift/app/pulls/<pr> -F body=@<file>`.
+  `gh api -X PATCH repos/Fluenshift/grifando/pulls/<pr> -F body=@<file>`.
 - CodeQL rejects `randomBytes` with `%` (`js/biased-cryptographic-random`): use `randomInt`.
 - A comment that cites `migration/...` or `docs/migration/...` names a file that git history
   keeps: `git show 8a379e2:<path>` (ADR 0044).
@@ -189,7 +191,7 @@ Traps that earlier units paid for:
 - **Never weaken a gate to get green**: no lowered lint or Effect severity, no new suppression
   comment, no removed check. If a gate seems wrong, change it under an ADR that says why.
 - **Leave the irreversible to the owners.** Never change or archive the source repositories
-  (`Fluenshift/prompt-evolution`, `Fluenshift/grifando`), move production, change organization
+  (`Fluenshift/prompt-evolution`, `Fluenshift/old-grifando`), move production, change organization
   or ruleset settings, or spend money on paid models. ADR 0044 lists what waits for the owners;
   a new such step goes on the issue that needs it. Use only the token the session started with.
 

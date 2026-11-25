@@ -5,7 +5,7 @@ ADR, and it is in force once its pull request merges; its status line says when,
 request. Only an ADR can make a ledger row `port-changed`, `superseded` or `drop`, and such a row
 names it as `"decision": "adr:NNNN"`.
 
-Jhefferson accepted 0001 to 0018 on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) and 0019 on 2026-11-16.
+Jhefferson accepted 0001 to 0018 on 2026-11-14 ([comment](https://github.com/Fluenshift/grifando/issues/5#issuecomment-6880924859)) and 0019 on 2026-11-16.
 
 ADRs 0001 to 0018 cite `docs/migration/PRE_MIGRATION.md` and `docs/migration/HANDOFF.md`, which
 ADR 0019 deleted; commit `39fbb46` holds them.
