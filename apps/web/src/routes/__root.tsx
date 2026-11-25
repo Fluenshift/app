@@ -1,7 +1,7 @@
 // The application shell: the primary navigation above the current screen. Ported from PE
 // apps/web/src/routes/__root.tsx (5e831bb).
-import type { DeployProfile } from "@fluenshift/contract";
-import { Toaster } from "@fluenshift/ui/components/sonner";
+import type { DeployProfile } from "@grifando/contract";
+import { Toaster } from "@grifando/ui/components/sonner";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
 import Header from "../components/header";

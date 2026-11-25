@@ -6,8 +6,8 @@
 import { rm } from "node:fs/promises";
 import { inspect } from "node:util";
 
-import { LearnerId } from "@fluenshift/contract";
-import { TrainerConfig } from "@fluenshift/env";
+import { LearnerId } from "@grifando/contract";
+import { TrainerConfig } from "@grifando/env";
 import {
   ConfigProvider,
   Effect,

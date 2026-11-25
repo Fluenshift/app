@@ -9,7 +9,7 @@ import type {
   ProgressEvidenceRequest,
   VocabularyItemRequest,
   WritingSampleRequest,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import type { hc, InferRequestType } from "hono/client";
 import type { AppType } from "server/app";
 import { describe, expectTypeOf, it } from "vitest";

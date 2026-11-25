@@ -1,7 +1,7 @@
 // Ported from ensureUser in Grifando src/server/session/currentUser.ts (74dbb9f): the Learner's
 // row exists after any write, and its last activity, which the hosted profile's idle cleanup
 // reads (docs/adr/0011), moves at most once an hour.
-import { Database, learners } from "@fluenshift/db";
+import { Database, learners } from "@grifando/db";
 import { and, eq, lt } from "drizzle-orm";
 import { Effect } from "effect";
 

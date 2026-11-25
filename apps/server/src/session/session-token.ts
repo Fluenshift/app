@@ -1,5 +1,5 @@
 // Ported from Grifando src/server/session/sessionToken.ts (74dbb9f). The secret comes from
-// SessionConfig (@fluenshift/env), which replaces getSessionSecret.
+// SessionConfig (@grifando/env), which replaces getSessionSecret.
 import { createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 
 /** The cookie that carries a hosted Learner's signed session id. */

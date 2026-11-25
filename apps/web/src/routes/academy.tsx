@@ -1,7 +1,7 @@
 // The Academy dashboard. Ported from Grifando src/app/page.tsx (74dbb9f), at /academy: the
 // Writing Desk keeps / (docs/adr/0025). The dashboard comes from the server; the landing specimen
 // is fixed data.
-import { buttonVariants } from "@fluenshift/ui/components/button";
+import { buttonVariants } from "@grifando/ui/components/button";
 import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 
 import {

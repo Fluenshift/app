@@ -26,8 +26,8 @@ import {
   ProgressSummary,
   SetupStatus,
   VocabularyList,
-} from "@fluenshift/contract";
-import type { DeployProfile } from "@fluenshift/contract";
+} from "@grifando/contract";
+import type { DeployProfile } from "@grifando/contract";
 import { Option, Schema } from "effect";
 import { hc } from "hono/client";
 import type { AppType } from "server/app";

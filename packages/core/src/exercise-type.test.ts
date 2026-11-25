@@ -1,4 +1,4 @@
-import { ExerciseType, MasteryLevel } from "@fluenshift/contract";
+import { ExerciseType, MasteryLevel } from "@grifando/contract";
 import { describe, expect, it } from "vitest";
 
 import { assignExerciseType, assignExerciseTypeFor } from "./exercise-type";

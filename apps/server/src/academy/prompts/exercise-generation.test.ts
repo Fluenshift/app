@@ -1,4 +1,4 @@
-import { ExerciseType, MistakeCategory } from "@fluenshift/contract";
+import { ExerciseType, MistakeCategory } from "@grifando/contract";
 import { describe, expect, it } from "vitest";
 
 import { buildExerciseGenerationUserMessage } from "./exercise-generation";

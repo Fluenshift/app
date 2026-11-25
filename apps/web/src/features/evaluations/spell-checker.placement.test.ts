@@ -1,7 +1,7 @@
 import type {
   EvaluationFinding,
   EvaluationSuggestion,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import { describe, expect, test } from "vitest";
 
 import { buildTextSpans } from "./spell-checker";

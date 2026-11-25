@@ -1,8 +1,8 @@
 // A route's body schema must check exactly the body its context declares to the typed client: one
 // key more or one key less fails `tsc` (docs/adr/0042). The assertions are types: Vitest runs
 // nothing here.
-import { AttemptRequest } from "@fluenshift/contract";
-import type { AttemptRequest as Decoded } from "@fluenshift/contract";
+import { AttemptRequest } from "@grifando/contract";
+import type { AttemptRequest as Decoded } from "@grifando/contract";
 import { Schema } from "effect";
 import type { StandardSchema } from "effect";
 import { describe, expectTypeOf, it } from "vitest";

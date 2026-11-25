@@ -367,16 +367,16 @@ importers:
       '@electric-sql/pglite':
         specifier: 'catalog:'
         version: 0.5.16
-      '@fluenshift/contract':
+      '@grifando/contract':
         specifier: workspace:*
         version: link:../../packages/contract
-      '@fluenshift/core':
+      '@grifando/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@fluenshift/db':
+      '@grifando/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@fluenshift/env':
+      '@grifando/env':
         specifier: workspace:*
         version: link:../../packages/env
       '@hono/node-server':
@@ -407,7 +407,7 @@ importers:
       '@effect/vitest':
         specifier: 'catalog:'
         version: 4.1.2(effect@4.1.2)(vitest@5.1.0(@types/node@26.6.6)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))
-      '@fluenshift/config':
+      '@grifando/config':
         specifier: workspace:*
         version: link:../../packages/config
       '@types/node':
@@ -425,13 +425,13 @@ importers:
 
   apps/web:
     dependencies:
-      '@fluenshift/contract':
+      '@grifando/contract':
         specifier: workspace:*
         version: link:../../packages/contract
-      '@fluenshift/core':
+      '@grifando/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@fluenshift/ui':
+      '@grifando/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       '@fontsource/inter':
@@ -465,7 +465,7 @@ importers:
         specifier: 'catalog:'
         version: 2.0.8(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
     devDependencies:
-      '@fluenshift/config':
+      '@grifando/config':
         specifier: workspace:*
         version: link:../../packages/config
       '@tailwindcss/vite':
@@ -528,7 +528,7 @@ importers:
       '@effect/vitest':
         specifier: 'catalog:'
         version: 4.1.2(effect@4.1.2)(vitest@5.1.0(@types/node@26.6.6)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))
-      '@fluenshift/config':
+      '@grifando/config':
         specifier: workspace:*
         version: link:../config
       typescript:
@@ -540,7 +540,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@fluenshift/contract':
+      '@grifando/contract':
         specifier: workspace:*
         version: link:../contract
       effect:
@@ -553,7 +553,7 @@ importers:
       '@effect/vitest':
         specifier: 'catalog:'
         version: 4.1.2(effect@4.1.2)(vitest@5.1.0(@types/node@26.6.6)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))
-      '@fluenshift/config':
+      '@grifando/config':
         specifier: workspace:*
         version: link:../config
       typescript:
@@ -568,10 +568,10 @@ importers:
       '@electric-sql/pglite':
         specifier: 'catalog:'
         version: 0.5.16
-      '@fluenshift/contract':
+      '@grifando/contract':
         specifier: workspace:*
         version: link:../contract
-      '@fluenshift/env':
+      '@grifando/env':
         specifier: workspace:*
         version: link:../env
       drizzle-orm:
@@ -590,7 +590,7 @@ importers:
       '@effect/vitest':
         specifier: 'catalog:'
         version: 4.1.2(effect@4.1.2)(vitest@5.1.0(@types/node@26.6.6)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))
-      '@fluenshift/config':
+      '@grifando/config':
         specifier: workspace:*
         version: link:../config
       '@types/node':
@@ -621,7 +621,7 @@ importers:
       '@effect/vitest':
         specifier: 'catalog:'
         version: 4.1.2(effect@4.1.2)(vitest@5.1.0(@types/node@26.6.6)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))
-      '@fluenshift/config':
+      '@grifando/config':
         specifier: workspace:*
         version: link:../config
       '@types/node':
@@ -661,7 +661,7 @@ importers:
         specifier: 'catalog:'
         version: 3.7.0
     devDependencies:
-      '@fluenshift/config':
+      '@grifando/config':
         specifier: workspace:*
         version: link:../config
       '@types/react':
@@ -676,7 +676,7 @@ importers:
 
   smoke:
     devDependencies:
-      '@fluenshift/config':
+      '@grifando/config':
         specifier: workspace:*
         version: link:../packages/config
       '@types/node':

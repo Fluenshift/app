@@ -1,5 +1,5 @@
 // Ported from Grifando src/server/ai/prompts/answerExplanation.ts (74dbb9f).
-import type { GeneratedExercise } from "@fluenshift/contract";
+import type { GeneratedExercise } from "@grifando/contract";
 
 export interface ExplainAttemptInput {
   readonly exercise: GeneratedExercise;

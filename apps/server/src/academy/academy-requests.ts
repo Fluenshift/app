@@ -1,6 +1,6 @@
 // The Academy's work for one request: the Trainer on the Learner's key, and what the Academy's
 // routes ask of it.
-import type { ExerciseGenerationRequest } from "@fluenshift/contract";
+import type { ExerciseGenerationRequest } from "@grifando/contract";
 import { Effect } from "effect";
 
 import { explainAttempt, generatePracticeSet } from "./exercise-service";

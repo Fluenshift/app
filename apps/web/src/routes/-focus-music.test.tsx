@@ -3,7 +3,7 @@
 // copy, roles, storage keys and embed URLs. It sits in the header of both profiles, beside the
 // primary navigation, which the root route keeps mounted, so closing it or changing pages never stops the music (Grifando
 // #22), and its player is sandboxed, where Grifando's was not (docs/adr/0039).
-import type { DeployProfile } from "@fluenshift/contract";
+import type { DeployProfile } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

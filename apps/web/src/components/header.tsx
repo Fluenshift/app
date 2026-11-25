@@ -4,7 +4,7 @@
 // Grifando's Focus Music player ends the header in both profiles, as it ended Grifando's site
 // header: the root route keeps it mounted, so changing pages never stops the music
 // (docs/adr/0039).
-import type { DeployProfile } from "@fluenshift/contract";
+import type { DeployProfile } from "@grifando/contract";
 import { Link, useRouteContext } from "@tanstack/react-router";
 
 import { FocusMusic } from "../features/music/focus-music";

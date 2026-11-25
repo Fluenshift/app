@@ -3,8 +3,8 @@
 // src/server/domain/exercises/categoryAbility.repository.ts (74dbb9f).
 import { randomUUID } from "node:crypto";
 
-import type { MistakeCategory } from "@fluenshift/contract";
-import { categoryAbilities, Database } from "@fluenshift/db";
+import type { MistakeCategory } from "@grifando/contract";
+import { categoryAbilities, Database } from "@grifando/db";
 import { eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
 

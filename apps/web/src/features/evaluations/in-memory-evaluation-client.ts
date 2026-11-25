@@ -10,7 +10,7 @@ import type {
   ProgressPeriod,
   ProgressSegment,
   SetupStatus,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 
 import type { EvaluationClient } from "./evaluation-client";
 

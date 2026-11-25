@@ -1,13 +1,13 @@
 // One Exercise's question, by its public view. Ported from Grifando
 // src/components/exercises/ExerciseQuestion.tsx (74dbb9f).
-import type { PublicExercise } from "@fluenshift/contract";
-import { Input } from "@fluenshift/ui/components/input";
-import { Label } from "@fluenshift/ui/components/label";
+import type { PublicExercise } from "@grifando/contract";
+import { Input } from "@grifando/ui/components/input";
+import { Label } from "@grifando/ui/components/label";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "@fluenshift/ui/components/radio-group";
-import { Textarea } from "@fluenshift/ui/components/textarea";
+} from "@grifando/ui/components/radio-group";
+import { Textarea } from "@grifando/ui/components/textarea";
 
 export const AttemptForm = ({
   answer,

@@ -1,6 +1,6 @@
 // How the Academy names each Technical Category. Ported from Grifando
 // src/lib/technicalCategoryLabels.ts (74dbb9f).
-import type { TechnicalCategory } from "@fluenshift/contract";
+import type { TechnicalCategory } from "@grifando/contract";
 
 export const TECHNICAL_CATEGORY_LABELS: Readonly<
   Record<TechnicalCategory, string>

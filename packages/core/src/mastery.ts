@@ -1,5 +1,5 @@
 // Ported from Grifando src/server/domain/mistakes/mastery.ts; SPEC.md is Grifando's.
-import { ExerciseType, MasteryLevel } from "@fluenshift/contract";
+import { ExerciseType, MasteryLevel } from "@grifando/contract";
 
 import { isDueForReview } from "./recall";
 import type { RecallState } from "./recall";

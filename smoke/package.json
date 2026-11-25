@@ -8,7 +8,7 @@
     "smoke": "vitest run"
   },
   "devDependencies": {
-    "@fluenshift/config": "workspace:*",
+    "@grifando/config": "workspace:*",
     "@types/node": "catalog:",
     "server": "workspace:*",
     "typescript": "catalog:",

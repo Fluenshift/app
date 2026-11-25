@@ -6,8 +6,8 @@ import {
   isTrainerKeyProvider,
   TRAINER_KEY_HEADER,
   TRAINER_PROVIDER_HEADER,
-} from "@fluenshift/contract";
-import { ServerConfig, TrainerConfig } from "@fluenshift/env";
+} from "@grifando/contract";
+import { ServerConfig, TrainerConfig } from "@grifando/env";
 import { Effect, Option, Redacted } from "effect";
 
 import type { EdgeErrors, EdgeFailure } from "../../edge";

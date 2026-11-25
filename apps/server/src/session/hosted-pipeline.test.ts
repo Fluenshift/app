@@ -11,7 +11,7 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { ServerConfig, SessionConfig } from "@fluenshift/env";
+import { ServerConfig, SessionConfig } from "@grifando/env";
 import {
   ConfigProvider,
   Effect,

@@ -1,5 +1,5 @@
 {
-  "name": "@fluenshift/db",
+  "name": "@grifando/db",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@electric-sql/pglite": "catalog:",
-    "@fluenshift/contract": "workspace:*",
-    "@fluenshift/env": "workspace:*",
+    "@grifando/contract": "workspace:*",
+    "@grifando/env": "workspace:*",
     "drizzle-orm": "catalog:",
     "effect": "catalog:",
     "pg": "catalog:"
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@effect/tsgo": "catalog:",
     "@effect/vitest": "catalog:",
-    "@fluenshift/config": "workspace:*",
+    "@grifando/config": "workspace:*",
     "@types/node": "catalog:",
     "@types/pg": "catalog:",
     "drizzle-kit": "catalog:",

@@ -5,7 +5,7 @@
 // where Grifando's facts no longer hold: which provider each key reaches, the hashed IP the rate
 // limits keep, and no analytics; and the local profile keeps its facts on Setup & privacy
 // (docs/adr/0036).
-import type { DeployProfile } from "@fluenshift/contract";
+import type { DeployProfile } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

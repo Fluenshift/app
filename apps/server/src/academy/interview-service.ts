@@ -5,14 +5,14 @@
 // Evaluation forgets the answer while the turn stays answered (DATA-POLICY.md § Deletion).
 import { randomUUID } from "node:crypto";
 
-import type { InterviewStatus } from "@fluenshift/contract";
+import type { InterviewStatus } from "@grifando/contract";
 import {
   Database,
   evaluationsView,
   interviewSessions,
   interviewTurns,
   learners,
-} from "@fluenshift/db";
+} from "@grifando/db";
 import { and, asc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 

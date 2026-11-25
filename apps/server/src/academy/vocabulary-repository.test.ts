@@ -3,7 +3,7 @@
 // replace Grifando's writing sessions (docs/adr/0004).
 import { rm } from "node:fs/promises";
 
-import { LearnerId } from "@fluenshift/contract";
+import { LearnerId } from "@grifando/contract";
 import { Effect, Schema } from "effect";
 import type { Layer } from "effect";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";

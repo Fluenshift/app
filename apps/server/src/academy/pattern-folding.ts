@@ -5,16 +5,16 @@
 // and records one Occurrence per Finding, then one per note (docs/adr/0028).
 import { randomUUID } from "node:crypto";
 
-import { MistakeCategory, mistakeCategoriesOf } from "@fluenshift/contract";
-import type { LearnerId, MistakeSeverity } from "@fluenshift/contract";
-import { applyExerciseResult } from "@fluenshift/core/mastery";
+import { MistakeCategory, mistakeCategoriesOf } from "@grifando/contract";
+import type { LearnerId, MistakeSeverity } from "@grifando/contract";
+import { applyExerciseResult } from "@grifando/core/mastery";
 import {
   Database,
   enrichments,
   mistakePatterns,
   occurrences,
-} from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
+} from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
 import { and, eq } from "drizzle-orm";
 import { Effect } from "effect";
 

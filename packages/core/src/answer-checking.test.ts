@@ -1,4 +1,4 @@
-import type { GeneratedExercise } from "@fluenshift/contract";
+import type { GeneratedExercise } from "@grifando/contract";
 import { describe, expect, it } from "vitest";
 
 import {

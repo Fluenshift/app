@@ -3,8 +3,8 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import type { SetupStatus } from "@fluenshift/contract";
-import { ServerConfig } from "@fluenshift/env";
+import type { SetupStatus } from "@grifando/contract";
+import { ServerConfig } from "@grifando/env";
 import {
   ConfigProvider,
   Effect,

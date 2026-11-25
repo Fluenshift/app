@@ -1,7 +1,7 @@
 // The page frame of the Academy's screens. Ported from Grifando
 // src/components/layout/PageHeader.tsx (74dbb9f); the Academy keeps Grifando's page structure
 // (docs/adr/0009).
-import { cn } from "@fluenshift/ui/utils";
+import { cn } from "@grifando/ui/utils";
 import type { ReactNode } from "react";
 
 import { AcademyNav } from "./academy-nav";

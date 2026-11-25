@@ -3,7 +3,7 @@
 import { rm } from "node:fs/promises";
 import path from "node:path";
 
-import { ServerConfig } from "@fluenshift/env";
+import { ServerConfig } from "@grifando/env";
 import { Effect, Layer, ManagedRuntime } from "effect";
 import { describe, expect, it } from "vitest";
 

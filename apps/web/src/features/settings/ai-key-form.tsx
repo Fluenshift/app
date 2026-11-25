@@ -7,16 +7,16 @@
 import {
   isTrainerKeyProvider,
   TRAINER_KEY_PROVIDERS,
-} from "@fluenshift/contract";
-import type { TrainerKeyProvider } from "@fluenshift/contract";
-import { Button } from "@fluenshift/ui/components/button";
-import { Card, CardContent, CardFooter } from "@fluenshift/ui/components/card";
-import { Input } from "@fluenshift/ui/components/input";
-import { Label } from "@fluenshift/ui/components/label";
+} from "@grifando/contract";
+import type { TrainerKeyProvider } from "@grifando/contract";
+import { Button } from "@grifando/ui/components/button";
+import { Card, CardContent, CardFooter } from "@grifando/ui/components/card";
+import { Input } from "@grifando/ui/components/input";
+import { Label } from "@grifando/ui/components/label";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "@fluenshift/ui/components/radio-group";
+} from "@grifando/ui/components/radio-group";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 import type { FormEvent } from "react";

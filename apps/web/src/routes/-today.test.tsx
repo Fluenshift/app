@@ -3,7 +3,7 @@
 // TodaySession today's challenge. Under docs/adr/0025 the route test of apps/server checks the
 // challenge and its bias; this screen test checks what the page renders from the challenge it
 // reads.
-import type { DailyChallenge } from "@fluenshift/contract";
+import type { DailyChallenge } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

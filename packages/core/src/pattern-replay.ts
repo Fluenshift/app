@@ -3,8 +3,8 @@
 // Academy builds one event at a time: an Occurrence of a Finding is a failed recall in writing
 // (docs/adr/0014), a Naturalness Note grows the pattern without a recall (docs/adr/0028), and an
 // Attempt moves the Mastery Level by its grade (Grifando SPEC.md §6).
-import { MasteryLevel } from "@fluenshift/contract";
-import type { ExerciseType } from "@fluenshift/contract";
+import { MasteryLevel } from "@grifando/contract";
+import type { ExerciseType } from "@grifando/contract";
 
 import { applyExerciseResult } from "./mastery";
 import type { MasteryState } from "./mastery";

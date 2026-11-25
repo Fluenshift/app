@@ -3,8 +3,8 @@
 // (74dbb9f): another Learner's Exercise or Attempt reads as not found.
 import { randomUUID } from "node:crypto";
 
-import type { ExerciseType, GeneratedExercise } from "@fluenshift/contract";
-import { Database, exerciseAttempts, exercises } from "@fluenshift/db";
+import type { ExerciseType, GeneratedExercise } from "@grifando/contract";
+import { Database, exerciseAttempts, exercises } from "@grifando/db";
 import { and, asc, desc, eq, notExists } from "drizzle-orm";
 import { Effect } from "effect";
 

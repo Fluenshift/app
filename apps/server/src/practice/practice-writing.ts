@@ -4,8 +4,8 @@
 import type {
   AIResponseValidationError,
   PracticeOccurrence,
-} from "@fluenshift/contract";
-import { ServerConfig } from "@fluenshift/env";
+} from "@grifando/contract";
+import { ServerConfig } from "@grifando/env";
 import { Effect, Option, Schema } from "effect";
 
 import { trainerForRequest } from "../academy/academy-requests";

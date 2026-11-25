@@ -2,19 +2,19 @@
 // src/server/domain/exercises/exerciseService.ts (74dbb9f): generation needs a Trainer, grading
 // an Attempt is deterministic and does not, and the explanation of an Attempt never changes its
 // grade.
-import type { GeneratedExercise } from "@fluenshift/contract";
-import { evaluateExerciseAnswer } from "@fluenshift/core/answer-checking";
+import type { GeneratedExercise } from "@grifando/contract";
+import { evaluateExerciseAnswer } from "@grifando/core/answer-checking";
 import {
   DEFAULT_ABILITY,
   targetLevel,
   updateAbility,
-} from "@fluenshift/core/difficulty";
-import { assignExerciseTypeFor } from "@fluenshift/core/exercise-type";
-import { applyExerciseResult } from "@fluenshift/core/mastery";
+} from "@grifando/core/difficulty";
+import { assignExerciseTypeFor } from "@grifando/core/exercise-type";
+import { applyExerciseResult } from "@grifando/core/mastery";
 import {
   selectPatternsForPractice,
   selectReviewSet,
-} from "@fluenshift/core/selection";
+} from "@grifando/core/selection";
 import { Effect } from "effect";
 
 import {

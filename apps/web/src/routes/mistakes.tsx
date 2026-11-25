@@ -2,10 +2,10 @@
 // comes from the server, and the page applies `window` and `origin` from its own URL
 // (docs/adr/0025). Its search, which ADR 0020 keeps from Grifando's SPEC and Grifando never
 // built, narrows the patterns in the page and never enters the URL (docs/adr/0008, #276).
-import type { NotebookPattern } from "@fluenshift/contract";
-import { Badge } from "@fluenshift/ui/components/badge";
-import { buttonVariants } from "@fluenshift/ui/components/button";
-import { Input } from "@fluenshift/ui/components/input";
+import type { NotebookPattern } from "@grifando/contract";
+import { Badge } from "@grifando/ui/components/badge";
+import { buttonVariants } from "@grifando/ui/components/button";
+import { Input } from "@grifando/ui/components/input";
 import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 import { useState } from "react";
 

@@ -3,7 +3,7 @@
 // src/components/home/specimenData.ts (74dbb9f) under docs/adr/0004: each mark is a Finding at
 // validated byte offsets, listed in the order it appears in the text, with the Error Category
 // its slip rolls up to (docs/adr/0005).
-import type { EvaluationFinding } from "@fluenshift/contract";
+import type { EvaluationFinding } from "@grifando/contract";
 
 export interface SpecimenFinding {
   readonly byteEnd: number;

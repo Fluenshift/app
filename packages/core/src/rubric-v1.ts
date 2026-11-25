@@ -1,6 +1,6 @@
 // Rubric Version 1: word count, score, band and correction application, ported from PE
 // apps/server/src/evaluation/rubric-v1.ts. Byte offsets use Uint8Array instead of Buffer.
-import type { FindingSeverity, ProficiencyBand } from "@fluenshift/contract";
+import type { FindingSeverity, ProficiencyBand } from "@grifando/contract";
 import { Effect, Schema } from "effect";
 
 import {
@@ -20,12 +20,12 @@ export const RUBRIC_VERSION = "1";
 export const CURRENT_RUBRIC_VERSION = "1-provisional";
 
 // The closed value sets of Rubric Version 1 belong to the Evaluation contract.
-export { ERROR_CATEGORIES } from "@fluenshift/contract";
+export { ERROR_CATEGORIES } from "@grifando/contract";
 export type {
   ErrorCategory,
   FindingSeverity,
   ProficiencyBand,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 
 export interface LocatedCorrection {
   readonly byteEnd: number;

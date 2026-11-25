@@ -218,14 +218,14 @@ Code:
   only together with `@effect/tsgo`. ADR 0000 holds the stack choices and when to revisit them.
 - No user text in URLs or query strings; loggers record URLs.
 - `packages/core` and `packages/contract` stay isomorphic: `TextEncoder` and Web Crypto, never
-  `Buffer` or `node:crypto`. `packages/core` exports by path (`@fluenshift/core/<module>`),
+  `Buffer` or `node:crypto`. `packages/core` exports by path (`@grifando/core/<module>`),
   with no barrel.
 - No `zod` in code. Schemas for LLM JSON use `Schema.Finite` and `Schema.Int`, not
   `Schema.Number`; raw secret strings use `Schema.RedactedFromValue`.
 - The Hono edge turns an Effect result into a response through one typed helper that requires
   a status for every tagged error, with one test per error.
 - The Academy reads Evaluations: through Learning History's reads and the read-only views
-  `evaluationsView`, `findingsView` and `suggestionsView` of `@fluenshift/db`. Code that writes
+  `evaluationsView`, `findingsView` and `suggestionsView` of `@grifando/db`. Code that writes
   both an Evaluation and Academy state composes them outside `apps/server/src/academy`, as
   `apps/server/src/practice/practice-writing.ts` does.
 - The server bundle keeps npm packages external: every npm package that bundled workspace code
@@ -247,7 +247,7 @@ runtime (ADR 0007).
 - Errors are `Schema.TaggedError<X, { readonly brand: unique symbol }>()`, never
   `extends Error`.
 - Services are `Context.Service` classes with a `static readonly layer`; the service id is the
-  package name plus the path, for example `"@fluenshift/db/Database"`. A service class is
+  package name plus the path, for example `"@grifando/db/Database"`. A service class is
   itself an Effect: `yield* ServerConfig`.
 - Functions that return an Effect are named with `Effect.fn("Service.method")`. It keeps a
   generator's type parameters, so a service can take an Effect-returning capability.

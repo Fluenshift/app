@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 
 import { assert, describe, expect, it } from "@effect/vitest";
-import { ServerConfig } from "@fluenshift/env";
+import { ServerConfig } from "@grifando/env";
 import { sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import { ConfigProvider, Effect, Exit, Layer, Option } from "effect";

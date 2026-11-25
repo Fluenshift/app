@@ -2,7 +2,7 @@
 // Ported from Grifando src/app/write/page.tsx (74dbb9f): the page reads `promptId` and `mode`
 // from its own URL, a technical prompt comes from the bank of packages/core, and the daily
 // challenge from the server (docs/adr/0025).
-import { findTechnicalPromptById } from "@fluenshift/core/technical-prompts";
+import { findTechnicalPromptById } from "@grifando/core/technical-prompts";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 import { PageHeader, PageShell } from "../features/academy/page-header";

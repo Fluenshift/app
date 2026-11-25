@@ -1,10 +1,10 @@
 // The form that saves a vocabulary item. Ported from Grifando
 // src/components/vocabulary/VocabularyForm.tsx (74dbb9f); the item's source is an Evaluation,
 // which replaces Grifando's writing session (docs/adr/0004).
-import { Button } from "@fluenshift/ui/components/button";
-import { Card, CardContent, CardFooter } from "@fluenshift/ui/components/card";
-import { Input } from "@fluenshift/ui/components/input";
-import { Label } from "@fluenshift/ui/components/label";
+import { Button } from "@grifando/ui/components/button";
+import { Card, CardContent, CardFooter } from "@grifando/ui/components/card";
+import { Input } from "@grifando/ui/components/input";
+import { Label } from "@grifando/ui/components/label";
 import {
   useNavigate,
   useRouteContext,

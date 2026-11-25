@@ -2,7 +2,7 @@
 // src/server/ai/provider.ts (74dbb9f). Grifando's writing analysis is not a Trainer call: the
 // Judge evaluates every text, and the Trainer's Enrichment adds the Academy fields to the
 // Findings (docs/adr/0004).
-import type { GeneratedExercise, MistakeCategory } from "@fluenshift/contract";
+import type { GeneratedExercise, MistakeCategory } from "@grifando/contract";
 import type { Effect } from "effect";
 
 import type { ExplainAttemptInput } from "../prompts/answer-explanation";

@@ -2,7 +2,7 @@
 // every Learner idle for 90 days, with all their data, and the rate-limit windows older than 2 days.
 // Grifando's Vercel cron called it daily at 03:17 UTC through a secret-protected route; the server
 // runs it in process at the same hour, with no route (docs/adr/0011).
-import { Database, learners, rateLimitWindows } from "@fluenshift/db";
+import { Database, learners, rateLimitWindows } from "@grifando/db";
 import { lt } from "drizzle-orm";
 import { Clock, Effect, Layer, Schedule } from "effect";
 

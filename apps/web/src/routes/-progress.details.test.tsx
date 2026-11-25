@@ -1,4 +1,4 @@
-import type { Evaluation } from "@fluenshift/contract";
+import type { Evaluation } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { expect, test } from "vitest";

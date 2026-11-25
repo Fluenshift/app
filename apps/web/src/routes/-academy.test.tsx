@@ -3,7 +3,7 @@
 // under docs/adr/0025. The route test of apps/server checks what the dashboard reads; this screen
 // test checks what the page renders from it. A writing session is a practice-origin Writing
 // Sample (docs/adr/0004), and the averaged model scores are gone (docs/adr/0002).
-import type { AcademyDashboard } from "@fluenshift/contract";
+import type { AcademyDashboard } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

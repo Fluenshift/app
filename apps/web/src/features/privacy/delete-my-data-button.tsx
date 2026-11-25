@@ -2,7 +2,7 @@
 // src/components/privacy/DeleteMyDataButton.tsx (74dbb9f): it asks once more, deletes through
 // `DELETE /api/me`, then removes the browser's AI key and loads the start page again, because the
 // session cookie is gone and only a page load mints a new one (docs/adr/0032, docs/adr/0036).
-import { Button } from "@fluenshift/ui/components/button";
+import { Button } from "@grifando/ui/components/button";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 

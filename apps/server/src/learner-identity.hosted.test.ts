@@ -2,7 +2,7 @@
 // LearnerIdentity.hosted reads the signed cookie of the request instead of Next.js's cookie
 // store, signed with the secret SessionConfig reads, and fails with MissingSessionError where
 // getCurrentUserId threw it.
-import { SessionConfig } from "@fluenshift/env";
+import { SessionConfig } from "@grifando/env";
 import { ConfigProvider, Effect, Layer, Redacted } from "effect";
 import { describe, expect, it } from "vitest";
 

@@ -13,8 +13,8 @@ import {
   findings,
   learners,
   suggestions,
-} from "@fluenshift/db";
-import { ServerConfig } from "@fluenshift/env";
+} from "@grifando/db";
+import { ServerConfig } from "@grifando/env";
 import { asc, count, sql } from "drizzle-orm";
 import { ConfigProvider, Effect, Layer, pipe } from "effect";
 import { afterEach, describe, expect, it } from "vitest";

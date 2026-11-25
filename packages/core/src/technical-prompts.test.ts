@@ -1,4 +1,4 @@
-import { TechnicalCategory } from "@fluenshift/contract";
+import { TechnicalCategory } from "@grifando/contract";
 import { describe, expect, it } from "vitest";
 
 import {

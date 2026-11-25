@@ -14,8 +14,8 @@ import { cp, mkdtemp, readdir, readFile, rename, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { Database } from "@fluenshift/db";
-import { ServerConfig } from "@fluenshift/env";
+import { Database } from "@grifando/db";
+import { ServerConfig } from "@grifando/env";
 import { ConfigProvider, Effect, Layer } from "effect";
 
 import { CurrentLearner } from "../learner-identity";

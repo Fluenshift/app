@@ -1,14 +1,14 @@
 import path from "node:path";
 
 import { NodeRuntime } from "@effect/platform-node";
-import { Database } from "@fluenshift/db";
+import { Database } from "@grifando/db";
 import {
   ClientIpConfig,
   ServerConfig,
   SessionConfig,
   SiteConfig,
   TrainerConfig,
-} from "@fluenshift/env";
+} from "@grifando/env";
 import { Effect, Layer, Option } from "effect";
 
 import { academyDashboard } from "./academy/academy-dashboard";

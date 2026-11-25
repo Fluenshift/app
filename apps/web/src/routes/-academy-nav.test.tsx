@@ -1,7 +1,7 @@
 // Grifando's NavLinks (74dbb9f), ported from source under docs/adr/0025, decision 5, as the
 // Academy's own navigation on its screens: Overview opens /academy, and Key shows in the hosted
 // profile only (docs/adr/0034). Explain code joined it with its screen (docs/adr/0038).
-import type { DeployProfile } from "@fluenshift/contract";
+import type { DeployProfile } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

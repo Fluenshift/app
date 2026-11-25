@@ -2,7 +2,7 @@
 // numbered correction. Ported from Grifando src/components/home/LiveSpecimen.tsx (74dbb9f); the
 // marks come from PE's localization of the scenario's Findings (docs/adr/0004). The animated
 // layer is hidden from assistive tech, which gets the plain-text version.
-import { cn } from "@fluenshift/ui/utils";
+import { cn } from "@grifando/ui/utils";
 import { useState } from "react";
 
 import { buildTextSpans } from "../evaluations/spell-checker";

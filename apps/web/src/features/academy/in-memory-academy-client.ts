@@ -15,7 +15,7 @@ import type {
   StartedInterview,
   VocabularyItem,
   VocabularyItemRequest,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 
 import { getStoredAIKey, MissingAIKeyError } from "../settings/ai-key-store";
 import type { AICredentials } from "../settings/ai-key-store";

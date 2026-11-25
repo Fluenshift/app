@@ -3,7 +3,7 @@
 // way Grifando's functions threw. resolveAICredentials is re-expressed under docs/adr/0012: the
 // local profile's configured key replaces the development environment keys, and the hosted
 // profile never uses one.
-import { ServerConfig, TrainerConfig } from "@fluenshift/env";
+import { ServerConfig, TrainerConfig } from "@grifando/env";
 import { ConfigProvider, Effect, Layer, Redacted } from "effect";
 import { describe, expect, it } from "vitest";
 
