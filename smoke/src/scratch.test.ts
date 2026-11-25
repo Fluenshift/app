@@ -19,7 +19,7 @@ const removal = async (directory: string) => {
 
 describe("scratch directory", () => {
   it("refuses to remove a path outside its own prefix", async () => {
-    const outside = await mkdtemp(path.join(tmpdir(), "fluenshift-outside-"));
+    const outside = await mkdtemp(path.join(tmpdir(), "grifando-outside-"));
     const escaping = path.join(
       `${SCRATCH_PREFIX}run`,
       "..",

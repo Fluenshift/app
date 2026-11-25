@@ -100,7 +100,7 @@ const hostedApp = (options: WebOptions & AppBoundaries) =>
     profile: "hosted",
     runtime,
     session: hostedSession,
-    siteUrl: "https://fluenshift.example",
+    siteUrl: "https://grifando.example",
     ...options,
   });
 
@@ -208,8 +208,8 @@ describe("HTTP application", () => {
   it("answers a host that is not loopback in the hosted profile", async () => {
     const app = hostedApp({ serveWeb: false, webDistPath });
     const response = await app.request(
-      get("https://fluenshift.example/api/health", {
-        origin: "https://fluenshift.example",
+      get("https://grifando.example/api/health", {
+        origin: "https://grifando.example",
       })
     );
 
@@ -1349,7 +1349,7 @@ describe("Sample limits endpoint", () => {
 
   it("answers the hosted profile's 5000 characters within the same 32 KiB", async () => {
     const response = await hostedApp({ serveWeb: false, webDistPath }).request(
-      get("https://fluenshift.example/api/sample-limits", hostedSessionCookie)
+      get("https://grifando.example/api/sample-limits", hostedSessionCookie)
     );
 
     expect(response.status).toBe(200);
@@ -1375,7 +1375,7 @@ describe("Deploy profile endpoint", () => {
 
   it("names the hosted profile to a Learner with a session", async () => {
     const response = await hostedApp({ serveWeb: false, webDistPath }).request(
-      get("https://fluenshift.example/api/deploy-profile", hostedSessionCookie)
+      get("https://grifando.example/api/deploy-profile", hostedSessionCookie)
     );
 
     expect(response.status).toBe(200);

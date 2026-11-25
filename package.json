@@ -1,5 +1,5 @@
 {
-  "name": "fluenshift-app",
+  "name": "grifando",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,7 +14,7 @@
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs --follow",
     "docker:smoke": "pnpm --filter smoke run smoke",
-    "docker:up": "mkdir -p .data && FLUENSHIFT_UID=$(id -u) FLUENSHIFT_GID=$(id -g) docker compose up --detach --build",
+    "docker:up": "mkdir -p .data && GRIFANDO_UID=$(id -u) GRIFANDO_GID=$(id -g) docker compose up --detach --build",
     "format": "oxfmt --check .",
     "format:fix": "oxfmt .",
     "lint": "oxlint --deny-warnings",

@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 
 /** Every scratch directory of the smoke starts with this prefix. */
-export const SCRATCH_PREFIX = path.join(tmpdir(), "fluenshift-docker-smoke-");
+export const SCRATCH_PREFIX = path.join(tmpdir(), "grifando-docker-smoke-");
 
 export const createScratch = () => mkdtemp(SCRATCH_PREFIX);
 

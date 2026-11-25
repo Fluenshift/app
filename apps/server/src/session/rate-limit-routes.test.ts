@@ -121,7 +121,7 @@ const hostedApp = (boundaries: AppBoundaries) =>
     runtime,
     serveWeb: false,
     session,
-    siteUrl: "https://fluenshift.example",
+    siteUrl: "https://grifando.example",
     webDistPath: "",
   });
 

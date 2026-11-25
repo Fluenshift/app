@@ -35,7 +35,7 @@ const revealed = (credentials: TrainerCredentials | null) =>
 const read = (headers: Headers) =>
   revealed(Effect.runSync(readTrainerCredentials(headers)));
 
-const LOCAL = { DATA_DIRECTORY: "/tmp/fluenshift-unused" };
+const LOCAL = { DATA_DIRECTORY: "/tmp/grifando-unused" };
 const HOSTED = {
   DATABASE_URL: "postgres://unused@127.0.0.1:1/unused",
   DEPLOY_PROFILE: "hosted",

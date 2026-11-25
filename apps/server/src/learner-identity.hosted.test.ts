@@ -26,7 +26,7 @@ const getSessionSecret = () =>
 
 // The request a browser sends with `value` as its session cookie, or with no cookie.
 const requestWith = (value: string | undefined) =>
-  new Request("https://fluenshift.example/api/vocabulary", {
+  new Request("https://grifando.example/api/vocabulary", {
     headers:
       value === undefined ? {} : { cookie: `${SESSION_COOKIE}=${value}` },
   });

@@ -28,7 +28,7 @@ const ALT = "Grifando — a personal English coach built from your own mistakes"
 let webDistPath = "";
 
 beforeAll(async () => {
-  webDistPath = await mkdtemp(path.join(tmpdir(), "fluenshift-web-"));
+  webDistPath = await mkdtemp(path.join(tmpdir(), "grifando-web-"));
   await writeFile(path.join(webDistPath, "index.html"), SHELL);
   await writeFile(path.join(webDistPath, "og-image.png"), CARD);
 });
@@ -50,7 +50,7 @@ const limitsOf = (env: Record<string, string>) =>
 // Serving the shell and the card needs no Learner.
 const runtime = ManagedRuntime.make(LearnerIdentity.local);
 
-const hostedApp = (siteUrl = "https://fluenshift.example") =>
+const hostedApp = (siteUrl = "https://grifando.example") =>
   createApp({
     limits: limitsOf({
       DATABASE_URL: "postgres://app@db:5432/app",
@@ -96,12 +96,12 @@ describe("link preview", () => {
 
     expect(response.status).toBe(200);
     expect(imageTagsOf(shell)).toEqual([
-      ["og:image", "https://fluenshift.example/og-image.png"],
+      ["og:image", "https://grifando.example/og-image.png"],
       ["og:image:type", "image/png"],
       ["og:image:width", "1200"],
       ["og:image:height", "630"],
       ["og:image:alt", ALT],
-      ["twitter:image", "https://fluenshift.example/og-image.png"],
+      ["twitter:image", "https://grifando.example/og-image.png"],
       ["twitter:image:alt", ALT],
       ["twitter:image:type", "image/png"],
       ["twitter:image:width", "1200"],
@@ -120,7 +120,7 @@ describe("link preview", () => {
     const shell = await response.text();
 
     expect(shell).toContain(
-      '<meta name="twitter:image" content="https://fluenshift.example/og-image.png" />\n'
+      '<meta name="twitter:image" content="https://grifando.example/og-image.png" />\n'
     );
   });
 

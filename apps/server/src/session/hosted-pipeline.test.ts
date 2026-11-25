@@ -41,7 +41,7 @@ import {
 let webDistPath = "";
 
 beforeAll(async () => {
-  webDistPath = await mkdtemp(path.join(tmpdir(), "fluenshift-web-"));
+  webDistPath = await mkdtemp(path.join(tmpdir(), "grifando-web-"));
   await mkdir(path.join(webDistPath, "assets"));
   await writeFile(
     path.join(webDistPath, "index.html"),
@@ -62,7 +62,7 @@ const fromEnv = (env: Record<string, string>) =>
   ConfigProvider.layer(ConfigProvider.fromEnvRecord(env));
 
 const SECRET = { SESSION_SECRET: "pipeline-test-secret-xxxxxxxxxxxxxxxxxxxx" };
-const SITE_URL = "https://fluenshift.example";
+const SITE_URL = "https://grifando.example";
 
 // The session settings the hosted profile reads under one NODE_ENV.
 const sessionFor = (nodeEnv: string) =>
@@ -336,7 +336,7 @@ describe("robots", () => {
       "text/plain; charset=UTF-8"
     );
     expect(await response.text()).toBe(
-      "User-Agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://fluenshift.example/sitemap.xml\n"
+      "User-Agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://grifando.example/sitemap.xml\n"
     );
   });
 });

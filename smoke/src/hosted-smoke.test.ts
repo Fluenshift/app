@@ -33,7 +33,7 @@ beforeAll(async () => {
   compose = composeOf({
     envFile,
     files: [runtime],
-    name: `fluenshift-hosted-smoke-${String(process.pid)}-${randomLetters(6)}`,
+    name: `grifando-hosted-smoke-${String(process.pid)}-${randomLetters(6)}`,
   });
   await compose(["up", "--detach", "--build", "app"]);
   await waitForHealth(baseUrl);

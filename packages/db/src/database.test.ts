@@ -22,7 +22,7 @@ import { evaluations, findings, suggestions } from "./schema";
 let scratch = "";
 
 beforeAll(async () => {
-  scratch = await mkdtemp(path.join(tmpdir(), "fluenshift-db-"));
+  scratch = await mkdtemp(path.join(tmpdir(), "grifando-db-"));
 });
 
 afterAll(async () => {

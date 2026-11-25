@@ -46,7 +46,7 @@ afterEach(async () => {
 });
 
 const scratchDirectory = async () => {
-  const directory = await mkdtemp(path.join(tmpdir(), "fluenshift-pe-"));
+  const directory = await mkdtemp(path.join(tmpdir(), "grifando-pe-"));
   directories.push(directory);
   return directory;
 };
@@ -677,7 +677,7 @@ describe("PE import command", () => {
     const refused = await run(
       refusal(runPeImport([file])),
       configFor({
-        DATABASE_URL: "postgres://fluenshift@127.0.0.1:9/none",
+        DATABASE_URL: "postgres://grifando@127.0.0.1:9/none",
         DEPLOY_PROFILE: "hosted",
       })
     );

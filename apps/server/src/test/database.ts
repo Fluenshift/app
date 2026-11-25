@@ -76,7 +76,7 @@ let template: Promise<string> | undefined;
 
 const migratedTemplate = () => {
   template ??= templateKey().then(async (key) => {
-    const target = path.join(tmpdir(), `fluenshift-pglite-${key}`);
+    const target = path.join(tmpdir(), `grifando-pglite-${key}`);
     if (!existsSync(target)) {
       await buildTemplate(target);
     }
@@ -110,7 +110,7 @@ export const localProfileLayer = (dataDirectory: string) => {
 export const makeTemporaryDatabase = () =>
   Promise.all([
     migratedTemplate(),
-    mkdtemp(path.join(tmpdir(), "fluenshift-")),
+    mkdtemp(path.join(tmpdir(), "grifando-")),
   ]).then(async ([source, directory]) => {
     const dataDirectory = path.join(directory, "pglite");
     await cp(source, dataDirectory, { recursive: true });
