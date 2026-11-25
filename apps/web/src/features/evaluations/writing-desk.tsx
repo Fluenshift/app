@@ -3,13 +3,13 @@ import type {
   EvaluationSummary,
   ProgressSummary,
   SetupStatus,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 // The Writing Desk: one Writing Sample, its evaluation and the evidence beside it. Ported from
 // PE apps/web/src/features/evaluations/writing-desk.tsx (5e831bb).
-import { Button } from "@fluenshift/ui/components/button";
-import { Label } from "@fluenshift/ui/components/label";
-import { Textarea } from "@fluenshift/ui/components/textarea";
-import { cn } from "@fluenshift/ui/utils";
+import { Button } from "@grifando/ui/components/button";
+import { Label } from "@grifando/ui/components/label";
+import { Textarea } from "@grifando/ui/components/textarea";
+import { cn } from "@grifando/ui/utils";
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { ChevronRight, Command, ShieldCheck, Sparkles } from "lucide-react";
 import type { FormEvent, KeyboardEvent } from "react";

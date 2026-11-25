@@ -3,7 +3,7 @@
 // gives it a mock Anthropic model that answers what the tool_use block carried, or no object at
 // all, and the key check reads the call that reached the model. The analyzeWriting cases are
 // superseded (docs/adr/0004).
-import { AIResponseValidationError } from "@fluenshift/contract";
+import { AIResponseValidationError } from "@grifando/contract";
 import { Effect } from "effect";
 import { describe, expect, it } from "vitest";
 

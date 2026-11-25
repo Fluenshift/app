@@ -34,7 +34,7 @@ export const hostedRuntime = (hostPort: number) => {
       NODE_ENV: production
       SERVER_HOST: 0.0.0.0
       SESSION_SECRET: ${randomLetters(48)}
-      SITE_URL: https://fluenshift.example
+      SITE_URL: https://grifando.example
     ports:
       - "127.0.0.1:${String(hostPort)}:3000"
 `;

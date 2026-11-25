@@ -1,6 +1,6 @@
 // The Learner's Enrichment records: what the Trainer added to an Evaluation beside its
 // Occurrences (docs/adr/0028).
-import { Database, enrichments } from "@fluenshift/db";
+import { Database, enrichments } from "@grifando/db";
 import { and, eq } from "drizzle-orm";
 import { Effect } from "effect";
 

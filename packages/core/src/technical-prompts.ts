@@ -1,6 +1,6 @@
 // Ported from Grifando src/server/domain/writing/technicalPrompts.ts; SPEC.md is Grifando's.
 // The prompt bank is copied verbatim.
-import { TechnicalCategory } from "@fluenshift/contract";
+import { TechnicalCategory } from "@grifando/contract";
 
 export interface TechnicalPrompt {
   id: string;

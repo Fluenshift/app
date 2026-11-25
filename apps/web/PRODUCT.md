@@ -12,7 +12,7 @@ Brazilian developers, native speakers of Portuguese, who write English every wor
 
 ## Product Purpose
 
-Fluenshift takes a piece of English a Learner wrote, evaluates only its English, stores the result, and turns the Learner's own mistakes into practice. Success is a Learner whose Finding Rate falls over weeks of real work, and who can see that trend (#320).
+Grifando takes a piece of English a Learner wrote, evaluates only its English, stores the result, and turns the Learner's own mistakes into practice. Success is a Learner whose Finding Rate falls over weeks of real work, and who can see that trend (#320).
 
 ## Positioning
 
@@ -34,15 +34,15 @@ Fluenshift takes a piece of English a Learner wrote, evaluates only its English,
 - Academy side: Overview, Today, Write, Technical, Explain code, Interview, Exercises, Mistakes, Vocabulary; Focus music. None of these is to be removed (owners, 2026-11-23).
 - Planned: Text Kinds and Progress charts (`docs/specs/`, issues #336 to #346).
 - Inviolable: no remote analytics (ADR 0013); only deliberately submitted text is sent or stored; never imply a Writing Sample stays local when an external model receives it; API keys are never stored or logged, and the hosted profile uses the visitor's keys; the local profile has no sign-up or login.
-- Open: the product's name, logo and visual style (#333); a redesign of the interface is expected (#320).
+- Open: the product's logo and visual style (#333); a redesign of the interface is expected (#320).
 
 ## Brand Commitments
 
-"Fluenshift" is a working name, and the repository is `Fluenshift/app` (#333). The current look and the nine latin font faces come from Grifando; their origin is still to be recorded in `docs/product/ASSET-LICENSES.md`. No brand asset is binding until the owners decide #333.
+The product is Grifando, in the repository `Fluenshift/grifando` (ADR 0045); Fluenshift names only the GitHub organization. The current look and the nine latin font faces come from old Grifando; their origin is still to be recorded in `docs/product/ASSET-LICENSES.md`. No logo or other brand asset is binding until the owners decide the rest of #333.
 
 ## Evidence on Hand
 
-No users, testimonials, metrics or press exist yet. The hosted site is not live for this repository (grifando.vercel.app still serves Grifando). Do not fabricate any of these.
+No users, testimonials, metrics or press exist yet. The hosted site is not live for this repository (grifando.vercel.app still serves old Grifando). Do not fabricate any of these.
 
 ## Product Principles
 

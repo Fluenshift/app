@@ -1,5 +1,5 @@
 // Ported from Grifando src/server/domain/mistakes/analytics.ts; SPEC.md is Grifando's.
-import type { MistakeCategory } from "@fluenshift/contract";
+import type { MistakeCategory } from "@grifando/contract";
 
 export interface CategoryCount {
   category: MistakeCategory;

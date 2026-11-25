@@ -1,6 +1,6 @@
 // The view of a generated exercise that may reach the client, ported from Grifando
 // src/server/domain/exercises/publicView.ts.
-import type { GeneratedExercise } from "@fluenshift/contract";
+import type { GeneratedExercise } from "@grifando/contract";
 import { absurd } from "effect";
 
 export type PublicExercise =

@@ -1,21 +1,21 @@
 // The Progress page: what the retained Evaluations of a period show, and the evidence behind
 // each insight. Ported from PE apps/web/src/routes/progress.tsx (5e831bb).
-import { ERROR_CATEGORIES } from "@fluenshift/contract";
+import { ERROR_CATEGORIES } from "@grifando/contract";
 import type {
   ErrorCategory,
   ProgressEvidence,
   ProgressEvidenceSelection,
   ProgressPeriod,
   ProgressSegment,
-} from "@fluenshift/contract";
-import { buttonVariants } from "@fluenshift/ui/components/button";
+} from "@grifando/contract";
+import { buttonVariants } from "@grifando/ui/components/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@fluenshift/ui/components/empty";
+} from "@grifando/ui/components/empty";
 import { Link, createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 /** A Correction selected on Progress. Its text stays out of the URL (docs/adr/0008). */

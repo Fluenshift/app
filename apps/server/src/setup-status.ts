@@ -1,9 +1,9 @@
 // What GET /api/setup answers (FR-24, #273): the Judge's provider and model, where the data lives
 // and the current Rubric Version, and in the local profile the Trainer the server holds a key
 // for. The hosted profile holds no Trainer key: the visitor brings one (docs/adr/0012).
-import type { SetupStatus } from "@fluenshift/contract";
-import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
-import type { DeployProfile } from "@fluenshift/env";
+import type { SetupStatus } from "@grifando/contract";
+import { CURRENT_RUBRIC_VERSION } from "@grifando/core/rubric-v1";
+import type { DeployProfile } from "@grifando/env";
 
 import { trainerSetupOf } from "./trainer-setup";
 

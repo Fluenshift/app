@@ -2,7 +2,7 @@
 // each case runs on a fresh PGlite database, for the local Learner.
 import { rm } from "node:fs/promises";
 
-import { MistakeCategory } from "@fluenshift/contract";
+import { MistakeCategory } from "@grifando/contract";
 import { Effect } from "effect";
 import type { Layer } from "effect";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";

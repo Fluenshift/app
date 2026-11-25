@@ -1,4 +1,4 @@
 {
-  "extends": "@fluenshift/config/tsconfig.isomorphic.json",
+  "extends": "@grifando/config/tsconfig.isomorphic.json",
   "include": ["src"]
 }

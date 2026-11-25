@@ -13,7 +13,7 @@ import {
   MISTAKE_SEVERITIES,
   PROFICIENCY_BANDS,
   WRITING_SAMPLE_ORIGINS,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import { sql } from "drizzle-orm";
 import {
   boolean,

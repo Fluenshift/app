@@ -9,7 +9,7 @@ import {
   evaluationsView,
   learners,
   vocabularyItems,
-} from "@fluenshift/db";
+} from "@grifando/db";
 import { and, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 

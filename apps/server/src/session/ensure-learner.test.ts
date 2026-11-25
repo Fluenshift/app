@@ -3,9 +3,9 @@
 // and the rows are read and written through the Database service where the test used Prisma.
 import { rm } from "node:fs/promises";
 
-import { LearnerId } from "@fluenshift/contract";
-import { Database, learners, vocabularyItems } from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
+import { LearnerId } from "@grifando/contract";
+import { Database, learners, vocabularyItems } from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
 import { eq } from "drizzle-orm";
 import { Effect, Schema } from "effect";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";

@@ -10,7 +10,7 @@ import { deployProfileConfig } from "./server";
 export class JudgeConfig extends Context.Service<
   JudgeConfig,
   { readonly apiKey: Option.Option<Redacted.Redacted<string>> }
->()("@fluenshift/env/JudgeConfig") {
+>()("@grifando/env/JudgeConfig") {
   static readonly layer = Layer.effect(
     JudgeConfig,
     Effect.gen(function* () {

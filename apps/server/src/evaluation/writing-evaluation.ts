@@ -5,13 +5,13 @@
 // origin of its Writing Sample: work unless the Academy asked for it (docs/adr/0010).
 import { createHash, randomUUID } from "node:crypto";
 
-import type { WritingSampleOrigin } from "@fluenshift/contract";
+import type { WritingSampleOrigin } from "@grifando/contract";
 import {
   InvalidAssessmentError,
   ModelAssessmentSchema,
-} from "@fluenshift/core/model-assessment";
-import type { AssessmentSpan } from "@fluenshift/core/model-assessment";
-import { findProtectedTechnicalContent } from "@fluenshift/core/protected-content";
+} from "@grifando/core/model-assessment";
+import type { AssessmentSpan } from "@grifando/core/model-assessment";
+import { findProtectedTechnicalContent } from "@grifando/core/protected-content";
 import {
   applyCorrections,
   countEnglishWords,
@@ -19,12 +19,12 @@ import {
   CURRENT_RUBRIC_VERSION,
   scoreEvaluation,
   UnsafeCorrectionError,
-} from "@fluenshift/core/rubric-v1";
+} from "@grifando/core/rubric-v1";
 import {
   isUtf8ByteBoundary,
   isWellFormedUtf8String,
-} from "@fluenshift/core/utf8";
-import { ServerConfig } from "@fluenshift/env";
+} from "@grifando/core/utf8";
+import { ServerConfig } from "@grifando/env";
 import { Effect, Option, Schema } from "effect";
 
 import { persistEvaluation } from "../history/learning-history";

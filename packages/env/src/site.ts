@@ -21,7 +21,7 @@ const siteUrlOf = (configured: Option.Option<string>): string => {
 };
 
 export class SiteConfig extends Context.Service<SiteConfig, SiteSettings>()(
-  "@fluenshift/env/SiteConfig"
+  "@grifando/env/SiteConfig"
 ) {
   static readonly layer = Layer.effect(
     SiteConfig,

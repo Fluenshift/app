@@ -1,15 +1,15 @@
 // A graded Attempt: the grade, the answer key and, for a wrong answer, "Explain my answer".
 // Ported from Grifando src/components/exercises/ExerciseResult.tsx (74dbb9f).
-import type { GradedAttempt } from "@fluenshift/contract";
-import { diffWords, findClosestAnswer } from "@fluenshift/core/answer-diff";
-import { Button } from "@fluenshift/ui/components/button";
+import type { GradedAttempt } from "@grifando/contract";
+import { diffWords, findClosestAnswer } from "@grifando/core/answer-diff";
+import { Button } from "@grifando/ui/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@fluenshift/ui/components/card";
+} from "@grifando/ui/components/card";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 

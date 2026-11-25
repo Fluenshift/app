@@ -7,8 +7,8 @@ import type {
   Evaluation,
   EvaluationFinding,
   PracticeOccurrence,
-} from "@fluenshift/contract";
-import { Button } from "@fluenshift/ui/components/button";
+} from "@grifando/contract";
+import { Button } from "@grifando/ui/components/button";
 import { Link } from "@tanstack/react-router";
 
 import { SpellChecker } from "../evaluations/spell-checker";

@@ -1,7 +1,7 @@
 // Ported from deleteUserData in Grifando src/server/domain/privacy/cleanup.ts (74dbb9f): deleting
 // the Learner's row deletes every row that belongs to the Learner, since each table's reference
 // to the Learner, direct or through an Evaluation, cascades (packages/db/src/schema.ts).
-import { Database, learners } from "@fluenshift/db";
+import { Database, learners } from "@grifando/db";
 import { eq } from "drizzle-orm";
 import { Effect } from "effect";
 

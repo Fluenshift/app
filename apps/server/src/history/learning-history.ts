@@ -7,14 +7,14 @@ import type {
   FindingSeverity,
   ProficiencyBand,
   WritingSampleOrigin,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import {
   Database,
   evaluations,
   findings,
   learners,
   suggestions,
-} from "@fluenshift/db";
+} from "@grifando/db";
 import { and, asc, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 

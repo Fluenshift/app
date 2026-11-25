@@ -5,9 +5,9 @@
 import type {
   AcademyDashboard,
   CategoryBreakdownEntry,
-} from "@fluenshift/contract";
-import { TARGET_SUCCESS } from "@fluenshift/core/difficulty";
-import { REST_DAYS_PER_WEEK, reachedMilestone } from "@fluenshift/core/streak";
+} from "@grifando/contract";
+import { TARGET_SUCCESS } from "@grifando/core/difficulty";
+import { REST_DAYS_PER_WEEK, reachedMilestone } from "@grifando/core/streak";
 import type { ReactNode } from "react";
 
 import { MISTAKE_CATEGORY_LABELS } from "./mistake-category-labels";

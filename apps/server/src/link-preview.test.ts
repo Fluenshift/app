@@ -7,7 +7,7 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { ServerConfig } from "@fluenshift/env";
+import { ServerConfig } from "@grifando/env";
 import {
   ConfigProvider,
   Effect,
@@ -21,15 +21,14 @@ import { createApp } from "./app";
 import { LearnerIdentity } from "./learner-identity";
 
 const SHELL =
-  '<!doctype html>\n<html lang="en">\n  <head>\n    <title>Fluenshift</title>\n  </head>\n  <body>\n    <div id="app"></div>\n  </body>\n</html>\n';
+  '<!doctype html>\n<html lang="en">\n  <head>\n    <title>Grifando</title>\n  </head>\n  <body>\n    <div id="app"></div>\n  </body>\n</html>\n';
 const CARD = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
-const ALT =
-  "Fluenshift — a personal English coach built from your own mistakes";
+const ALT = "Grifando — a personal English coach built from your own mistakes";
 
 let webDistPath = "";
 
 beforeAll(async () => {
-  webDistPath = await mkdtemp(path.join(tmpdir(), "fluenshift-web-"));
+  webDistPath = await mkdtemp(path.join(tmpdir(), "grifando-web-"));
   await writeFile(path.join(webDistPath, "index.html"), SHELL);
   await writeFile(path.join(webDistPath, "og-image.png"), CARD);
 });
@@ -51,7 +50,7 @@ const limitsOf = (env: Record<string, string>) =>
 // Serving the shell and the card needs no Learner.
 const runtime = ManagedRuntime.make(LearnerIdentity.local);
 
-const hostedApp = (siteUrl = "https://fluenshift.example") =>
+const hostedApp = (siteUrl = "https://grifando.example") =>
   createApp({
     limits: limitsOf({
       DATABASE_URL: "postgres://app@db:5432/app",
@@ -97,12 +96,12 @@ describe("link preview", () => {
 
     expect(response.status).toBe(200);
     expect(imageTagsOf(shell)).toEqual([
-      ["og:image", "https://fluenshift.example/og-image.png"],
+      ["og:image", "https://grifando.example/og-image.png"],
       ["og:image:type", "image/png"],
       ["og:image:width", "1200"],
       ["og:image:height", "630"],
       ["og:image:alt", ALT],
-      ["twitter:image", "https://fluenshift.example/og-image.png"],
+      ["twitter:image", "https://grifando.example/og-image.png"],
       ["twitter:image:alt", ALT],
       ["twitter:image:type", "image/png"],
       ["twitter:image:width", "1200"],
@@ -121,7 +120,7 @@ describe("link preview", () => {
     const shell = await response.text();
 
     expect(shell).toContain(
-      '<meta name="twitter:image" content="https://fluenshift.example/og-image.png" />\n'
+      '<meta name="twitter:image" content="https://grifando.example/og-image.png" />\n'
     );
   });
 

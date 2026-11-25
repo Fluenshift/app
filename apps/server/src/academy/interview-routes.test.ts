@@ -6,10 +6,10 @@
 // fake Trainer asks the questions.
 import { rm } from "node:fs/promises";
 
-import { AIResponseValidationError } from "@fluenshift/contract";
-import type { LearnerId } from "@fluenshift/contract";
-import { Database, evaluations } from "@fluenshift/db";
-import { TrainerConfig } from "@fluenshift/env";
+import { AIResponseValidationError } from "@grifando/contract";
+import type { LearnerId } from "@grifando/contract";
+import { Database, evaluations } from "@grifando/db";
+import { TrainerConfig } from "@grifando/env";
 import { eq } from "drizzle-orm";
 import { ConfigProvider, Effect, Layer, ManagedRuntime, Option } from "effect";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

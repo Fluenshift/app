@@ -1,8 +1,8 @@
 // Ported from Grifando src/server/rateLimit.ts (74dbb9f): fixed-window counters in Postgres, per
 // Learner and per hashed client IP, which the hosted profile counts before every state-changing
 // route (docs/adr/0033). The cleanup deletes windows older than 2 days (docs/adr/0011).
-import { Database, rateLimitWindows } from "@fluenshift/db";
-import { ClientIpConfig } from "@fluenshift/env";
+import { Database, rateLimitWindows } from "@grifando/db";
+import { ClientIpConfig } from "@grifando/env";
 import { sql } from "drizzle-orm";
 import { Effect, pipe, Schema } from "effect";
 

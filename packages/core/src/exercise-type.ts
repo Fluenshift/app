@@ -1,5 +1,5 @@
 // Ported from Grifando src/server/domain/exercises/exerciseType.ts.
-import { ExerciseType } from "@fluenshift/contract";
+import { ExerciseType } from "@grifando/contract";
 
 import { needsMasteryCheck } from "./mastery";
 import type { MasteryState } from "./mastery";

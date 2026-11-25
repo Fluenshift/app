@@ -11,7 +11,7 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { ServerConfig, SessionConfig } from "@fluenshift/env";
+import { ServerConfig, SessionConfig } from "@grifando/env";
 import {
   ConfigProvider,
   Effect,
@@ -41,11 +41,11 @@ import {
 let webDistPath = "";
 
 beforeAll(async () => {
-  webDistPath = await mkdtemp(path.join(tmpdir(), "fluenshift-web-"));
+  webDistPath = await mkdtemp(path.join(tmpdir(), "grifando-web-"));
   await mkdir(path.join(webDistPath, "assets"));
   await writeFile(
     path.join(webDistPath, "index.html"),
-    "<main>Fluenshift</main>"
+    "<main>Grifando</main>"
   );
   await writeFile(path.join(webDistPath, "assets", "app-123.js"), "export {};");
 });
@@ -62,7 +62,7 @@ const fromEnv = (env: Record<string, string>) =>
   ConfigProvider.layer(ConfigProvider.fromEnvRecord(env));
 
 const SECRET = { SESSION_SECRET: "pipeline-test-secret-xxxxxxxxxxxxxxxxxxxx" };
-const SITE_URL = "https://fluenshift.example";
+const SITE_URL = "https://grifando.example";
 
 // The session settings the hosted profile reads under one NODE_ENV.
 const sessionFor = (nodeEnv: string) =>
@@ -169,7 +169,7 @@ describe("hosted request pipeline", () => {
     expect(
       verifySessionToken(mintedToken(set), getSessionSecret())
     ).not.toBeNull();
-    expect(await response.text()).toBe("<main>Fluenshift</main>");
+    expect(await response.text()).toBe("<main>Grifando</main>");
   });
 
   it("leaves a valid cookie untouched", async () => {
@@ -336,7 +336,7 @@ describe("robots", () => {
       "text/plain; charset=UTF-8"
     );
     expect(await response.text()).toBe(
-      "User-Agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://fluenshift.example/sitemap.xml\n"
+      "User-Agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://grifando.example/sitemap.xml\n"
     );
   });
 });

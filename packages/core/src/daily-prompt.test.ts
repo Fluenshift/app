@@ -1,4 +1,4 @@
-import { MistakeCategory } from "@fluenshift/contract";
+import { MistakeCategory } from "@grifando/contract";
 import { describe, expect, it } from "vitest";
 
 import {

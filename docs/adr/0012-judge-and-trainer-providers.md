@@ -1,6 +1,6 @@
 # 0012. Pin the Judge on OpenRouter; let the Trainer use any provider
 
-- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
+- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/grifando/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/grifando/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
 - Open item from PRE_MIGRATION (judge provider), with Grifando #77. Ledger rows:
   `decision: "adr:0012"`.
 

@@ -5,8 +5,8 @@
 // one request, and nothing keeps the key.
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogle } from "@ai-sdk/google";
-import { TrainerConfig } from "@fluenshift/env";
-import type { TrainerProvider } from "@fluenshift/env";
+import { TrainerConfig } from "@grifando/env";
+import type { TrainerProvider } from "@grifando/env";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import type { LanguageModel } from "ai";
 import { Context, Effect, Layer, Redacted } from "effect";

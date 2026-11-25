@@ -5,14 +5,14 @@
 // (docs/adr/0011), on Effect's TestClock.
 import { rm } from "node:fs/promises";
 
-import { LearnerId } from "@fluenshift/contract";
+import { LearnerId } from "@grifando/contract";
 import {
   Database,
   evaluations,
   learners,
   rateLimitWindows,
-} from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
+} from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
 import { eq } from "drizzle-orm";
 import { Effect, Fiber, Layer, Logger, Schema } from "effect";
 import { TestClock } from "effect/testing";

@@ -1,6 +1,6 @@
 // Removes one vocabulary item. Ported from Grifando
 // src/components/vocabulary/RemoveVocabularyButton.tsx (74dbb9f).
-import { Button } from "@fluenshift/ui/components/button";
+import { Button } from "@grifando/ui/components/button";
 import { useRouteContext, useRouter } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { useState } from "react";

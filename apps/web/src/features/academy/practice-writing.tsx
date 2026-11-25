@@ -7,8 +7,8 @@ import type {
   PracticeOccurrence,
   SampleLimits,
   TechnicalCategory,
-} from "@fluenshift/contract";
-import { Button } from "@fluenshift/ui/components/button";
+} from "@grifando/contract";
+import { Button } from "@grifando/ui/components/button";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 

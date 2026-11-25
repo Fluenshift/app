@@ -1,6 +1,6 @@
 // The caps the setup status hands the web app (docs/adr/0006), read from each Deploy Profile's
 // configuration.
-import { ServerConfig } from "@fluenshift/env";
+import { ServerConfig } from "@grifando/env";
 import { ConfigProvider, Effect, Layer } from "effect";
 import { describe, expect, it } from "vitest";
 

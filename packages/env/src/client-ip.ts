@@ -36,7 +36,7 @@ export class MissingIpHashSaltError extends Schema.TaggedError<
 export class ClientIpConfig extends Context.Service<
   ClientIpConfig,
   ClientIpSettings
->()("@fluenshift/env/ClientIpConfig") {
+>()("@grifando/env/ClientIpConfig") {
   static readonly layer = Layer.effect(
     ClientIpConfig,
     Effect.gen(function* () {

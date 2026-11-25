@@ -1,11 +1,8 @@
 // A marginal note for one Occurrence of a practice Writing Sample. Ported from Grifando
 // src/components/writing/MistakeCard.tsx (74dbb9f); "Save to vocabulary" hands the vocabulary form
 // its prefill in history state, never in the URL (docs/adr/0025).
-import type {
-  EvaluationFinding,
-  PracticeOccurrence,
-} from "@fluenshift/contract";
-import { Badge } from "@fluenshift/ui/components/badge";
+import type { EvaluationFinding, PracticeOccurrence } from "@grifando/contract";
+import { Badge } from "@grifando/ui/components/badge";
 import { Link } from "@tanstack/react-router";
 
 import { MISTAKE_CATEGORY_LABELS } from "./mistake-category-labels";

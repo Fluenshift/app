@@ -1,4 +1,4 @@
-import { ServerConfig } from "@fluenshift/env";
+import { ServerConfig } from "@grifando/env";
 import { sql } from "drizzle-orm";
 import { Effect, Exit, Layer, Option, Redacted } from "effect";
 import { describe, expect, it } from "vitest";

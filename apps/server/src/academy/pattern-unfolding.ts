@@ -2,15 +2,15 @@
 // it (docs/adr/0031, DATA-POLICY.md § Deletion). The Evaluation's Occurrences go, and each Mistake
 // Pattern they touched is rebuilt from the Occurrences and the Attempts that remain. A pattern left
 // without an Occurrence goes too; the Learner's Exercises and Attempts stay.
-import type { ExerciseType, LearnerId } from "@fluenshift/contract";
-import { replayPattern } from "@fluenshift/core/pattern-replay";
+import type { ExerciseType, LearnerId } from "@grifando/contract";
+import { replayPattern } from "@grifando/core/pattern-replay";
 import {
   exerciseAttempts,
   exercises,
   mistakePatterns,
   occurrences,
-} from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
+} from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
 import { and, asc, eq } from "drizzle-orm";
 
 // The pattern's Occurrences in the order they were folded: by moment, then a fold's Findings in

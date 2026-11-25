@@ -2,7 +2,7 @@ import type {
   Evaluation,
   ProgressEvidence,
   ProgressSummary,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import { afterEach, describe, expect, test } from "vitest";
 
 import {

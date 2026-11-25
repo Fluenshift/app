@@ -1,4 +1,4 @@
-import type { Evaluation } from "@fluenshift/contract";
+import type { Evaluation } from "@grifando/contract";
 
 export const PROGRESS_CLOCK = "2026-09-03T12:00:00.000Z";
 

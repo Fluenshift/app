@@ -1,8 +1,8 @@
 // The Academy's own navigation on its screens. Ported from Grifando
 // src/components/layout/NavLinks.tsx (74dbb9f): Overview opens /academy (docs/adr/0025), and Key
 // shows in the hosted profile only, where the browser holds the key (docs/adr/0034).
-import type { DeployProfile } from "@fluenshift/contract";
-import { cn } from "@fluenshift/ui/utils";
+import type { DeployProfile } from "@grifando/contract";
+import { cn } from "@grifando/ui/utils";
 import { Link, useLocation, useRouteContext } from "@tanstack/react-router";
 import { ChevronDown } from "lucide-react";
 import { useId, useState } from "react";

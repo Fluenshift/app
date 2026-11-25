@@ -241,7 +241,7 @@ function selfTests(): SelfTest[] {
         write(
           tree,
           ACADEMY_FILE,
-          'import { evaluations } from "@fluenshift/db";\n\nexport const table = evaluations;\n'
+          'import { evaluations } from "@grifando/db";\n\nexport const table = evaluations;\n'
         ),
       rejectedBy: [["lint", lint(ACADEMY_FILE)]],
       acceptedBy: [["types", types("apps/server")]],
@@ -266,7 +266,7 @@ function selfTests(): SelfTest[] {
           tree,
           ACADEMY_FILE,
           [
-            'import type { DrizzleClient } from "@fluenshift/db";',
+            'import type { DrizzleClient } from "@grifando/db";',
             'import { sql } from "drizzle-orm";',
             "",
             "export const erase = (client: DrizzleClient) =>",
@@ -285,8 +285,8 @@ function selfTests(): SelfTest[] {
           tree,
           ACADEMY_FILE,
           [
-            'import { evaluationsView } from "@fluenshift/db";',
-            'import type { DrizzleClient } from "@fluenshift/db";',
+            'import { evaluationsView } from "@grifando/db";',
+            'import type { DrizzleClient } from "@grifando/db";',
             "",
             "export const erase = (client: DrizzleClient) =>",
             "  client.delete(evaluationsView);",

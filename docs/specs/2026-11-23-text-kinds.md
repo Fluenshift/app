@@ -7,7 +7,7 @@
 
 ## Why
 
-Fluenshift takes a piece of text a Learner wrote, of a known kind, analyzes its English, and
+Grifando takes a piece of text a Learner wrote, of a known kind, analyzes its English, and
 stores the result so the Learner can see trends (#320). Today a Writing Sample has no kind: the
 Judge cannot tell a terse prompt to an AI from a PR description, and Progress cannot answer
 "is my English in PR descriptions getting better?".

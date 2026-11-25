@@ -11,7 +11,7 @@ import type {
   ProgressPeriod,
   ProgressSummary,
   SetupStatus,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 
 export interface EvaluationClient {
   readonly deleteEvaluation: (evaluationId: string) => Promise<void>;

@@ -1,7 +1,7 @@
 import { rm } from "node:fs/promises";
 
-import { Database, evaluations } from "@fluenshift/db";
-import { ServerConfig } from "@fluenshift/env";
+import { Database, evaluations } from "@grifando/db";
+import { ServerConfig } from "@grifando/env";
 import { sql } from "drizzle-orm";
 import { ConfigProvider, Effect, Layer } from "effect";
 import { afterEach, describe, expect, it } from "vitest";

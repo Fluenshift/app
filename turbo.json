@@ -14,10 +14,10 @@
     "check:effect": {},
     "test": {},
     "server#test": {
-      "dependsOn": ["@fluenshift/db#test"]
+      "dependsOn": ["@grifando/db#test"]
     },
     "web#test": {
-      "dependsOn": ["@fluenshift/db#test", "server#test"]
+      "dependsOn": ["@grifando/db#test", "server#test"]
     },
     "dev": {
       "cache": false,

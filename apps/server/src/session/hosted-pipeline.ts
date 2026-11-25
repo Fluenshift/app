@@ -3,7 +3,7 @@
 // Next.js render; here two Hono middlewares run before every route: one sets the static
 // single-page application's CSP and the security headers on every answer, the other is the
 // session gate.
-import type { SessionSettings } from "@fluenshift/env";
+import type { SessionSettings } from "@grifando/env";
 import { Redacted } from "effect";
 import type { MiddlewareHandler } from "hono";
 import { getCookie } from "hono/cookie";

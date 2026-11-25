@@ -1,6 +1,6 @@
 # 0003. Scope data by Learner; ship a local and a hosted profile
 
-- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
+- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/grifando/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/grifando/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
 - Seam: Phase 1 (b) and the open deploy model. Ledger rows: `decision: "adr:0003"`.
 
 ## Context

@@ -1,5 +1,5 @@
 // Ported from Grifando src/server/ai/prompts/exerciseGeneration.ts (74dbb9f).
-import type { ExerciseType, MistakeCategory } from "@fluenshift/contract";
+import type { ExerciseType, MistakeCategory } from "@grifando/contract";
 
 export interface ExerciseTarget {
   readonly category: MistakeCategory;

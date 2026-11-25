@@ -14,7 +14,7 @@ import {
   ProgressPeriod,
   VocabularyItemRequest,
   WritingSampleRequest,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import type {
   AcademyDashboard,
   DailyChallenge,
@@ -26,15 +26,15 @@ import type {
   SetupStatus,
   GeneratedExercise,
   AIResponseValidationError,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import {
   EVALUATION_HTTP_IDLE_TIMEOUT_SECONDS,
   EVALUATION_MAX_OUTPUT_TOKENS,
   EVALUATION_REQUEST_TIMEOUT_MILLISECONDS,
-} from "@fluenshift/core/evaluation-request-policy";
-import { toPublicExercise } from "@fluenshift/core/public-view";
-import type { DatabaseError } from "@fluenshift/db";
-import type { InputLimits, SessionSettings } from "@fluenshift/env";
+} from "@grifando/core/evaluation-request-policy";
+import { toPublicExercise } from "@grifando/core/public-view";
+import type { DatabaseError } from "@grifando/db";
+import type { InputLimits, SessionSettings } from "@grifando/env";
 import { getRequestListener } from "@hono/node-server";
 import { Effect, Option, Schema } from "effect";
 import { Hono } from "hono";

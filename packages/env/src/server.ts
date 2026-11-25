@@ -78,7 +78,7 @@ export class ServerConfig extends Context.Service<
     readonly profile: DeployProfile;
     readonly webDistPath: string;
   }
->()("@fluenshift/env/ServerConfig") {
+>()("@grifando/env/ServerConfig") {
   static readonly layer = Layer.effect(
     ServerConfig,
     Effect.gen(function* () {

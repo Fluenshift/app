@@ -4,8 +4,8 @@ QR-08: every bundled font, icon and visual asset has a documented license. The p
 bundle contains the font files below, no logos, and two images: the Open Graph card that link
 previews load (ADR 0040), and the hand-drawn arrow of the Academy's hero note, an inline SVG. It
 makes no third-party runtime request until the Learner opens Focus Music, which loads the Spotify
-or YouTube player they chose (ADR 0039). Grifando's three faces are served by the build itself,
-latin only (ADR 0009); graphs are CSS.
+or YouTube player they chose (ADR 0039). Old Grifando's three faces are served by the build
+itself, latin only (ADR 0009); graphs are CSS.
 
 | Asset | Source | Version | License |
 | --- | --- | --- | --- |
@@ -16,9 +16,9 @@ latin only (ADR 0009); graphs are CSS.
 | Utility CSS | [`tailwindcss`](https://github.com/tailwindlabs/tailwindcss) | 4.3.5 | MIT |
 | Toast component, CSS, embedded status icons | [`sonner`](https://github.com/emilkowalski/sonner) | 2.0.8 | MIT |
 | Dialog, popover and button primitives | [`@base-ui/react`](https://github.com/mui/base-ui) | 1.9.0 | MIT |
-| Palette, shapes and type scale | Grifando's `src/app/globals.css` (ADR 0009), adapted in `packages/ui/src/styles/globals.css` | 74dbb9f | MIT, the owners' own work |
-| Hero note arrow, inline SVG in `apps/web/src/features/academy/hero-note.tsx` | Grifando's `src/components/home/HeroNote.tsx` | 74dbb9f | MIT, the owners' own work |
-| Open Graph card, `apps/web/public/og-image.png` | Grifando's `src/app/opengraph-image.tsx` (ADR 0040), with Fluenshift's name, drawn in Inter Light from Grifando's `src/app/fonts/` | 74dbb9f | The card: MIT, the owners' own work. Inter: SIL OFL 1.1, which leaves images made with the font free |
+| Palette, shapes and type scale | Old Grifando's `src/app/globals.css` (ADR 0009), adapted in `packages/ui/src/styles/globals.css` | 74dbb9f | MIT, the owners' own work |
+| Hero note arrow, inline SVG in `apps/web/src/features/academy/hero-note.tsx` | Old Grifando's `src/components/home/HeroNote.tsx` | 74dbb9f | MIT, the owners' own work |
+| Open Graph card, `apps/web/public/og-image.png` | Old Grifando's `src/app/opengraph-image.tsx` (ADR 0040), with the product's name and no glyph (ADR 0045), drawn in Inter Light from its `src/app/fonts/` | 74dbb9f | The card: MIT, the owners' own work. Inter: SIL OFL 1.1, which leaves images made with the font free |
 
 All permit redistribution with the copyright and license notice retained.
 

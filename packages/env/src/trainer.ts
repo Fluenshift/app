@@ -41,7 +41,7 @@ export class TrainerConfig extends Context.Service<
     readonly localKey: Option.Option<TrainerKey>;
     readonly models: Readonly<Record<TrainerProvider, TrainerModels>>;
   }
->()("@fluenshift/env/TrainerConfig") {
+>()("@grifando/env/TrainerConfig") {
   static readonly layer = Layer.effect(
     TrainerConfig,
     Effect.gen(function* () {

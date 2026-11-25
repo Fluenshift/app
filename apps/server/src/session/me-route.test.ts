@@ -2,8 +2,8 @@
 // expires (74dbb9f), as contract tests through `app.request` in the hosted profile: the signed
 // session cookie names the Learner, and a fake deleteLearner boundary stands in for deleteUserData.
 // A fake limitRequest boundary stands in for rateLimitResponse.
-import { DatabaseError } from "@fluenshift/db";
-import { ServerConfig, SessionConfig } from "@fluenshift/env";
+import { DatabaseError } from "@grifando/db";
+import { ServerConfig, SessionConfig } from "@grifando/env";
 import {
   ConfigProvider,
   Effect,
@@ -71,7 +71,7 @@ const hostedApp = (settings = session, boundaries?: AppBoundaries) =>
     runtime: hostedRuntime,
     serveWeb: false,
     session: settings,
-    siteUrl: "https://fluenshift.example",
+    siteUrl: "https://grifando.example",
     webDistPath: "",
   });
 

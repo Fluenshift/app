@@ -1,7 +1,7 @@
 import type {
   Evaluation,
   EvaluationSubmissionResult,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
