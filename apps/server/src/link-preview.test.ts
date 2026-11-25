@@ -21,10 +21,9 @@ import { createApp } from "./app";
 import { LearnerIdentity } from "./learner-identity";
 
 const SHELL =
-  '<!doctype html>\n<html lang="en">\n  <head>\n    <title>Fluenshift</title>\n  </head>\n  <body>\n    <div id="app"></div>\n  </body>\n</html>\n';
+  '<!doctype html>\n<html lang="en">\n  <head>\n    <title>Grifando</title>\n  </head>\n  <body>\n    <div id="app"></div>\n  </body>\n</html>\n';
 const CARD = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
-const ALT =
-  "Fluenshift — a personal English coach built from your own mistakes";
+const ALT = "Grifando — a personal English coach built from your own mistakes";
 
 let webDistPath = "";
 

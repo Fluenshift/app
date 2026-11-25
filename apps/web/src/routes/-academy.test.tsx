@@ -155,6 +155,14 @@ describe("/academy", () => {
       within(navigation).getByRole("link", { name: "Academy" })
     ).toHaveAttribute("href", "/academy");
   });
+
+  it("names the product in the header, linked to the Writing Desk", async () => {
+    await renderDashboard(empty);
+    expect(screen.getByRole("link", { name: "Grifando" })).toHaveAttribute(
+      "href",
+      "/"
+    );
+  });
 });
 
 // Grifando's LiveSpecimen (74dbb9f), ported from source under docs/adr/0025, decision 5.

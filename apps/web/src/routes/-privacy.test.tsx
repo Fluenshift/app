@@ -93,7 +93,7 @@ describe("/privacy", () => {
     ).toBeVisible();
     expect(
       screen.getByText(
-        "No sign-up, no email. Here is what Fluenshift keeps, what it sends out, and how to wipe it."
+        "No sign-up, no email. Here is what Grifando keeps, what it sends out, and how to wipe it."
       )
     ).toBeVisible();
     expect(

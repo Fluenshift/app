@@ -45,7 +45,7 @@ beforeAll(async () => {
   await mkdir(path.join(webDistPath, "assets"));
   await writeFile(
     path.join(webDistPath, "index.html"),
-    "<main>Fluenshift</main>"
+    "<main>Grifando</main>"
   );
   await writeFile(path.join(webDistPath, "assets", "app-123.js"), "export {};");
 });
@@ -169,7 +169,7 @@ describe("hosted request pipeline", () => {
     expect(
       verifySessionToken(mintedToken(set), getSessionSecret())
     ).not.toBeNull();
-    expect(await response.text()).toBe("<main>Fluenshift</main>");
+    expect(await response.text()).toBe("<main>Grifando</main>");
   });
 
   it("leaves a valid cookie untouched", async () => {

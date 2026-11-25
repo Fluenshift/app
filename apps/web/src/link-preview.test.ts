@@ -1,7 +1,7 @@
-// Grifando's metadata, src/app/layout.tsx (74dbb9f), in the application shell with Fluenshift's
-// name, static at build in both profiles, and Grifando's Open Graph card,
-// src/app/opengraph-image.tsx, as a static file of the build. The hosted server adds the card's
-// tags at its public origin (docs/adr/0040).
+// Old Grifando's metadata, src/app/layout.tsx (74dbb9f), in the application shell under the
+// product's name, Grifando (docs/adr/0045), static at build in both profiles, and old Grifando's
+// Open Graph card, src/app/opengraph-image.tsx, as a static file of the build. The hosted server
+// adds the card's tags at its public origin (docs/adr/0040).
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
@@ -17,10 +17,10 @@ const shellHead = () =>
   ).head;
 
 describe("link preview", () => {
-  it("describes Fluenshift in the shell as Grifando's metadata described Grifando", () => {
+  it("describes Grifando in the shell as old Grifando's metadata described it", () => {
     const head = shellHead();
 
-    expect(head.querySelector("title")?.textContent).toBe("Fluenshift");
+    expect(head.querySelector("title")?.textContent).toBe("Grifando");
     expect(
       Array.from(
         head.querySelectorAll(
@@ -34,11 +34,11 @@ describe("link preview", () => {
     ).toEqual([
       ["description", DESCRIPTION],
       ["og:type", "website"],
-      ["og:site_name", "Fluenshift"],
-      ["og:title", "Fluenshift"],
+      ["og:site_name", "Grifando"],
+      ["og:title", "Grifando"],
       ["og:description", DESCRIPTION],
       ["twitter:card", "summary_large_image"],
-      ["twitter:title", "Fluenshift"],
+      ["twitter:title", "Grifando"],
       ["twitter:description", DESCRIPTION],
     ]);
   });
