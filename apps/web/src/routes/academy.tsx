@@ -40,8 +40,8 @@ const AcademyPage = () => {
           style={{ animationDelay: "80ms" }}
         >
           <p className="prose-serif text-iron text-lg">
-            Write anything. Fluenshift marks each slip, explains it, and turns
-            it into practice built from your own writing.
+            Write anything. Grifando marks each slip, explains it, and turns it
+            into practice built from your own writing.
           </p>
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
