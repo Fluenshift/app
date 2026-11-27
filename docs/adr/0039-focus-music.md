@@ -3,6 +3,7 @@
 - Status: Accepted on 2026-11-21 by the session (ADR 0020), with the Phase 6 Focus Music unit
   (#252). Decision 1 amended the same day after the pre-cutover review (#267), to say where the
   player sits: the code kept Grifando's placement, which the first wording did not describe.
+  Superseded by ADR 0046, which cuts Focus Music.
 - Phase 6, item 1 (`docs/migration/MIGRATION_PROTOCOL.md`). Grifando's
   `src/components/layout/FocusMusic.tsx` (74dbb9f) has no test at the baseline and ports from
   source (ADR 0025, decision 5); the rows of its link parsers, in `academy-web.json`, were

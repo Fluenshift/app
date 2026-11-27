@@ -1,6 +1,7 @@
 # 0018. Start Grifando's hosted data fresh; import PE's local history
 
 - Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/grifando/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/grifando/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
+  ADR 0046 supersedes decision 2: PE's local history is not imported.
 - Phase 7 step 5. No ledger row waits on it; it fixes the cutover plan early.
 
 ## Context
