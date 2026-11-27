@@ -94,7 +94,6 @@ new Rubric Version; Progress keeps versions apart as FR-22 already requires.
   /api/practice-writing` stores `other`; `GET /api/progress` and the evidence route read the filter.
 - `apps/web`: the selector on the Writing Desk; the label in History
   and on the Evaluation page; the filter in Progress's period column.
-- `README` and the PE importer: imported Evaluations are `other`.
 
 ## Acceptance
 

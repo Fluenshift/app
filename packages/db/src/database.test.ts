@@ -244,6 +244,38 @@ describe("Database", () => {
     expect(outcome.removed).toStrictEqual([0, 0, 0]);
   });
 
+  // A feature that leaves the product takes its table with it (ADR 0046): the migrations end on
+  // exactly these tables.
+  it("migrates exactly the product's tables", async () => {
+    const tables = await Effect.runPromise(
+      Effect.gen(function* () {
+        const database = yield* Database;
+        return yield* database.run((client) =>
+          client.execute(
+            sql`select table_name from information_schema.tables where table_schema = 'public' and table_type = 'BASE TABLE' order by table_name`
+          )
+        );
+      }).pipe(Effect.provide(migrated()))
+    );
+
+    expect(tables.rows).toStrictEqual([
+      { table_name: "category_abilities" },
+      { table_name: "enrichments" },
+      { table_name: "evaluations" },
+      { table_name: "exercise_attempts" },
+      { table_name: "exercises" },
+      { table_name: "findings" },
+      { table_name: "interview_sessions" },
+      { table_name: "interview_turns" },
+      { table_name: "learners" },
+      { table_name: "mistake_patterns" },
+      { table_name: "occurrences" },
+      { table_name: "rate_limit_windows" },
+      { table_name: "suggestions" },
+      { table_name: "vocabulary_items" },
+    ]);
+  });
+
   it("ties every Finding and Suggestion to the Learner of its Evaluation", async () => {
     const outcome = await Effect.runPromise(
       Effect.gen(function* () {

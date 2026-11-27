@@ -8,14 +8,6 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 - A Mistake Pattern's state is what `replayPattern` (`@grifando/core/pattern-replay`) builds from its Occurrences and the Attempts on its Exercises: deleting an Evaluation rebuilds each pattern it touched that way (`unfoldEvaluation`, called by Learning History's `deleteEvaluation`, ADR 0031). A new path that changes a pattern must be one the replay reproduces, and must stamp its Occurrence or Attempt with the moment it writes on the pattern (`now` in `pattern-folding.ts`, `submitAttempt`), or the next deletion undoes it.
 - Progress reads `listEvaluations({ origin: "work" })`: practice writing stays out of every insight and its evidence (ADR 0030). The Academy dashboard's trend reads practice (ADR 0027).
 
-## PE import
-
-- tsdown builds two entries, so `dist/` holds `index.mjs`, the importer's `import-pe.mjs` and a shared chunk; whatever copies the server copies the whole directory.
-- The import records itself in `pe_imports`, one row per Learner, written in the import's transaction, and every later run, dry or not, refuses once the row exists (#296). Only deleting that row lets the import run again.
-- The importer refuses a PE file with no Evaluations, dry run or not, before it records anything (#309).
-- An owner who tries the importer before cutover points `DATA_DIRECTORY` at a scratch directory: a real import into `./.data` makes the import at cutover refuse.
-- The importer's fixture, `apps/server/src/history/fixtures/pe-local.db`, was written by PE's own code at its pin; the script and how to rerun it stay in git history (`git show 8a379e2:migration/fixtures/pe/local-database.ts`). Tests copy it into a temporary directory first: SQLite writes `-shm` and `-wal` files beside a WAL database even when it opens it read-only.
-
 ## Protected Technical Content
 
 - `packages/core/src/shell-line.ts` reads the command and arguments of a line as PE's shell-line pattern matched them, in linear time (#306); its header gives the pattern and the order in which the pattern tries its choices. `shell-line.test.ts` pins 42 lines whose expected values PE's pattern computed. To pin another line, run the pattern from that header outside the repository: in a test file, CodeQL would raise `js/redos` again. Check a change to the reader the same way, against the pattern on millions of generated lines over names, `=`, both quotes, backslashes, whitespace and line terminators, as the review of #315 did.
@@ -88,6 +80,5 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 - Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-grifando/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
 - The interactive `grep` is ugrep, so one-liners call `/usr/bin/grep`.
 - `git rebase` signs by default and gpg times out: run `git -c commit.gpgsign=false rebase origin/main`, and abort a rebase that already stopped on a signature before rerunning it.
-- mise holds Bun 1.4.0, PE's pinned Bun, at `~/.local/share/mise/installs/bun/1.4.0/bin`; the default `bun` is newer. Rebuilding the PE import fixture needs it, with PE cloned at its pin (5e831bb).
 - Google Chrome is installed (`/usr/bin/google-chrome`): Playwright's `channel: "chrome"` can check a third-party player outside the repository, as #252 did for the sandbox.
 - For a hosted hand check, start Postgres 17 on a loopback port: `docker run -d --name fs-unit-pg -e POSTGRES_USER=app -e POSTGRES_PASSWORD=pw -e POSTGRES_DB=app -p 127.0.0.1:55432:5432 postgres:17-alpine`, then remove it with `docker rm -f fs-unit-pg`.
