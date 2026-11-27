@@ -136,10 +136,7 @@ const renderWrite = async (
   practiceWriting: PracticeWritingResult | AcademyRequestError,
   deployProfile: DeployProfile = "local"
 ) => {
-  const client = createInMemoryAcademyClient({
-    practiceWriting,
-    vocabulary: [],
-  });
+  const client = createInMemoryAcademyClient({ practiceWriting });
   render(
     <RouterProvider
       router={createAppRouter({
@@ -176,7 +173,7 @@ describe("/write practice writing", () => {
     expect(results).toHaveTextContent("One verb form mistake.");
     const notes = within(page).getByRole("region", { name: "Notes" });
     expect(notes).toHaveTextContent(
-      "IncorrectVerb tenseFrom Portuguesegoed → corrected towent'Go' has an irregular past: 'went'.“I went home early.”Save to vocabulary"
+      "IncorrectVerb tenseFrom Portuguesegoed → corrected towent'Go' has an irregular past: 'went'.“I went home early.”"
     );
     expect(
       within(page).getByRole("region", { name: "Corrected version" })
@@ -273,7 +270,7 @@ describe("/write practice writing", () => {
 
     const notes = await within(page).findByRole("region", { name: "Notes" });
     expect(notes).toHaveTextContent(
-      "Save to vocabulary2UnnaturalUnnatural phrasingI goed home → corrected toI got home'Got home' is what a fluent speaker would say.“I got home late.”Save to vocabulary"
+      "“I went home early.”2UnnaturalUnnatural phrasingI goed home → corrected toI got home'Got home' is what a fluent speaker would say.“I got home late.”"
     );
   });
 
@@ -291,24 +288,33 @@ describe("/write practice writing", () => {
     ).toHaveValue("");
   });
 
-  it("saves an Occurrence to vocabulary through the history state", async () => {
-    const { page } = await renderWrite(evaluated);
+  // Vocabulary left the product (ADR 0046), and with it the only link a note held.
+  it("links nowhere from a note, an Occurrence's or a Finding's", async () => {
+    const { page } = await renderWrite({
+      ...evaluated,
+      evaluation: {
+        ...evaluation,
+        findings: [
+          ...evaluation.findings,
+          {
+            byteEnd: 11,
+            byteStart: 7,
+            category: "Clarity",
+            correction: "house",
+            explanation: "Say where you went plainly.",
+            originalText: "home",
+            severity: "Minor",
+          },
+        ],
+      },
+    });
     await userEvent.click(
       within(page).getByRole("button", { name: "Get feedback" })
     );
-    await userEvent.click(
-      await within(page).findByRole("link", { name: "Save to vocabulary" })
-    );
 
-    const vocabulary = await screen.findByRole("heading", {
-      level: 1,
-      name: "Vocabulary",
-    });
-    expect(vocabulary).toBeVisible();
-    expect(screen.getByRole("textbox", { name: "Term" })).toHaveValue("went");
-    expect(
-      screen.getByRole("textbox", { name: "Example sentence" })
-    ).toHaveValue("I went home early.");
+    const notes = await within(page).findByRole("region", { name: "Notes" });
+    expect(within(notes).getAllByRole("article")).toHaveLength(2);
+    expect(within(notes).queryAllByRole("link")).toStrictEqual([]);
   });
 
   it("keeps the text and shows the route's message when the Enrichment fails", async () => {
