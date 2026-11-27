@@ -1,0 +1,95 @@
+/* PROTOTYPE (#333), throwaway: the reset and the floating switcher, outside every design. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+a {
+  color: inherit;
+}
+#app {
+  min-height: 100vh;
+  padding-bottom: 96px;
+}
+
+.proto-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px 6px 10px;
+  border-radius: 999px;
+  background: #111;
+  color: #f5f5f5;
+  font:
+    500 13px/1 system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+.proto-bar button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 7px 10px;
+  border-radius: 999px;
+}
+.proto-bar button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.proto-tag {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fbbf24;
+  padding: 0 6px 0 2px;
+}
+.proto-name {
+  min-width: 150px;
+  text-align: center;
+}
+.proto-name b {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  border-radius: 6px;
+  background: #fbbf24;
+  color: #111;
+  font-size: 12px;
+}
+.proto-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.proto-screen.is-on {
+  background: #f5f5f5;
+  color: #111;
+}
+.proto-screen.is-on:hover {
+  background: #fff;
+}
