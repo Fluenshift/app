@@ -1,7 +1,7 @@
 // Ported from Grifando src/server/clientIp.test.ts (74dbb9f), with the case of its characterization:
 // hashedClientIp takes the settings ClientIpConfig reads, here from an environment that names no salt
 // and no header, so the development salt and x-forwarded-for, as Grifando's tests ran.
-import { ClientIpConfig } from "@fluenshift/env";
+import { ClientIpConfig } from "@grifando/env";
 import { ConfigProvider, Effect, Layer } from "effect";
 import { describe, expect, it } from "vitest";
 

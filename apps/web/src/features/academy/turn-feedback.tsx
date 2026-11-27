@@ -3,7 +3,7 @@
 // (docs/adr/0010): its summary, its corrected version when it differs from the answer, Grifando's
 // natural version when it differs from the answer (docs/adr/0028), and the Overall Score with its
 // band in place of Grifando's five model scores.
-import type { Evaluation, InterviewTurnRef } from "@fluenshift/contract";
+import type { Evaluation, InterviewTurnRef } from "@grifando/contract";
 
 export interface CompletedTurn {
   readonly answer: string;

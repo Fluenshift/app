@@ -4,10 +4,10 @@
 // answers its RateLimitedError: the 429, or null when the call may go on.
 import { rm } from "node:fs/promises";
 
-import { LearnerId } from "@fluenshift/contract";
-import { Database, rateLimitWindows } from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
-import { ClientIpConfig } from "@fluenshift/env";
+import { LearnerId } from "@grifando/contract";
+import { Database, rateLimitWindows } from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
+import { ClientIpConfig } from "@grifando/env";
 import { asc } from "drizzle-orm";
 import { ConfigProvider, Effect, Layer, pipe, Schema } from "effect";
 import {

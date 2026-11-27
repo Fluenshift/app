@@ -8,15 +8,10 @@ import type {
   LearnerId,
   MasteryLevel,
   MistakeCategory,
-} from "@fluenshift/contract";
-import { normalizePatternKey } from "@fluenshift/core/pattern-key";
-import {
-  Database,
-  learners,
-  mistakePatterns,
-  occurrences,
-} from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
+} from "@grifando/contract";
+import { normalizePatternKey } from "@grifando/core/pattern-key";
+import { Database, learners, mistakePatterns, occurrences } from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
 import { and, desc, eq, exists, sql } from "drizzle-orm";
 import { Effect } from "effect";
 

@@ -10,12 +10,12 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@fluenshift/contract": "workspace:*",
-    "@fluenshift/core": "workspace:*",
-    "@fluenshift/ui": "workspace:*",
     "@fontsource/inter": "catalog:",
     "@fontsource/jetbrains-mono": "catalog:",
     "@fontsource/source-serif-4": "catalog:",
+    "@grifando/contract": "workspace:*",
+    "@grifando/core": "workspace:*",
+    "@grifando/ui": "workspace:*",
     "@tanstack/react-router": "catalog:",
     "effect": "catalog:",
     "hono": "catalog:",
@@ -25,7 +25,7 @@
     "sonner": "catalog:"
   },
   "devDependencies": {
-    "@fluenshift/config": "workspace:*",
+    "@grifando/config": "workspace:*",
     "@tailwindcss/vite": "catalog:",
     "@tanstack/router-plugin": "catalog:",
     "@testing-library/dom": "catalog:",

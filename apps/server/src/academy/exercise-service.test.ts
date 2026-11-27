@@ -5,8 +5,8 @@
 import { randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
 
-import { MasteryLevel, MistakeCategory } from "@fluenshift/contract";
-import type { LearnerId } from "@fluenshift/contract";
+import { MasteryLevel, MistakeCategory } from "@grifando/contract";
+import type { LearnerId } from "@grifando/contract";
 import {
   categoryAbilities,
   Database,
@@ -14,8 +14,8 @@ import {
   exercises,
   learners,
   mistakePatterns,
-} from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
+} from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
 import { and, count, eq } from "drizzle-orm";
 import { Effect } from "effect";
 import type { Layer } from "effect";

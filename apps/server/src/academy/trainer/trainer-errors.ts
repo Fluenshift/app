@@ -1,6 +1,6 @@
 // The Trainer's access errors, which the Learner can act on. Ported from Grifando
 // src/server/ai/errors.ts (74dbb9f).
-import type { AIResponseValidationError } from "@fluenshift/contract";
+import type { AIResponseValidationError } from "@grifando/contract";
 import { Schema } from "effect";
 
 // The provider rejected the key.

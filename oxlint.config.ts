@@ -95,7 +95,7 @@ export default defineConfig({
                 importNames: ["evaluations", "findings", "suggestions"],
                 message:
                   "The Academy reads the Evaluation tables through evaluationsView, findingsView and suggestionsView, which cannot be written.",
-                name: "@fluenshift/db",
+                name: "@grifando/db",
               },
             ],
             patterns: [

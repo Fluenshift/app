@@ -1,6 +1,6 @@
 // A calm status line for slow Trainer calls. Ported from Grifando
 // src/components/feedback/AnalyzingStatus.tsx (74dbb9f).
-import { cn } from "@fluenshift/ui/utils";
+import { cn } from "@grifando/ui/utils";
 import { useEffect, useState } from "react";
 
 export const WRITING_STEPS = [

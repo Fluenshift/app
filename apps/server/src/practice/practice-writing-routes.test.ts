@@ -7,10 +7,10 @@
 import { rm } from "node:fs/promises";
 import { inspect } from "node:util";
 
-import type { LearnerId } from "@fluenshift/contract";
-import { DatabaseError } from "@fluenshift/db";
-import { ServerConfig, TrainerConfig } from "@fluenshift/env";
-import type { InputLimits } from "@fluenshift/env";
+import type { LearnerId } from "@grifando/contract";
+import { DatabaseError } from "@grifando/db";
+import { ServerConfig, TrainerConfig } from "@grifando/env";
+import type { InputLimits } from "@grifando/env";
 import {
   ConfigProvider,
   Effect,

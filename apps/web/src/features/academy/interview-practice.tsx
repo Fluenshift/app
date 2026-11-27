@@ -7,15 +7,15 @@ import type {
   InterviewTurnRef,
   SampleLimits,
   StartedInterview,
-} from "@fluenshift/contract";
-import { Button } from "@fluenshift/ui/components/button";
+} from "@grifando/contract";
+import { Button } from "@grifando/ui/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@fluenshift/ui/components/card";
+} from "@grifando/ui/components/card";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 

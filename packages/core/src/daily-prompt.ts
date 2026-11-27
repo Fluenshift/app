@@ -1,6 +1,6 @@
 // Ported from Grifando src/server/domain/writing/dailyPrompt.ts; SPEC.md is Grifando's. The
 // prompt bank is copied verbatim.
-import { MistakeCategory } from "@fluenshift/contract";
+import { MistakeCategory } from "@grifando/contract";
 
 export interface DailyPrompt {
   id: string;

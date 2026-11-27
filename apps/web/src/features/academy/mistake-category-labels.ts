@@ -1,6 +1,6 @@
 // How the Academy names each Mistake Category. Ported from Grifando
 // src/lib/mistakeCategoryLabels.ts (74dbb9f).
-import type { MistakeCategory } from "@fluenshift/contract";
+import type { MistakeCategory } from "@grifando/contract";
 
 export const MISTAKE_CATEGORY_LABELS: Readonly<
   Record<MistakeCategory, string>

@@ -1,5 +1,5 @@
 {
-  "extends": "@fluenshift/config/tsconfig.base.json",
+  "extends": "@grifando/config/tsconfig.base.json",
   "include": [
     "src",
     "drizzle.config.ts",

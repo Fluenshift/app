@@ -5,7 +5,7 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 ## Seams
 
 - The Academy (`apps/server/src/academy/**`, tests aside) reads the Evaluation tables only through `evaluationsView`, `findingsView` and `suggestionsView`; lint refuses the tables, `persistEvaluation`, `deleteEvaluation`, the `evaluation/` and `practice/` modules, and raw SQL (`execute`). Code that writes both axes composes them outside the Academy (`AGENTS.md`, Code).
-- A Mistake Pattern's state is what `replayPattern` (`@fluenshift/core/pattern-replay`) builds from its Occurrences and the Attempts on its Exercises: deleting an Evaluation rebuilds each pattern it touched that way (`unfoldEvaluation`, called by Learning History's `deleteEvaluation`, ADR 0031). A new path that changes a pattern must be one the replay reproduces, and must stamp its Occurrence or Attempt with the moment it writes on the pattern (`now` in `pattern-folding.ts`, `submitAttempt`), or the next deletion undoes it.
+- A Mistake Pattern's state is what `replayPattern` (`@grifando/core/pattern-replay`) builds from its Occurrences and the Attempts on its Exercises: deleting an Evaluation rebuilds each pattern it touched that way (`unfoldEvaluation`, called by Learning History's `deleteEvaluation`, ADR 0031). A new path that changes a pattern must be one the replay reproduces, and must stamp its Occurrence or Attempt with the moment it writes on the pattern (`now` in `pattern-folding.ts`, `submitAttempt`), or the next deletion undoes it.
 - Progress reads `listEvaluations({ origin: "work" })`: practice writing stays out of every insight and its evidence (ADR 0030). The Academy dashboard's trend reads practice (ADR 0027).
 
 ## PE import
@@ -23,7 +23,7 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 
 ## Hosted profile
 
-- `createApp` takes `profile: "hosted"` only with its `session` (`SessionSettings` of `@fluenshift/env`) and its `siteUrl`. In that profile `securityHeaders` sets the CSP and Grifando's four headers on every answer, `guard` refuses a body over 256 KiB, then `sessionGate` refuses an API request without a valid `ig_session` cookie (401 `SESSION_REQUIRED`), except `GET /api/health`, and mints a cookie on any other answer but `/assets/` (ADR 0032). `index.ts` builds the server per profile with `Layer.unwrap`; the hosted branch provides `LearnerIdentity.hosted` and `SessionConfig.layer`.
+- `createApp` takes `profile: "hosted"` only with its `session` (`SessionSettings` of `@grifando/env`) and its `siteUrl`. In that profile `securityHeaders` sets the CSP and Grifando's four headers on every answer, `guard` refuses a body over 256 KiB, then `sessionGate` refuses an API request without a valid `ig_session` cookie (401 `SESSION_REQUIRED`), except `GET /api/health`, and mints a cookie on any other answer but `/assets/` (ADR 0032). `index.ts` builds the server per profile with `Layer.unwrap`; the hosted branch provides `LearnerIdentity.hosted` and `SessionConfig.layer`.
 - A hosted test signs its cookie with the secret it gives `SessionConfig`: `hosted-pipeline.test.ts` and `me-route.test.ts` show the setup. Every hosted API request in a test carries that cookie, the health check aside.
 - `sessionCookie(value, maxAgeSeconds, secure)` writes a cookie as Grifando's Next.js did, attribute order included, because characterizations pin the exact strings.
 - The guard refuses a declared body over the cap before reading it, then counts a body that declares no length with Hono's `bodyLimit`, which hands the routes a buffered copy of the request (#272). An in-process test request with a string body declares no length, so every route test reads that copy.
@@ -84,8 +84,8 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 
 ## Jhefferson's machine
 
-- `$F` is `/home/jheff/projects/personal/fluenshift`; `$F/app` is the only checkout of this repository.
-- Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-app/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
+- `$F` is `/home/jheff/projects/personal/fluenshift`; `$F/grifando` is the only checkout of this repository, and `$F/old-grifando` a read-only clone of old Grifando.
+- Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-grifando/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
 - The interactive `grep` is ugrep, so one-liners call `/usr/bin/grep`.
 - `git rebase` signs by default and gpg times out: run `git -c commit.gpgsign=false rebase origin/main`, and abort a rebase that already stopped on a signature before rerunning it.
 - mise holds Bun 1.4.0, PE's pinned Bun, at `~/.local/share/mise/installs/bun/1.4.0/bin`; the default `bun` is newer. Rebuilding the PE import fixture needs it, with PE cloned at its pin (5e831bb).

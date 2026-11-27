@@ -5,7 +5,7 @@
 // as a session would.
 import { rm } from "node:fs/promises";
 
-import type { LearnerId } from "@fluenshift/contract";
+import type { LearnerId } from "@grifando/contract";
 import { Effect, Layer, ManagedRuntime, Option } from "effect";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 

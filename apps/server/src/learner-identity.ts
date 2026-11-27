@@ -1,5 +1,5 @@
-import { LearnerId } from "@fluenshift/contract";
-import { SessionConfig } from "@fluenshift/env";
+import { LearnerId } from "@grifando/contract";
+import { SessionConfig } from "@grifando/env";
 import { Context, Effect, Layer, Option, Redacted, Schema } from "effect";
 import { parse } from "hono/utils/cookie";
 

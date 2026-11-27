@@ -9,7 +9,7 @@
 //
 // Both runs print the same counts, or the import is not accepted. A refusal exits with 1.
 import { NodeRuntime } from "@effect/platform-node";
-import { ServerConfig } from "@fluenshift/env";
+import { ServerConfig } from "@grifando/env";
 import { Console, Effect } from "effect";
 
 import { runPeImport } from "./history/pe-import";

@@ -2,7 +2,7 @@
 // structured assessment and its usage. Ported from the service part of PE
 // apps/server/src/evaluation/evaluation-model.ts (5e831bb); the assessment schema lives in
 // packages/core. The Judge on the AI SDK implements this service in Phase 4c.
-import type { AssessmentSpan } from "@fluenshift/core/model-assessment";
+import type { AssessmentSpan } from "@grifando/core/model-assessment";
 import { Context, Layer, Schema } from "effect";
 import type { Effect, Redacted } from "effect";
 

@@ -6,7 +6,7 @@
 import { randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
 
-import { MistakeCategory } from "@fluenshift/contract";
+import { MistakeCategory } from "@grifando/contract";
 import {
   Database,
   enrichments,
@@ -14,8 +14,8 @@ import {
   interviewTurns,
   learners,
   mistakePatterns,
-} from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
+} from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
 import { Effect } from "effect";
 import type { Layer } from "effect";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";

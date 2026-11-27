@@ -17,7 +17,7 @@ export const SITE_FILE_PATHS: ReadonlySet<string> = new Set([
 ]);
 
 const OG_IMAGE_ALT =
-  "Fluenshift — a personal English coach built from your own mistakes";
+  "Grifando — a personal English coach built from your own mistakes";
 
 const escapeAttribute = (value: string): string =>
   value

@@ -2,8 +2,9 @@
 
 - Status: Accepted on 2026-11-21, at the request of Jhefferson in a Claude Code session (#324).
 - Later on 2026-11-21, at Jhefferson's request, a session made `Fluenshift/prompt-evolution` and
-  `Fluenshift/grifando` private, then archived them (decision 6). `Fluenshift/app` stays public
-  until the owners choose its name (#333): on GitHub's Free plan a private repository loses
+  `Fluenshift/grifando` (now `Fluenshift/old-grifando`, ADR 0045) private, then archived them
+  (decision 6). `Fluenshift/app` (now `Fluenshift/grifando`) stays public until the owners choose
+  its name (#333): on GitHub's Free plan a private repository loses
   unlimited Actions minutes, code scanning and the enforcement of its rules.
 - Amends ADR 0019 and ADR 0020 (the gates that run), `AGENTS.md`, and the order of Phase 7 in
   the retired `docs/migration/MIGRATION_PROTOCOL.md`. Retires G8, G9, G10 and the checks of the
@@ -40,7 +41,7 @@
 6. What waits for the owners, unchanged: the go-ahead for cutover; the host of the hosted profile
    and its settings (`SESSION_SECRET`, `IP_HASH_SALT`, `CLIENT_IP_HEADER`, `SITE_URL`); Grifando's
    notice for at least 30 days before production moves and its read-only database for 30 days
-   after (ADR 0018); archiving `Fluenshift/grifando` and `Fluenshift/prompt-evolution`; the
+   after (ADR 0018); archiving `Fluenshift/old-grifando` and `Fluenshift/prompt-evolution`; the
    import of PE's local history (`README.md`); the budget of live calibration; and where
    Grifando's visual style came from, for `docs/product/ASSET-LICENSES.md`.
 

@@ -30,7 +30,7 @@ const Block = ({
 const PrivacyPage = () => (
   <PageShell>
     <PageHeader
-      description="No sign-up, no email. Here is what Fluenshift keeps, what it sends out, and how to wipe it."
+      description="No sign-up, no email. Here is what Grifando keeps, what it sends out, and how to wipe it."
       title="Privacy"
     />
 

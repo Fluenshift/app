@@ -10,11 +10,11 @@ import type {
   ProgressSegment,
   ProgressSummary,
   RecurringCorrection,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import {
   proficiencyBandForScore,
   CURRENT_RUBRIC_VERSION,
-} from "@fluenshift/core/rubric-v1";
+} from "@grifando/core/rubric-v1";
 import { Effect } from "effect";
 
 import { getEvaluation, listEvaluations } from "../history/learning-history";

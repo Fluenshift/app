@@ -1,7 +1,7 @@
 // The sheet a Learner writes on. Ported from Grifando src/components/writing/WritingSheet.tsx
 // (74dbb9f). Grifando always stopped it at 5000 characters; here the Deploy Profile's character
 // cap does, and a profile without one leaves the sheet uncapped (docs/adr/0006).
-import { cn } from "@fluenshift/ui/utils";
+import { cn } from "@grifando/ui/utils";
 import { useId } from "react";
 
 // A sheet of white paper on the cream canvas: the textarea has no box of its

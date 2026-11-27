@@ -3,7 +3,7 @@
 // docs/adr/0025: the prefill of the form travels in the router's history state, never in the
 // URL. The route test of apps/server checks the list and its Learner; this screen test checks what
 // the page renders from the list, and Grifando's form and remove button, ported from their source.
-import type { VocabularyItem } from "@fluenshift/contract";
+import type { VocabularyItem } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import type { HistoryState } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";

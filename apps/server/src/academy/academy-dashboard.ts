@@ -2,13 +2,13 @@
 // read it, at /academy under docs/adr/0025. A writing session is a practice-origin Writing Sample
 // (docs/adr/0004): its Evaluations give the writing count, the recent writing and, with the
 // Attempts, the Streak. The averaged model scores are gone (docs/adr/0002).
-import type { AcademyDashboard } from "@fluenshift/contract";
-import { computeCategoryBreakdown } from "@fluenshift/core/analytics";
-import { isDueForReview } from "@fluenshift/core/recall";
-import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
-import { selectPatternsForPractice } from "@fluenshift/core/selection";
-import { computeStreak } from "@fluenshift/core/streak";
-import { Database, evaluationsView, findingsView } from "@fluenshift/db";
+import type { AcademyDashboard } from "@grifando/contract";
+import { computeCategoryBreakdown } from "@grifando/core/analytics";
+import { isDueForReview } from "@grifando/core/recall";
+import { CURRENT_RUBRIC_VERSION } from "@grifando/core/rubric-v1";
+import { selectPatternsForPractice } from "@grifando/core/selection";
+import { computeStreak } from "@grifando/core/streak";
+import { Database, evaluationsView, findingsView } from "@grifando/db";
 import { and, count, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 

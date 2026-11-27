@@ -5,8 +5,8 @@
 import { randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
 
-import { AIResponseValidationError } from "@fluenshift/contract";
-import type { GeneratedExercise, LearnerId } from "@fluenshift/contract";
+import { AIResponseValidationError } from "@grifando/contract";
+import type { GeneratedExercise, LearnerId } from "@grifando/contract";
 import {
   Database,
   exerciseAttempts,
@@ -14,9 +14,9 @@ import {
   learners,
   mistakePatterns,
   occurrences,
-} from "@fluenshift/db";
-import type { DrizzleClient } from "@fluenshift/db";
-import { TrainerConfig } from "@fluenshift/env";
+} from "@grifando/db";
+import type { DrizzleClient } from "@grifando/db";
+import { TrainerConfig } from "@grifando/env";
 import { ConfigProvider, Effect, Layer, ManagedRuntime, Option } from "effect";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 

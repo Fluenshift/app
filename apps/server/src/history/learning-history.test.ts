@@ -1,7 +1,7 @@
 import { rm } from "node:fs/promises";
 
-import { LearnerId } from "@fluenshift/contract";
-import { Database } from "@fluenshift/db";
+import { LearnerId } from "@grifando/contract";
+import { Database } from "@grifando/db";
 import { sql } from "drizzle-orm";
 import { Effect, Layer, Schema } from "effect";
 import { afterEach, describe, expect, it } from "vitest";

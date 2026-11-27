@@ -1,4 +1,4 @@
-import type { Evaluation, ProficiencyBand } from "@fluenshift/contract";
+import type { Evaluation, ProficiencyBand } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

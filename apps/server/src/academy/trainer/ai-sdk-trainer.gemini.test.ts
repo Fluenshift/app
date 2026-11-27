@@ -2,7 +2,7 @@
 // Gemini SDK's generateContent; on the AI SDK one Trainer serves every provider, so each case gives
 // it a mock Gemini model that answers the JSON text, and the key check reads the call that
 // reached the model. The analyzeWriting cases are superseded (docs/adr/0004).
-import { AIResponseValidationError } from "@fluenshift/contract";
+import { AIResponseValidationError } from "@grifando/contract";
 import { Effect, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 

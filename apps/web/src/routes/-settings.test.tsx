@@ -3,7 +3,7 @@
 // so these assert Grifando's copy, roles and calls. The page belongs to the hosted profile; the
 // local profile's key lives in server configuration (docs/adr/0034). Where it names providers,
 // it offers OpenRouter first, since only an OpenRouter key runs the Judge (docs/adr/0035).
-import type { DeployProfile, KeyTestStatus } from "@fluenshift/contract";
+import type { DeployProfile, KeyTestStatus } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

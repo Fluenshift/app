@@ -3,7 +3,7 @@
 // way Grifando's functions threw. resolveAICredentials is re-expressed under docs/adr/0012: the
 // local profile's configured key replaces the development environment keys, and the hosted
 // profile never uses one.
-import { ServerConfig, TrainerConfig } from "@fluenshift/env";
+import { ServerConfig, TrainerConfig } from "@grifando/env";
 import { ConfigProvider, Effect, Layer, Redacted } from "effect";
 import { describe, expect, it } from "vitest";
 
@@ -35,7 +35,7 @@ const revealed = (credentials: TrainerCredentials | null) =>
 const read = (headers: Headers) =>
   revealed(Effect.runSync(readTrainerCredentials(headers)));
 
-const LOCAL = { DATA_DIRECTORY: "/tmp/fluenshift-unused" };
+const LOCAL = { DATA_DIRECTORY: "/tmp/grifando-unused" };
 const HOSTED = {
   DATABASE_URL: "postgres://unused@127.0.0.1:1/unused",
   DEPLOY_PROFILE: "hosted",

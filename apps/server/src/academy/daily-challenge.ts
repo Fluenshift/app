@@ -2,12 +2,12 @@
 // has not mastered. Ported from Grifando src/server/domain/writing/dailyChallenge.ts (74dbb9f),
 // which its /today and /write?mode=daily pages share so both show the same prompt; the Academy
 // dashboard shows it too, from the patterns it has already read.
-import type { DailyChallenge } from "@fluenshift/contract";
+import type { DailyChallenge } from "@grifando/contract";
 import {
   DAILY_PROMPTS,
   extractActiveWeakCategories,
   selectDailyPrompt,
-} from "@fluenshift/core/daily-prompt";
+} from "@grifando/core/daily-prompt";
 import { Effect } from "effect";
 
 import { listPatterns } from "./mistake-pattern-repository";

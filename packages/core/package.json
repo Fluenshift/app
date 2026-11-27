@@ -1,5 +1,5 @@
 {
-  "name": "@fluenshift/core",
+  "name": "@grifando/core",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,13 +12,13 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@fluenshift/contract": "workspace:*",
+    "@grifando/contract": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {
     "@effect/tsgo": "catalog:",
     "@effect/vitest": "catalog:",
-    "@fluenshift/config": "workspace:*",
+    "@grifando/config": "workspace:*",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

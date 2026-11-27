@@ -1,8 +1,8 @@
 // The technical Practice Prompts, by Technical Category. Ported from Grifando
 // src/app/technical/page.tsx (74dbb9f): the bank is packages/core's, and each prompt opens
 // /write, which resolves it from its own URL (docs/adr/0025).
-import { TECHNICAL_CATEGORIES } from "@fluenshift/contract";
-import { getTechnicalPromptsByCategory } from "@fluenshift/core/technical-prompts";
+import { TECHNICAL_CATEGORIES } from "@grifando/contract";
+import { getTechnicalPromptsByCategory } from "@grifando/core/technical-prompts";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { PageHeader, PageShell } from "../features/academy/page-header";

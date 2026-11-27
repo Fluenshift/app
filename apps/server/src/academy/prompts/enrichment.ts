@@ -2,8 +2,8 @@
 // needs (docs/adr/0004). Derived from Grifando src/server/ai/prompts/writingAnalysis.ts
 // (74dbb9f), keeping only the Academy fields, the natural version and the "correct but unnatural"
 // tier: the Judge has already found the errors (docs/adr/0028).
-import { ERROR_CATEGORIES, mistakeCategoriesOf } from "@fluenshift/contract";
-import type { ErrorCategory } from "@fluenshift/contract";
+import { ERROR_CATEGORIES, mistakeCategoriesOf } from "@grifando/contract";
+import type { ErrorCategory } from "@grifando/contract";
 
 // One Finding as the Trainer reads it.
 export interface EnrichmentFinding {

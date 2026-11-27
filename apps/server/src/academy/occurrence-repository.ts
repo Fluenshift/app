@@ -5,9 +5,9 @@ import type {
   MistakeCategory,
   MistakeSeverity,
   PracticeOccurrence,
-} from "@fluenshift/contract";
-import type { CategoryCount } from "@fluenshift/core/analytics";
-import { Database, occurrences } from "@fluenshift/db";
+} from "@grifando/contract";
+import type { CategoryCount } from "@grifando/core/analytics";
+import { Database, occurrences } from "@grifando/db";
 import { and, asc, count, eq, gte } from "drizzle-orm";
 import { Effect } from "effect";
 

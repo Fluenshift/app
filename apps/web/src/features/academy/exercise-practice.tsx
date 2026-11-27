@@ -2,15 +2,15 @@
 // src/components/exercises/ExercisePractice.tsx (74dbb9f). The Academy client replaces Grifando's
 // fetch and aiFetch: a missing key is the hosted browser's MissingAIKeyError or, in the local
 // profile, the server's AI_KEY_REQUIRED answer (docs/adr/0034).
-import type { GradedAttempt, PendingExercise } from "@fluenshift/contract";
-import { Button } from "@fluenshift/ui/components/button";
+import type { GradedAttempt, PendingExercise } from "@grifando/contract";
+import { Button } from "@grifando/ui/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@fluenshift/ui/components/card";
+} from "@grifando/ui/components/card";
 import { useRouteContext } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 

@@ -1,8 +1,8 @@
 // The visitor's Trainer key, kept only in this browser's localStorage (docs/adr/0012). Ported from
 // Grifando src/lib/aiKeyStore.ts (74dbb9f). Every access is guarded: storage is missing outside a
 // browser, and throws when the browser blocks site data.
-import { TRAINER_KEY_PROVIDERS } from "@fluenshift/contract";
-import type { TrainerKeyProvider } from "@fluenshift/contract";
+import { TRAINER_KEY_PROVIDERS } from "@grifando/contract";
+import type { TrainerKeyProvider } from "@grifando/contract";
 import { Option, Schema } from "effect";
 
 /**

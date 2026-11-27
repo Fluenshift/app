@@ -35,7 +35,7 @@ export class MissingSessionSecretError extends Schema.TaggedError<
 export class SessionConfig extends Context.Service<
   SessionConfig,
   SessionSettings
->()("@fluenshift/env/SessionConfig") {
+>()("@grifando/env/SessionConfig") {
   static readonly layer = Layer.effect(
     SessionConfig,
     Effect.gen(function* () {

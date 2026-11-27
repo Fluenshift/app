@@ -3,15 +3,15 @@
 import type {
   EvaluationFinding,
   EvaluationSuggestion,
-} from "@fluenshift/contract";
-import { Button } from "@fluenshift/ui/components/button";
+} from "@grifando/contract";
+import { Button } from "@grifando/ui/components/button";
 import {
   Popover,
   PopoverClose,
   PopoverContent,
   PopoverTrigger,
-} from "@fluenshift/ui/components/popover";
-import { cn } from "@fluenshift/ui/utils";
+} from "@grifando/ui/components/popover";
+import { cn } from "@grifando/ui/utils";
 import {
   AlertCircle,
   Check,

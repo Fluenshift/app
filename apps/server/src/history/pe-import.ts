@@ -21,8 +21,8 @@ import {
   ErrorCategory,
   FindingSeverity,
   ProficiencyBand,
-} from "@fluenshift/contract";
-import { RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
+} from "@grifando/contract";
+import { RUBRIC_VERSION } from "@grifando/core/rubric-v1";
 import {
   Database,
   evaluations,
@@ -30,9 +30,9 @@ import {
   learners,
   peImports,
   suggestions,
-} from "@fluenshift/db";
-import type { DatabaseError, DrizzleClient } from "@fluenshift/db";
-import { ServerConfig } from "@fluenshift/env";
+} from "@grifando/db";
+import type { DatabaseError, DrizzleClient } from "@grifando/db";
+import { ServerConfig } from "@grifando/env";
 import { eq } from "drizzle-orm";
 import { Effect, Predicate, Result, Schema, SchemaIssue } from "effect";
 

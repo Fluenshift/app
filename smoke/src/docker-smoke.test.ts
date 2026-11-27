@@ -124,7 +124,7 @@ beforeAll(async () => {
   const environment = `    environment:\n      OPENROUTER_API_KEY: "${secretSentinel}"\n      SERVER_PORT: "3000"\n`;
   await writeFile(
     envFile,
-    `FLUENSHIFT_DATA_DIR=${dataDirectory}\nFLUENSHIFT_GID=${HOST_GROUP_ID}\nFLUENSHIFT_UID=${HOST_USER_ID}\n`
+    `GRIFANDO_DATA_DIR=${dataDirectory}\nGRIFANDO_GID=${HOST_GROUP_ID}\nGRIFANDO_UID=${HOST_USER_ID}\n`
   );
   await writeFile(safeEnvironment, `services:\n  app:\n${environment}`);
   await writeFile(
@@ -132,7 +132,7 @@ beforeAll(async () => {
     `services:\n  app:\n${environment}    ports: !override\n      - "127.0.0.1:${hostPort}:3000"\n`
   );
 
-  const name = `fluenshift-smoke-${process.pid}-${randomLetters(6)}`;
+  const name = `grifando-smoke-${process.pid}-${randomLetters(6)}`;
   releaseCompose = composeOf({
     envFile,
     files: [COMPOSE_FILE, safeEnvironment],

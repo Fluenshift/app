@@ -2,7 +2,7 @@
 // the app runs on the HTTP clients and the screen tests on the in-memory ones, and the Deploy
 // Profile the server named. Ported from PE apps/web/src/router.ts (5e831bb); the Academy client is
 // docs/adr/0025's, the Deploy Profile docs/adr/0034's.
-import type { DeployProfile } from "@fluenshift/contract";
+import type { DeployProfile } from "@grifando/contract";
 import { createRouter } from "@tanstack/react-router";
 import type { RouterHistory } from "@tanstack/react-router";
 

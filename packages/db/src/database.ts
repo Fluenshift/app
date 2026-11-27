@@ -2,7 +2,7 @@ import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
 import { PGlite } from "@electric-sql/pglite";
-import { ServerConfig } from "@fluenshift/env";
+import { ServerConfig } from "@grifando/env";
 import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
 import { migrate as migratePostgres } from "drizzle-orm/node-postgres/migrator";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
@@ -77,7 +77,7 @@ export class Database extends Context.Service<
       query: (client: DrizzleClient) => Promise<A>
     ): Effect.Effect<A, DatabaseError>;
   }
->()("@fluenshift/db/Database") {
+>()("@grifando/db/Database") {
   /**
    * An embedded PGlite database: in memory without `dataDir`, on disk with it, migrated from
    * `migrationsFolder` when one is given.

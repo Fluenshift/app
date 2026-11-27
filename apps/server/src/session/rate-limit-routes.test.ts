@@ -3,8 +3,8 @@
 // `app.request` in the hosted profile: a fake limitRequest boundary stands in for
 // rateLimitResponse and refuses every call, and a fake ensureLearner for ensureUser. The routes'
 // own boundaries must never run. With the buckets of PE's routes (docs/adr/0033).
-import { DatabaseError } from "@fluenshift/db";
-import { ServerConfig, SessionConfig } from "@fluenshift/env";
+import { DatabaseError } from "@grifando/db";
+import { ServerConfig, SessionConfig } from "@grifando/env";
 import {
   ConfigProvider,
   Effect,
@@ -121,7 +121,7 @@ const hostedApp = (boundaries: AppBoundaries) =>
     runtime,
     serveWeb: false,
     session,
-    siteUrl: "https://fluenshift.example",
+    siteUrl: "https://grifando.example",
     webDistPath: "",
   });
 

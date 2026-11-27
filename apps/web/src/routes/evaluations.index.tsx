@@ -1,12 +1,12 @@
 // Ported from PE apps/web/src/routes/evaluations.index.tsx (5e831bb).
-import { buttonVariants } from "@fluenshift/ui/components/button";
+import { buttonVariants } from "@grifando/ui/components/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@fluenshift/ui/components/empty";
+} from "@grifando/ui/components/empty";
 import { Link, createFileRoute, getRouteApi } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 

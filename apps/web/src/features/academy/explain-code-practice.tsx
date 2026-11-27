@@ -3,8 +3,8 @@
 // with the snippet, which only the Trainer receives (docs/adr/0038), and no failed session is
 // retried, as on /write (docs/adr/0024). The Deploy Profile's caps size both sheets
 // (docs/adr/0006).
-import type { SampleLimits } from "@fluenshift/contract";
-import { Button } from "@fluenshift/ui/components/button";
+import type { SampleLimits } from "@grifando/contract";
+import { Button } from "@grifando/ui/components/button";
 import { useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 

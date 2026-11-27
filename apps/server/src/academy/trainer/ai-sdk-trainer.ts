@@ -9,7 +9,7 @@ import {
   exerciseGenerationResultSchema,
   MISTAKE_CATEGORIES,
   validateExerciseGenerationResult,
-} from "@fluenshift/contract";
+} from "@grifando/contract";
 import {
   APICallError,
   generateText,

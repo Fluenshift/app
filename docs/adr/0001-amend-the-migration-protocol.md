@@ -1,7 +1,7 @@
 # 0001. Amend the migration protocol for the merge goal
 
-- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/app/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
-- Amended at acceptance: item 4's Codex verification of every PR is waived ([comment](https://github.com/Fluenshift/app/issues/5#issuecomment-6880963426)). PRs merge once CI is green; the `G12` status stays on PRs as information.
+- Status: Accepted by Jhefferson on 2026-11-14 ([comment](https://github.com/Fluenshift/grifando/issues/5#issuecomment-6880924859)) on [#5](https://github.com/Fluenshift/grifando/issues/5). Levy's acceptance is pending; the migration proceeds meanwhile.
+- Amended at acceptance: item 4's Codex verification of every PR is waived ([comment](https://github.com/Fluenshift/grifando/issues/5#issuecomment-6880963426)). PRs merge once CI is green; the `G12` status stays on PRs as information.
 - Amended by ADR 0019: decision 4's verification and its `G12` status end, decision 6 is settled without a ruleset, and decision 7's self-tests run when a gate changes instead of on every run.
 - Ledger rows: `decision: "adr:0001"`.
 

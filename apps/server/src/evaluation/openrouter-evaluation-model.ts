@@ -5,15 +5,15 @@
 // and storage opt-out. Until live calibration it runs as a provisional Rubric Version. The local
 // profile's Judge runs on the configured key; the hosted profile's on the visitor's OpenRouter key
 // that the request's route provides (docs/adr/0035).
-import { localizeModelAssessment } from "@fluenshift/core/assessment-localization";
+import { localizeModelAssessment } from "@grifando/core/assessment-localization";
 import {
   EVALUATION_MAX_OUTPUT_TOKENS,
   EVALUATION_REQUEST_TIMEOUT_MILLISECONDS,
-} from "@fluenshift/core/evaluation-request-policy";
-import { MeaningfulTextSchema } from "@fluenshift/core/model-assessment";
-import type { AssessmentSpan } from "@fluenshift/core/model-assessment";
-import { ERROR_CATEGORIES, RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
-import { JudgeConfig } from "@fluenshift/env";
+} from "@grifando/core/evaluation-request-policy";
+import { MeaningfulTextSchema } from "@grifando/core/model-assessment";
+import type { AssessmentSpan } from "@grifando/core/model-assessment";
+import { ERROR_CATEGORIES, RUBRIC_VERSION } from "@grifando/core/rubric-v1";
+import { JudgeConfig } from "@grifando/env";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { APICallError, generateText, NoObjectGeneratedError, Output } from "ai";
 import { Effect, Layer, Option, Redacted, Schema } from "effect";

@@ -1,5 +1,5 @@
 {
-  "name": "@fluenshift/contract",
+  "name": "@grifando/contract",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -17,7 +17,7 @@
   "devDependencies": {
     "@effect/tsgo": "catalog:",
     "@effect/vitest": "catalog:",
-    "@fluenshift/config": "workspace:*",
+    "@grifando/config": "workspace:*",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

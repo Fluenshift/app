@@ -9,5 +9,5 @@ export default defineConfig({
   format: "esm",
   platform: "node",
   target: "node26",
-  deps: { alwaysBundle: [/^@fluenshift\//u], onlyBundle: [] },
+  deps: { alwaysBundle: [/^@grifando\//u], onlyBundle: [] },
 });

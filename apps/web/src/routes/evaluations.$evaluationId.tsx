@@ -1,5 +1,5 @@
 // Ported from PE apps/web/src/routes/evaluations.$evaluationId.tsx (5e831bb).
-import { Button, buttonVariants } from "@fluenshift/ui/components/button";
+import { Button, buttonVariants } from "@grifando/ui/components/button";
 import {
   Dialog,
   DialogClose,
@@ -7,8 +7,8 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@fluenshift/ui/components/dialog";
-import { cn } from "@fluenshift/ui/utils";
+} from "@grifando/ui/components/dialog";
+import { cn } from "@grifando/ui/utils";
 import { Link, createFileRoute, getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";

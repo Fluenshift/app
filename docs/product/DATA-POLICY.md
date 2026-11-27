@@ -1,6 +1,6 @@
 # Data policy
 
-What Fluenshift keeps, what it never keeps, and what leaves the machine, for each Deploy
+What Grifando keeps, what it never keeps, and what leaves the machine, for each Deploy
 Profile (ADR 0003). Vocabulary is defined in `CONTEXT.md`. Neither profile sends telemetry or
 remote analytics; adding any needs a new ADR and a change to this policy (ADR 0013).
 
@@ -10,7 +10,7 @@ remote analytics; adding any needs a new ADR and a change to this policy (ADR 00
 
 A successful Evaluation stays in the local database until deliberately deleted. No
 expiration. The database is PGlite in the data directory the profile configures, `./.data`
-when Fluenshift runs with Docker (ADR 0017).
+when Grifando runs with Docker (ADR 0017).
 
 Original Writing Sample and its content hash; its origin, work or practice; submission and
 evaluation timestamps; corrected version and summary; evaluated English word count; score

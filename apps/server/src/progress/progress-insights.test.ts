@@ -3,9 +3,9 @@ import { rm } from "node:fs/promises";
 import type {
   ProgressEvidenceSelection,
   WritingSampleOrigin,
-} from "@fluenshift/contract";
-import { CURRENT_RUBRIC_VERSION } from "@fluenshift/core/rubric-v1";
-import type { Database } from "@fluenshift/db";
+} from "@grifando/contract";
+import { CURRENT_RUBRIC_VERSION } from "@grifando/core/rubric-v1";
+import type { Database } from "@grifando/db";
 import { Effect, pipe } from "effect";
 import { afterEach, describe, expect, it } from "vitest";
 

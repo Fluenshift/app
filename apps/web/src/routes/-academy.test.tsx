@@ -3,7 +3,7 @@
 // under docs/adr/0025. The route test of apps/server checks what the dashboard reads; this screen
 // test checks what the page renders from it. A writing session is a practice-origin Writing
 // Sample (docs/adr/0004), and the averaged model scores are gone (docs/adr/0002).
-import type { AcademyDashboard } from "@fluenshift/contract";
+import type { AcademyDashboard } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -154,6 +154,14 @@ describe("/academy", () => {
     expect(
       within(navigation).getByRole("link", { name: "Academy" })
     ).toHaveAttribute("href", "/academy");
+  });
+
+  it("names the product in the header, linked to the Writing Desk", async () => {
+    await renderDashboard(empty);
+    expect(screen.getByRole("link", { name: "Grifando" })).toHaveAttribute(
+      "href",
+      "/"
+    );
   });
 });
 

@@ -1,5 +1,5 @@
 // The local profile's Trainer as /setup shows it (FR-24, #273).
-import type { TrainerModels, TrainerProvider } from "@fluenshift/env";
+import type { TrainerModels, TrainerProvider } from "@grifando/env";
 import { Option, Redacted } from "effect";
 import { describe, expect, it } from "vitest";
 

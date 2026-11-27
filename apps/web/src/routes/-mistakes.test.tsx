@@ -3,7 +3,7 @@
 // docs/adr/0005 and docs/adr/0025. The route test of apps/server checks the patterns, their
 // derived state and the breakdowns; this screen test checks what the page renders from them, and
 // the time range and origin filters it applies from its own URL.
-import type { MistakeNotebook, NotebookPattern } from "@fluenshift/contract";
+import type { MistakeNotebook, NotebookPattern } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

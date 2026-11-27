@@ -1,6 +1,6 @@
 // Grading of exercise answers, ported from Grifando
 // src/server/domain/exercises/answerChecking.ts. Grading is deterministic: no model call.
-import type { GeneratedExercise } from "@fluenshift/contract";
+import type { GeneratedExercise } from "@grifando/contract";
 import { absurd } from "effect";
 
 const normalizeAnswer = (value: string): string =>

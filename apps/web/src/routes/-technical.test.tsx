@@ -1,8 +1,8 @@
 // Grifando's /technical page (74dbb9f): the technical Practice Prompts by Technical Category,
 // each opening /write with its prompt. It reads no repository, so it ports from source under
 // docs/adr/0025, decision 5; the bank is packages/core's.
-import { TECHNICAL_CATEGORIES } from "@fluenshift/contract";
-import { TECHNICAL_PROMPTS } from "@fluenshift/core/technical-prompts";
+import { TECHNICAL_CATEGORIES } from "@grifando/contract";
+import { TECHNICAL_PROMPTS } from "@grifando/core/technical-prompts";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";

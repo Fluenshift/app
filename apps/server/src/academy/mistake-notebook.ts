@@ -2,10 +2,10 @@
 // Component read it: every pattern with its due and fading state and whether an Occurrence of it
 // carries L1 Transfer, and the breakdowns of all time and of the last 30 days. The page applies
 // its filters itself (docs/adr/0025).
-import type { MistakeNotebook } from "@fluenshift/contract";
-import { computeCategoryBreakdown } from "@fluenshift/core/analytics";
-import { isFading } from "@fluenshift/core/mastery";
-import { isDueForReview } from "@fluenshift/core/recall";
+import type { MistakeNotebook } from "@grifando/contract";
+import { computeCategoryBreakdown } from "@grifando/core/analytics";
+import { isFading } from "@grifando/core/mastery";
+import { isDueForReview } from "@grifando/core/recall";
 import { Effect } from "effect";
 
 import { listPatterns } from "./mistake-pattern-repository";
