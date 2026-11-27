@@ -105,7 +105,7 @@ describe("Setup & privacy", () => {
     const trainer = await screen.findByRole("region", { name: "Trainer" });
     expect(within(trainer).getByText("Needs setup")).toBeInTheDocument();
     expect(trainer).toHaveTextContent(
-      "Set ANTHROPIC_API_KEY, or GEMINI_API_KEY with AI_PROVIDER=gemini, in the server environment, then restart."
+      "Set ANTHROPIC_API_KEY, OPENROUTER_API_KEY, or GEMINI_API_KEY with AI_PROVIDER=gemini, in the server environment, then restart."
     );
   });
 
@@ -137,4 +137,55 @@ describe("Setup & privacy", () => {
       "The Academy sends practice writing to Anthropic, and once you have practiced, every Evaluation too."
     );
   });
+
+  test("says the Trainer shares the Judge's OpenRouter key", async () => {
+    const router = createAppRouter({
+      evaluationClient: createInMemoryEvaluationClient({
+        setupStatus: {
+          ...SETUP,
+          trainer: {
+            configured: true,
+            model: "google/gemini-3.5-flash",
+            provider: "OpenRouter",
+          },
+        },
+      }),
+      history: createMemoryHistory({ initialEntries: ["/setup"] }),
+    });
+
+    render(<RouterProvider router={router} />);
+
+    const trainer = await screen.findByRole("region", { name: "Trainer" });
+    expect(trainer).toHaveTextContent("Shares the Judge's OpenRouter key");
+  });
+
+  test.each([
+    ["the Judge is not OpenRouter", { provider: "Anthropic" }, "OpenRouter"],
+    ["the Trainer is not OpenRouter", {}, "Anthropic"],
+  ])(
+    "does not claim a shared key when %s",
+    async (_name, judge, trainerProvider) => {
+      const router = createAppRouter({
+        evaluationClient: createInMemoryEvaluationClient({
+          setupStatus: {
+            ...SETUP,
+            ...judge,
+            trainer: {
+              configured: true,
+              model: "claude-sonnet-5",
+              provider: trainerProvider,
+            },
+          },
+        }),
+        history: createMemoryHistory({ initialEntries: ["/setup"] }),
+      });
+
+      render(<RouterProvider router={router} />);
+
+      const trainer = await screen.findByRole("region", { name: "Trainer" });
+      expect(trainer).not.toHaveTextContent(
+        "Shares the Judge's OpenRouter key"
+      );
+    }
+  );
 });

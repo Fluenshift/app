@@ -8,6 +8,8 @@ The merge is done (ADR 0044): its plan, ledger and characterization tests stay i
 
 Node 26.13.0 and pnpm 12.18.0, which `mise.toml` pins: with [mise](https://mise.jdx.dev/), run `mise trust` once in the clone.
 
+One `OPENROUTER_API_KEY` runs both the Judge and the Trainer.
+
 ## Commands
 
 ```bash

@@ -294,8 +294,9 @@ describe("Docker smoke", () => {
     );
 
     // PE's expected status changed with ADR 0017 (the data location), ADR 0020 decision 5 (the
-    // provisional Rubric Version) and #273 (the local Trainer). Phase 4 built it, so its rows are
-    // superseded under ADR 0021 and the check stays here, pinned.
+    // provisional Rubric Version), #273 (the local Trainer) and #347 (the OpenRouter key alone runs
+    // the Trainer, OK-02). Phase 4 built it, so its rows are superseded under ADR 0021 and the check
+    // stays here, pinned.
     const setup = await readJson(`${baseUrl}/api/setup`);
     expect(setup).toStrictEqual({
       configured: true,
@@ -303,7 +304,11 @@ describe("Docker smoke", () => {
       model: "openai/gpt-5.6-terra",
       provider: "OpenRouter",
       rubricVersion: "1-provisional",
-      trainer: { configured: false },
+      trainer: {
+        configured: true,
+        model: "google/gemini-3.5-flash",
+        provider: "OpenRouter",
+      },
     });
     expect(leakedSentinels(JSON.stringify(setup))).toStrictEqual([]);
 

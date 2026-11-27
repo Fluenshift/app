@@ -28,6 +28,27 @@ const GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite";
 const OPENROUTER_MODEL = "google/gemini-3.5-flash";
 const OPENROUTER_FALLBACK_MODEL = "google/gemini-3.5-flash-lite";
 
+const nonEmpty = (key: Option.Option<Redacted.Redacted<string>>) =>
+  key.pipe(
+    Option.map((value) => Redacted.value(value).trim()),
+    Option.filter((value) => value.length > 0)
+  );
+
+const providerOf = (
+  aiProvider: string,
+  keys: Readonly<Record<TrainerProvider, Option.Option<string>>>
+): TrainerProvider => {
+  if (aiProvider === "gemini" || aiProvider === "openrouter") {
+    return aiProvider;
+  }
+  // OK-02: OpenRouter only when it is the sole key.
+  return Option.isNone(keys.anthropic) &&
+    Option.isNone(keys.gemini) &&
+    Option.isSome(keys.openrouter)
+    ? "openrouter"
+    : "anthropic";
+};
+
 /**
  * The Trainer's model pins, moved here from Grifando src/server/ai/client.ts (74dbb9f) by
  * docs/adr/0012. Each provider has a primary model, which `ANTHROPIC_MODEL` or `GEMINI_MODEL`
@@ -45,25 +66,34 @@ export class TrainerConfig extends Context.Service<
   static readonly layer = Layer.effect(
     TrainerConfig,
     Effect.gen(function* () {
-      const [anthropic, gemini, aiProvider, anthropicKey, geminiKey] =
-        yield* Config.all([
-          Config.NonEmptyString("ANTHROPIC_MODEL").pipe(
-            Config.withDefault(DEFAULT_ANTHROPIC_MODEL)
-          ),
-          Config.NonEmptyString("GEMINI_MODEL").pipe(
-            Config.withDefault(DEFAULT_GEMINI_MODEL)
-          ),
-          Config.String("AI_PROVIDER").pipe(Config.withDefault("")),
-          Config.option(Config.Redacted("ANTHROPIC_API_KEY")),
-          Config.option(Config.Redacted("GEMINI_API_KEY")),
-        ]);
-      // As Grifando's development keys did: Gemini when AI_PROVIDER names it, Anthropic
-      // otherwise, and no key when that provider's variable is empty.
-      const provider: TrainerProvider =
-        aiProvider === "gemini" ? "gemini" : "anthropic";
-      const localKey = (provider === "gemini" ? geminiKey : anthropicKey).pipe(
-        Option.map((key) => Redacted.value(key).trim()),
-        Option.filter((key) => key.length > 0),
+      const [
+        anthropic,
+        gemini,
+        aiProvider,
+        anthropicKey,
+        geminiKey,
+        openrouterKey,
+      ] = yield* Config.all([
+        Config.NonEmptyString("ANTHROPIC_MODEL").pipe(
+          Config.withDefault(DEFAULT_ANTHROPIC_MODEL)
+        ),
+        Config.NonEmptyString("GEMINI_MODEL").pipe(
+          Config.withDefault(DEFAULT_GEMINI_MODEL)
+        ),
+        Config.String("AI_PROVIDER").pipe(Config.withDefault("")),
+        Config.option(Config.Redacted("ANTHROPIC_API_KEY")),
+        Config.option(Config.Redacted("GEMINI_API_KEY")),
+        Config.option(Config.Redacted("OPENROUTER_API_KEY")),
+      ]);
+      // As Grifando's development keys did: Gemini or OpenRouter when AI_PROVIDER names it.
+      // With it empty, OpenRouter only when it is the sole key, else Anthropic (OK-02).
+      const keys = {
+        anthropic: nonEmpty(anthropicKey),
+        gemini: nonEmpty(geminiKey),
+        openrouter: nonEmpty(openrouterKey),
+      };
+      const provider = providerOf(aiProvider, keys);
+      const localKey = keys[provider].pipe(
         Option.map((key): TrainerKey => ({
           apiKey: Redacted.make(key),
           provider,
