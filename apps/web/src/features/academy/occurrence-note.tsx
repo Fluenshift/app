@@ -1,19 +1,14 @@
 // A marginal note for one Occurrence of a practice Writing Sample. Ported from Grifando
-// src/components/writing/MistakeCard.tsx (74dbb9f); "Save to vocabulary" hands the vocabulary form
-// its prefill in history state, never in the URL (docs/adr/0025).
+// src/components/writing/MistakeCard.tsx (74dbb9f).
 import type { EvaluationFinding, PracticeOccurrence } from "@grifando/contract";
 import { Badge } from "@grifando/ui/components/badge";
-import { Link } from "@tanstack/react-router";
 
 import { MISTAKE_CATEGORY_LABELS } from "./mistake-category-labels";
-import "./vocabulary-prefill";
 
 export const OccurrenceNote = ({
-  evaluationId,
   index,
   occurrence,
 }: {
-  readonly evaluationId: string;
   readonly index: number;
   readonly occurrence: PracticeOccurrence;
 }) => (
@@ -55,19 +50,6 @@ export const OccurrenceNote = ({
       <p className="prose-serif text-iron italic">
         &ldquo;{occurrence.example}&rdquo;
       </p>
-      <Link
-        className="inline-block text-sm underline"
-        state={{
-          vocabularyPrefill: {
-            example: occurrence.example,
-            sourceEvaluationId: evaluationId,
-            term: occurrence.correctedSpan,
-          },
-        }}
-        to="/vocabulary"
-      >
-        Save to vocabulary
-      </Link>
     </div>
   </article>
 );
@@ -75,11 +57,9 @@ export const OccurrenceNote = ({
 // The note for a Finding the Enrichment recorded no Occurrence for: its Error Category stands in
 // for the Mistake Category, and it carries no example.
 export const FindingNote = ({
-  evaluationId,
   finding,
   index,
 }: {
-  readonly evaluationId: string;
   readonly finding: EvaluationFinding;
   readonly index: number;
 }) => (
@@ -107,19 +87,6 @@ export const FindingNote = ({
         <span>{finding.correction}</span>
       </p>
       <p className="text-iron">{finding.explanation}</p>
-      <Link
-        className="inline-block text-sm underline"
-        state={{
-          vocabularyPrefill: {
-            example: "",
-            sourceEvaluationId: evaluationId,
-            term: finding.correction,
-          },
-        }}
-        to="/vocabulary"
-      >
-        Save to vocabulary
-      </Link>
     </div>
   </article>
 );

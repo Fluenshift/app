@@ -39,9 +39,9 @@ const PrivacyPage = () => (
         <Block id="stored-en" title="What we store">
           <p>
             The texts you write, their Evaluations, your Mistake Patterns,
-            exercises and attempts, your interview practice answers, and your
-            vocabulary. They are kept under a random id held in a cookie in your
-            browser. We do not ask for or store your name, email or any login.
+            exercises and attempts, and your interview practice answers. They
+            are kept under a random id held in a cookie in your browser. We do
+            not ask for or store your name, email or any login.
           </p>
           <p>
             To limit requests, we also keep a hash of your IP address, with

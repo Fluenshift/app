@@ -1,6 +1,5 @@
-// A fake Academy client for the screen tests: it answers from explicit fixtures, keeps the
-// vocabulary it is given and saves, and records each save, generation, Attempt, key test and
-// Learner deletion request. A call with no fixture fails.
+// A fake Academy client for the screen tests: it answers from explicit fixtures, and records each
+// generation, Attempt, key test and Learner deletion request. A call with no fixture fails.
 import type {
   AcademyDashboard,
   DailyChallenge,
@@ -13,8 +12,6 @@ import type {
   PracticeWritingResult,
   SampleLimits,
   StartedInterview,
-  VocabularyItem,
-  VocabularyItemRequest,
 } from "@grifando/contract";
 
 import { getStoredAIKey, MissingAIKeyError } from "../settings/ai-key-store";
@@ -57,8 +54,6 @@ interface InMemoryAcademyClientOptions {
    */
   readonly deletions?: readonly (null | Promise<undefined> | Error)[];
   readonly exercises?: InMemoryExercises;
-  /** Every save fails, as a refused or failed request does. */
-  readonly failVocabularySaves?: boolean;
   readonly interview?: InMemoryInterview;
   /** What each key test finds, in order: a status, a test still running, or its failure. */
   readonly keyTests?: readonly (
@@ -71,8 +66,6 @@ interface InMemoryAcademyClientOptions {
   readonly practiceWriting?: PracticeWritingResult | AcademyRequestError;
   /** The Deploy Profile's caps; the local profile's when left out (ADR 0006). */
   readonly sampleLimits?: SampleLimits;
-  /** The Learner's vocabulary, newest first. */
-  readonly vocabulary?: readonly VocabularyItem[];
 }
 
 export type InMemoryAcademyClient = AcademyClient & {
@@ -91,7 +84,6 @@ export type InMemoryAcademyClient = AcademyClient & {
   readonly generationRequests: readonly ExerciseGenerationRequest[];
   /** The key the browser held when each key test ran, as the hosted client would send it. */
   readonly keyTestRequests: readonly (AICredentials | null)[];
-  readonly vocabularyRequests: readonly VocabularyItemRequest[];
   readonly writeRequests: readonly string[];
   /** The snippet each practice writing request sent, beside its Writing Sample. */
   readonly codeSnippets: readonly (string | undefined)[];
@@ -127,7 +119,6 @@ export const createInMemoryAcademyClient = ({
   dailyChallenge,
   deletions = [],
   exercises = {},
-  failVocabularySaves = false,
   interview = {},
   keyTests = [],
   mistakeNotebook,
@@ -137,10 +128,7 @@ export const createInMemoryAcademyClient = ({
     sampleMaxBytes: 32_768,
     sampleMaxCharacters: null,
   },
-  vocabulary,
 }: InMemoryAcademyClientOptions = {}): InMemoryAcademyClient => {
-  let items = vocabulary;
-  const vocabularyRequests: VocabularyItemRequest[] = [];
   const generationRequests: ExerciseGenerationRequest[] = [];
   const attemptRequests: { answer: string; exerciseId: string }[] = [];
   const writeRequests: string[] = [];
@@ -162,34 +150,9 @@ export const createInMemoryAcademyClient = ({
     answerRequests,
     attemptRequests,
     codeSnippets,
-    createVocabularyItem: (request) => {
-      vocabularyRequests.push(request);
-      if (failVocabularySaves || items === undefined) {
-        return Promise.reject(new Error("The save failed"));
-      }
-      items = [
-        {
-          createdAt: new Date().toISOString(),
-          exampleSentence: request.exampleSentence,
-          id: `item-${vocabularyRequests.length}`,
-          meaningPt: request.meaningPt,
-          sourceEvaluationId: request.sourceEvaluationId ?? null,
-          term: request.term,
-        },
-        ...items,
-      ];
-      return Promise.resolve();
-    },
     deleteLearner: async () => {
       deletionRequests.push(getStoredAIKey());
       await deletionOf(deletions[deletionRequests.length - 1]);
-    },
-    deleteVocabularyItem: (itemId) => {
-      if (items === undefined) {
-        return unavailableAcademyClient.deleteVocabularyItem(itemId);
-      }
-      items = items.filter((item) => item.id !== itemId);
-      return Promise.resolve();
     },
     deletionRequests,
     endInterview: (sessionId) => {
@@ -218,10 +181,6 @@ export const createInMemoryAcademyClient = ({
     getSampleLimits: () => Promise.resolve(sampleLimits),
     keyTestRequests,
     listPendingExercises: () => settle(exercises.pending),
-    listVocabulary: () =>
-      items === undefined
-        ? unavailableAcademyClient.listVocabulary()
-        : Promise.resolve(items),
     startInterview: () => settle(interview.started),
     submitAttempt: (exerciseId, answer) => {
       attemptRequests.push({ answer, exerciseId });
@@ -232,7 +191,6 @@ export const createInMemoryAcademyClient = ({
       const keyTest = keyTests[keyTestRequests.length - 1];
       return keyTest instanceof Promise ? keyTest : settle(keyTest);
     },
-    vocabularyRequests,
     writePractice: (writingSample, codeSnippet) => {
       writeRequests.push(writingSample);
       codeSnippets.push(codeSnippet);

@@ -81,14 +81,12 @@ export const PracticeEvaluation = ({
               {notes.map((note, index) =>
                 "occurrence" in note ? (
                   <OccurrenceNote
-                    evaluationId={evaluation.id}
                     index={index}
                     key={note.occurrence.id}
                     occurrence={note.occurrence}
                   />
                 ) : (
                   <FindingNote
-                    evaluationId={evaluation.id}
                     finding={note.finding}
                     index={index}
                     key={`finding-${String(note.position)}`}
