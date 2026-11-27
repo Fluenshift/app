@@ -12,7 +12,6 @@ import {
   PracticeWritingRequest,
   ProgressEvidenceRequest,
   ProgressPeriod,
-  VocabularyItemRequest,
   WritingSampleRequest,
 } from "@grifando/contract";
 import type {
@@ -65,7 +64,6 @@ import {
   TrainerKeyRequiredError,
 } from "./academy/trainer/trainer-errors";
 import type { TrainerAccessError } from "./academy/trainer/trainer-errors";
-import type { VocabularyItem } from "./academy/vocabulary-repository";
 import { INTERNAL_ERROR, makeEdge } from "./edge";
 import type { EdgeFailure, EdgeRuntime } from "./edge";
 import { endpointFailure } from "./evaluation/evaluation-endpoint";
@@ -192,25 +190,12 @@ export interface AppBoundaries<R = never> {
   >;
   readonly logEvaluation?: (event: EvaluationLogEvent) => void;
   readonly setup?: SetupStatus;
-  readonly createVocabularyItem?: (
-    request: VocabularyItemRequest
-  ) => Effect.Effect<unknown, DatabaseError, R | CurrentLearner>;
-  /** The Learner's vocabulary items, newest first. */
-  readonly listVocabularyItems?: () => Effect.Effect<
-    readonly VocabularyItem[],
-    DatabaseError,
-    R | CurrentLearner
-  >;
   /** The Learner's Mistake Notebook: every pattern with its derived state, and the breakdowns. */
   readonly getMistakeNotebook?: () => Effect.Effect<
     MistakeNotebook,
     DatabaseError,
     R | CurrentLearner
   >;
-  /** Whether the Learner had an item with that id, which is now deleted. */
-  readonly deleteVocabularyItem?: (
-    id: string
-  ) => Effect.Effect<boolean, DatabaseError, R | CurrentLearner>;
   /** Ends the Learner's interview session; false when the Learner has no such session. */
   readonly endInterview?: (
     sessionId: string
@@ -505,11 +490,7 @@ const WRITING_SAMPLE_REQUEST = Schema.toStandardSchemaV1(WritingSampleRequest);
 // Both evidence routes refuse a selection they cannot read with one answer.
 const EVIDENCE_REQUEST = Schema.toStandardSchemaV1(ProgressEvidenceRequest);
 
-// Grifando's vocabulary routes answer every issue of a refused body (src/app/api/vocabulary,
-// 74dbb9f), and a failure with a message the Learner can act on.
-const VOCABULARY_REQUEST = Schema.toStandardSchemaV1(VocabularyItemRequest, {
-  parseOptions: { errors: "all" },
-});
+// A failure with a message the Learner can act on.
 const SOMETHING_WENT_WRONG: EdgeFailure = {
   body: { error: "Something went wrong. Please try again." },
   status: 500,
@@ -1379,19 +1360,6 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
         success: (notebook) => Response.json(notebook),
       });
     })
-    // The Learner's vocabulary, newest first (Grifando's /vocabulary page read it in a Server
-    // Component; docs/adr/0025).
-    .get("/api/vocabulary", (context): Response | Promise<Response> => {
-      const { listVocabularyItems } = options;
-      if (listVocabularyItems === undefined) {
-        return context.json(notReady("Vocabulary is not available"), 503);
-      }
-      return edge(forLearner(context.req.raw, listVocabularyItems()), {
-        errors: { DatabaseError: () => SOMETHING_WENT_WRONG },
-        log: "Failed to list vocabulary items",
-        success: (items) => Response.json({ items }),
-      });
-    })
     // Practice writing (Grifando's POST /api/writing-sessions, docs/adr/0026): the Judge
     // evaluates the text as a practice Writing Sample and the Trainer folds its Findings. The
     // key is resolved first; a failed Enrichment keeps the Evaluation and answers 201, as
@@ -1465,72 +1433,6 @@ export const createApp = <R = never>(options: AppOptions<R>) => {
                 { error: "Invalid request body", issues: result.issues },
                 { status: 400 }
               )
-        );
-      }
-    )
-    .post(
-      "/api/vocabulary",
-      (
-        context: BodyContext<typeof VocabularyItemRequest, "/api/vocabulary">
-      ): Response | Promise<Response> => {
-        const { createVocabularyItem } = options;
-        if (createVocabularyItem === undefined) {
-          return context.json(notReady("Vocabulary is not available"), 503);
-        }
-        return readBody(context, VOCABULARY_REQUEST, null).then((result) =>
-          result.issues === undefined
-            ? edge(
-                forLearner(
-                  context.req.raw,
-                  admitted(
-                    context.req.raw,
-                    "write",
-                    createVocabularyItem(result.value)
-                  )
-                ),
-                {
-                  errors: {
-                    DatabaseError: () => SOMETHING_WENT_WRONG,
-                    RateLimitedError: rateLimited,
-                  },
-                  log: "Failed to save vocabulary item",
-                  success: (item) => Response.json(item, { status: 201 }),
-                }
-              )
-            : Response.json(
-                { error: "Invalid request body", issues: result.issues },
-                { status: 400 }
-              )
-        );
-      }
-    )
-    .delete(
-      "/api/vocabulary/:itemId",
-      (context): Response | Promise<Response> => {
-        const { deleteVocabularyItem } = options;
-        if (deleteVocabularyItem === undefined) {
-          return context.json(notReady("Vocabulary is not available"), 503);
-        }
-        return edge(
-          forLearner(
-            context.req.raw,
-            admitted(
-              context.req.raw,
-              "write",
-              deleteVocabularyItem(context.req.param("itemId"))
-            )
-          ),
-          {
-            errors: {
-              DatabaseError: () => SOMETHING_WENT_WRONG,
-              RateLimitedError: rateLimited,
-            },
-            log: "Failed to delete vocabulary item",
-            success: (deleted) =>
-              deleted
-                ? new Response(null, { status: 204 })
-                : Response.json({ error: "Not found" }, { status: 404 }),
-          }
         );
       }
     )

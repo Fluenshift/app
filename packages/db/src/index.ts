@@ -19,5 +19,4 @@ export {
   occurrences,
   rateLimitWindows,
   suggestions,
-  vocabularyItems,
 } from "./schema";

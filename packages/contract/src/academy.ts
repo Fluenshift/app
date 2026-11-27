@@ -123,41 +123,6 @@ export const DailyChallenge = Schema.Struct({
 });
 export type DailyChallenge = typeof DailyChallenge.Type;
 
-/**
- * A vocabulary item the Learner saves, with Grifando's limits (src/app/api/vocabulary/route.ts,
- * 74dbb9f). Its source is one of the Learner's Evaluations, which replace Grifando's writing
- * sessions (docs/adr/0004).
- */
-export const VocabularyItemRequest = Schema.Struct({
-  exampleSentence: Schema.Trim.check(
-    Schema.isMinLength(1),
-    Schema.isMaxLength(500)
-  ),
-  meaningPt: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(300)),
-  sourceEvaluationId: Schema.optional(
-    Schema.String.check(Schema.isMinLength(1), Schema.isMaxLength(64))
-  ),
-  term: Schema.Trim.check(Schema.isMinLength(1), Schema.isMaxLength(120)),
-});
-export type VocabularyItemRequest = typeof VocabularyItemRequest.Type;
-
-/** A saved vocabulary item as the Learner reads it back (docs/adr/0025). */
-export const VocabularyItem = Schema.Struct({
-  createdAt: Schema.String,
-  exampleSentence: Schema.String,
-  id: Schema.String,
-  meaningPt: Schema.String,
-  sourceEvaluationId: Schema.NullOr(Schema.String),
-  term: Schema.String,
-});
-export type VocabularyItem = typeof VocabularyItem.Type;
-
-/** The Learner's vocabulary, newest first (Grifando's /vocabulary page, 74dbb9f). */
-export const VocabularyList = Schema.Struct({
-  items: Schema.Array(VocabularyItem),
-});
-export type VocabularyList = typeof VocabularyList.Type;
-
 /** One Mistake Category's share of the Learner's Occurrences (Grifando's analytics, 74dbb9f). */
 export const CategoryBreakdownEntry = Schema.Struct({
   category: MistakeCategorySchema,

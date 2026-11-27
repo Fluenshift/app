@@ -101,10 +101,7 @@ const runtime = ManagedRuntime.make(
 
 const hostedApp = (settings = session) =>
   createApp({
-    createVocabularyItem: (request) =>
-      Effect.succeed({ id: "item-1", ...request }),
     limits,
-    listVocabularyItems: () => Effect.succeed([]),
     profile: "hosted",
     runtime,
     serveWeb: true,
@@ -141,7 +138,7 @@ const attributesOf = (response: Response) => {
 describe("hosted request pipeline", () => {
   it("answers 401 SESSION_REQUIRED to an /api request without a valid cookie and mints nothing", async () => {
     const response = await hostedApp().request(
-      new Request("http://127.0.0.1:3000/api/vocabulary", { method: "POST" })
+      new Request("http://127.0.0.1:3000/api/evaluations", { method: "POST" })
     );
     expect(response.status).toBe(401);
     expect(response.headers.get("set-cookie")).toBeNull();
@@ -153,7 +150,7 @@ describe("hosted request pipeline", () => {
 
   it("lets an /api request with a valid cookie through", async () => {
     const response = await hostedApp().request(
-      new Request("http://127.0.0.1:3000/api/vocabulary", {
+      new Request("http://127.0.0.1:3000/api/deploy-profile", {
         headers: { cookie: validCookie() },
       })
     );
@@ -182,8 +179,10 @@ describe("hosted request pipeline", () => {
       [
         request(),
         request(validCookie()),
-        new Request("http://127.0.0.1:3000/api/vocabulary", { method: "POST" }),
-        new Request("http://127.0.0.1:3000/api/vocabulary", {
+        new Request("http://127.0.0.1:3000/api/evaluations", {
+          method: "POST",
+        }),
+        new Request("http://127.0.0.1:3000/api/deploy-profile", {
           headers: { cookie: validCookie() },
         }),
         new Request("http://127.0.0.1:3000/assets/app-123.js"),
@@ -251,7 +250,9 @@ describe("next.config security headers", () => {
     const responses = await Promise.all(
       [
         request(),
-        new Request("http://127.0.0.1:3000/api/vocabulary", { method: "POST" }),
+        new Request("http://127.0.0.1:3000/api/evaluations", {
+          method: "POST",
+        }),
         new Request("http://127.0.0.1:3000/api/health"),
         new Request("http://127.0.0.1:3000/assets/app-123.js"),
       ].map((each) => hostedApp().request(each))
