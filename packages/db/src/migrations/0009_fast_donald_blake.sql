@@ -1,0 +1,1 @@
+DROP TABLE "pe_imports" CASCADE;

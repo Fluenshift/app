@@ -34,18 +34,6 @@ pnpm docker:logs                 # follow its logs
 pnpm docker:down                 # stop and remove the container; the data stays in ./.data
 ```
 
-### Importing PE's local history
-
-Prompt Evolution's local Evaluations move into the local profile once, as Rubric Version 1 (ADR 0018). Stop PE and the container, build, then run the importer from `apps/server` on PE's `local.db`, which PE's Docker setup kept in `.data/` of its clone. Run it as a dry run first:
-
-```bash
-pnpm docker:down && pnpm build && cd apps/server
-DATA_DIRECTORY=../../.data/pglite node dist/import-pe.mjs --dry-run <path to PE's local.db>
-DATA_DIRECTORY=../../.data/pglite node dist/import-pe.mjs <path to PE's local.db>
-```
-
-Accept the import only when both runs print the same counts. The importer never writes to PE's file, refuses a file with no Evaluations, imports nothing when a row does not fit the product, and runs once: after an import it refuses every later run, even after the imported Evaluations were deleted.
-
 ## License
 
 MIT.

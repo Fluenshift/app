@@ -33,7 +33,7 @@ Read the other documents when their subject comes up:
 | --- | --- |
 | `CONTEXT.md` | Before naming anything in code, tests or UI. |
 | `docs/adr/README.md`, then the ADR | When an issue or a rule cites an ADR, and before a change at a seam between the two products. |
-| `docs/engineering-notes.md` | Before a change to a seam, the hosted profile, the Academy, the PE import, Protected Technical Content, the Docker smoke or CI. |
+| `docs/engineering-notes.md` | Before a change to a seam, the hosted profile, the Academy, Protected Technical Content, the Docker smoke or CI. |
 | `docs/product/` | When a unit touches a requirement, the rubric or the data policy. |
 | `apps/server/node_modules/effect/AGENTS.md`, and `ai-docs/` beside it | Before writing Effect code. They match the installed version. |
 

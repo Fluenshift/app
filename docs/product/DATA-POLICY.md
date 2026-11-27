@@ -93,19 +93,6 @@ stays until the Learner deletes it (ADR 0011). There are no application-managed 
 deletion cannot be undone through the product. Introducing backups later requires a new
 explicit policy.
 
-### PE's local history
-
-Prompt Evolution's local Evaluations move into the local profile once, as Rubric Version 1, for
-its one Learner (ADR 0018). The importer reads PE's SQLite file without changing it, copies each
-Evaluation with its Findings and Suggestions as a work Writing Sample, and runs no model, so the
-Academy enriches none of them. It imports nothing unless every row fits the product, and it runs
-once: the product keeps when the import ran and how many Evaluations, Findings and Suggestions
-it wrote, and refuses every later run, even after the Learner deleted what the import wrote. A
-PE file with no Evaluations is refused before anything is recorded, so a wrong file cannot use
-up the one import.
-Progress keeps the imported Evaluations in Rubric Version 1's own segment, apart from the
-provisional version.
-
 ## Hosted profile
 
 The hosted profile replaces Grifando's public site; it was built in Phase 6 of the migration,
