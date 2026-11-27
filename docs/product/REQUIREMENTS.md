@@ -116,6 +116,7 @@ search of History; goals; directional improvement claims; any advice about promp
 code review in Explain Code; voice, speech recognition and pronunciation scoring; social
 features, leaderboards and friend streaks; XP, badges and currencies; native mobile apps;
 browser extensions; reminders; vocabulary review, whose schema exists but whose feature waits.
+Ideas the owners keep for later, some of them on this list, are in [`IDEAS.md`](./IDEAS.md).
 
 Brought into scope by the merge: the hosted Deploy Profile with anonymous sessions
 (ADR 0003), several Trainer providers and visitors' own keys (ADR 0012), and the Academy's
