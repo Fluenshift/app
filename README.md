@@ -48,4 +48,4 @@ Accept the import only when both runs print the same counts. The importer never 
 
 ## License
 
-MIT.
+Source-available under the [PolyForm Noncommercial License 1.0.0](./LICENSE) (ADR 0047): anyone may read, run, change and share Grifando for a noncommercial purpose. Commercial use needs a license from Fluenshift.
