@@ -16,7 +16,6 @@ One `OPENROUTER_API_KEY` runs both the Judge and the Trainer.
 pnpm install --frozen-lockfile   # install and patch TypeScript and oxlint with Effect diagnostics
 pnpm verify                      # static checks, the tests that need no Docker, and the build
 pnpm test                        # unit and integration tests
-pnpm test:e2e                    # Playwright journeys against the built server and web app
 pnpm test:postgres               # the Database service against Postgres 17: set DEPLOY_PROFILE=hosted and DATABASE_URL
 pnpm db:generate                 # write the next migration from the Drizzle schema
 pnpm dev                         # Vite for the web app; it proxies /api to a server started on port 3000

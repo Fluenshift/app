@@ -80,7 +80,7 @@ New IDs in `docs/product/REQUIREMENTS.md`, range PC:
 
 - Unit tests for bucketing: empty buckets, a bucket spanning midnight, two Rubric Versions,
   the kind filter.
-- Playwright: with seeded Evaluations over 10 days, the 30-day chart shows the right points and
+- A screen test: with seeded Evaluations over 10 days, the 30-day chart shows the right points and
   clicking one lists its Evaluations.
 - Light and dark themes render the charts legibly (`-root.light-theme.test.tsx` pattern).
 
