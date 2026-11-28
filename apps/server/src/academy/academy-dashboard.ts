@@ -1,13 +1,12 @@
 // The Academy dashboard. Ported from Grifando src/app/page.tsx (74dbb9f), whose Server Component
 // read it, at /academy under docs/adr/0025. A writing session is a practice-origin Writing Sample
-// (docs/adr/0004): its Evaluations give the writing count, the recent writing and, with the
-// Attempts, the Streak. The averaged model scores are gone (docs/adr/0002).
+// (docs/adr/0004): its Evaluations give the writing count and the recent writing. The averaged
+// model scores are gone (docs/adr/0002), and so is every game element (docs/adr/0046).
 import type { AcademyDashboard } from "@grifando/contract";
 import { computeCategoryBreakdown } from "@grifando/core/analytics";
 import { isDueForReview } from "@grifando/core/recall";
 import { CURRENT_RUBRIC_VERSION } from "@grifando/core/rubric-v1";
 import { selectPatternsForPractice } from "@grifando/core/selection";
-import { computeStreak } from "@grifando/core/streak";
 import { Database, evaluationsView, findingsView } from "@grifando/db";
 import { and, count, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
@@ -154,15 +153,6 @@ export const academyDashboard = Effect.fn("AcademyDashboard.academyDashboard")(
               exampleOriginal: recommendation.exampleOriginal,
               occurrenceCount: recommendation.occurrenceCount,
             },
-      // Days follow the server's local time zone, as in Grifando: the app runs on the Learner's
-      // machine.
-      streak: computeStreak(
-        [
-          ...writing.map(({ evaluatedAt }) => evaluatedAt),
-          ...attempts.map(({ attemptedAt }) => attemptedAt),
-        ],
-        now
-      ),
       weakAreas: computeCategoryBreakdown(categoryCounts),
       findingTrend: findingTrendOf(writing),
     } satisfies AcademyDashboard;

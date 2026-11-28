@@ -56,7 +56,6 @@ const empty: AcademyDashboard = {
     },
   },
   recommendation: null,
-  streak: { activeToday: false, current: 0, longest: 0 },
   weakAreas: [],
 };
 
@@ -112,7 +111,6 @@ describe("/academy", () => {
         occurrenceCount: 3,
       },
       findingTrend: empty.findingTrend,
-      streak: { activeToday: true, current: 4, longest: 4 },
       weakAreas: [{ category: "PREPOSITIONS", count: 4, percentage: 100 }],
     });
     expect(after.text).not.toContain("longest 4");

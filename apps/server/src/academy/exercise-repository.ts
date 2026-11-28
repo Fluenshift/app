@@ -91,8 +91,8 @@ export const createExercises = Effect.fn("ExerciseRepository.createExercises")(
   }
 );
 
-// When the Learner answered and whether each answer was right, newest first: the dashboard's
-// streak and accuracy need no more (Grifando's listAttemptDates, countByUser and recentAccuracy).
+// Whether each answer was right, newest first: the dashboard's count and accuracy need no more
+// (Grifando's countByUser and recentAccuracy).
 export const listAttemptOutcomes = Effect.fn(
   "ExerciseRepository.listAttemptOutcomes"
 )(function* () {
@@ -100,10 +100,7 @@ export const listAttemptOutcomes = Effect.fn(
   const learner = yield* CurrentLearner;
   return yield* database.run((client) =>
     client
-      .select({
-        attemptedAt: exerciseAttempts.attemptedAt,
-        isCorrect: exerciseAttempts.isCorrect,
-      })
+      .select({ isCorrect: exerciseAttempts.isCorrect })
       .from(exerciseAttempts)
       .where(eq(exerciseAttempts.learnerId, learner.id))
       .orderBy(desc(exerciseAttempts.attemptedAt))
