@@ -85,7 +85,7 @@ describe("applyExerciseResult", () => {
     });
   });
 
-  it("resets the streak on an incorrect attempt from ACTIVE", () => {
+  it("resets the consecutive correct count on an incorrect attempt from ACTIVE", () => {
     const result = applyExerciseResult(
       { masteryLevel: MasteryLevel.ACTIVE, consecutiveCorrectCount: 1 },
       false
