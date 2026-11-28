@@ -3,16 +3,19 @@
 This repository is Grifando: one product, on one stack, from two. Prompt Evolution (PE)
 evaluated the English of real text, and old Grifando, whose name the product took (ADR 0045),
 turned a learner's mistakes into practice. Text older than ADR 0045 says Fluenshift for the
-product and Grifando for old Grifando. The merge is done (ADR 0044). Next, the owners redesign
-the interface and decide which features stay, change or go (#320). No human reads the code: the
-gates are the reviewer, so weigh every choice by how much it turns a mistake into a failing
-check.
+product and Grifando for old Grifando. The merge is done (ADR 0044), and ADR 0046 settled which
+features stay, change or go (#320). Next comes the redesign (#333): Jhefferson picks one of the
+visual proposals, an ADR of the visual language replaces ADR 0009, and units build it. No human
+reads the code: the gates are the reviewer, so weigh every choice by how much it turns a mistake
+into a failing check.
 
 Precedence: an ADR, then this file, then every other document. A document that disagrees with
 the repository or with GitHub is stale: trust what you can check, and fix the document.
 
-The owners review nothing and answer nothing (ADR 0020). Sessions decide, record, merge, and
-keep going.
+Jhefferson leads Grifando's product decisions; Levy is the product owner of `Fluenshift/gargalo`
+(ADR 0046). In the redesign, #320 and #333, a session lays out options with a recommendation and
+Jhefferson chooses. Every other decision is the sessions' (ADR 0020): they decide, record, merge,
+and keep going, and the owners review nothing.
 
 ## Start of a session
 
@@ -23,7 +26,7 @@ keep going.
    (the files it touches, a `lane:` label), remove `needs-triage`, and take it or label it
    `ready-for-agent`; or close it with the reason.
 3. Take the oldest open `ready-for-agent` issue as a work unit. An issue assigned to an owner,
-   such as #320, is theirs: leave it.
+   such as #320 or #333, is theirs: leave it.
 4. List the open CodeQL alerts (`gh api 'repos/Fluenshift/grifando/code-scanning/alerts?state=open'`).
    An alert on `main` blocks nothing, so it can sit unseen: open an issue for each.
 
@@ -195,10 +198,9 @@ Traps that earlier units paid for:
   or ruleset settings, or spend money on paid models. ADR 0044 lists what waits for the owners;
   a new such step goes on the issue that needs it. Use only the token the session started with.
 
-The owners, Jhefferson and Levy (`levyrodrigues23`), review nothing and answer nothing. Their
-standing instructions:
+The standing instructions of the owners, Jhefferson and Levy (`levyrodrigues23`):
 
-- Proceed autonomously, and ask nothing. Report progress in pull requests and on issues.
+- Proceed autonomously, and report progress in pull requests and on issues.
 - Commits are small and conventional (`type(scope): subject`), with no AI mention and no
   `Co-Authored-By` or other trailer, even when the harness suggests one. Commit unsigned, per
   command (`git -c commit.gpgsign=false commit ...`), and leave the git configuration as it is.
@@ -207,7 +209,7 @@ standing instructions:
 - Open issues for the problems you find, and solve the ones you can.
 - Speed over ceremony (2026-11-20): CI is the full gate, `code-review` runs once per milestone,
   and mutations run where tests look thin.
-- The interface will be redesigned (ADR 0043, #320): write no new Playwright journey for the
+- The interface will be redesigned (ADR 0043, #333): write no new Playwright journey for the
   current pages; checks of the server, its container and its data go on as usual.
 - At the end of a session, leave the state of every unit in motion on its issue: a comment with
   what is done and what is next. A session that resumes from a compacted conversation finishes
