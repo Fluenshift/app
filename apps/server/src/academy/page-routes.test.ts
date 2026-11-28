@@ -457,9 +457,9 @@ const seedAttempts = (
 
 // Grifando's / page under docs/adr/0025: the dashboard moves to /academy. A writing session is a
 // practice-origin Writing Sample (docs/adr/0004), so work-origin Evaluations count for none of it,
-// and the averaged model scores are gone (docs/adr/0002).
+// the averaged model scores are gone (docs/adr/0002), and so is every game element (docs/adr/0046).
 describe("/academy", () => {
-  it("feeds the dashboard's streak, progress, weak areas and recent lists", async () => {
+  it("feeds the dashboard's progress, weak areas and recent lists", async () => {
     const empty = await GET("/api/academy/dashboard");
     expect(empty.status).toBe(200);
     expect(await empty.json()).toEqual({
@@ -486,7 +486,6 @@ describe("/academy", () => {
           findingRate: null,
         },
       },
-      streak: { activeToday: false, current: 0, longest: 0 },
       weakAreas: [],
     });
 
@@ -530,11 +529,6 @@ describe("/academy", () => {
       readonly recentPatterns: readonly { readonly id: string }[];
       readonly recentWriting: readonly { readonly id: string }[];
     } & Record<string, unknown>;
-    expect(dashboard["streak"]).toEqual({
-      activeToday: true,
-      current: 4,
-      longest: 4,
-    });
     expect(dashboard["progress"]).toEqual({
       exerciseAccuracy: { correct: 2, total: 3 },
       exercisesCompleted: 3,
