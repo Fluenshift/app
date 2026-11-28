@@ -2,9 +2,8 @@
 
 QR-08: every bundled font, icon and visual asset has a documented license. The production
 bundle contains the font files below, no logos, and two images: the Open Graph card that link
-previews load (ADR 0040), and the hand-drawn arrow of the Academy's hero note, an inline SVG. It
-makes no third-party runtime request until the Learner opens Focus Music, which loads the Spotify
-or YouTube player they chose (ADR 0039). Old Grifando's three faces are served by the build
+previews load (ADR 0040), and the hand-drawn arrow of the Academy's hero note, an inline SVG.
+It makes no third-party runtime request. Old Grifando's three faces are served by the build
 itself, latin only (ADR 0009); graphs are CSS.
 
 | Asset | Source | Version | License |
