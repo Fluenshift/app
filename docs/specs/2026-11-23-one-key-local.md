@@ -1,6 +1,7 @@
 # Spec: One AI key in the local profile
 
-- Status: Draft, 2026-11-23. Small change.
+- Status: Built on 2026-11-27 by #349 (#347). Its OK rows sit in `REQUIREMENTS.md`'s Functional
+  table (#354).
 
 ## Why
 
