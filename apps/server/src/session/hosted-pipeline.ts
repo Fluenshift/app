@@ -21,16 +21,16 @@ import {
  * The Content Security Policy of the static single-page application: Grifando's policy with
  * scripts from the same origin only, where its Next.js pages needed a per-request nonce,
  * 'strict-dynamic' and, in development, 'unsafe-eval'. Styles keep 'unsafe-inline' for React
- * style attributes; the frames and the thumbnails are Focus Music's.
+ * style attributes. The page frames nothing, so `default-src 'self'` covers frames
+ * (docs/adr/0046).
  */
 export const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://i.ytimg.com",
+  "img-src 'self' data:",
   "font-src 'self'",
   "connect-src 'self'",
-  "frame-src https://open.spotify.com https://www.youtube-nocookie.com https://www.youtube.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

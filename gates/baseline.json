@@ -585,13 +585,6 @@
           }
         },
         {
-          "files": ["apps/web/src/features/music/focus-music.tsx"],
-          "plugins": [],
-          "rules": {
-            "react/iframe-missing-sandbox": "allow"
-          }
-        },
-        {
           "files": ["**/*.test.ts", "**/*.test.tsx", "e2e/**/*.ts"],
           "plugins": ["vitest"],
           "rules": {

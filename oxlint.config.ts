@@ -162,14 +162,6 @@ export default defineConfig({
       },
     },
     {
-      // Focus Music frames Spotify's and YouTube's players, which play only with their scripts
-      // and their own origin. The rule refuses allow-scripts beside allow-same-origin, a pair
-      // that lifts the sandbox only of a frame on the page's own origin; this file alone may
-      // pair them, and `-focus-music.test.tsx` pins its one sandbox (docs/adr/0039).
-      files: ["apps/web/src/features/music/focus-music.tsx"],
-      rules: { "react/iframe-missing-sandbox": "off" },
-    },
-    {
       // Test integrity (AGENTS.md: tests come first): no test may be focused, skipped, left
       // as todo, commented out or defined conditionally, and titles stay unique because the
       // ledger keys on them.
