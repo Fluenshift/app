@@ -43,6 +43,11 @@ The Profiles column names the Deploy Profiles a requirement binds (ADR 0003): `l
 | FR-27 | A sample with no meaning-bearing English Passage is rejected and stored nowhere. | both |
 | FR-28 | Context-dependent wording gets no Finding or Correction — at most a Suggestion labeled non-error. | both |
 | FR-29 | English inside quotes and blockquotes is evaluated normally. | both |
+| OK-01 | `AI_PROVIDER=openrouter` selects OpenRouter for the Trainer, with `OPENROUTER_API_KEY` and the Trainer's existing OpenRouter model pins (`OPENROUTER_MODEL`, `OPENROUTER_FALLBACK_MODEL`). | local |
+| OK-02 | With `AI_PROVIDER` empty, no Anthropic or Gemini key and an OpenRouter key present, the Trainer uses OpenRouter. | local |
+| OK-03 | An existing Anthropic or Gemini setup behaves exactly as today. | local |
+| OK-04 | The Setup page names the Trainer's provider and says when it shares the Judge's key. | local |
+| OK-05 | No key appears in any log line or response (as the key-in-logs tests of `apps/server/src/practice/practice-writing-routes.test.ts` check today). | local |
 
 In the hosted profile, HR-01 replaces FR-03, HR-08 replaces FR-24, and FR-02 does not apply:
 the site is public (ADR 0003).
@@ -126,17 +131,11 @@ searchable Mistake Notebook (ADR 0020).
 
 Requirements of the specs in [`docs/specs/`](../specs/), accepted as the plan and not yet built.
 A row moves into Functional when the unit that builds it lands with its tests. Text Kind (TK)
-rows are in [`2026-11-23-text-kinds.md`](../specs/2026-11-23-text-kinds.md), Progress chart (PC)
-rows in [`2026-11-23-progress-charts.md`](../specs/2026-11-23-progress-charts.md) and one-key
-(OK) rows in [`2026-11-23-one-key-local.md`](../specs/2026-11-23-one-key-local.md).
+rows are in [`2026-11-23-text-kinds.md`](../specs/2026-11-23-text-kinds.md), and Progress chart
+(PC) rows in [`2026-11-23-progress-charts.md`](../specs/2026-11-23-progress-charts.md).
 
 | ID | Requirement | Profiles |
 | --- | --- | --- |
-| OK-01 | `AI_PROVIDER=openrouter` selects OpenRouter for the Trainer, with `OPENROUTER_API_KEY` and the Trainer's existing OpenRouter model pins (`OPENROUTER_MODEL`, `OPENROUTER_FALLBACK_MODEL`). | local |
-| OK-02 | With `AI_PROVIDER` empty, no Anthropic or Gemini key and an OpenRouter key present, the Trainer uses OpenRouter. | local |
-| OK-03 | An existing Anthropic or Gemini setup behaves exactly as today. | local |
-| OK-04 | The Setup page names the Trainer's provider and says when it shares the Judge's key. | local |
-| OK-05 | No key appears in any log line or response (as the key-in-logs tests of `apps/server/src/practice/practice-writing-routes.test.ts` check today). | local |
 | PC-01 | Progress returns a time series per period: one bucket per calendar day for 7 and 30 days, per ISO week (Monday start) for all history, each with evaluation count, English word count, Finding count and Finding Rate. Days and weeks are in the time zone the browser sends (IANA name); without one, UTC. | both |
 | PC-02 | Buckets with no Evaluations are returned empty, not as zero Finding Rate. | both |
 | PC-03 | The series also carries Finding count per Error Category per bucket. | both |
