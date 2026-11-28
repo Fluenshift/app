@@ -1478,6 +1478,14 @@
   .e-change {
     font-size: 26px;
   }
+  .e-change-sm {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .e-change-sm .e-arrow {
+    transform: rotate(90deg);
+  }
   .e-corrected {
     padding: 20px 16px 22px;
     box-shadow: 6px 6px 0 var(--yellow);
