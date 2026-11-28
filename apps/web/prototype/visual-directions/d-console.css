@@ -432,9 +432,10 @@
   color: var(--text-3);
   font-size: 12.5px;
 }
-.d-sub span + span::before {
+/* Each item ends with its separator, so a wrapped line never starts with one. */
+.d-sub span:not(:last-child)::after {
   content: "·";
-  margin-right: 14px;
+  margin-left: 14px;
 }
 .d-text {
   margin: 22px 0 0;
@@ -1493,8 +1494,8 @@
     margin-top: 20px;
     font-size: 21px;
   }
-  .d-sub span + span::before {
-    margin-right: 6px;
+  .d-sub span:not(:last-child)::after {
+    margin-left: 6px;
   }
   .d-sub {
     gap: 2px 6px;
