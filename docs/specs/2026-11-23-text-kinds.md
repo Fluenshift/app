@@ -98,7 +98,7 @@ new Rubric Version; Progress keeps versions apart as FR-22 already requires.
 ## Acceptance
 
 - Each TK row has a test that fails before its change (AGENTS.md: tests first).
-- Playwright: submit a `pull-request` sample, see it in History with its label, filter Progress
+- A screen test: submit a `pull-request` sample, see it in History with its label, filter Progress
   to Pull requests and see only it.
 - The hosted Docker smoke still passes.
 

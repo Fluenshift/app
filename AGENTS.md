@@ -55,18 +55,17 @@ shell environment when a session starts, so start sessions in the repository.
 | Command | What it does |
 | --- | --- |
 | `pnpm install --frozen-lockfile` | Install; also patches TypeScript and oxlint with the Effect diagnostics. |
-| `pnpm verify` | Format, documented commands, gate integrity, URL text, lint, Effect lint, types, Effect diagnostics, the tests that need no Docker, and the build. G5, G6 and G7's scans run apart, in CI. |
+| `pnpm verify` | Format, documented commands, gate integrity, URL text, lint, Effect lint, types, Effect diagnostics, the tests that need no Docker, and the build. G6 and G7's scans run apart, in CI. |
 | `pnpm format` / `pnpm format:fix` | Check or apply oxfmt. |
 | `pnpm lint` / `pnpm lint:effect` | oxlint, and the type-aware Effect rules. Warnings fail. |
 | `pnpm check-types` / `pnpm check:effect` | `tsc` per workspace, and the Effect diagnostics. |
 | `pnpm test` | The scripts' own tests, then Vitest in every workspace. The database cases run first, beside the small suites only, because PGlite's cold start times out next to the web and server suites (#72); the web suite waits for the server suite, whose load times out its 1-second queries. |
 | `pnpm db:generate` | Write the next migration of `packages/db` from `packages/db/src/schema.ts` with drizzle-kit. Only the coordinator runs it, one migration in flight at a time. |
 | `pnpm test:postgres` | The `Database` service against a Postgres 17 server; `DEPLOY_PROFILE=hosted` and `DATABASE_URL` name it. |
-| `pnpm test:e2e` | Build the server and the web app, then run the Playwright journeys against the one process that serves both. |
 | `pnpm build` | Server bundle and SPA build. |
 | `pnpm docker:smoke` | Gate G6: build the image and start it with Compose twice: in the local profile as the invoking user, to check its boundary, its data directory and what it serves, and in the hosted profile beside Postgres, to check its session cookie, CSP header, robots and sitemap. Needs Docker. |
 | `pnpm docker:up` / `pnpm docker:down` | Start the local profile in Docker on `127.0.0.1:3001`, with its data in `./.data`, or remove the container. |
-| `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, Vitest, Vite and Playwright setting, the hooks, and each workflow line by line are at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
+| `pnpm check:gates` | Gate integrity (G11): every lint, TypeScript, Vitest and Vite setting, the hooks, and each workflow line by line are at least as strict as `gates/baseline.json`, and no file gains a suppression comment. Only the coordinator records a new baseline, with `node scripts/check-gates.ts --write`. |
 | `pnpm check:url-text` | Gate G7 (ADR 0008): no server route reads user text from a URL. A query string carries only the period, the insight and the Error Category; a path only the Evaluation ID and the Academy's record IDs (ADR 0023). |
 | `node scripts/gate-selftest.ts` | Proves that each gate still rejects its broken case. Run it after changing a gate; CI runs it when a gate changes. |
 
@@ -85,7 +84,6 @@ gives its usage.
 | `packages/env` | Effect `Config`. The only place that may read the environment. |
 | `packages/ui` | Shared UI components. |
 | `packages/config` | Shared TypeScript configuration, including the Effect diagnostic severities. |
-| `e2e` | Playwright journeys against the built process. |
 | `smoke` | The Docker smoke (G6): Vitest suites against the image in the local and the hosted profile. |
 | `docs/adr`, `docs/product` | The decisions, and the requirements, rubric, data policy and asset licenses. |
 | `scripts`, `gates` | The gate scripts and G11's baseline. |
@@ -98,16 +96,16 @@ gives its usage.
 | G2 Lint and format | Type-aware oxlint with the Effect rules, and `oxfmt --check`. Bans focused and skipped tests, Node built-ins in `packages/core` and `packages/contract`, `zod`, `process.env` outside `packages/env`, and Academy writes to Evaluation data. |
 | G3 Tests | Vitest in every workspace, on PGlite databases, and the `Database` service against Postgres 17. |
 | G4 Build | The server bundle and the SPA build. |
-| G5 E2E | Playwright journeys against the built process. |
 | G6 Docker smoke | The image in the local profile (loopback-only publication, hostile Host and Origin headers, data surviving container replacement, no secret in assets or logs) and in the hosted profile (session cookie, CSP header, robots and sitemap). |
 | G7 Privacy and supply chain | gitleaks over the whole history, `pnpm audit --prod --audit-level high`, and no user text in a URL (ADR 0008). |
 | G11 Gate integrity | Every gate setting at least as strict as `gates/baseline.json`; no new suppression comment. |
 | G13 Live calibration | Deferred until the owners schedule it: paid, with frozen fixtures and a budget. |
 
-G8, G9 and G10 checked the migration's ledger and retired with it (ADR 0044); G12 retired
-earlier (ADR 0019). CI runs each suite once per run, and two rules skip work that cannot fail
-(`scripts/ci-changes.ts`): a change that is only Markdown outside the workspaces runs the static
-checks and G7 alone, and the gate self-tests run only when a gate changes.
+G5's browser journeys wait until the interface settles (ADR 0049); G8, G9 and G10 checked the
+migration's ledger and retired with it (ADR 0044); G12 retired earlier (ADR 0019). CI runs each
+suite once per run, and two rules skip work that cannot fail (`scripts/ci-changes.ts`): a change
+that is only Markdown outside the workspaces runs the static checks and G7 alone, and the gate
+self-tests run only when a gate changes.
 
 ## Work units
 
@@ -154,7 +152,7 @@ Traps that earlier units paid for:
 
 - A `gh pr checks --watch` started seconds after `gh pr create` can exit on CodeQL's checks alone
   while CI is still queued. Before merging, list the checks and see the CI jobs green.
-- G11 records the lint, TypeScript, Vitest, Playwright, Vite and oxfmt configurations, the
+- G11 records the lint, TypeScript, Vitest, Vite and oxfmt configurations, the
   hooks, the gate scripts of every `package.json`, each workflow line by line and CI's path
   classifier, `scripts/ci-changes.ts`. A change to one fails `pnpm check:gates` until the
   coordinator records the baseline again (`node scripts/check-gates.ts --write`), and a weaker
@@ -209,8 +207,9 @@ The standing instructions of the owners, Jhefferson and Levy (`levyrodrigues23`)
 - Open issues for the problems you find, and solve the ones you can.
 - Speed over ceremony (2026-11-20): CI is the full gate, `code-review` runs once per milestone,
   and mutations run where tests look thin.
-- The interface will be redesigned (ADR 0043, #333): write no new Playwright journey for the
-  current pages; checks of the server, its container and its data go on as usual.
+- The interface will be redesigned (#333), and browser journeys wait until it settles
+  (ADR 0049): screen tests cover the pages, and checks of the server, its container and its data
+  go on as usual.
 - At the end of a session, leave the state of every unit in motion on its issue: a comment with
   what is done and what is next. A session that resumes from a compacted conversation finishes
   the pull request already in motion, comments on its issue, and stops, so the next session

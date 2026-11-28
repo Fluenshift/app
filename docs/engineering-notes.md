@@ -71,7 +71,6 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 - G7 accepts only the path parameters ADR 0023 lists (`PATH_PARAMETERS` in `scripts/check-url-text.ts`); a new one needs an ADR. Filters and prompt choices stay in the SPA's own URL (ADR 0025).
 - CI runs the gate self-tests, about 2 more minutes, when a pull request changes a gate, a file in `SELF_TEST_FIXTURES` (`scripts/gate-selftest.ts`, `apps/server/src/edge.ts` among them), a `package.json`, a `tsconfig` or the lockfile (`GATE_PATHS` in `scripts/ci-changes.ts`).
 - CodeQL's default setup analyzes every pull request (the checks "Analyze (javascript-typescript)" and "CodeQL") and `main`. An alert on `main` blocks nothing, so it can sit unseen, as #306's three did for a week: list the open alerts at the start of a session.
-- CI flake seen once (PR #157): the end-to-end job hung on "Install the Playwright browser" for over nine minutes. Cancel the run and rerun its failed jobs (`gh run cancel <run>`, then `gh run rerun <run> --failed`).
 - CI, measured on 2026-11-16: a pull request that changes product code takes about 2.3 minutes, one that changes a gate about 2.8, and one that changes only Markdown outside the workspaces runs the static checks and G7 alone. Measure before changing CI again.
 
 ## Jhefferson's machine
@@ -80,5 +79,4 @@ Facts about the code that neither the code nor a test makes obvious, gathered by
 - Claude Code keeps its memory in `~/.claude/projects/-home-jheff-projects-personal-fluenshift-grifando/memory/`. A session hook makes chat replies terse; text written to the repository and to GitHub stays plain English.
 - The interactive `grep` is ugrep, so one-liners call `/usr/bin/grep`.
 - `git rebase` signs by default and gpg times out: run `git -c commit.gpgsign=false rebase origin/main`, and abort a rebase that already stopped on a signature before rerunning it.
-- Google Chrome is installed (`/usr/bin/google-chrome`): Playwright's `channel: "chrome"` can check a third-party player outside the repository, as #252 did for the sandbox.
 - For a hosted hand check, start Postgres 17 on a loopback port: `docker run -d --name fs-unit-pg -e POSTGRES_USER=app -e POSTGRES_PASSWORD=pw -e POSTGRES_DB=app -p 127.0.0.1:55432:5432 postgres:17-alpine`, then remove it with `docker rm -f fs-unit-pg`.

@@ -3,8 +3,6 @@ dist
 *.tsbuildinfo
 .turbo
 coverage
-/playwright-report/
-/test-results/
 apps/web/src/routeTree.gen.ts
 .env
 .env*.local

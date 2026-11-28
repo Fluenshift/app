@@ -29,7 +29,7 @@ units.
 | UI | Tailwind, shadcn, Base UI and lucide |
 | Persistence | Postgres with Drizzle ORM and drizzle-kit inside an Effect service; PGlite for tests and local mode (ADR 0017) |
 | AI | AI SDK (`ai`, `@ai-sdk/google`, `@ai-sdk/anthropic`, `@openrouter/ai-sdk-provider`) inside the Effect services `Judge` and `Trainer` (ADR 0012; ADR 0042 dropped the unused `@ai-sdk/openai`) |
-| Tests | Vitest with `@effect/vitest`; Playwright for E2E |
+| Tests | Vitest with `@effect/vitest`; Playwright for E2E, retired until the interface settles (ADR 0049) |
 | Container | A slim Node image pinned by digest, single process, non-root |
 | Git hooks | husky |
 

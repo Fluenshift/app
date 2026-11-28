@@ -1,6 +1,7 @@
 # 0043. The end-to-end pause ends; the rows that check the interface drop
 
 - Status: Accepted on 2026-11-21, at the request of Jhefferson in a Claude Code session (#318).
+  ADR 0049 supersedes decision 4: the journeys in `e2e/` retire until the interface settles.
 - Amends `AGENTS.md` (Rules, the end-to-end pause), `MIGRATION_PROTOCOL.md` (Phase 4f, Phase 6
   item 4, G6) and ADR 0037's consequence on the hosted Docker smoke. Ledger rows: the ten of
   decision 2 become `drop` under this ADR.
