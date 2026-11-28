@@ -16,7 +16,6 @@ const NAV_LINKS = [
   { label: "Interview", to: "/interview" },
   { label: "Exercises", to: "/exercises" },
   { label: "Mistakes", to: "/mistakes" },
-  { label: "Vocabulary", to: "/vocabulary" },
 ] as const;
 
 const KEY_LINK = { label: "Key", to: "/settings" } as const;

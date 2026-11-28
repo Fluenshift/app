@@ -1,6 +1,7 @@
 # 0023. Academy record IDs in URL paths
 
 - Status: Accepted on 2026-11-17 by the session (ADR 0020).
+  ADR 0046 cuts Vocabulary Items: `itemId` left G7's list with the vocabulary route (#359).
 - Amends ADR 0008. No ledger row changes.
 
 ## Context

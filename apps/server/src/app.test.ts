@@ -765,6 +765,30 @@ describe("API errors", () => {
     });
   });
 
+  // Vocabulary left the product with its routes (ADR 0046).
+  it("answers the vocabulary routes with a not-found code", async () => {
+    const app = appWith();
+    const responses = await Promise.all([
+      app.request(get("http://localhost/api/vocabulary")),
+      app.request(
+        new Request("http://localhost/api/vocabulary", {
+          body: JSON.stringify({ meaningPt: "depender de", term: "rely on" }),
+          headers: { "content-type": "application/json" },
+          method: "POST",
+        })
+      ),
+      app.request(
+        new Request("http://localhost/api/vocabulary/item-1", {
+          method: "DELETE",
+        })
+      ),
+    ]);
+
+    expect(responses.map((response) => response.status)).toStrictEqual([
+      404, 404, 404,
+    ]);
+  });
+
   it("answers a body that is not JSON with an invalid-request code", async () => {
     const response = await appWith({
       evaluateWriting: () => Effect.die(new Error("must not be called")),

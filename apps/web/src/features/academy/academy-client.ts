@@ -12,8 +12,6 @@ import type {
   PracticeWritingResult,
   SampleLimits,
   StartedInterview,
-  VocabularyItem,
-  VocabularyItemRequest,
 } from "@grifando/contract";
 
 import { MissingAIKeyError } from "../settings/ai-key-store";
@@ -25,16 +23,11 @@ export interface AcademyClient {
     turnId: string,
     answer: string
   ) => Promise<InterviewAnswerResult>;
-  readonly createVocabularyItem: (
-    request: VocabularyItemRequest
-  ) => Promise<void>;
   /**
    * Deletes the hosted Learner and all their data, and expires the session, so only a page load
    * starts a new one (`DELETE /api/me`, ADR 0003, ADR 0036). It reaches no provider.
    */
   readonly deleteLearner: () => Promise<void>;
-  /** Resolves once the item is gone, also when it was already gone. */
-  readonly deleteVocabularyItem: (itemId: string) => Promise<void>;
   /** Ends an interview; a failure is ignored, as Grifando's wrap-up showed regardless. */
   readonly endInterview: (sessionId: string) => Promise<void>;
   /** The Trainer's explanation of one graded Attempt; it never changes the grade. */
@@ -52,7 +45,6 @@ export interface AcademyClient {
   /** The Deploy Profile's caps on one Writing Sample, which size the writing sheets (ADR 0006). */
   readonly getSampleLimits: () => Promise<SampleLimits>;
   readonly listPendingExercises: () => Promise<readonly PendingExercise[]>;
-  readonly listVocabulary: () => Promise<readonly VocabularyItem[]>;
   readonly startInterview: () => Promise<StartedInterview>;
   readonly submitAttempt: (
     exerciseId: string,
@@ -153,9 +145,7 @@ const unavailable = () =>
  */
 export const unavailableAcademyClient: AcademyClient = {
   answerInterviewTurn: unavailable,
-  createVocabularyItem: unavailable,
   deleteLearner: unavailable,
-  deleteVocabularyItem: unavailable,
   endInterview: unavailable,
   explainAttempt: unavailable,
   generateExercises: unavailable,
@@ -164,7 +154,6 @@ export const unavailableAcademyClient: AcademyClient = {
   getMistakeNotebook: unavailable,
   getSampleLimits: unavailable,
   listPendingExercises: unavailable,
-  listVocabulary: unavailable,
   startInterview: unavailable,
   submitAttempt: unavailable,
   testAIKey: unavailable,

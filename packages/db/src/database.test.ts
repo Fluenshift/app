@@ -272,7 +272,6 @@ describe("Database", () => {
       { table_name: "occurrences" },
       { table_name: "rate_limit_windows" },
       { table_name: "suggestions" },
-      { table_name: "vocabulary_items" },
     ]);
   });
 

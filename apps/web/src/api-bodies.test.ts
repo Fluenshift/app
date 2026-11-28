@@ -7,7 +7,6 @@ import type {
   InterviewAnswerRequest,
   PracticeWritingRequest,
   ProgressEvidenceRequest,
-  VocabularyItemRequest,
   WritingSampleRequest,
 } from "@grifando/contract";
 import type { hc, InferRequestType } from "hono/client";
@@ -40,9 +39,6 @@ describe("request bodies of the typed client", () => {
     expectTypeOf<
       InferRequestType<Api["practice-writing"]["$post"]>["json"]
     >().toEqualTypeOf<typeof PracticeWritingRequest.Encoded>();
-    expectTypeOf<
-      InferRequestType<Api["vocabulary"]["$post"]>["json"]
-    >().toEqualTypeOf<typeof VocabularyItemRequest.Encoded>();
   });
 
   it("refuse a body with a misspelled key", () => {

@@ -23,11 +23,6 @@ import { submitAttempt } from "./academy/exercise-service";
 import { endInterview, getSession } from "./academy/interview-service";
 import { mistakeNotebook } from "./academy/mistake-notebook";
 import { TrainerClient } from "./academy/trainer/trainer-client";
-import {
-  createVocabularyItem,
-  deleteVocabularyItem,
-  listVocabularyItems,
-} from "./academy/vocabulary-repository";
 import { createApp, serveApp } from "./app";
 import type { AppBoundaries, ProfileOptions } from "./app";
 import { EvaluationModel } from "./evaluation/evaluation-model";
@@ -89,10 +84,8 @@ const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
       const app = createApp({
         ...(yield* profile),
         answerInterviewTurn: answerInterviewTurnFor,
-        createVocabularyItem,
         deleteEvaluation,
         deleteLearner,
-        deleteVocabularyItem,
         endInterview,
         explainAttempt: explainAttemptFor,
         generateExercises: generateExercisesFor,
@@ -108,7 +101,6 @@ const httpServer = <R>(profile: Effect.Effect<ProfileServer, never, R>) =>
         limits: config.limits,
         listEvaluations: () => listEvaluations(),
         listPendingExercises,
-        listVocabularyItems,
         // The event carries codes, timings and the model, never the Writing Sample.
         logEvaluation: (event) => {
           Effect.runSyncWith(services)(

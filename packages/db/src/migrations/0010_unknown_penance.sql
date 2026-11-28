@@ -1,0 +1,1 @@
+DROP TABLE "vocabulary_items" CASCADE;

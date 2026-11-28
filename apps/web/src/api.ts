@@ -25,7 +25,6 @@ import {
   ProgressEvidence,
   ProgressSummary,
   SetupStatus,
-  VocabularyList,
 } from "@grifando/contract";
 import type { DeployProfile } from "@grifando/contract";
 import { Option, Schema } from "effect";
@@ -130,7 +129,6 @@ const decodeProgressEvidence = Schema.decodeUnknownOption(ProgressEvidence);
 const decodeSetupStatus = Schema.decodeUnknownOption(SetupStatus);
 const decodeDailyChallenge = Schema.decodeUnknownOption(DailyChallenge);
 const decodeAcademyDashboard = Schema.decodeUnknownOption(AcademyDashboard);
-const decodeVocabularyList = Schema.decodeUnknownOption(VocabularyList);
 const decodeMistakeNotebook = Schema.decodeUnknownOption(MistakeNotebook);
 const decodeSampleLimits = Schema.decodeUnknownOption(SampleLimits);
 const decodePendingExercises = Schema.decodeUnknownOption(PendingExerciseList);
@@ -316,33 +314,10 @@ export const createHttpAcademyClient = ({
       );
     },
 
-    async createVocabularyItem(request) {
-      const response = await api.vocabulary.$post({ json: request });
-      if (!response.ok) {
-        throw new AcademyRequestError(
-          response.status,
-          Option.getOrUndefined(decodeAcademyFailure(await parseJson(response)))
-        );
-      }
-    },
-
     // The deletion reaches no provider, so it goes without the key (docs/adr/0036).
     async deleteLearner() {
       const response = await api.me.$delete();
       if (!response.ok) {
-        throw new AcademyRequestError(
-          response.status,
-          Option.getOrUndefined(decodeAcademyFailure(await parseJson(response)))
-        );
-      }
-    },
-
-    // A 404 means the item is already gone, as when another tab removed it.
-    async deleteVocabularyItem(itemId) {
-      const response = await api.vocabulary[":itemId"].$delete({
-        param: { itemId: encodeURIComponent(itemId) },
-      });
-      if (!response.ok && response.status !== 404) {
         throw new AcademyRequestError(
           response.status,
           Option.getOrUndefined(decodeAcademyFailure(await parseJson(response)))
@@ -408,14 +383,6 @@ export const createHttpAcademyClient = ({
         decodePendingExercises
       );
       return exercises;
-    },
-
-    async listVocabulary() {
-      const { items } = await academyJson(
-        await api.vocabulary.$get(),
-        decodeVocabularyList
-      );
-      return items;
     },
 
     async startInterview() {

@@ -410,19 +410,12 @@ const trainerCalls = (client: AcademyClient) => [
 
 // Every other call of the Academy client.
 const otherCalls = (client: AcademyClient) => [
-  client.createVocabularyItem({
-    exampleSentence: "We shipped it on time.",
-    meaningPt: "entregar",
-    term: "ship",
-  }),
-  client.deleteVocabularyItem("item-1"),
   client.endInterview("session-1"),
   client.getAcademyDashboard(),
   client.getDailyChallenge(),
   client.getMistakeNotebook(),
   client.getSampleLimits(),
   client.listPendingExercises(),
-  client.listVocabulary(),
   client.submitAttempt("exercise-1", "I depend on this library."),
 ];
 
@@ -465,7 +458,7 @@ describe("HTTP Academy client keys", () => {
       otherCalls(createHttpAcademyClient({ deployProfile: "hosted", fetch }))
     );
 
-    expect(requests).toHaveLength(10);
+    expect(requests).toHaveLength(7);
     expect(
       requests.filter(
         ({ headers }) => headers.has("x-ai-key") || headers.has("x-ai-provider")

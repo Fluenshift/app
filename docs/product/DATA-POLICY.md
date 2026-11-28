@@ -35,9 +35,7 @@ When the Learner uses the Academy, it also stores:
   Attempts (the Learner's answer, whether it was correct, and the feedback);
 - Interviews: each question the Trainer asked, the model that asked it, its place in the
   Interview, when it was answered, and the Evaluation of the answer;
-- a Category Ability estimate for each Mistake Category;
-- vocabulary items: term, meaning in Portuguese, example sentence and the Evaluation it came
-  from.
+- a Category Ability estimate for each Mistake Category.
 
 ### Never stored
 
@@ -83,15 +81,14 @@ CORS is off.
 ### Deletion
 
 Deleting an Evaluation removes its Writing Sample, Findings, Suggestions, and metadata, and
-Progress recalculates without that evidence. It also removes the Occurrences and the
-Enrichment record made from it, and unlinks vocabulary items that came from it. Each Mistake
-Pattern those Occurrences belonged to is rebuilt from what remains, its other Occurrences and
-the Attempts on its Exercises, so its counts, example, times and Mastery Level no longer show
-the deleted Evaluation; a pattern left without an Occurrence is removed. Exercises and
-Attempts stay, as the Learner's practice (ADR 0031). The local profile runs no cleanup: data
-stays until the Learner deletes it (ADR 0011). There are no application-managed backups, so
-deletion cannot be undone through the product. Introducing backups later requires a new
-explicit policy.
+Progress recalculates without that evidence. It also removes the Occurrences and the Enrichment
+record made from it. Each Mistake Pattern those Occurrences belonged to is rebuilt from what
+remains, its other Occurrences and the Attempts on its Exercises, so its counts, example, times
+and Mastery Level no longer show the deleted Evaluation; a pattern left without an Occurrence
+is removed. Exercises and Attempts stay, as the Learner's practice (ADR 0031). The local
+profile runs no cleanup: data stays until the Learner deletes it (ADR 0011). There are no
+application-managed backups, so deletion cannot be undone through the product. Introducing
+backups later requires a new explicit policy.
 
 ## Hosted profile
 

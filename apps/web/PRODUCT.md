@@ -31,7 +31,7 @@ Grifando takes a piece of English a Learner wrote, evaluates only its English, s
 ## Capabilities and Constraints
 
 - Evaluation side: Writing Desk, History, Progress with evidence behind every insight, Setup and privacy.
-- Academy side: Overview, Today, Write, Technical, Explain code, Interview, Exercises, Mistakes, Vocabulary; Focus music. None of these is to be removed (owners, 2026-11-23).
+- Academy side: Overview, Today, Write, Technical, Explain code, Interview, Exercises, Mistakes; Focus music. ADR 0046 records which of them stay, change or go in the redesign.
 - Planned: Text Kinds and Progress charts (`docs/specs/`, issues #336 to #346).
 - Inviolable: no remote analytics (ADR 0013); only deliberately submitted text is sent or stored; never imply a Writing Sample stays local when an external model receives it; API keys are never stored or logged, and the hosted profile uses the visitor's keys; the local profile has no sign-up or login.
 - Open: the product's logo and visual style (#333); a redesign of the interface is expected (#320).

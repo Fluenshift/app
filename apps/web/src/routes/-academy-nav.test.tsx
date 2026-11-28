@@ -15,9 +15,7 @@ const renderAt = (url: string, deployProfile: DeployProfile = "local") =>
   render(
     <RouterProvider
       router={createAppRouter({
-        academyClient: createInMemoryAcademyClient({
-          vocabulary: [],
-        }),
+        academyClient: createInMemoryAcademyClient(),
         deployProfile,
         evaluationClient: createInMemoryEvaluationClient(),
         history: createMemoryHistory({ initialEntries: [url] }),
@@ -27,7 +25,7 @@ const renderAt = (url: string, deployProfile: DeployProfile = "local") =>
 
 describe("Academy navigation", () => {
   it("links every Academy screen and marks the current one", async () => {
-    renderAt("/vocabulary");
+    renderAt("/write");
     const navigation = await screen.findByRole("navigation", {
       name: "Academy",
     });
@@ -44,17 +42,16 @@ describe("Academy navigation", () => {
       ["Interview", "/interview"],
       ["Exercises", "/exercises"],
       ["Mistakes", "/mistakes"],
-      ["Vocabulary", "/vocabulary"],
     ]);
     expect(
       links
         .filter((link) => link.getAttribute("aria-current") === "page")
         .map((link) => link.textContent)
-    ).toEqual(["Vocabulary"]);
+    ).toEqual(["Write"]);
   });
 
   it("ends with Grifando's Key entry in the hosted profile", async () => {
-    renderAt("/vocabulary", "hosted");
+    renderAt("/write", "hosted");
     const navigation = await screen.findByRole("navigation", {
       name: "Academy",
     });
@@ -72,7 +69,6 @@ describe("Academy navigation", () => {
       ["Interview", "/interview"],
       ["Exercises", "/exercises"],
       ["Mistakes", "/mistakes"],
-      ["Vocabulary", "/vocabulary"],
       ["Key", "/settings"],
     ]);
   });
@@ -90,7 +86,7 @@ describe("Academy navigation", () => {
     await userEvent.click(menu);
 
     expect(menu).toHaveAttribute("aria-expanded", "true");
-    expect(within(navigation).getAllByRole("link")).toHaveLength(18);
+    expect(within(navigation).getAllByRole("link")).toHaveLength(16);
   });
 
   it("stays off the Evaluation screens", async () => {

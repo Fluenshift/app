@@ -3,14 +3,14 @@
 // and the rows are read and written through the Database service where the test used Prisma.
 import { rm } from "node:fs/promises";
 
-import { LearnerId } from "@grifando/contract";
-import { Database, learners, vocabularyItems } from "@grifando/db";
+import { LearnerId, MistakeCategory } from "@grifando/contract";
+import { Database, learners, mistakePatterns } from "@grifando/db";
 import type { DrizzleClient } from "@grifando/db";
 import { eq } from "drizzle-orm";
 import { Effect, Schema } from "effect";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { listVocabularyItems } from "../academy/vocabulary-repository";
+import { listPatterns } from "../academy/mistake-pattern-repository";
 import { CurrentLearner } from "../learner-identity";
 import { makeTemporaryDatabase } from "../test/database";
 import { ensureLearner } from "./ensure-learner";
@@ -76,16 +76,17 @@ describe("ensureUser", () => {
     await ensureLearnerFor("s1");
     await ensureLearnerFor("s2");
     await query((client) =>
-      client.insert(vocabularyItems).values({
-        exampleSentence: "e",
-        id: "item-1",
+      client.insert(mistakePatterns).values({
+        category: MistakeCategory.PREPOSITIONS,
+        exampleCorrection: "I depend on this library.",
+        exampleOriginal: "I depend of this library.",
+        id: "pattern-1",
         learnerId: "s1",
-        meaningPt: "m",
-        term: "t",
+        patternKey: "depend-on",
       })
     );
-    expect(await as("s2", listVocabularyItems())).toEqual([]);
-    expect(await as("s1", listVocabularyItems())).toHaveLength(1);
+    expect(await as("s2", listPatterns())).toEqual([]);
+    expect(await as("s1", listPatterns())).toHaveLength(1);
   });
 
   it("recreates a deleted user on the next write", async () => {

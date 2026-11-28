@@ -95,16 +95,13 @@ const refuse = limitWith(
 
 const routes: AppBoundaries = {
   answerInterviewTurn: unreached,
-  createVocabularyItem: unreached,
   deleteEvaluation: unreached,
   deleteLearner: unreached,
-  deleteVocabularyItem: unreached,
   endInterview: unreached,
   evaluateWriting: unreached,
   explainAttempt: unreached,
   generateExercises: unreached,
   getProgressEvidence: unreached,
-  listVocabularyItems: unreached,
   startInterview: unreached,
   submitAttempt: unreached,
   testTrainerKey: unreached,
@@ -220,21 +217,6 @@ describe("rate limit before the user", () => {
       ],
       ["DELETE /api/me", () => app.request(request("DELETE", "/api/me"))],
       [
-        "DELETE /api/vocabulary/[id]",
-        () => app.request(request("DELETE", "/api/vocabulary/item-1")),
-      ],
-      [
-        "POST /api/vocabulary",
-        () =>
-          app.request(
-            request("POST", "/api/vocabulary", {
-              exampleSentence: "I rely on tests.",
-              meaningPt: "depender de",
-              term: "rely on",
-            })
-          ),
-      ],
-      [
         "POST /api/writing-sessions",
         () =>
           app.request(
@@ -262,8 +244,6 @@ describe("rate limit before the user", () => {
       "analysis",
       "generation",
       "write",
-      "write",
-      "write",
       "analysis",
     ]);
     expect(learnerEnsured).not.toHaveBeenCalled();
@@ -272,20 +252,13 @@ describe("rate limit before the user", () => {
 
   it("admits a call in order: the limit, then the Learner's row, then the route's work", async () => {
     const response = await hostedApp({
-      createVocabularyItem: () =>
+      deleteEvaluation: () =>
         Effect.sync(() => {
           steps("work");
-          return { id: "item-1" };
         }),
       limitRequest: limitWith(Effect.void),
-    }).request(
-      request("POST", "/api/vocabulary", {
-        exampleSentence: "I rely on tests.",
-        meaningPt: "depender de",
-        term: "rely on",
-      })
-    );
-    expect(response.status).toBe(201);
+    }).request(request("DELETE", "/api/evaluations/evaluation-1"));
+    expect(response.status).toBe(204);
     expect(steps.mock.calls.map(([step]) => step)).toEqual([
       "limit",
       "ensure",
@@ -295,7 +268,7 @@ describe("rate limit before the user", () => {
 
   it("answers Grifando's 429 with the seconds to wait", async () => {
     const response = await hostedApp({ limitRequest: refuse }).request(
-      request("DELETE", "/api/vocabulary/item-1")
+      request("DELETE", "/api/evaluations/evaluation-1")
     );
     expect(response.status).toBe(429);
     expect(response.headers.get("retry-after")).toBe("60");
@@ -331,7 +304,7 @@ describe("rate limit before the user", () => {
     const app = hostedApp({
       getProgressEvidence: () => Effect.succeed({}),
       limitRequest: refuse,
-      listVocabularyItems: () => Effect.succeed([]),
+      listPendingExercises: () => Effect.succeed([]),
     });
     const evidence = await app.request(
       request("POST", "/api/progress/evidence", {
@@ -339,9 +312,9 @@ describe("rate limit before the user", () => {
         selection: { kind: "average-score" },
       })
     );
-    const vocabulary = await app.request(request("GET", "/api/vocabulary"));
+    const exercises = await app.request(request("GET", "/api/exercises"));
     expect(evidence.status).toBe(200);
-    expect(vocabulary.status).toBe(200);
+    expect(exercises.status).toBe(200);
     expect(limitedFor).not.toHaveBeenCalled();
   });
 

@@ -198,10 +198,6 @@ practice-origin Writing Sample that the Judge evaluates like any other; there is
 interview score (ADR 0010).
 _Not: mock interview score, fifth score._
 
-**Vocabulary Item**: a term the Learner keeps to study, with its meaning in Portuguese, an
-example sentence, and the Evaluation it came from, when it came from one.
-_Not: flashcard, word list entry._
-
 ## Collisions resolved
 
 | Source term | Grifando term |

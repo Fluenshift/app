@@ -32,7 +32,6 @@ export const PATH_PARAMETERS: ReadonlySet<string> = new Set([
   "attemptId",
   "evaluationId",
   "exerciseId",
-  "itemId",
   "sessionId",
   "turnId",
 ]);

@@ -67,7 +67,6 @@ const renderExplainCode = async (
   const client = createInMemoryAcademyClient({
     practiceWriting,
     sampleLimits,
-    vocabulary: [],
   });
   render(
     <RouterProvider

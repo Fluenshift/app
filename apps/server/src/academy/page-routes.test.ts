@@ -16,7 +16,6 @@ import {
   learners,
   mistakePatterns,
   occurrences,
-  vocabularyItems,
 } from "@grifando/db";
 import type { DrizzleClient } from "@grifando/db";
 import { Effect, Layer, ManagedRuntime, Option } from "effect";
@@ -30,7 +29,6 @@ import { makeTemporaryDatabase } from "../test/database";
 import { academyDashboard } from "./academy-dashboard";
 import { dailyChallenge } from "./daily-challenge";
 import { mistakeNotebook } from "./mistake-notebook";
-import { listVocabularyItems } from "./vocabulary-repository";
 
 const NOW = new Date("2026-03-05T12:00:00Z");
 const DAY = 24 * 60 * 60 * 1000;
@@ -76,7 +74,6 @@ const appOf = (boundaries: AppBoundaries = {}) =>
       sampleMaxBytes: 32 * 1024,
       sampleMaxCharacters: Option.none(),
     },
-    listVocabularyItems,
     profile: "local",
     runtime,
     serveWeb: false,
@@ -261,89 +258,6 @@ describe("GET /api/daily-challenge", () => {
       getDailyChallenge: () =>
         Effect.fail(new DatabaseError({ cause: new Error("down") })),
     }).request(new Request("http://localhost/api/daily-challenge"));
-
-    expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({
-      error: "Something went wrong. Please try again.",
-    });
-  });
-});
-
-const seedVocabularyItem = (
-  learnerId: string,
-  values: Pick<
-    typeof vocabularyItems.$inferInsert,
-    "createdAt" | "exampleSentence" | "meaningPt" | "term"
-  >
-) =>
-  query(async (client) => {
-    await client
-      .insert(learners)
-      .values({ id: learnerId })
-      .onConflictDoNothing();
-    const id = randomUUID();
-    await client.insert(vocabularyItems).values({ id, learnerId, ...values });
-    return id;
-  });
-
-// The prefill half of this row is the screen test's: the form takes it from the history state
-// (docs/adr/0025). The route answers the list the page shows.
-describe("/vocabulary", () => {
-  it("lists the visitor's items newest first and prefills the form from the history state", async () => {
-    const empty = await GET("/api/vocabulary");
-    expect(empty.status).toBe(200);
-    expect(await empty.json()).toEqual({ items: [] });
-
-    const older = await seedVocabularyItem("visitor-1", {
-      createdAt: daysAgo(2),
-      exampleSentence: "I rely on tests.",
-      meaningPt: "depender de",
-      term: "rely on",
-    });
-    const newer = await seedVocabularyItem("visitor-1", {
-      createdAt: daysAgo(1),
-      exampleSentence: "We roll out on Fridays.",
-      meaningPt: "implantar",
-      term: "roll out",
-    });
-    await seedVocabularyItem("other-user", {
-      createdAt: NOW,
-      exampleSentence: "Not yours.",
-      meaningPt: "de outra pessoa",
-      term: "someone else's",
-    });
-
-    const listed = await GET("/api/vocabulary");
-    expect(listed.status).toBe(200);
-    expect(await listed.json()).toEqual({
-      items: [
-        {
-          createdAt: daysAgo(1).toISOString(),
-          exampleSentence: "We roll out on Fridays.",
-          id: newer,
-          meaningPt: "implantar",
-          sourceEvaluationId: null,
-          term: "roll out",
-        },
-        {
-          createdAt: daysAgo(2).toISOString(),
-          exampleSentence: "I rely on tests.",
-          id: older,
-          meaningPt: "depender de",
-          sourceEvaluationId: null,
-          term: "rely on",
-        },
-      ],
-    });
-  });
-});
-
-describe("GET /api/vocabulary", () => {
-  it("answers the generic 500 when the database fails", async () => {
-    const response = await appOf({
-      listVocabularyItems: () =>
-        Effect.fail(new DatabaseError({ cause: new Error("down") })),
-    }).request(new Request("http://localhost/api/vocabulary"));
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({

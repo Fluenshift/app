@@ -12,9 +12,6 @@ describe("check-url-text", () => {
   it("accepts the IDs of the Academy's records in a path", () => {
     assert.deepEqual(
       findings(
-        '.delete("/api/vocabulary/:itemId", (context) =>',
-        '  context.req.param("itemId")',
-        ")",
         '.post("/api/exercises/:exerciseId/attempts/:attemptId", (context) =>',
         '  [context.req.param("exerciseId"), context.req.param("attemptId")]',
         ")",
@@ -52,6 +49,9 @@ describe("check-url-text", () => {
         "const texts = context.req.queries(`originalText`);",
         '.get("/api/samples/:writingSample", (context) =>',
         '  context.req.param("writingSample")',
+        ")",
+        '.delete("/api/items/:itemId", (context) =>',
+        '  context.req.param("itemId")',
         ")"
       ),
       [
@@ -59,6 +59,8 @@ describe("check-url-text", () => {
         'app.ts:2: reads the query key "originalText"',
         'app.ts:3: names the path parameter "writingSample"',
         'app.ts:4: reads the path parameter "writingSample"',
+        'app.ts:6: names the path parameter "itemId"',
+        'app.ts:7: reads the path parameter "itemId"',
       ]
     );
   });

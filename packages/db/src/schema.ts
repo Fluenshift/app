@@ -523,36 +523,3 @@ export const rateLimitWindows = pgTable(
     index("rate_limit_windows_window_start_idx").on(table.windowStart),
   ]
 );
-
-// A term the Learner saves while writing; its source, when set, is one of the Learner's own
-// Evaluations, which replace Grifando's writing sessions (docs/adr/0004).
-export const vocabularyItems = pgTable(
-  "vocabulary_items",
-  {
-    createdAt: moment("created_at").notNull().defaultNow(),
-    exampleSentence: text("example_sentence").notNull(),
-    id: text("id").primaryKey(),
-    // Breaks ties between items of one moment, newest insertion first.
-    insertionOrder: integer("insertion_order").generatedAlwaysAsIdentity(),
-    learnerId: text("learner_id").notNull(),
-    meaningPt: text("meaning_pt").notNull(),
-    sourceEvaluationId: text("source_evaluation_id"),
-    term: text("term").notNull(),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.learnerId],
-      foreignColumns: [learners.id],
-      name: "vocabulary_items_learner_fk",
-    }).onDelete("cascade"),
-    foreignKey({
-      columns: [table.sourceEvaluationId],
-      foreignColumns: [evaluations.id],
-      name: "vocabulary_items_source_evaluation_fk",
-    }).onDelete("set null"),
-    index("vocabulary_items_learner_created_at_idx").on(
-      table.learnerId,
-      table.createdAt
-    ),
-  ]
-);
