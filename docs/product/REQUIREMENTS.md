@@ -82,11 +82,11 @@ Grifando's `SPEC.md` it comes from and the ADRs that changed it.
 | AR-10 | Mastery Level moves only as `CONTEXT.md` (Mastery Level) defines. | §5.4, §6, §6.1; ADR 0014 |
 | AR-11 | Recall is estimated for each pattern and orders review as `CONTEXT.md` (Recall) defines. | §6.1 |
 | AR-12 | Each Exercise is aimed through Category Ability as `CONTEXT.md` (Category Ability) defines. | §6.1 |
-| AR-13 | A Streak counts practice as `CONTEXT.md` (Streak) defines. | §6.1 |
+| AR-13 | Removed: ADR 0046 cuts every game element for now. | ADR 0046 |
 | AR-14 | Daily Writing offers one challenge a day from a curated bank, biased toward the Learner's weak categories. | §5.5 |
 | AR-15 | Technical English prompts carry one Technical Category from the fixed list. Explain Code asks the Learner to explain a pasted snippet in English, and its feedback concerns the English, never the code. | §5.6, §5.7 |
 | AR-16 | Interview Practice is text only and turn based, as `CONTEXT.md` (Interview) defines it. | §5.8; ADR 0010 |
-| AR-17 | The Academy dashboard keeps a small, fixed set of cards: today's challenge, recent writing, weak categories, recently seen Mistake Patterns, one practice recommendation, one Finding-based trend (ADR 0027), the Streak, and a count of the practice done, as Grifando's dashboard showed them. | §5.9; ADR 0002 |
+| AR-17 | The Academy dashboard keeps a small, fixed set of cards: today's challenge, recent writing, weak categories, recently seen Mistake Patterns, one practice recommendation, one Finding-based trend (ADR 0027), and a count of the practice done, as Grifando's dashboard showed them. | §5.9; ADR 0002 |
 | AR-18 | Mistake Patterns, Mastery Level and Recall span Rubric Versions; each Occurrence records the Rubric Version of its Finding. | ADR 0015 |
 | AR-19 | The Trainer may fall back to another model only on overload, and records the model that answered. | §4; ADR 0012 |
 | AR-20 | Every Trainer answer is validated against its schema before anything is stored; an invalid answer stores nothing and keeps the Learner's text. | §9; QR-03 |
@@ -112,15 +112,15 @@ migration.
 
 Unless an accepted ADR brings it in: automatic capture or proxying of text from other tools;
 model-created or editable Error Categories; accounts, sign-up, login and cloud sync; export;
-search of History; goals; directional improvement claims; any advice about prompt quality;
-code review in Explain Code; voice, speech recognition and pronunciation scoring; social
-features, leaderboards and friend streaks; XP, badges and currencies; native mobile apps;
-browser extensions; reminders; a list of saved vocabulary and its review (ADR 0046).
+search of History; goals; directional improvement claims; any advice about prompt quality; code
+review in Explain Code; voice, speech recognition and pronunciation scoring; social features
+and leaderboards; game elements such as XP, badges and currencies (ADR 0046); native mobile
+apps; browser extensions; reminders; a list of saved vocabulary and its review (ADR 0046).
 Ideas the owners keep for later, some of them on this list, are in [`IDEAS.md`](./IDEAS.md).
 
 Brought into scope by the merge: the hosted Deploy Profile with anonymous sessions
 (ADR 0003), several Trainer providers and visitors' own keys (ADR 0012), and the Academy's
-simple Streak (Grifando §6.1) and searchable Mistake Notebook (ADR 0020).
+searchable Mistake Notebook (ADR 0020).
 
 ## Planned
 
