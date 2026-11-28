@@ -167,7 +167,7 @@ export default defineConfig({
       // ledger keys on them.
       // Style presets for tests are left out on purpose: ported tests keep their source titles
       // and assertions verbatim, and matcher rewrites could weaken them.
-      files: ["**/*.test.ts", "**/*.test.tsx", "e2e/**/*.ts"],
+      files: ["**/*.test.ts", "**/*.test.tsx"],
       plugins: ["vitest"],
       rules: {
         "vitest/no-commented-out-tests": "error",
