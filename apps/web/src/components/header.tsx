@@ -1,13 +1,8 @@
 // Ported from PE apps/web/src/components/header.tsx (5e831bb). Setup & privacy speaks for the
 // local profile only; in the hosted profile the "Key settings" and "Privacy" links of Grifando's
 // site footer (src/components/layout/SiteFooter.tsx, 74dbb9f) take its place (docs/adr/0036).
-// Grifando's Focus Music player ends the header in both profiles, as it ended Grifando's site
-// header: the root route keeps it mounted, so changing pages never stops the music
-// (docs/adr/0039).
 import type { DeployProfile } from "@grifando/contract";
 import { Link, useRouteContext } from "@tanstack/react-router";
-
-import { FocusMusic } from "../features/music/focus-music";
 
 const PRODUCT_LINKS = [
   { exact: true, label: "Writing Desk", to: "/" },
@@ -44,9 +39,6 @@ const Header = () => {
         <Link className="text-base font-semibold tracking-tight" to="/">
           Grifando
         </Link>
-        <div className="ml-auto sm:order-last">
-          <FocusMusic />
-        </div>
         <nav
           aria-label="Primary navigation"
           className="grid w-full grid-cols-2 gap-1 text-sm sm:flex sm:w-auto sm:items-center"
