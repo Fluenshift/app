@@ -329,6 +329,19 @@ describe("Primary navigation per Deploy Profile", () => {
     ]);
   });
 
+  // The header's last control, a music player, left the product (docs/adr/0046): the header holds
+  // the product's name and its links, and nothing a visitor presses.
+  it("puts no button in the header", async () => {
+    renderAt("/privacy");
+
+    const navigation = await screen.findByRole("navigation", {
+      name: "Primary navigation",
+    });
+    expect(
+      navigation.closest("header")?.querySelectorAll("button")
+    ).toHaveLength(0);
+  });
+
   it("keeps Setup & privacy in the local profile", async () => {
     renderAt("/setup", { deployProfile: "local" });
 
