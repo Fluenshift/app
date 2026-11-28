@@ -9,7 +9,6 @@ import {
   ProgressSummary,
   RecentPatterns,
   RecentWriting,
-  StreakStatus,
   WeakAreas,
 } from "../features/academy/dashboard";
 import { HeroNote } from "../features/academy/hero-note";
@@ -81,7 +80,6 @@ const AcademyPage = () => {
             </h2>
           </div>
           <div className="space-y-6">
-            <StreakStatus streak={dashboard.streak} />
             <div className="flex flex-wrap gap-2">
               <Link
                 className={buttonVariants({ variant: "outline" })}

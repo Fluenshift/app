@@ -194,7 +194,7 @@ describe("exerciseGenerationService.generatePracticeSet", () => {
 });
 
 describe("exerciseAttemptService.submitAttempt", () => {
-  it("records a correct attempt and promotes the pattern's mastery streak", async () => {
+  it("records a correct attempt and promotes the pattern's Mastery Level", async () => {
     const pattern = await seedPattern({
       consecutiveCorrectCount: 1,
       masteryLevel: MasteryLevel.ACTIVE,

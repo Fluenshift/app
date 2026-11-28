@@ -184,10 +184,6 @@ _Not: try, submission._
 used to aim each Exercise at about 70% expected success.
 _Not: skill level, rating._
 
-**Streak**: the run of days with at least one practice activity, with limited rest days. No
-punishment and no leaderboard.
-_Not: score, XP._
-
 **Practice Prompt**: what the Academy asks the Learner to write about: a daily challenge, a
 technical topic, a piece of code to explain in English, or an interview question. Free writing
 has none. The answer is a practice-origin Writing Sample.

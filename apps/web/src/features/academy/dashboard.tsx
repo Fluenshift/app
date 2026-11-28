@@ -1,59 +1,19 @@
 // The Academy dashboard's cards. Ported from Grifando src/components/dashboard/ (74dbb9f):
-// StreakStatus, ProgressSummary, WeakAreas, RecentMistakes and RecentWriting. A writing session
-// is a practice-origin Writing Sample (docs/adr/0004), and the averaged model scores are gone
-// (docs/adr/0002). The numbers render without Grifando's count-up motion.
+// ProgressSummary, WeakAreas, RecentMistakes and RecentWriting. A writing session is a
+// practice-origin Writing Sample (docs/adr/0004), the averaged model scores are gone
+// (docs/adr/0002), and so is every game element (docs/adr/0046). The numbers render without
+// Grifando's count-up motion.
 import type {
   AcademyDashboard,
   CategoryBreakdownEntry,
 } from "@grifando/contract";
 import { TARGET_SUCCESS } from "@grifando/core/difficulty";
-import { REST_DAYS_PER_WEEK, reachedMilestone } from "@grifando/core/streak";
 import type { ReactNode } from "react";
 
 import { MISTAKE_CATEGORY_LABELS } from "./mistake-category-labels";
 
 const MAX_CATEGORIES = 4;
 const EXCERPT_LENGTH = 140;
-
-// A light nudge, not a scoreboard: no loss-aversion warnings, rest days are
-// forgiven silently.
-export const StreakStatus = ({
-  streak,
-}: {
-  readonly streak: AcademyDashboard["streak"];
-}) => {
-  if (streak.longest === 0) {
-    return (
-      <p className="prose-serif text-iron text-lg">
-        Practice once today to start a streak.
-      </p>
-    );
-  }
-
-  const milestone = reachedMilestone(streak.current);
-
-  return (
-    <div className="space-y-2">
-      <p className="text-heading-sm">
-        {streak.current}-day streak
-        <span className="text-muted-foreground">
-          {" "}
-          · longest {streak.longest}
-        </span>
-      </p>
-      {milestone === null ? null : (
-        <p className="text-success text-sm">
-          {milestone}-day milestone reached
-        </p>
-      )}
-      <p className="prose-serif text-iron text-lg">
-        {streak.activeToday
-          ? "Today counts already."
-          : `One activity today keeps it going. Up to ${REST_DAYS_PER_WEEK} rest days a week are fine.`}
-      </p>
-    </div>
-  );
-};
 
 const Figure = ({
   label,

@@ -197,11 +197,6 @@ export const AcademyDashboard = Schema.Struct({
       occurrenceCount: Schema.Int,
     })
   ),
-  streak: Schema.Struct({
-    activeToday: Schema.Boolean,
-    current: Schema.Int,
-    longest: Schema.Int,
-  }),
   weakAreas: Schema.Array(CategoryBreakdownEntry),
   /**
    * The Finding Rate of the last 10 practice-origin Writing Samples under the current Rubric

@@ -19,7 +19,7 @@ Grifando takes a piece of English a Learner wrote, evaluates only its English, s
 - It judges only the English. Code, commands, paths, identifiers and logs (Protected Technical Content) are excluded from scoring and kept byte for byte, which a general grammar checker does not do.
 - Its evaluation follows a written, versioned rubric (`docs/product/RUBRIC.md`) with an Overall Score from 0 to 100, a Proficiency Band and categorized Findings, so results are comparable over time rather than one-off chat answers.
 - It keeps every Evaluation, so Progress shows which errors recur and whether they are fading.
-- The Academy builds practice from the Learner's own recorded mistakes, not generic drills. Its game elements (Streak and beyond) belong to Jhefferson's area (#320).
+- The Academy builds practice from the Learner's own recorded mistakes, not generic drills. It has no game elements for now: they return only as one design under their own ADR (ADR 0046).
 
 ## Operating Context
 

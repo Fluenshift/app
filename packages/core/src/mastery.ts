@@ -9,7 +9,7 @@ export interface MasteryState {
   consecutiveCorrectCount: number;
 }
 
-const REQUIRED_STREAK = 2;
+const REQUIRED_CONSECUTIVE_CORRECT = 2;
 
 // Exercises that give no scaffolding (no options, no blank to fill): the
 // learner produces the whole sentence. Reaching MASTERED requires one of these
@@ -26,7 +26,7 @@ export const isUnscaffolded = (type: ExerciseType): boolean =>
 // should be the unscaffolded mastery check.
 export const needsMasteryCheck = (state: MasteryState): boolean =>
   state.masteryLevel === MasteryLevel.IMPROVING &&
-  state.consecutiveCorrectCount >= REQUIRED_STREAK - 1;
+  state.consecutiveCorrectCount >= REQUIRED_CONSECUTIVE_CORRECT - 1;
 
 // Two consecutive correct attempts promote a pattern; one failed recall drops it
 // one level back toward ACTIVE (SPEC.md §6). A failed recall is an incorrect
@@ -53,7 +53,7 @@ export const applyExerciseResult = (
 
   const consecutiveCorrectCount = state.consecutiveCorrectCount + 1;
 
-  if (consecutiveCorrectCount < REQUIRED_STREAK) {
+  if (consecutiveCorrectCount < REQUIRED_CONSECUTIVE_CORRECT) {
     return { masteryLevel: state.masteryLevel, consecutiveCorrectCount };
   }
 
@@ -64,7 +64,7 @@ export const applyExerciseResult = (
   if (!exerciseType || !isUnscaffolded(exerciseType)) {
     return {
       masteryLevel: MasteryLevel.IMPROVING,
-      consecutiveCorrectCount: REQUIRED_STREAK - 1,
+      consecutiveCorrectCount: REQUIRED_CONSECUTIVE_CORRECT - 1,
     };
   }
 

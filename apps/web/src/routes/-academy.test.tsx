@@ -2,7 +2,8 @@
 // migration/characterization/grifando/files/src/app/pages.characterization.test.ts), at /academy
 // under docs/adr/0025. The route test of apps/server checks what the dashboard reads; this screen
 // test checks what the page renders from it. A writing session is a practice-origin Writing
-// Sample (docs/adr/0004), and the averaged model scores are gone (docs/adr/0002).
+// Sample (docs/adr/0004), the averaged model scores are gone (docs/adr/0002), and so is every game
+// element (docs/adr/0046).
 import type { AcademyDashboard } from "@grifando/contract";
 import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
@@ -55,14 +56,13 @@ const empty: AcademyDashboard = {
     },
   },
   recommendation: null,
-  streak: { activeToday: false, current: 0, longest: 0 },
   weakAreas: [],
 };
 
 describe("/academy", () => {
-  it("feeds the dashboard's streak, progress, weak areas and recent lists", async () => {
+  it("feeds the dashboard's progress, weak areas and recent lists", async () => {
     const before = await renderDashboard(empty);
-    expect(before.text).toContain("Practice once today to start a streak.");
+    expect(before.text).not.toContain("Practice once today");
     expect(before.text).toContain("0Writing samples");
     expect(before.text).toContain("0Exercises done");
     expect(before.text).toContain("—Exercise accuracy · aiming for about 70%");
@@ -111,11 +111,10 @@ describe("/academy", () => {
         occurrenceCount: 3,
       },
       findingTrend: empty.findingTrend,
-      streak: { activeToday: true, current: 4, longest: 4 },
       weakAreas: [{ category: "PREPOSITIONS", count: 4, percentage: 100 }],
     });
-    expect(after.text).toContain("4-day streak · longest 4");
-    expect(after.text).toContain("Today counts already.");
+    expect(after.text).not.toContain("longest 4");
+    expect(after.text).not.toContain("Today counts already.");
     expect(after.text).toContain("4Writing samples");
     expect(after.text).toContain("3Exercises done");
     expect(after.text).toContain(
